@@ -1,5 +1,4 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "VectorIHub",
   "blog": {
@@ -12,17 +11,6 @@
   },
   "favicon": "/logo.png",
   "navigation": {
-    "dropdowns": [
-      {
-        "dropdown": "Documentation",
-        "icon": "book-open",
-        "pages": [
-          "quickstart",
-          "development",
-          "navigation"
-        ]
-      }
-    ],
     "tabs": [
       {
         "tab": "Guides",
@@ -33,68 +21,10 @@
               "documentation",
               "quickstart"
             ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "/",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Changelog",
-          "icon": "list",
-          "href": "/changelog"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
@@ -103,8 +33,14 @@
   "navbar": {
     "links": [
       {
+        "label": "Changelog",
+        "href": "/changelog",
+        "icon": "cloud"
+      },
+      {
         "label": "Support",
-        "href": "mailto:analystmuli@gmail.com"
+        "href": "mailto:analystmuli@gmail.com",
+        "icon": "headset"
       }
     ],
     "primary": {

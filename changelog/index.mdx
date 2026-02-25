@@ -1,26 +1,22 @@
 ---
-title: "Changelog: The Journey Begins"
-description: "Welcoming our first beta testers to the VectorIHub ecosystem."
-date: "2026-02-25"
-authors:
-  - name: "VectorIHub Team"
-    image: "/logo.png"
+title: "Changelog"
+description: "Product updates and announcements for VectorIHub."
 ---
 
-# Release v0.1.0 <Badge text="Public Beta" color="green" />
+<Update label="February 2026" description="v0.1.0 Beta Release">
+
+## The Journey Begins: Public Beta Launch
 
 Welcome to the very first VectorIHub changelog! We are officially opening our doors to beta testers to help us refine the future of **Push-to-Deploy** infrastructure.
 
----
-
-##  New Features
+### 🚀 New Features
 
 <CardGroup cols={1}>
   <Card title="Auto-Dockerization" icon="wand-magic-sparkles" color="#16A34A">
-    Our core engine now supports automatic detection for **Node.js, React, and Go**. Launch without writing a single Dockerfile.
+    ###### Our core engine now supports automatic detection for **Node.js, React, and Go**. Launch without writing a single Dockerfile.
   </Card>
   <Card title="GitHub Native Integration" icon="github" color="#000000">
-    Securely connect your account and deploy any repository **public** or **private** with a single click.
+    ###### Securely connect your account and deploy any repository **public** or **private** with a single click.
   </Card>
 </CardGroup>
 
@@ -30,52 +26,53 @@ We've overhauled our backend to ensure your applications stay fast and secure fr
 
 <Tabs>
   <Tab title="Runtime">
-    **VHB Cloud Runtime** has been optimized for high-density container orchestration, significantly reducing cold start times for serverless-style deployments.
+    <div style={{ fontSize: "15px" }}>
+    **VHB Cloud Runtime** has been optimized for high-density container orchestration, significantly reducing cold start times.
+    </div>
   </Tab>
   <Tab title="Security">
-    **Automatic SSL:** Every deployment now receives an automated Let's Encrypt SSL certificate. Security is no longer an afterthought; it’s the default.
+     <div style={{ fontSize: "15px" }}>
+    **Automatic SSL:** Every deployment now receives an automated Let's Encrypt SSL certificate. Security is the default.
+    </div>
   </Tab>
   <Tab title="Networking">
-    **Custom Subdomains:** Beta users can now claim and manage their own `*.vectorihub.run` namespaces directly from the dashboard.
+   <div style={{ fontSize: "15px" }}>
+    **Custom Subdomains:** Beta users can now claim and manage their own `*.vectorihub.run` namespaces.
+    </div>
   </Tab>
 </Tabs>
 
----
-
-## 🛠 Bug Fixes & Refinements
-
-Being in Beta means finding the rough edges. Here is what we've polished in the latest sprint:
+### 🛠 Bug Fixes & Refinements
 
 <AccordionGroup>
   <Accordion title="Environment Variable Parsing" icon="key">
-    Fixed a critical issue where hidden `.env` files were not being correctly injected during the container build phase.
+    Fixed an issue where hidden `.env` files were not being correctly injected during the container build phase.
   </Accordion>
   <Accordion title="Real-time Build Streaming" icon="terminal">
-    Improved the socket connection for build logs, providing a smoother, zero-latency stream during the **Analyze** and **Build** steps.
+    Improved socket connections for build logs, providing a smoother, zero-latency stream during the build steps.
   </Accordion>
 </AccordionGroup>
 
----
-
-## 🏗 Roadmap: What's Next?
-
-We are just getting started. Here is the trajectory for the next few weeks:
+### 🏗 Roadmap: What's Next?
 
 <Steps>
-  <Step title="Deploying Nested folders">
-    Introduction of a dedicated binary for terminal-based deployments, secret management, and log tailing.
+  <Step title="Deploying Nested Folders">
+    Support for monorepos and specific root directory deployments.
   </Step>
-  <Step title="Zero time deployments">
-    Deploy closer to your users with choices between US-East, EU-West, and Asia-Pacific clusters.
+  <Step title="Zero-Time Deployments">
+    Implementing atomic rollouts to ensure zero downtime during project updates.
   </Step>
 </Steps>
 
 ---
 
 <Note>
-  **Feedback Welcome:** Found a bug or have a feature request? Reach out directly via [email](mailto:analystmuli@gmail.com) or join the conversation on [X (Twitter)](https://x.com/vectorihub).
+  **Feedback Welcome:** Found a bug? Reach out via [email](mailto:analystmuli@gmail.com) or join the conversation on [X](https://x.com/vectorihub).
 </Note>
 
-<Tip>
-  Ready to deploy? Check out the [Quickstart Guide](/quickstart) to get your first app live today.
-</Tip>
+</Update>
+
+<Update label="January 2026" description="v0.0.9 Alpha">
+  ### Internal Alpha Testing
+  Initial stress testing of the Auto-Dockerization engine with core contributors.
+</Update>
