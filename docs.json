@@ -2,6 +2,9 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "VectorIHub",
+  "blog": {
+    "enabled": true
+  },
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -9,6 +12,17 @@
   },
   "favicon": "/logo.png",
   "navigation": {
+    "dropdowns": [
+      {
+        "dropdown": "Documentation",
+        "icon": "book-open",
+        "pages": [
+          "quickstart",
+          "development",
+          "navigation"
+        ]
+      }
+    ],
     "tabs": [
       {
         "tab": "Guides",
@@ -75,8 +89,13 @@
           "icon": "book-open-cover"
         },
         {
+          "anchor": "Changelog",
+          "icon": "list",
+          "href": "/changelog"
+        },
+        {
           "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "href": "/blog",
           "icon": "newspaper"
         }
       ]

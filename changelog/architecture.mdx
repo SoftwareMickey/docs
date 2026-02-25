@@ -1,0 +1,30 @@
+---
+title: "Inside Beaver"
+description: "A deep dive into how Beaver detects, builds, and deploys any codebase automatically."
+date: "2026-02-25"
+authors: muli
+---
+
+## The Problem
+
+Traditional deployment platforms cause downtime during container rebuilds.
+For developers, this breaks user experience and trust.
+
+## Our Approach at VectorIHub
+
+At Beaver, we designed a rebuild pipeline that:
+- Regenerates images
+- Uses rolling container replacement
+- Maintains live traffic routing
+
+<Steps>
+  <Step title="Upload Code">
+    Developer uploads repository to Beaver.
+  </Step>
+  <Step title="Auto Detection">
+    Beaver detects language and framework automatically.
+  </Step>
+  <Step title="Deploy">
+    Container is deployed on VHB Cloud runtime.
+  </Step>
+</Steps>
