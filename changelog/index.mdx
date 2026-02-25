@@ -1,0 +1,81 @@
+---
+title: "Changelog: The Journey Begins"
+description: "Welcoming our first beta testers to the VectorIHub ecosystem."
+date: "2026-02-25"
+authors:
+  - name: "VectorIHub Team"
+    image: "/logo.png"
+---
+
+# Release v0.1.0 <Badge text="Public Beta" color="green" />
+
+Welcome to the very first VectorIHub changelog! We are officially opening our doors to beta testers to help us refine the future of **Push-to-Deploy** infrastructure.
+
+---
+
+##  New Features
+
+<CardGroup cols={1}>
+  <Card title="Auto-Dockerization" icon="wand-magic-sparkles" color="#16A34A">
+    Our core engine now supports automatic detection for **Node.js, React, and Go**. Launch without writing a single Dockerfile.
+  </Card>
+  <Card title="GitHub Native Integration" icon="github" color="#000000">
+    Securely connect your account and deploy any repository **public** or **private** with a single click.
+  </Card>
+</CardGroup>
+
+### Infrastructure Upgrades
+
+We've overhauled our backend to ensure your applications stay fast and secure from the moment they are provisioned.
+
+<Tabs>
+  <Tab title="Runtime">
+    **VHB Cloud Runtime** has been optimized for high-density container orchestration, significantly reducing cold start times for serverless-style deployments.
+  </Tab>
+  <Tab title="Security">
+    **Automatic SSL:** Every deployment now receives an automated Let's Encrypt SSL certificate. Security is no longer an afterthought; it’s the default.
+  </Tab>
+  <Tab title="Networking">
+    **Custom Subdomains:** Beta users can now claim and manage their own `*.vectorihub.run` namespaces directly from the dashboard.
+  </Tab>
+</Tabs>
+
+---
+
+## 🛠 Bug Fixes & Refinements
+
+Being in Beta means finding the rough edges. Here is what we've polished in the latest sprint:
+
+<AccordionGroup>
+  <Accordion title="Environment Variable Parsing" icon="key">
+    Fixed a critical issue where hidden `.env` files were not being correctly injected during the container build phase.
+  </Accordion>
+  <Accordion title="Real-time Build Streaming" icon="terminal">
+    Improved the socket connection for build logs, providing a smoother, zero-latency stream during the **Analyze** and **Build** steps.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## 🏗 Roadmap: What's Next?
+
+We are just getting started. Here is the trajectory for the next few weeks:
+
+<Steps>
+  <Step title="Deploying Nested folders">
+    Introduction of a dedicated binary for terminal-based deployments, secret management, and log tailing.
+  </Step>
+  <Step title="Zero time deployments">
+    Deploy closer to your users with choices between US-East, EU-West, and Asia-Pacific clusters.
+  </Step>
+</Steps>
+
+---
+
+<Note>
+  **Feedback Welcome:** Found a bug or have a feature request? Reach out directly via [email](mailto:analystmuli@gmail.com) or join the conversation on [X (Twitter)](https://x.com/vectorihub).
+</Note>
+
+<Tip>
+  Ready to deploy? Check out the [Quickstart Guide](/quickstart) to get your first app live today.
+</Tip>
