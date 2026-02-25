@@ -1,0 +1,64 @@
+1. Layout & Structure
+Used to organize the flow of your page.
+
+<Card> & <CardGroup>: Create clickable, visual boxes for navigation or features.
+
+<Accordion> & <AccordionGroup>: Collapsible sections for FAQs or deep-dives.
+
+<Tabs> & <Tab>: Organize content into switchable views (e.g., different OS instructions).
+
+<Steps> & <Step>: Create numbered, sequential walkthroughs.
+
+<Columns> & <Column>: Side-by-side content layouts.
+
+<Expandable>: A toggle to show/hide detailed nested content.
+
+2. Callouts & Emphasis
+Used to draw the reader's eye to specific notes.
+
+<Note>: Blue callout for general information.
+
+<Warning>: Amber callout for "be careful" info.
+
+<Info>: Alternative blue/green callout for tips.
+
+<Check>: Green callout for success or "do this" items.
+
+<Tip>: Practical advice or "pro-tips."
+
+<Error>: Red callout for critical "don't do this" or common failures.
+
+3. Code & Technical Documentation
+The core of developer docs.
+
+<CodeGroup>: Group multiple code snippets (e.g., npm, yarn, pnpm) into tabs.
+
+<RequestExample>: Pins code to the right sidebar on desktop (standard for API docs).
+
+<ResponseExample>: Pins the JSON response to the right sidebar.
+
+<Frame>: Wraps images or code blocks in a styled border/container.
+
+<Snippet>: Reusable pieces of content imported from the /snippets folder.
+
+4. API & Data Components
+Used for documenting endpoints and properties.
+
+<ParamField>: Beautifully styled rows for API parameters (query, path, body).
+
+<ResponseField>: Similar to ParamField, but for documenting the output JSON.
+
+<Expandable>: Often nested inside fields to show child properties of an object.
+
+5. Visual & Interactive
+<Icon>: Access to the Lucide icon library (e.g., <Icon icon="rocket" />).
+
+<Badge>: Inline colored labels for status (e.g., "New", "Deprecated").
+
+<Tooltip>: Hover text for definitions.
+
+<Update>: A specialized component for changelogs that includes a date and tag.
+
+Mermaid: Built-in support for diagrams (flowcharts, sequence diagrams).
+
+<Embed>: For YouTube, Loom, or other video/iframe content.
