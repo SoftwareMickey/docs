@@ -1,0 +1,192 @@
+---
+title: "Supported Go App Types"
+sidebarTitle: "Supported App Types"
+description: "Learn which Go server patterns VectorIHub automatically detects, compiles, and runs without manual configuration."
+sidebar_position: 2
+icon: "golang"
+---
+
+# Supported Go App Types
+
+VectorIHub automatically detects and runs your Go applications by scanning for common server and runtime patterns in your codebase.  
+You don’t need to manually configure ports or container settings — as long as your app follows one of the supported patterns below, VectorIHub handles compilation, port binding, and execution for you.
+
+<Note>
+Automatic detection works best when your application starts a server using a defined port or reads from `os.Getenv("PORT")`.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Automatic Binary Compilation" icon="cpu">
+    VectorIHub detects `go.mod`, builds your binary, and runs it in a production container.
+  </Card>
+  <Card title="Zero Config Port Binding" icon="settings">
+    No manual port configuration required for supported Go frameworks.
+  </Card>
+</CardGroup>
+
+---
+
+## Supported Runtime Patterns
+
+<Tabs>
+  <Tab title="net/http (Standard)">
+    Most Go web servers use the built-in `net/http` package.  
+    VectorIHub automatically detects `http.ListenAndServe` and `http.ListenAndServeTLS`.
+
+    <Check>
+    This is the most common and fully optimized Go deployment pattern on VectorIHub.
+    </Check>
+
+    <CodeGroup>
+    ```go main.go
+      package main
+
+      import (
+        "fmt"
+        "net/http"
+      )
+
+      func handler(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintln(w, "Hello from VectorIHub 🚀")
+      }
+
+      func main() {
+        http.HandleFunc("/", handler)
+        fmt.Println("Server running on port 8080")
+        http.ListenAndServe(":8080", nil)
+    }
+    ```
+    </CodeGroup> 
+  </Tab> 
+  <Tab title="Dynamic PORT (Recommended)"> 
+    For cloud-native deployments, using `os.Getenv("PORT")` is the recommended best practice. VectorIHub automatically injects and binds the correct port at runtime. 
+    
+    <Tip> Always use `os.Getenv("PORT")` for maximum compatibility with cloud environments. </Tip> 
+    
+    <CodeGroup> 
+    ```go main.go 
+      package main
+
+      import (
+      "fmt"
+      "net/http"
+      "os"
+      )
+
+      func main() {
+        port := os.Getenv("PORT")
+        if port == "" {
+        port = "8080"
+      }
+
+      http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintln(w, "Running on a VectorIHub-assigned port 🚀")
+      })
+
+      fmt.Println("Server running on port", port)
+      http.ListenAndServe(":"+port, nil)
+
+      }
+    ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Gin Framework">
+    VectorIHub detects `router.Run(":PORT")` automatically for Gin applications.
+
+    <Info>
+    Gin apps are optimized for high-performance APIs and microservices and are fully supported.
+    </Info>
+
+    <CodeGroup>
+      ```go main.go
+      package main
+
+      import "github.com/gin-gonic/gin"
+
+      func main() {
+        r := gin.Default()
+
+        r.GET("/", func(c *gin.Context) {
+          c.JSON(200, gin.H{
+            "message": "Hello from Gin on VectorIHub",
+          })
+        })
+
+        r.Run(":8080")
+      }
+      ```
+    </CodeGroup> 
+  </Tab> 
+  
+  <Tab title="Echo Framework"> 
+  For Echo-based applications, VectorIHub detects `.Start(":PORT")` automatically. 
+    <CodeGroup> 
+    ```go main.go package main
+
+      import (
+      "net/http"
+      "github.com/labstack/echo/v4"
+      )
+
+      func main() {
+      e := echo.New()
+
+      e.GET("/", func(c echo.Context) error {
+        return c.String(http.StatusOK, "Hello from Echo on VectorIHub")
+      })
+
+      e.Start(":8080")
+
+      }
+    ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Fiber Framework">
+    VectorIHub also supports Fiber apps using `.Listen(":PORT")`.
+
+    <CodeGroup>
+      ```go main.go
+      package main
+
+      import "github.com/gofiber/fiber/v2"
+
+      func main() {
+        app := fiber.New()
+
+        app.Get("/", func(c *fiber.Ctx) error {
+          return c.SendString("Hello from Fiber on VectorIHub")
+        })
+
+        app.Listen(":8080")
+      }
+      ```
+    </CodeGroup> 
+  </Tab> 
+</Tabs>
+
+Additional Detection Support
+<Columns>
+  <Column> 
+    <Check>`http.ListenAndServe(":PORT", ...)`</Check> 
+    <Check>`http.ListenAndServeTLS(":PORT", ...)`</Check> 
+    <Check>`router.Run(":PORT")` (Gin)</Check> 
+  </Column> 
+  <Column> 
+    <Check>`e.Start(":PORT")` (Echo)</Check> 
+    <Check>`app.Listen(":PORT")` (Fiber)</Check> 
+    <Check>`os.Getenv("PORT")` dynamic binding</Check> 
+  </Column> 
+</Columns> 
+
+<Expandable title="Advanced Config Detection">
+   VectorIHub can also detect more advanced Go runtime configurations such as: - Flag-based port configs (`flag.Int("port", 8080, ...)`) - Custom router setups built on top of `net/http` - Modular Go services compiled from `main.go`
+</Expandable>
+
+Summary
+<Check> 
+  VectorIHub automatically detects, compiles, and runs Go applications that follow standard server patterns — with zero manual Docker, port configuration, or runtime setup required. 
+</Check>
+
+<Badge color="green">Auto Runtime Detection Enabled</Badge>

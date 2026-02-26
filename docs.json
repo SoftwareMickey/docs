@@ -23,6 +23,16 @@
             ]
           },
           {
+            "group": "React",
+            "pages": [
+              "/react/index",
+              "/react/supported-react-types",
+              "/react/deploying-react-app",
+              "/react/environment-variables",
+              "/react/congratulations"
+            ]
+          },
+          {
             "group": "Node Js",
             "pages": [
               "/nodejs/index",
@@ -30,6 +40,16 @@
               "/nodejs/deploying-nodejs-app",
               "/nodejs/environment-variables",
               "/nodejs/congratulations"
+            ]
+          },
+          {
+            "group": "Golang",
+            "pages": [
+              "/go/index",
+              "/go/supported-go-types",
+              "/go/deploying-go-app",
+              "/go/environment-variables",
+              "/go/congratulations"
             ]
           }
         ]

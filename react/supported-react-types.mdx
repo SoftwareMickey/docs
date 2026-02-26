@@ -1,0 +1,80 @@
+---
+title: "Supported React App Types"
+sidebarTitle: "Supported App Types"
+description: "Learn which React project patterns VectorIHub automatically detects, builds, and deploys without manual configuration."
+sidebar_position: 2
+icon: "react"
+---
+
+# Supported React App Types
+
+VectorIHub automatically detects and deploys your React applications by scanning your repository for common frontend project structures.  
+Unlike backend runtimes, React apps do not require manual port configuration — VectorIHub builds your app and serves the optimized production bundle automatically.
+
+<Note>
+Automatic detection works best when your project includes a valid `package.json` with a build script such as `npm run build`.
+</Note>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Automatic Framework Detection" icon="rocket">
+    VectorIHub detects React frameworks like Vite, CRA, and similar setups instantly.
+  </Card>
+  <Card title="Zero Config Builds" icon="settings">
+    No manual server or port setup required for supported React projects.
+  </Card>
+</CardGroup>
+
+---
+
+## 1. Vite + React (Recommended)
+
+Modern React apps built with **Vite** are fully supported and automatically optimized for fast production builds and static serving.
+
+<Check>
+This is the fastest and most optimized React deployment pattern on VectorIHub.
+</Check>
+
+<CodeGroup>
+```jsx main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+</CodeGroup>
+
+## 2. Create React App (CRA)
+
+VectorIHub automatically detects Create React App projects and runs the correct build process without additional configuration.
+
+<Tip> Ensure your `package.json` contains a valid `build` script (e.g. `react-scripts build`) for automatic detection. </Tip> 
+
+<CodeGroup> 
+  ```json package.json 
+  { 
+    "scripts": { 
+      "start": "react-scripts start", 
+      "build": "react-scripts build" 
+    } 
+  } 
+  ``` 
+</CodeGroup>
+
+## 3. Static React Builds (Dist / Build Folder)
+
+If your React project outputs a static build folder (such as dist/ or build/), VectorIHub automatically serves it through a secure container and global routing layer.
+
+<Info> This works seamlessly with custom React setups, Vite exports, and other static frontend configurations. </Info> 
+
+<CodeGroup> 
+```bash 
+  npm run build # Output: # dist/ or build/ 
+  ``` 
+</CodeGroup>

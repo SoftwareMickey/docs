@@ -1,0 +1,176 @@
+---
+title: "Managing Environment Variables"
+sidebarTitle: "Environment Variables"
+description: "Securely manage API keys, endpoints, and configuration values in VectorIHub React apps using environment variables."
+sidebar_position: 4
+icon: "key"
+---
+
+# Managing Environment Variables
+
+Modern React applications rely on API endpoints, feature flags, and third-party integrations.  
+VectorIHub allows you to securely manage these using **environment variables** — without exposing sensitive data in your repository.
+
+<Note>
+Environment variables are securely injected during the build and deployment process and are not stored in your source code.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Secure by Default" icon="shield">
+    Keep API keys and configs out of your GitHub repository.
+  </Card>
+  <Card title="Build-Time Injection" icon="cpu">
+    Variables are injected during the build process for React apps.
+  </Card>
+  <Card title="Zero Config Access" icon="zap">
+    Access variables instantly using `import.meta.env` or framework-specific env access.
+  </Card>
+</CardGroup>
+
+---
+
+## Adding Environment Variables
+
+Follow these steps to add environment variables to your React project:
+
+<Steps>
+  <Step title="Open Project Dashboard">
+    Go to your project inside the **VectorIHub Dashboard**.
+  </Step>
+
+  <Step title="Navigate to Environment Settings">
+    Open:
+    <Info>Settings → Environment Variables</Info>
+  </Step>
+
+  <Step title="Add Key-Value Pairs">
+    Add your environment variables such as API URLs, public keys, or feature flags.
+
+    ```bash
+    Key: VITE_API_URL
+    Value: https://api.vectorihub.com
+    ```
+
+    <Check>
+    Your variables are now securely stored and will be injected during the build.
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Accessing Variables in React (Vite)
+
+For Vite-based React apps, environment variables are accessed using `import.meta.env`.
+
+<CodeGroup>
+```jsx App.jsx
+const apiUrl = import.meta.env.VITE_API_URL;
+
+export default function App() {
+  return (
+    <div>
+      <h1>VectorIHub React App 🚀</h1>
+      <p>API Endpoint: {apiUrl}</p>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+<Tip> Vite requires environment variables to be prefixed with `VITE_` to be exposed to the browser. </Tip>
+
+## Accessing Variables in Create React App (CRA)
+
+If you are using Create React App, use the REACT_APP_ prefix.
+
+<CodeGroup> 
+  ```jsx App.js 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  function App() {
+    return (
+    <div>
+    <h1>Connected to: {apiUrl}</h1>
+    </div>
+    );
+  }
+
+  export default App;
+  ```
+</CodeGroup>
+
+
+## Best Practices
+
+<Columns>
+  <Column>
+    <Check>Never commit API keys or secrets to GitHub</Check>
+    <Check>Use environment variables for all external endpoints</Check>
+    <Check>Separate development and production variables</Check>
+  </Column>
+  <Column>
+    <Warning>
+      Exposing private secrets in frontend apps can lead to security risks. Only use public-safe keys in React.
+    </Warning>
+  </Column>
+</Columns>
+
+---
+
+## Updating Environment Variables
+
+Environment variable updates are applied during the next deployment cycle.
+
+<AccordionGroup>
+  <Accordion title="How updates are applied">
+    - Modify or add variables in the dashboard  
+    - Trigger a redeploy or push new code  
+    - VectorIHub rebuilds the React app with updated variables  
+  </Accordion>
+
+  <Accordion title="When should you redeploy?">
+    Redeploy whenever you:
+    - Change API endpoints  
+    - Update public configuration values  
+    - Add new third-party integrations  
+  </Accordion>
+</AccordionGroup>
+
+<Badge color="amber">Requires Redeploy</Badge>
+
+---
+
+## Supported Use Cases
+
+VectorIHub environment variables in React apps can be used for:
+
+<CardGroup cols={1}>
+  <Card title="API Endpoints" icon="globe">
+    Backend URLs, microservices, and gateway endpoints.
+  </Card>
+  <Card title="Public API Keys" icon="lock">
+    Stripe public keys, analytics keys, and other client-safe tokens.
+  </Card>
+  <Card title="Feature Flags" icon="settings">
+    Enable or disable features across environments.
+  </Card>
+  <Card title="App Configuration" icon="sliders">
+    Environment modes, branding configs, and runtime settings.
+  </Card>
+</CardGroup>
+
+---
+
+## Summary
+
+<Check>
+Store configuration safely in the VectorIHub dashboard and access it in your React app using `import.meta.env` (Vite) or `process.env` (CRA).
+</Check>
+
+<Expandable title="Quick Recap">
+- Add variables in **Dashboard → Settings → Environment Variables**  
+- Use `VITE_` (Vite) or `REACT_APP_` (CRA) prefixes  
+- Redeploy to apply changes  
+- Never store secrets directly in frontend code  
+</Expandable>

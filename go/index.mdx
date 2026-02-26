@@ -1,0 +1,79 @@
+---
+title: "Go"
+sidebarTitle: "Go"
+description: "Build and deploy fast, compiled backend services with VectorIHub's Go runtime."
+icon: "golang"
+---
+
+Go (Golang) is a high-performance, compiled programming language designed for scalable backend systems, APIs, and microservices.  
+VectorIHub provides **first-class support for Go projects**, automatically detecting your entry point, compiling your binary, and preparing a production-ready container for deployment.
+
+<CardGroup cols={2}>
+  <Card title="HTTP APIs & Web Servers" icon="server">
+    Go servers using `net/http`, Gin, Fiber, Echo, and other frameworks.
+  </Card>
+  <Card title="Workers & Services" icon="gears">
+    Background jobs, microservices, and CLI-based Go applications.
+  </Card>
+</CardGroup>
+
+---
+
+## Deployment Process
+
+Follow these steps to get your Go application live on VectorIHub.
+
+<Steps>
+  <Step title="Connect Repository">
+    Upload or connect your GitHub/GitLab repository. VectorIHub scans your codebase to detect Go modules and entry files.
+
+    <Tip>Ensure your `go.mod` and `main.go` are present for automatic runtime detection.</Tip>
+  </Step>
+
+  <Step title="Build & Environment Setup">
+    VectorIHub automatically:
+    * Detects `go.mod` and Go module structure
+    * Downloads dependencies using `go mod download`
+    * Compiles your application into an optimized binary
+    * Detects the Go version from your module settings
+  </Step>
+
+  <Step title="Go Live">
+    VectorIHub builds and runs your compiled Go binary inside a secure container, automatically binding the correct port.
+
+    <Check>Most Go deployments complete in under 60 seconds.</Check>
+  </Step>
+</Steps>
+
+---
+
+## Example: Deploying a Go HTTP Server
+
+<CodeGroup>
+
+```go main.go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello from VectorIHub Go runtime 🚀")
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	http.HandleFunc("/", handler)
+	fmt.Println("Server running on port", port)
+	http.ListenAndServe(":"+port, nil)
+}
+```
+
+</CodeGroup>

@@ -1,0 +1,134 @@
+---
+title: "Deploying a React App"
+sidebarTitle: "Deploy React"
+description: "Step-by-step guide to deploying your React application on VectorIHub with automatic build detection and containerized hosting."
+sidebar_position: 3
+icon: "rocket"
+---
+
+### Deploying a React App
+
+<div style={{ fontSize: "16px" }}>
+    VectorIHub makes deploying your React apps effortless.  
+    Once your code is pushed to GitHub (or uploaded directly), VectorIHub will **auto detect the framework**, run the production build, and host the optimized static bundle for you — **no Dockerfile or server setup required**.
+</div>
+
+<Note>
+VectorIHub automatically scans your repository to detect React frameworks like Vite, Create React App, and other static frontend setups.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Auto Framework Detection" icon="search">
+    Detects React, Vite, CRA, and static frontend projects automatically.
+  </Card>
+  <Card title="Zero Docker Setup" icon="box">
+    No Dockerfile or manual container configuration needed.
+  </Card>
+  <Card title="Instant Global Hosting" icon="zap">
+    Your built React app is deployed and served instantly via secure routing.
+  </Card>
+</CardGroup>
+
+---
+
+## Project Requirements
+
+Before deploying, ensure your React project meets the following requirements:
+
+<Columns>
+  <Column>
+    <Check>Includes a `package.json` file</Check>
+    <Check>Has a valid build script (`npm run build`)</Check>
+    <Check>Uses a supported React setup (Vite, CRA, or similar)</Check>
+  </Column>
+  <Column>
+    <Info>
+      Supported setups include:
+      <br />• Vite + React  
+      • Create React App  
+      • Static build outputs (`dist/` or `build/`)
+    </Info>
+  </Column>
+</Columns>
+
+<Tip>
+For best compatibility, ensure your production build outputs to a `dist` or `build` folder.
+</Tip>
+
+### Example Project Structure
+
+```bash
+my-react-app/
+├── package.json
+├── index.html
+├── src/
+│   ├── main.jsx
+│   └── App.jsx
+└── vite.config.js
+```
+
+## Deployment Workflow
+
+<Steps> 
+    <Step title="Push Your Project"> Push your React project to GitHub or upload it directly via the VectorIHub dashboard. </Step> 
+
+    <CodeGroup>
+        ```bash Git (Recommended)
+            git init
+            git add .
+            git commit -m "first commit"
+            git branch -M main
+            git remote add origin https://github.com/username/my-app.git
+            git push -u origin main
+            ```
+            ```bash Direct Upload
+            # Upload your project zip file from the VectorIHub dashboard
+            # VectorIHub will automatically extract and analyze the codebase
+            ```
+    </CodeGroup>
+
+    <Check>Your repository is now ready for automatic framework detection.</Check>
+
+    <Step title="Connect to VectorIHub"> Navigate to the VectorIHub dashboard and connect your repository. </Step> 
+        <CardGroup cols={1}> 
+            <Card title="Deploy Repo" icon="github"> Import directly from GitHub or GitLab. </Card> 
+            <Card title="Code Scan" icon="scan-line"> VectorIHub scans your codebase for React configs and build scripts. </Card> 
+        </CardGroup> 
+        <Note> The platform automatically detects frameworks like Vite and CRA by analyzing `package.json` and build configurations. </Note> 
+
+    <Step title="Build & Deploy"> VectorIHub handles the entire build pipeline automatically. </Step> 
+    <AccordionGroup> 
+        <Accordion title="Dependency Installation"> Installs dependencies using `npm install`, `yarn install`, or `pnpm install` based on your lockfile. </Accordion> 
+        <Accordion title="Framework Detection"> Detects your React framework and build configuration automatically. </Accordion> 
+        <Accordion title="Production Build"> Runs the production build command (e.g. `npm run build`) to generate optimized static assets. </Accordion> 
+        <Accordion title="Containerized Hosting"> Serves the built `dist/` or `build/` folder inside a secure production container. </Accordion> 
+    </AccordionGroup>
+
+    <Check>No server configuration or Dockerfile required</Check>
+
+    <Step title="Access Your App"> Once deployment is complete, VectorIHub provides a live URL for your application. </Step> 
+    <Frame> 
+        ```arduino 
+            https://my-react-app.vectorihub.run 
+        ``` 
+    </Frame> 
+
+    <Info> Your React app is now globally accessible with automatic routing, caching, and secure hosting. </Info> 
+</Steps>
+
+## Common Tips for Smooth Deployment
+
+<Tabs> 
+    <Tab title="Best Practices"> 
+        <Tip>Keep your `package.json` in the root directory.</Tip> 
+        <Tip>Ensure a valid `build` script exists in your project.</Tip> 
+        <Tip>Use environment variables for API endpoints instead of hardcoding URLs.</Tip> 
+    </Tab> 
+    <Tab title="Troubleshooting"> 
+        <Warning> If the build fails, ensure `npm run build` works locally before deploying. </Warning>
+        <Error> Missing `package.json` or build script may cause automatic detection to fail. </Error> 
+    </Tab> 
+</Tabs>
+
+Summary
+<Check> With VectorIHub, deploying a React app is as simple as pushing your code. The platform auto-detects the framework, installs dependencies, builds the project, and hosts the optimized frontend globally with zero configuration. </Check>

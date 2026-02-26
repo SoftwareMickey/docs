@@ -1,0 +1,179 @@
+---
+title: "Deploying a Go App"
+sidebarTitle: "Deploy Go"
+description: "Step-by-step guide to deploying your Go application on VectorIHub with automatic build detection, compilation, and containerized execution."
+sidebar_position: 3
+icon: "rocket"
+---
+
+### Deploying a Go App
+
+<div style={{ fontSize: "16px" }}>
+    VectorIHub makes deploying your Go apps effortless.  
+    Once your code is pushed to GitHub (or uploaded directly), VectorIHub will **auto detect your Go module**, compile the binary, and handle containerization for you — <strong>no Dockerfile required</strong>.
+</div>
+
+<Note>
+VectorIHub automatically scans your repository to detect `go.mod`, `main.go`, and supported server patterns such as `http.ListenAndServe` and framework-based routers.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Auto Go Module Detection" icon="search">
+    Detects `go.mod`, entry files, and server runtime patterns automatically.
+  </Card>
+  <Card title="Zero Docker Setup" icon="box">
+    No Dockerfile or manual container configuration needed.
+  </Card>
+  <Card title="Compiled Binary Deployment" icon="cpu">
+    Your Go app is compiled into an optimized binary and deployed securely.
+  </Card>
+</CardGroup>
+
+---
+
+## Project Requirements
+
+Before deploying, ensure your Go project meets the following requirements:
+
+<Columns>
+  <Column>
+    <Check>Includes a `go.mod` file</Check>
+    <Check>Has a `main.go` entry file</Check>
+    <Check>Starts a server or executable in `main()`</Check>
+  </Column>
+  <Column>
+    <Info>
+      Supported patterns include:
+      <br />• `http.ListenAndServe(":PORT", ...)`  
+      • `os.Getenv("PORT")`  
+      • `router.Run(":PORT")` (Gin)  
+      • `app.Listen(":PORT")` (Fiber)  
+    </Info>
+  </Column>
+</Columns>
+
+<Tip>
+For best cloud compatibility, use `os.Getenv("PORT")` instead of hardcoding ports.
+</Tip>
+
+### Example Project Structure
+
+```bash
+my-go-app/
+├── go.mod
+├── go.sum
+├── main.go
+└── internal/
+    └── handlers.go
+```
+It looks like you've already got a solid structure there using Mintlify-style components! I’ve refined the syntax to ensure it follows standard MDX conventions for documentation, keeping the flow logical and the technical steps punchy.
+
+---
+
+## Go Deployment Workflow
+
+Follow these steps to get your Go application live on VectorIHub in minutes.
+
+<Steps>
+    <Step title="Push Your Project">
+        Push your Go project to GitHub or upload it directly via the VectorIHub dashboard.
+
+        <CodeGroup>
+            ```bash Git (Recommended)
+            git init
+            git add .
+            git commit -m "first commit"
+            git branch -M main
+            git remote add origin https://github.com/username/my-go-app.git
+            git push -u origin main
+            ```
+        </CodeGroup>
+
+        ```bash Direct Upload
+        # 1. Zip your project files
+        # 2. Upload via the VectorIHub dashboard
+        # 3. VectorIHub automatically extracts and analyzes the codebase
+        ```
+
+        <Check>Your repository is now ready for automatic Go runtime detection.</Check>
+    </Step>
+
+    <Step title="Connect to VectorIHub">
+        Navigate to the VectorIHub dashboard and connect your repository to initiate the import.
+
+        <CardGroup cols={2}>
+            <Card title="Deploy Repo" icon="github">
+                Import directly from GitHub or GitLab with seamless integration.
+            </Card>
+            <Card title="Code Scan" icon="scan-line">
+                VectorIHub scans your codebase for `go.mod`, entry points, and server patterns.
+            </Card>
+        </CardGroup>
+
+        <Note>
+        The platform automatically detects supported patterns like `http.ListenAndServe`, Gin `Run()`, Echo `Start()`, and Fiber `Listen()`.
+        </Note>
+    </Step>
+
+    <Step title="Build & Deploy">
+        VectorIHub handles the entire Go build and deployment pipeline automatically.
+
+        <AccordionGroup>
+            <Accordion title="Dependency Resolution">
+                Downloads Go dependencies using `go mod download` and `go mod tidy`.
+            </Accordion>
+            <Accordion title="Compilation">
+                Compiles your application into a high-performance, optimized production binary.
+            </Accordion>
+            <Accordion title="Runtime Detection">
+                Detects the main entry point and server startup logic in `main.go`.
+            </Accordion>
+            <Accordion title="Containerization">
+                Packages the compiled binary into a secure, lightweight, and production-ready container.
+            </Accordion>
+            <Accordion title="Port Binding">
+                Automatically binds the correct `PORT` environment variable—no manual configuration required.
+            </Accordion>
+        </AccordionGroup>
+
+        <Check>No manual Dockerfile or build scripts required</Check>
+    </Step>
+
+    <Step title="Access Your App">
+        Once deployment is complete, VectorIHub provides a live production URL for your application.
+        <Frame>
+            `https://my-go-app.vectorihub.run`
+        </Frame>
+
+        <Info>
+        Your Go app is now publicly accessible, compiled, and securely hosted with automatic networking and routing.
+        </Info>
+    </Step>
+</Steps>
+
+## Common Tips for Smooth Deployment
+
+<Tabs>
+  <Tab title="Best Practices">
+    <Tip>Keep your `go.mod` in the root directory.</Tip>
+    <Tip>Ensure your `main.go` contains the application entry point.</Tip>
+    <Tip>Use `os.Getenv("PORT")` for production-ready deployments.</Tip>
+  </Tab>
+  
+  <Tab title="Troubleshooting">
+    <Warning>
+      If your app exits immediately, ensure your `main()` function starts a server or long-running process.
+    </Warning>
+    <Error>
+      Missing `go.mod` or `main.go` may cause runtime detection to fail.
+    </Error>
+  </Tab>
+</Tabs>
+
+Summary
+
+<Check>
+With VectorIHub, deploying a Go app is as simple as pushing your code. The platform auto-detects your module, compiles the binary, containerizes the runtime, and deploys your application with zero configuration.
+</Check>
+
+<Badge color="green">Go Runtime Auto-Deploy Enabled</Badge>

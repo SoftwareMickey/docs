@@ -1,0 +1,70 @@
+---
+title: "React"
+sidebarTitle: "React"
+description: "Build and deploy modern, high-performance frontend applications with VectorIHub's React runtime."
+icon: "react"
+---
+
+React is a popular JavaScript library for building dynamic user interfaces. VectorIHub provides **first-class support for React applications**, automatically detecting your project configuration and preparing an optimized build and deployment environment.
+
+<CardGroup cols={2}>
+  <Card title="Single Page Apps (SPA)" icon="globe">
+    React apps powered by Vite, CRA, or custom setups.
+  </Card>
+  <Card title="Static & Dynamic Builds" icon="rocket">
+    Optimized production builds with automatic asset serving.
+  </Card>
+</CardGroup>
+
+---
+
+## Deployment Process
+
+Follow these steps to get your React application live on VectorIHub.
+
+<Steps>
+  <Step title="Connect Repository">
+    Upload or connect your GitHub/GitLab repository. VectorIHub scans your codebase and detects React configurations automatically.
+
+    <Tip>Ensure your `package.json` and build config (e.g. Vite, CRA, or Next-style setup) are in the root directory.</Tip>
+  </Step>
+
+  <Step title="Build & Environment Setup">
+    VectorIHub automatically:
+    * Detects React frameworks (Vite, Create React App, etc.)
+    * Installs dependencies using `npm`, `yarn`, or `pnpm`
+    * Runs the production build (`npm run build`)
+    * Optimizes static assets for fast delivery
+  </Step>
+
+  <Step title="Go Live">
+    VectorIHub builds your React app and serves the optimized production bundle through a secure container and global edge routing.
+
+    <Check>Most React deployments complete in under 60 seconds.</Check>
+  </Step>
+</Steps>
+
+---
+
+## Example: Simple React App
+
+<CodeGroup>
+
+```jsx App.jsx
+import { useState } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", textAlign: "center", marginTop: "50px" }}>
+      <h1>Hello from VectorIHub React Runtime 🚀</h1>
+      <p>Clicks: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click Me
+      </button>
+    </div>
+  );
+}
+```
+</CodeGroup>

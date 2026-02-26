@@ -1,0 +1,170 @@
+---
+title: "Managing Environment Variables"
+sidebarTitle: "Environment Variables"
+description: "Securely manage API keys, database URLs, and secrets in VectorIHub Go apps using environment variables."
+sidebar_position: 4
+icon: "key"
+---
+
+# Managing Environment Variables
+
+Most production Go applications rely on API keys, database connections, and third-party services.  
+VectorIHub makes it easy to manage these securely using **environment variables** — so you never have to store secrets inside your Go codebase.
+
+<Note>
+Environment variables are securely injected into your runtime container during deployment and are never exposed in your repository.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Secure by Default" icon="shield">
+    Keep secrets and credentials out of your GitHub repository.
+  </Card>
+  <Card title="Runtime Injection" icon="cpu">
+    Variables are automatically injected into your Go app at runtime.
+  </Card>
+  <Card title="Zero Config Access" icon="zap">
+    Access variables instantly using `os.Getenv()` in your Go application.
+  </Card>
+</CardGroup>
+
+---
+
+## Adding Environment Variables
+
+Follow these steps to add environment variables to your Go project:
+
+<Steps>
+  <Step title="Open Project Dashboard">
+    Go to your project inside the **VectorIHub Dashboard**.
+  </Step>
+
+  <Step title="Navigate to Environment Settings">
+    Open:
+    <Info>Settings → Environment Variables</Info>
+  </Step>
+
+  <Step title="Add Key-Value Pairs">
+    Add your environment variables such as database URLs, API keys, or service tokens.
+
+    ```bash
+    Key: DATABASE_URL
+    Value: postgres://username:password@host:5432/mydb
+    ```
+    <Check>
+    Your variables are now securely stored and ready for deployment.
+    </Check>
+  </Step> 
+</Steps>
+
+## Accessing Variables in Go
+
+Once added, VectorIHub automatically injects environment variables into your runtime environment. 
+
+You can access them in your Go application using the standard library `os` package.
+
+<CodeGroup>
+  ```go main.go
+  package main
+
+  import (
+    "fmt"
+    "net/http"
+    "os"
+  )
+
+  func main() {
+    // Accessing the environment variable
+    dbURL := os.Getenv("DATABASE_URL")
+
+    fmt.Println("Connected to:", dbURL)
+
+    // Example: Using PORT for the server
+    port := os.Getenv("PORT")
+    if port == "" {
+      port = "8080"
+    }
+    
+    http.ListenAndServe(":" + port, nil)
+  }
+```
+</CodeGroup>
+
+<Tip>
+Always use `os.Getenv("PORT")` for cloud deployments to ensure proper port binding on VectorIHub.
+</Tip>
+
+---
+
+## Best Practices
+
+<Columns>
+  <Column>
+    <Check>Never commit secrets like API keys to GitHub</Check>
+    <Check>Use environment variables for all credentials</Check>
+    <Check>Add safe fallbacks for local development</Check>
+  </Column>
+  <Column>
+    <Warning>
+      Hardcoding secrets in Go source files can expose sensitive data and create serious security risks.
+    </Warning>
+  </Column>
+</Columns>
+
+---
+
+## Updating Environment Variables
+
+Environment variable updates are applied during the next deployment cycle.
+
+<AccordionGroup>
+  <Accordion title="How updates are applied">
+    - Modify or add variables in the dashboard  
+    - Trigger a redeploy or push new code  
+    - VectorIHub rebuilds and restarts your Go container with updated variables  
+  </Accordion>
+
+  <Accordion title="When should you redeploy?">
+    Redeploy whenever you:
+    - Change API keys  
+    - Update database credentials  
+    - Add new third-party integrations  
+  </Accordion>
+</AccordionGroup>
+
+<Badge color="amber">Requires Redeploy</Badge>
+
+---
+
+## Supported Use Cases
+
+VectorIHub environment variables in Go apps can be used for:
+
+<CardGroup cols={1}>
+  <Card title="Databases" icon="database">
+    PostgreSQL, MongoDB, MySQL, and other connection strings.
+  </Card>
+  <Card title="External APIs" icon="globe">
+    Stripe, OpenAI, Twilio, and other third-party service integrations.
+  </Card>
+  <Card title="Auth & Tokens" icon="lock">
+    JWT secrets, OAuth credentials, and service authentication keys.
+  </Card>
+  <Card title="Service Config" icon="settings">
+    Feature flags, environment modes, and runtime configuration values.
+  </Card>
+</CardGroup>
+
+---
+
+## Summary
+
+<Check>
+Store secrets securely in the VectorIHub dashboard and access them safely in your Go application using `os.Getenv("KEY")`.
+</Check>
+
+<Expandable title="Quick Recap">
+- Add variables in **Dashboard → Settings → Environment Variables**  
+- Access them using `os.Getenv("KEY")`  
+- Redeploy to apply changes  
+- Never commit secrets into your repository  
+</Expandable>
