@@ -1,0 +1,131 @@
+---
+title: "Managing Environment Variables"
+sidebarTitle: "Environment Variables"
+description: "Securely manage API keys, database URLs, and secrets in VectorIHub using environment variables."
+sidebar_position: 4
+icon: "key"
+---
+
+# Managing Environment Variables
+
+Most real-world applications rely on API keys, database connections, and third-party services.  
+VectorIHub makes it easy to manage these securely using **environment variables** — so you never have to store secrets in your codebase.
+
+<Note>
+Environment variables are securely injected into your runtime during deployment and are never exposed in your repository.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Secure by Default" icon="shield">
+    Keep secrets out of your GitHub repository.
+  </Card>
+  <Card title="Runtime Injection" icon="cpu">
+    Variables are automatically injected into your app at runtime.
+  </Card>
+  <Card title="Zero Config Access" icon="zap">
+    Access variables instantly using `process.env`.
+  </Card>
+</CardGroup>
+
+---
+
+## Adding Environment Variables
+
+Follow these steps to add environment variables to your project:
+
+<Steps>
+  <Step title="Open Project Dashboard">
+    Go to your project inside the **VectorIHub Dashboard**.
+  </Step>
+
+  <Step title="Navigate to Environment Settings">
+    Open:
+    <Info>Settings → Environment Variables</Info>
+  </Step>
+
+  <Step title="Add Key-Value Pairs">
+    Add your environment variables such as database URLs, API keys, or service tokens.
+
+    ```bash
+    Key: DATABASE_URL
+    Value: postgres://username:password@host:5432/mydb
+    ```
+
+    <Check>
+    Your variables are now securely stored and ready for deployment.
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Accessing Variables in Node.js
+
+Once added, VectorIHub automatically injects environment variables into your runtime environment.  
+You can access them in your application using `process.env`.
+
+<CodeGroup>
+```js server.js
+const express = require("express");
+const app = express();
+
+const dbUrl = process.env.DATABASE_URL;
+
+app.get("/", (req, res) => {
+  res.send(`Connected to database: ${dbUrl}`);
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server running with env vars on VectorIHub 🚀");
+});
+```
+</CodeGroup>
+
+Best Practices
+<Columns> 
+    <Column> 
+        <Check>Never commit secrets like API keys to GitHub</Check> 
+        <Check>Use environment variables for all credentials</Check> 
+        <Check>Add safe fallbacks for local development</Check> 
+    </Column> 
+    <Column> 
+        <Warning> Hardcoding secrets in your code can expose sensitive data and create security risks. </Warning> 
+    </Column> 
+</Columns>
+
+Updating Environment Variables
+
+Environment variable updates are applied during the next deployment cycle.
+
+<AccordionGroup> 
+    <Accordion title="How updates are applied"> 
+        - Modify or add variables in the dashboard 
+        - Trigger a redeploy or push new code 
+        - VectorIHub rebuilds the container with updated variables 
+    </Accordion> 
+    <Accordion title="When should you redeploy?"> 
+        Redeploy whenever you: 
+            - Change API keys 
+            - Update database credentials 
+            - Add new third-party integrations 
+    </Accordion> 
+</AccordionGroup>
+
+<Badge color="amber">Requires Redeploy</Badge>
+
+Supported Use Cases
+
+VectorIHub environment variables can be used for:
+
+<CardGroup cols={1}> 
+    <Card title="Databases" icon="database"> PostgreSQL, MongoDB, MySQL connection strings. </Card> 
+    <Card title="External APIs" icon="globe"> Stripe, OpenAI, Twilio, and other third-party APIs. </Card> 
+    <Card title="Auth & Tokens" icon="lock"> JWT secrets, OAuth tokens, and service credentials. </Card> 
+    <Card title="Service Config" icon="settings"> Feature flags, environment modes, and app configs. </Card> 
+</CardGroup>
+
+Summary
+<Check> Store secrets securely in the VectorIHub dashboard and access them safely using `process.env.KEY` inside your application. </Check> 
+
+<Expandable title="Quick Recap"> - Add variables in **Dashboard → Settings → Environment Variables** - Access them using `process.env` - Redeploy to apply changes - Never commit secrets into your repository 
+</Expandable> ```
