@@ -1,0 +1,65 @@
+---
+title: "Node.js"
+sidebarTitle: "Node.js"
+description: "Build and deploy fast, scalable server-side applications with VectorIHub's Node.js runtime."
+icon: "node-js"
+---
+
+Node.js is a JavaScript runtime built on Chrome’s V8 engine. VectorIHub provides **first-class support for Node.js projects**, automatically detecting your entry point and preparing the right environment for deployment.
+
+<CardGroup cols={2}>
+  <Card title="Express & Fastify" icon="server">
+    Web servers with `.listen()` on a port.
+  </Card>
+  <Card title="Background Workers" icon="gears">
+    Custom Node scripts for processing or CLIs.
+  </Card>
+</CardGroup>
+
+---
+
+## Deployment Process
+
+Follow these steps to get your Node.js application live on VectorIHub.
+
+<Steps>
+  <Step title="Connect Repository">
+    Upload or connect your GitHub/GitLab repository. VectorIHub scans your codebase for framework-specific configs.
+
+    <Tip>Ensure your `package.json` is in the root directory for automatic detection.</Tip>
+  </Step>
+
+  <Step title="Environment Setup">
+    VectorIHub automatically:
+    * Detects `package.json`
+    * Installs dependencies via `npm`, `yarn`, or `pnpm`.
+    * Uses the Node.js version specified in your `engines` field.
+  </Step>
+
+  <Step title="Go Live">
+    VectorIHub builds and starts your app inside a secure container, exposing the correct port automatically.
+
+    <Check>Deployment usually takes less than 60 seconds.</Check>
+  </Step>
+</Steps>
+
+---
+
+## Example: Deploying Express
+
+<CodeGroup>
+
+```javascript server.js
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello from VectorIHub Node.js runtime 🚀");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+```
+
+</CodeGroup>

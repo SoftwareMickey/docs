@@ -21,6 +21,14 @@
               "documentation",
               "quickstart"
             ]
+          },
+          {
+            "group": "Node Js",
+            "pages": [
+              "/nodejs/index",
+              "/nodejs/supported-nodejs-types",
+              "/nodejs/deploying-nodejs-app"
+            ]
           }
         ]
       }

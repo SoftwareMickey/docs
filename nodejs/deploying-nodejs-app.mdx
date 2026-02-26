@@ -1,0 +1,151 @@
+---
+title: "Deploying Node.js App"
+sidebarTitle: "Deploy Node.js"
+description: "Step-by-step guide to deploying your Node.js application on VectorIHub with automatic runtime detection and containerization."
+sidebar_position: 3
+icon: "rocket"
+---
+
+### Deploying a Node.js App
+
+<div style={{ fontSize: "16px" }}>
+    VectorIHub makes deploying your Node.js apps effortless.  
+    Once your code is pushed to GitHub (or uploaded directly), VectorIHub will **auto detect the runtime**, configure the environment, and handle containerization for you **no Dockerfile** required.
+</div>
+
+<Note>
+VectorIHub automatically scans your repository to detect Node.js frameworks, entry files, and port bindings.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Auto Runtime Detection" icon="search">
+    Detects Node.js apps, entry points, and server patterns automatically.
+  </Card>
+  <Card title="Zero Docker Setup" icon="box">
+    No Dockerfile or manual container configuration needed.
+  </Card>
+  <Card title="Instant Deployments" icon="zap">
+    Deploy in seconds after connecting your repository.
+  </Card>
+</CardGroup>
+
+---
+
+## Project Requirements
+
+Before deploying, ensure your Node.js project meets the following requirements:
+
+<Columns>
+  <Column>
+    <Check>Includes a `package.json` file</Check>
+    <Check>Has a server entry file (`server.js`, `app.js`, or `index.js`)</Check>
+    <Check>Uses a supported server pattern</Check>
+  </Column>
+  <Column>
+    <Info>
+      Supported patterns include:
+      <br />• `app.listen(...)`  
+      • `process.env.PORT`  
+      • `http.createServer(...).listen(PORT)`
+    </Info>
+  </Column>
+</Columns>
+
+<Tip>
+For best compatibility, use `process.env.PORT` instead of hardcoding ports.
+</Tip>
+
+### Example Project Structure
+
+
+```bash
+my-app/
+├── package.json
+├── package-lock.json
+├── server.js
+└── src/
+    └── routes.js
+```
+
+Deployment Workflow
+<Steps> 
+    <Step title="Push Your Project"> Push your Node.js project to GitHub or upload it directly via the VectorIHub dashboard.</Step>
+
+        <CodeGroup>
+            ```bash Git (Recommended)
+            git init
+            git add .
+            git commit -m "first commit"
+            git branch -M main
+            git remote add origin https://github.com/username/my-app.git
+            git push -u origin main
+            ```
+            ```bash Direct Upload
+            # Upload your project zip file from the VectorIHub dashboard
+            # VectorIHub will automatically extract and analyze the codebase
+            ```
+        </CodeGroup>
+
+        <Check>Your repository is now ready for automatic detection.</Check>
+    
+    <Step title="Connect to VectorIHub"> Navigate to the VectorIHub dashboard and connect your repository.</Step>
+        <CardGroup cols={2}>
+            <Card title="Deploy Repo" icon="github">
+                Import directly from GitHub or GitLab.
+            </Card>
+            <Card title="Code Scan" icon="scan-line">
+                VectorIHub scans your codebase for entry files and runtime patterns.
+            </Card>
+        </CardGroup>
+
+        <Note>
+            The platform automatically detects supported patterns like `app.listen()` and `process.env.PORT`.
+        </Note>
+    
+    <Step title="Build & Deploy"> VectorIHub handles the entire build pipeline automatically</Step>
+        <AccordionGroup>
+            <Accordion title="Dependency Installation">
+                Installs dependencies using `npm install`, `yarn install`, or `pnpm install` based on your lockfile.
+            </Accordion>
+            <Accordion title="Runtime Detection">
+                Detects your Node.js version and server entry point.
+            </Accordion>
+            <Accordion title="Containerization">
+                Creates a secure containerized environment optimized for production.
+            </Accordion>
+            <Accordion title="Port Binding">
+                Automatically binds the correct `PORT` without manual configuration.
+            </Accordion>
+        </AccordionGroup>
+
+        <Check>No manual Dockerfile needed</Check>
+    <Step title="Access Your App"> Once deployment is complete, VectorIHub provides a live URL for your application.</Step>
+        <Frame>
+            ```arduino
+            https://my-app.vectorihub.run
+            ```
+        </Frame>
+
+        <Info>
+            Your app is now publicly accessible and secured with automatic networking and routing.
+        </Info>
+</Steps>
+
+Common Tips for Smooth Deployment
+<Tabs> 
+    <Tab title="Best Practices"> 
+        <Tip>Keep your `package.json` in the root directory.</Tip> 
+        <Tip>Ensure your server starts automatically (no CLI prompts).</Tip> 
+        <Tip>Use `process.env.PORT` for production-ready apps.</Tip> 
+    </Tab> 
+    
+    <Tab title="Troubleshooting"> 
+        <Warning> If your app exits immediately, ensure your server file calls `.listen()` or starts the server. </Warning> <Error> Missing `package.json` or entry file may cause detection to fail. </Error> 
+    </Tab> 
+
+</Tabs>
+
+Summary
+<Check> 
+    With VectorIHub, deploying a Node.js app is as simple as pushing your code. The platform auto-detects, builds, containerizes, and deploys your application with zero configuration. 
+</Check>

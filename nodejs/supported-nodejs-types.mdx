@@ -1,0 +1,101 @@
+---
+title: "Supported Node.js App Types"
+sidebarTitle: "Supported App Types"
+description: "Learn which Node.js server patterns VectorIHub automatically detects and runs without manual port configuration."
+sidebar_position: 2
+icon: "node-js"
+---
+
+# Supported Node.js App Types
+
+VectorIHub automatically detects and runs your Node.js apps by scanning for common runtime patterns in your codebase.  
+You don’t need to configure ports manually — as long as your app follows one of the supported patterns below, VectorIHub handles port binding and runtime setup for you.
+
+<Note>
+Automatic port detection works best when your server explicitly calls `.listen(PORT)` or uses `process.env.PORT`.
+</Note>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Auto Port Detection" icon="rocket">
+    VectorIHub scans your entry file for `.listen()` and server bindings.
+  </Card>
+  <Card title="Zero Config Deployment" icon="settings">
+    No manual port configuration required for supported Node.js frameworks.
+  </Card>
+</CardGroup>
+
+---
+
+## 1. Express.js (or Raw HTTP)
+
+Most Node.js applications use **Express** or a raw HTTP server.  
+VectorIHub automatically detects `.listen(PORT)` calls and binds the correct container port.
+
+<Check>
+This is the most common and fully optimized deployment pattern on VectorIHub.
+</Check>
+
+<CodeGroup>
+```js server.js
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello from VectorIHub 🚀");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+```
+</CodeGroup>
+
+---
+
+## 2. Using process.env.PORT (Recommended)
+
+If your app relies on dynamic environment ports (best practice for cloud deployments), VectorIHub supports it automatically.
+
+<Tip> Always prefer `process.env.PORT` for maximum compatibility across environments. </Tip> 
+
+<CodeGroup> 
+```js server.js 
+
+const express = require("express"); const app = express();
+
+const port = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+res.send("Running on a VectorIHub-assigned port 🚀");
+});
+
+app.listen(port, () => {
+console.log(Server running on port ${port});
+});
+```
+</CodeGroup>
+
+
+## 3. Fastify
+
+VectorIHub detects Fastify servers that call `.listen(PORT)` and configures networking automatically.
+
+<Info>
+Fastify apps are optimized for high-performance workloads and are fully supported.
+</Info>
+
+<CodeGroup>
+```js server.js
+const fastify = require("fastify")();
+
+fastify.get("/", async () => {
+  return { message: "Hello from Fastify on VectorIHub" };
+});
+
+fastify.listen(3000, () => {
+  console.log("Fastify running on port 3000");
+});
+```
+</CodeGroup>
