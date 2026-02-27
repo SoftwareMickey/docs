@@ -1,6 +1,7 @@
 {
   "theme": "mint",
   "name": "VectorIHub",
+  "baseUrl": "https://docs.vectorihub.com",
   "blog": {
     "enabled": true
   },

@@ -1,52 +1,18 @@
 ---
-title: "Deploy Anything. Anywhere. Instantly."
-description: "VectorIHub automatically dockerizes your code, builds it in seconds, and gives you a live endpoint — no configs, no hassle."
+title: "Introduction to VectorIHub"
+description: "From source code to production-ready containers in seconds."
 ---
 
-## Deploy Anything. Anywhere. Instantly.
+## Overview
 
-VectorIHub automatically dockerizes your code, builds it in seconds, and gives you a live endpoint  **no configs, no hassle.**
+**VectorIHub** is a cloud hosting and deployment platform engineered to bridge the gap between development and production. By leveraging **Auto-Dockerization**, we eliminate the need for manual Dockerfile configuration, allowing you to focus on writing code while we handle the containerization, orchestration, and scaling.
 
-<Check>
-      Production-ready deployments in seconds
-    </Check>
-
-    <Badge color="green">Start Deploying Free</Badge>
----
-
-## Everything You Need to Go From Code → Cloud
-
-<Note>
-  VectorIHub handles infrastructure, builds, containers, and networking so you can focus purely on shipping code.
-</Note>
-
-## Core Features
-
-<CardGroup cols={1}>
-  <Card title="Auto-Dockerization" icon="box">
-    VectorIHub detects your framework and generates a production-grade Dockerfile automatically.  
-    No setup, no manual edits. Just push and go.
+<CardGroup cols={2}>
+  <Card title="Auto-Dockerization" icon="docker" href="#auto-dockerization">
+    Automatically detect framework patterns like Node.js and Python.
   </Card>
-
-  <Card title="Instant Container Deployments" icon="zap">
-    Build, ship, and serve your app in seconds.  
-    Our optimized infrastructure spins up isolated containers faster than traditional CI/CD.
-  </Card>
-
-  <Card title="Smart Framework Detection" icon="cpu">
-    Supports Node.js, Go, and more with automatic version detection and environment setup.
-  </Card>
-
-  <Card title="GitHub Integration" icon="github">
-    Connect your repository and VectorIHub handles builds and deployments automatically on every push.
-  </Card>
-
-  <Card title="Snapshots & Rollbacks" icon="history">
-    Every deployment is versioned. Test safely and roll back instantly with one click.
-  </Card>
-
-  <Card title="Secure Sandboxed Hosting" icon="shield">
-    Each project runs in an isolated environment with HTTPS, resource limits, and network-level protection.
+  <Card title="Instant Deployment" icon="bolt" href="#deployment-flow">
+    Zero-friction infrastructure with global scaling built-in.
   </Card>
 </CardGroup>
 
@@ -54,50 +20,116 @@ VectorIHub automatically dockerizes your code, builds it in seconds, and gives y
 
 ## How It Works
 
+VectorIHub analyzes your repository to determine the best environment for your application. No more `EXPOSE` or `WORKDIR` headaches.
+
 <Steps>
-  <Step title="Upload Your Project">
-    Push your code or connect your GitHub repository.
+  <Step title="Connect your Repository">
+    Link your GitHub or GitLab account to VectorIHub.
   </Step>
-  
-  <Step title="Automatic Build & Dockerization">
-    VectorIHub detects your stack and builds a production container automatically.
+  <Step title="Pattern Detection">
+    Our engine scans your code for framework signatures (e.g., `package.json`, `go.mod`).
   </Step>
-  
-  <Step title="Instant Deployment">
-    Your app is deployed to a live endpoint within seconds — globally accessible and secure.
+  <Step title="Build & Deploy">
+    We generate a secure, optimized Docker image and deploy it to our global edge network.
   </Step>
 </Steps>
 
+<Note>
+  VectorIHub currently provides a **Trial Tier** with no credit card required. You can deploy your first project in under 2 minutes.
+</Note>
+
 ---
 
-## Why Developers Choose VectorIHub
+## Technical Architecture
 
-<Info>
-  Built for speed, automation, and zero-config cloud deployment.
-</Info>
+Frequently Asked Questions
+<AccordionGroup>
+  <Accordion title="Do I need to know Docker to use VectorIHub?">
+    Not at all. VectorIHub handles the creation, layering, and optimization of your containers. However, if you have a custom Dockerfile, we’ll respect and use it.
+  </Accordion>
+  <Accordion title="What happens during production updates?">
+    We utilize Blue-Green deployments by default. Your old version stays live until the new container passes health checks, ensuring zero downtime.
+  </Accordion>
+</AccordionGroup>
 
+<Update label="New Feature" date="February 2026">
+  Added native support for React runtimes.
+</Update>
+
+## Why Choose VectorIHub?
+
+VectorIHub is built to remove the "infrastructure tax" from your development cycle. By automating the most tedious parts of the DevOps lifecycle, we allow you to focus on the only thing that matters: your code.
+
+<CardGroup cols={1}>
+  <Card title="Zero Config" icon="wand-sparkles">
+  No more writing complex Dockerfiles. We handle the containerization logic for you.
+  </Card>
+  <Card title="Infinite Scale" icon="arrows-up-to-line">
+  Your app grows with your traffic automatically, from 1 user to 1 million.
+  </Card>
+  <Card title="Cost Efficient" icon="wallet">
+  Only pay for what you use with our granular, resource-based billing.
+  </Card>
+</CardGroup>
+
+## Core Platform Benefits
+
+<AccordionGroup>
+  <Accordion title="Speed to Market" icon="rocket">
+  Traditional DevOps requires manual environment setup, which can take hours or even days. With VectorIHub, the transition from git push to a live URL happens in minutes.
+
+  * **Instant CI/CD:** Built-in pipelines triggered automatically by your git commits.
+  * **Pattern Detection:** Automatic recognition of Node.js, Python, and Go project structures to eliminate manual config.
+  </Accordion>
+
+  <Accordion title="Built-in Reliability" icon="shield-check">
+  We provide an "opinionated" infrastructure that follows industry best practices for security and uptime, so you don't have to be a SRE expert.
+
+  * **Zero-Downtime Deploys:** Automatic blue-green deployments ensure your app stays online during updates.
+  * **Health Monitoring:** Intelligent, self-healing containers that automatically restart if they crash or become unresponsive.
+  </Accordion>
+</AccordionGroup>
+
+## Comparison: Manual vs. VectorIHub
 <Tabs>
-  <Tab title="Speed">
-    Deploy applications in seconds with optimized container infrastructure and rapid build pipelines.
+  <Tab title="The Old Way (Manual)">
+    <Error>
+    Time Sink: 4-8 hours setting up Docker, registries, and SSL.
+    </Error>
+    <Steps>
+      <Step title="Write Dockerfile">Manually define layers, OS, and dependencies.</Step>
+      <Step title="Configure CI/CD">Set up GitHub Actions or Jenkins scripts.</Step>
+      <Step title="Manage SSL">Manual Let's Encrypt renewals or Nginx config.</Step>
+      <Step title="Provisioning">Renting a VPS and manually installing updates.</Step>
+    </Steps>
   </Tab>
 
-  <Tab title="Simplicity">
-    No DevOps setup, no Docker knowledge required, and no complex configuration files.
-  </Tab>
-
-  <Tab title="Scalability">
-    From small apps to production workloads, VectorIHub scales containers automatically.
+  <Tab title="The VectorIHub Way">
+    <Check>
+    Efficiency: 2 minutes to go live with a secure, production-grade URL.
+    </Check>
+    <Steps>
+      <Step title="Connect Repo">Select your GitHub/GitLab repository.</Step>
+      <Step title="Auto-Build">Our engine detects your framework and builds the image.</Step>
+      <Step title="Live!">Your app is deployed with automatic SSL and scaling.</Step>
+    </Steps>
   </Tab>
 </Tabs>
 
----
+## Deep Dive: Advanced Advantages
 
-## Start Deploying in Minutes
+<AccordionGroup>
+  <Accordion title="Optimized Resource Isolation">
+  Every application runs in its own isolated container. This prevents "noisy neighbor" syndrome and ensures that a memory leak in one service doesn't crash your entire cluster.
+  </Accordion>
+  <Accordion title="Security First Architecture">
+  VectorIHub automatically applies security patches to the base images we use for auto-dockerization. You get enterprise-grade security without having to audit your own base OS.
+  </Accordion>
+  <Accordion title="Developer Experience (DX)">
+  We prioritize the developer. From our intuitive dashboard, everything is designed to reduce cognitive load and prevent "DevOps burnout."
+  </Accordion>
+</AccordionGroup>
 
 <Tip>
-  Upload your project and let VectorIHub handle the rest — simple, fast, and scalable cloud deployment.
+Start with our Trial Tier to experience these benefits firsthand—no credit card or long-term commitment required.
 </Tip>
-
-<Card title="Try VectorIHub Free" icon="sparkles" href="https://vectorihub.com">
-  Launch your first deployment and get a live endpoint instantly.
-</Card>
