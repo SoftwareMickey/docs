@@ -54,7 +54,21 @@
           }
         ]
       }
-    ]
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Frameworks",
+          "href": "/frameworks",
+          "icon": "book-open-cover"
+        },
+        {
+          "anchor": "Features",
+          "href": "/features",
+          "icon": "newspaper"
+        }
+      ]
+    }
   },
   "logo": {
     "light": "/logo/light.svg",
