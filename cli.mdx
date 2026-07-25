@@ -1,0 +1,107 @@
+---
+title: "CLI"
+sidebarTitle: "CLI"
+description: "Install and use the VectorIHub command-line interface to authenticate and manage your account from a terminal."
+icon: "terminal"
+---
+
+VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
+
+<Info>
+  The CLI currently covers authentication and account-level operations (like listing your connected GitHub accounts). Deployment is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
+</Info>
+
+---
+
+## Installing the CLI
+
+<Tabs>
+  <Tab title="macOS / Linux">
+    Install with the install script — it detects your OS and architecture, downloads the matching release, and installs `beaver` to `/usr/local/bin`:
+
+    <CodeGroup>
+    ```bash Install script
+    curl -fsSL https://raw.githubusercontent.com/VectorIHub/vectorihub-cli/main/install.sh | sh
+    ```
+    </CodeGroup>
+
+    <Tip>
+      Set `INSTALL_DIR` to install somewhere other than `/usr/local/bin`, or `VERSION` to install a specific release instead of the latest:
+
+      ```bash
+      curl -fsSL https://raw.githubusercontent.com/VectorIHub/vectorihub-cli/main/install.sh | VERSION=v1.2.0 sh
+      ```
+    </Tip>
+  </Tab>
+  <Tab title="Windows">
+    Download the `windows_amd64` (or `windows_arm64`) `.zip` from the [latest release](https://github.com/VectorIHub/vectorihub-cli/releases/latest), extract it, and move `beaver.exe` to a directory on your `PATH`.
+  </Tab>
+</Tabs>
+
+### Verifying the installation
+
+```bash
+beaver version
+```
+
+---
+
+## Using the CLI
+
+Running `beaver` with no arguments starts an interactive shell — the primary way to use the CLI:
+
+```bash
+beaver
+```
+
+<CodeGroup>
+```txt Interactive shell
+$ beaver
+beaver ▸ login
+Email: you@example.com
+Password:
+Login successful! Welcome, you.
+
+beaver ▸ github
+Connected GitHub accounts:
+  - your-github-username (connected)
+
+beaver ▸ exit
+Goodbye!
+```
+</CodeGroup>
+
+A few commands — like `github` and `version` — can also be run directly, without opening the shell:
+
+```bash
+beaver github
+beaver version
+```
+
+<Note>
+  `login` and `logout` are shell-only. Running `beaver login` directly from your terminal will prompt you to open the shell (`beaver`) and run `login` from there instead — this keeps credential prompts inside one consistent, interactive flow.
+</Note>
+
+### Available commands
+
+| Command  | Description                                    |
+| -------- | ----------------------------------------------- |
+| `login`  | Authenticate your VectorIHub account (shell only) |
+| `logout` | Sign out and clear your local session (shell only) |
+| `github` | List your connected GitHub accounts             |
+| `version`| Show the installed CLI version                  |
+| `help`   | Show available commands                         |
+| `exit`   | Quit the interactive shell                      |
+
+Your session is stored locally at `~/.beaver_config.json` after `login`, and reused by every command until you `logout`.
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Deploy your first Dockerized app from the dashboard.
+  </Card>
+  <Card title="Documentation" icon="book-open-cover" href="/documentation">
+    Learn how VectorIHub's deployment pipeline works.
+  </Card>
+</CardGroup>
