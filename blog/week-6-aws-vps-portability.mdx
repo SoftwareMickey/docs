@@ -1,0 +1,38 @@
+---
+title: "Week 6 — AWS and VPS Portability"
+description: "The first real infrastructure targets: deploying the exact same application to AWS and to a VPS, and getting the same result."
+date: "2026-07-12"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · July 12, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 6 of 8*
+
+*July 6 – July 12, 2026 · First Infrastructure Providers*
+
+---
+
+With a consistent deployment configuration in place, it was time to prove it could actually reach real infrastructure. This week VectorIHub began supporting real infrastructure — starting with AWS and VPS deployment, with more providers to follow.
+
+The goal was to deploy the *same* application to *different* environments and get the same result: the same app, running the same way, whether the target was AWS or a VPS.
+
+Seeing one unchanged application land cleanly on two unrelated providers proved the portability concept wasn't just an idea on a whiteboard — it was technically possible.
+
+**Up next:** making it reliable enough to trust in production.
+
+<CardGroup cols={2}>
+  <Card title="← Week 5: Provider-Independent Deployment Configuration" href="/blog/week-5-deployment-configuration" />
+  <Card title="Week 7: Deployment Engine Maturation →" href="/blog/week-7-deployment-engine-maturation" />
+</CardGroup>
+
+<Card title="See what shipped this week" icon="route" href="/changelog#aws-and-vps-support">
+  v0.1.5 · AWS and VPS Support — in the changelog.
+</Card>

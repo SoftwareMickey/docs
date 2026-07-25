@@ -1,0 +1,38 @@
+---
+title: "Week 5 — Provider-Independent Deployment Configuration"
+description: "Defining a consistent, provider-independent way to describe what an application needs — the foundation for true multi-provider deployments."
+date: "2026-07-05"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · July 5, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 5 of 8*
+
+*June 29 – July 5, 2026 · A Consistent Way to Describe Deployments*
+
+---
+
+Once VectorIHub stopped owning infrastructure, a new question took center stage: how does the platform communicate with different infrastructures without embedding the specifics of each one?
+
+The answer was a provider-independent way to describe what an application needs — its image, ports, environment variables, resources, and health checks — without tying that description to any one provider's implementation.
+
+In practice, that means you describe what your application needs once — its resource limits, its health check path, its environment variables — and VectorIHub handles getting your target infrastructure to actually provide it, whether that's a VPS or a cloud provider. The application definition itself never changes; only how VectorIHub fulfills it does. This week established the foundation for true multi-provider deployments.
+
+**Up next:** turning that consistent deployment configuration into real infrastructure on two very different targets.
+
+<CardGroup cols={2}>
+  <Card title="← Week 4: The BYOC Pivot" href="/blog/week-4-byoc-pivot" />
+  <Card title="Week 6: AWS and VPS Portability →" href="/blog/week-6-aws-vps-portability" />
+</CardGroup>
+
+<Card title="See what shipped this week" icon="route" href="/changelog#provider-independent-deployment-configuration">
+  v0.1.4 · Provider-Independent Config — in the changelog.
+</Card>

@@ -1,0 +1,42 @@
+---
+title: "Week 7 — Deployment Engine Maturation"
+description: "Shifting from proving the concept to making the system reliable: deployment lifecycle tracking, persistent configuration, and clearer deployment states."
+date: "2026-07-19"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · July 19, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 7 of 8*
+
+*July 13 – July 19, 2026 · Building Production Foundations*
+
+---
+
+Proving the concept and running it reliably are two different jobs. Week seven shifted the focus to the second one: making the system dependable.
+
+The work covered deployment lifecycle tracking, persistent deployment configuration, and clearer deployment states. Crucially, those deployment states became independent from any specific infrastructure:
+
+```
+pending → active → failed → terminated
+```
+
+By modeling state at the platform level rather than the provider level, VectorIHub cleanly separated *application intent* from *infrastructure execution*. What an application is supposed to be doing no longer depends on how any one provider happens to report it — which is exactly what reliability and observability need to build on.
+
+**Up next:** naming what all of this has become.
+
+<CardGroup cols={2}>
+  <Card title="← Week 6: AWS and VPS Portability" href="/blog/week-6-aws-vps-portability" />
+  <Card title="Week 8: VectorIHub's New Identity →" href="/blog/week-8-build-once-deploy-anywhere" />
+</CardGroup>
+
+<Card title="See what shipped this week" icon="route" href="/changelog#deployment-engine-maturation">
+  v0.1.6 · Deployment Engine Maturation — in the changelog.
+</Card>
