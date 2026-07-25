@@ -1,0 +1,56 @@
+---
+title: "Deployment Configuration"
+sidebarTitle: "Deployment Configuration"
+description: "Configure the port, health checks, and resources for your deployment on VectorIHub."
+icon: "sliders"
+---
+
+# Deployment Configuration
+
+Beyond your Dockerfile, a handful of settings tell VectorIHub how to run and monitor your container. These are set once in the dashboard and apply regardless of which infrastructure provider you deploy to.
+
+<CardGroup cols={3}>
+  <Card title="Port" icon="plug">
+    The port your app listens on inside the container.
+  </Card>
+  <Card title="Health Checks" icon="heart-pulse">
+    A path VectorIHub polls to confirm your app is healthy before routing traffic to it.
+  </Card>
+  <Card title="Resources" icon="cpu">
+    CPU and memory limits for your container.
+  </Card>
+</CardGroup>
+
+---
+
+## Setting Your Configuration
+
+<Steps>
+  <Step title="Open Project Dashboard">
+    Go to your project inside the **VectorIHub Dashboard**.
+  </Step>
+  <Step title="Navigate to Deployment Settings">
+    Open **Settings → Deployment Configuration**.
+  </Step>
+  <Step title="Set Your Port">
+    Match this to the port your Dockerfile `EXPOSE`s and your app listens on.
+  </Step>
+  <Step title="Set a Health Check Path (Recommended)">
+    A simple `200 OK` endpoint (e.g. `/health`) is enough — VectorIHub uses it to gate zero-downtime deploys.
+  </Step>
+</Steps>
+
+<Tip>Setting a health check path enables blue-green deployments — your previous version stays live until the new one passes its health check.</Tip>
+
+## Why This Isn't in Your Dockerfile
+
+Your Dockerfile describes how your app is *built*. Port, health checks, and resource limits describe how VectorIHub should *run and monitor* it once deployed — separating the two means you can adjust deployment behavior without changing your build.
+
+<CardGroup cols={2}>
+  <Card title="Environment Variables" icon="key" href="/deploying/environment-variables">
+    Manage secrets and configuration values separately from your Dockerfile.
+  </Card>
+  <Card title="Infrastructure Providers" icon="server" href="/infrastructure">
+    See where this configuration can be deployed to.
+  </Card>
+</CardGroup>

@@ -1,0 +1,57 @@
+---
+title: "Remix"
+sidebarTitle: "Remix"
+description: "Deploy Remix applications on VectorIHub with a Dockerfile — full server-side rendering."
+icon: "shuffle"
+---
+
+# Remix
+
+Remix is a full-stack React framework focused on web fundamentals and server rendering. It always runs as a live server — there's no static export mode.
+
+<CardGroup cols={2}>
+  <Card title="Full SSR" icon="server">
+    Every request renders live.
+  </Card>
+  <Card title="remix-serve" icon="package">
+    Ships with a production server out of the box — no custom server code required.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM node:20-slim
+WORKDIR /app
+COPY --from=build /app ./
+EXPOSE 3000
+CMD ["npx", "remix-serve", "./build/server/index.js"]
+```
+</CodeGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```jsx
+export async function loader() {
+  const dbUrl = process.env.DATABASE_URL;
+  return json({ connected: Boolean(dbUrl) });
+}
+```
+</CodeGroup>
+
+<Warning>Remix env variables are server-side by default — expose values to the client explicitly via your loader, never read `process.env` directly in component code.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

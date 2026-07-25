@@ -1,0 +1,70 @@
+---
+title: "Echo"
+sidebarTitle: "Echo"
+description: "Deploy Echo applications on VectorIHub with a Dockerfile — a minimal, extensible Go web framework."
+icon: "server"
+---
+
+# Echo
+
+Echo is a high-performance, extensible Go web framework. Package it with a standard multi-stage Go Dockerfile.
+
+<CardGroup cols={2}>
+  <Card title="Multi-Stage Build" icon="docker">
+    Compile in a full Go image, ship only the binary in a minimal final image.
+  </Card>
+  <Card title="Automatic Port Binding" icon="settings">
+    Set `PORT` from the environment and match it in your Dockerfile's `EXPOSE`.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM golang:1.22 AS build
+WORKDIR /app
+COPY . .
+RUN go build -o server .
+
+FROM debian:bookworm-slim
+COPY --from=build /app/server /server
+EXPOSE 8080
+CMD ["/server"]
+```
+</CodeGroup>
+
+<CodeGroup>
+```go main.go
+package main
+
+import (
+  "net/http"
+  "github.com/labstack/echo/v4"
+)
+
+func main() {
+  e := echo.New()
+
+  e.GET("/", func(c echo.Context) error {
+    return c.String(http.StatusOK, "Hello from Echo on VectorIHub")
+  })
+
+  e.Start(":8080")
+}
+```
+</CodeGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```go
+dbURL := os.Getenv("DATABASE_URL")
+```
+</CodeGroup>
+
+<Card title="Go Runtime Notes" icon="route" href="/runtimes/go">
+  More Dockerfile patterns for Go apps.
+</Card>

@@ -1,0 +1,55 @@
+---
+title: "Vue"
+sidebarTitle: "Vue"
+description: "Deploy Vue applications on VectorIHub with a Dockerfile — Vite, Vue CLI, or a custom bundler."
+icon: "vuejs"
+---
+
+# Vue
+
+Vue is a progressive JavaScript framework for building user interfaces. Like React, Vue apps build to static files and are typically served through a lightweight web server.
+
+<CardGroup cols={2}>
+  <Card title="Any Bundler" icon="rocket">
+    Vite, Vue CLI, or a custom build setup — all work the same way.
+  </Card>
+  <Card title="Static Serving" icon="globe">
+    Your production build is served by nginx inside your container.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+```
+</CodeGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```js Vite
+const apiUrl = import.meta.env.VITE_API_URL;
+```
+```js Vue CLI
+const apiUrl = process.env.VUE_APP_API_URL;
+```
+</CodeGroup>
+
+<Warning>Only use public-safe keys — anything bundled into your build is visible to the browser.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

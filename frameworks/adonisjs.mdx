@@ -1,0 +1,57 @@
+---
+title: "AdonisJS"
+sidebarTitle: "AdonisJS"
+description: "Deploy AdonisJS applications on VectorIHub with a Dockerfile — a full-featured MVC Node.js backend framework."
+icon: "gem"
+---
+
+# AdonisJS
+
+AdonisJS is a full-featured MVC framework for Node.js, with batteries-included tooling for ORM, validation, and auth. It requires a build step (`node ace build`) before running the production image.
+
+<CardGroup cols={2}>
+  <Card title="Ace Build Step" icon="hammer">
+    Compile with `node ace build` before running the production image.
+  </Card>
+  <Card title="Automatic Port Binding" icon="settings">
+    Set `PORT` from the environment and match it in your Dockerfile's `EXPOSE`.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN node ace build
+
+FROM node:20-slim
+WORKDIR /app
+COPY --from=build /app/build ./
+RUN npm install --production
+EXPOSE 3333
+CMD ["node", "bin/server.js"]
+```
+</CodeGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```ts
+import env from '#start/env'
+
+const dbUrl = env.get('DATABASE_URL')
+```
+</CodeGroup>
+
+<Tip>AdonisJS validates environment variables against `start/env.ts` — make sure any variable you add there is also set in the VectorIHub dashboard.</Tip>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

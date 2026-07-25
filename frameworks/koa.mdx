@@ -1,0 +1,60 @@
+---
+title: "Koa"
+sidebarTitle: "Koa"
+description: "Deploy Koa applications on VectorIHub with a Dockerfile — a minimal, expressive Node.js backend framework."
+icon: "feather"
+---
+
+# Koa
+
+Koa is a minimal, middleware-driven Node.js framework from the makers of Express. Package it in a standard Node.js Dockerfile and deploy it as a live server.
+
+<CardGroup cols={2}>
+  <Card title="No Build Step Needed" icon="rocket">
+    Plain Koa apps run directly — no compilation required.
+  </Card>
+  <Card title="Automatic Port Binding" icon="settings">
+    Set `PORT` from the environment and match it in your Dockerfile's `EXPOSE`.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+</CodeGroup>
+
+<CodeGroup>
+```js server.js
+const Koa = require('koa');
+const app = new Koa();
+
+app.use(ctx => {
+  ctx.body = 'Hello from Koa on VectorIHub';
+});
+
+app.listen(process.env.PORT || 3000);
+```
+</CodeGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```js
+const dbUrl = process.env.DATABASE_URL;
+```
+</CodeGroup>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

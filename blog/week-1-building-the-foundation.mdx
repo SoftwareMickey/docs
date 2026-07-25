@@ -1,0 +1,37 @@
+---
+title: "Week 1 — Building the Foundation"
+description: "The first week of VectorIHub's development journey — an initial cloud hosting architecture, and the challenge that would unravel the original plan."
+date: "2026-06-07"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · June 7, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 1 of 8*
+
+*June 1 – June 7, 2026 · Initial Cloud Hosting Architecture*
+
+---
+
+Every project starts with a version of the idea you eventually leave behind. VectorIHub began as an ambitious attempt to simplify application hosting: developers should connect their repository, and the platform should handle everything else — detect the application, build a Docker image, deploy it, and provide a complete hosting experience.
+
+This first week focused on creating VectorIHub as a simplified cloud deployment platform. The goal was a developer experience where users could ship applications without managing infrastructure complexity — connect a source repository, detect the application, build it automatically, package it into a container, and deploy it.
+
+The vision was inspired by modern platforms that remove infrastructure friction from developers, and the early architecture leaned heavily on application detection, build pipelines, container creation, and deployment automation.
+
+The first implementation also exposed the challenge that would define everything after it: supporting automatic application builds meant VectorIHub needed to understand *every possible technology stack*. That turned out to be the thread that eventually unraveled the original plan.
+
+**Up next:** an attempt to remove Docker complexity from developers entirely — and where that ran into trouble.
+
+<Card title="Week 2: Exploring Automated Dockerization →" href="/blog/week-2-automated-dockerization-research" />
+
+<Card title="See what shipped this week" icon="route" href="/changelog#foundation">
+  v0.1.0 · Foundation — in the changelog.
+</Card>

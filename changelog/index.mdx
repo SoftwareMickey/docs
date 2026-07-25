@@ -3,79 +3,68 @@ title: "Changelog"
 description: "Product updates and announcements for VectorIHub."
 ---
 
-<Update label="February 2026" description="v0.1.0 Beta Release">
+<Update label="v0.1.7 · Build Once. Deploy Anywhere." description="Jul 20 – Jul 26, 2026">
 
-## The Journey Begins: Public Beta Launch
+## Build Once. Deploy Anywhere.
 
-Welcome to the very first VectorIHub changelog! We are officially opening our doors to beta testers to help us refine the future of **Push-to-Deploy** infrastructure.
+VectorIHub's long-term direction is now official: **build once, deploy anywhere**. Our mission has shifted from simplifying hosting to making infrastructure interchangeable — the same application definition should work regardless of where it runs, today and as we add more providers.
 
-### 🚀 New Features
-
-<CardGroup cols={1}>
-  <Card title="Auto-Dockerization" icon="wand-magic-sparkles" color="#16A34A">
-    ###### Our core engine now supports automatic detection for **Node.js, React, and Go**. Launch without writing a single Dockerfile.
-  </Card>
-  <Card title="GitHub Native Integration" icon="github" color="#000000">
-    ###### Securely connect your account and deploy any repository **public** or **private** with a single click.
-  </Card>
-</CardGroup>
-
-### Infrastructure Upgrades
-
-We've overhauled our backend to ensure your applications stay fast and secure from the moment they are provisioned.
-
-<Tabs>
-  <Tab title="Runtime">
-    <div style={{ fontSize: "15px" }}>
-    **VHB Cloud Runtime** has been optimized for high-density container orchestration, significantly reducing cold start times.
-    </div>
-  </Tab>
-  <Tab title="Security">
-     <div style={{ fontSize: "15px" }}>
-    **Automatic SSL:** Every deployment now receives an automated Let's Encrypt SSL certificate. Security is the default.
-    </div>
-  </Tab>
-  <Tab title="Networking">
-   <div style={{ fontSize: "15px" }}>
-    **Custom Subdomains:** Beta users can now claim and manage their own `*.vectorihub.run` namespaces.
-    </div>
-  </Tab>
-</Tabs>
-
-### 🛠 Bug Fixes & Refinements
-
-<AccordionGroup>
-  <Accordion title="Environment Variable Parsing" icon="key">
-    Fixed an issue where hidden `.env` files were not being correctly injected during the container build phase.
-  </Accordion>
-  <Accordion title="Real-time Build Streaming" icon="terminal">
-    Improved socket connections for build logs, providing a smoother, zero-latency stream during the build steps.
-  </Accordion>
-</AccordionGroup>
-
-### 🏗 Roadmap: What's Next?
-
-<Steps>
-  <Step title="Deploying Nested Folders">
-    Support for monorepos and specific root directory deployments.
-  </Step>
-  <Step title="Real Time Deployments">
-    Stream live build logs, container status, and deployment progress as they happen — from cloning and building to registry push and successful launch, with instant feedback and zero manual refresh.
-  </Step>
-  <Step title="Zero-Time Deployments">
-    Implementing atomic rollouts to ensure zero downtime during project updates.
-  </Step>
-</Steps>
-
----
-
-<Note>
-  **Feedback Welcome:** Found a bug? Reach out via [email](mailto:analystmuli@gmail.com) or join the conversation on [X](https://x.com/vectorihub).
-</Note>
+This closes out the eight-week transition from a cloud hosting platform to a provider-agnostic deployment engine. Thank you to everyone who tested early builds along the way.
 
 </Update>
 
-<Update label="January 2026" description="v0.0.9 Alpha">
-  ### Internal Alpha Testing
-  Initial stress testing of the Auto-Dockerization engine with core contributors.
+<Update label="v0.1.6 · Deployment Engine Maturation" description="Jul 13 – Jul 19, 2026">
+
+## Deployment Engine Maturation
+
+Deployments now move through clear lifecycle states — `pending`, `active`, `failed`, `terminated` — visible from your dashboard at every stage. We also improved reliability and observability across the deployment engine, so it's easier to see exactly what's happening during a deploy.
+
+</Update>
+
+<Update label="v0.1.5 · AWS and VPS Support" description="Jul 6 – Jul 12, 2026">
+
+## AWS and VPS Support
+
+You can now deploy to your own AWS account or to any VPS you manage, using the same deployment workflow either way. Deployment execution is consistent across both — no provider-specific steps to learn.
+
+</Update>
+
+<Update label="v0.1.4 · Provider-Independent Config" description="Jun 29 – Jul 5, 2026">
+
+## Provider-Independent Deployment Configuration
+
+Port, environment variables, and health checks are now configured once, independent of which infrastructure provider you deploy to. Your configuration stays the same whether you're targeting a VPS today or a cloud provider tomorrow.
+
+</Update>
+
+<Update label="v0.1.3 · Bring Your Own Cloud" description="Jun 22 – Jun 28, 2026">
+
+## Bring Your Own Cloud
+
+Introduced Bring Your Own Cloud (BYOC): deploy onto infrastructure you already own, instead of a VectorIHub-managed environment. This marks our repositioning from a cloud hosting platform to a deployment layer that works across infrastructure providers.
+
+</Update>
+
+<Update label="v0.1.2 · Dockerfile-Based Deployments" description="Jun 15 – Jun 21, 2026">
+
+## Dockerfile-Based Deployments
+
+Replaced automatic Dockerization with a simpler, more reliable model: deployments now build directly from a `Dockerfile` you provide. This gives you full control over your build process and improves deployment reliability and scalability — Docker is now the packaging layer, and VectorIHub is the deployment layer built on top of it.
+
+</Update>
+
+<Update label="v0.1.1 · Dockerization Research" description="Jun 8 – Jun 14, 2026">
+
+## Automated Dockerization Research
+
+We spent this week investigating fully automatic Docker image generation across frameworks. The research surfaced a hard truth: automatic build systems introduce edge cases that are difficult to predict or support consistently at scale — a finding that directly shaped the direction we took next.
+
+</Update>
+
+<Update label="v0.1.0 · Foundation" description="Jun 1 – Jun 7, 2026">
+
+## Foundation
+
+Kicked off VectorIHub's deployment architecture — the initial workflow for turning a connected repository into a running deployment, and the early groundwork for an automated build pipeline.
+
 </Update>

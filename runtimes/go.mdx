@@ -1,0 +1,68 @@
+---
+title: "Go Runtime"
+sidebarTitle: "Go"
+description: "Dockerfile patterns and deployment notes for Go projects on VectorIHub."
+icon: "golang"
+---
+
+# Go Runtime
+
+VectorIHub runs your Go application exactly as your `Dockerfile` defines it — this page covers the patterns that work well for Go images specifically.
+
+<CardGroup cols={2}>
+  <Card title="Multi-Stage Builds" icon="docker">
+    Compile in a full Go image, ship only the binary in a minimal final image.
+  </Card>
+  <Card title="Any Module Setup" icon="package">
+    Works with any project using `go.mod`.
+  </Card>
+</CardGroup>
+
+---
+
+## Recommended Pattern
+
+Go compiles to a single static binary, so the final image only needs to contain that binary — not the Go toolchain.
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM golang:1.22 AS build
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 go build -o server .
+
+FROM gcr.io/distroless/static-debian12
+COPY --from=build /app/server /server
+EXPOSE 8080
+CMD ["/server"]
+```
+</CodeGroup>
+
+<Tip>`CGO_ENABLED=0` plus a `distroless`/`scratch` final stage produces the smallest possible image — useful if you don't need CGO dependencies.</Tip>
+
+## Port Binding
+
+<CodeGroup>
+```go main.go
+port := os.Getenv("PORT")
+if port == "" {
+  port = "8080"
+}
+http.ListenAndServe(":"+port, nil)
+```
+</CodeGroup>
+
+<Tip>Match your deployment's port setting to whatever your Dockerfile `EXPOSE`s — see [Deployment Configuration](/deploying/deployment-configuration).</Tip>
+
+---
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Browse Go Frameworks" icon="route" href="/languages/go">
+    See every Go framework with a dedicated guide.
+  </Card>
+  <Card title="Environment Variables" icon="key" href="/deploying/environment-variables">
+    Manage secrets and configuration without baking them into your image.
+  </Card>
+</CardGroup>

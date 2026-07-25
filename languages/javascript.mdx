@@ -1,0 +1,64 @@
+---
+title: "JavaScript and TypeScript"
+sidebarTitle: "JavaScript / TypeScript"
+description: "Deploy any JavaScript or TypeScript project on VectorIHub — package it with a Dockerfile and deploy it to any supported infrastructure."
+icon: "js"
+---
+
+# JavaScript and TypeScript
+
+JavaScript and TypeScript are fully supported on VectorIHub — as with every language, all that's required is a `Dockerfile` that builds and runs your project. This covers everything from single-page frontends to full backend APIs.
+
+<CardGroup cols={2}>
+  <Card title="Bring Your Own Dockerfile" icon="docker" href="/deploying/dockerfile-requirements">
+    Package your app with a standard Node.js-based Dockerfile — no VectorIHub-specific build config required.
+  </Card>
+  <Card title="Any Package Manager" icon="package">
+    npm, yarn, pnpm, or bun — whichever your Dockerfile installs with.
+  </Card>
+</CardGroup>
+
+---
+
+## Example Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+COPY . .
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+</CodeGroup>
+
+<Tip>TypeScript projects build the same way — just add your `tsc`/bundler build step before the final `CMD`.</Tip>
+
+## Frameworks built on JavaScript and TypeScript
+
+Any of these — or a custom setup — work the same way: write a Dockerfile, deploy it.
+
+<CardGroup cols={3}>
+  <Card title="React" href="/frameworks/react" icon="react" />
+  <Card title="Vue" href="/frameworks/vue" icon="vuejs" />
+  <Card title="Angular" href="/frameworks/angular" icon="angular" />
+  <Card title="Next.js" href="/frameworks/nextjs" icon="layers" />
+  <Card title="Nuxt" href="/frameworks/nuxt" icon="server" />
+  <Card title="Svelte / SvelteKit" href="/frameworks/svelte" icon="flame" />
+  <Card title="Astro" href="/frameworks/astro" icon="rocket" />
+  <Card title="Remix" href="/frameworks/remix" icon="shuffle" />
+  <Card title="Express" href="/frameworks/express" icon="server" />
+  <Card title="Fastify" href="/frameworks/fastify" icon="zap" />
+  <Card title="NestJS" href="/frameworks/nestjs" icon="layer-group" />
+  <Card title="Hapi" href="/frameworks/hapi" icon="smile" />
+  <Card title="Koa" href="/frameworks/koa" icon="feather" />
+  <Card title="AdonisJS" href="/frameworks/adonisjs" icon="gem" />
+</CardGroup>
+
+<Card title="Deploying on the Node.js runtime" icon="route" href="/runtimes/nodejs">
+  Runtime-specific Dockerfile notes and the full deployment workflow.
+</Card>

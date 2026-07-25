@@ -1,0 +1,81 @@
+---
+title: "Node.js Runtime"
+sidebarTitle: "Node.js"
+description: "Dockerfile patterns and deployment notes for Node.js and TypeScript projects on VectorIHub."
+icon: "node-js"
+---
+
+# Node.js Runtime
+
+VectorIHub runs your Node.js application exactly as your `Dockerfile` defines it — this page covers the patterns that work well for Node.js images specifically.
+
+<CardGroup cols={2}>
+  <Card title="Any Base Image" icon="docker">
+    `node:20-slim`, `node:20-alpine`, or a custom base — your Dockerfile, your choice.
+  </Card>
+  <Card title="Any Package Manager" icon="package">
+    npm, yarn, pnpm, or bun — install however your lockfile expects.
+  </Card>
+</CardGroup>
+
+---
+
+## Static Frontend vs. Live Server
+
+Node.js covers two very different deployment shapes — make sure your Dockerfile matches the one your app needs:
+
+<Tabs>
+  <Tab title="Static Build (React, Vue, Angular, ...)">
+    Build your app, then serve the static output with a lightweight web server — no Node process needs to keep running.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM nginx:alpine
+    COPY --from=build /app/dist /usr/share/nginx/html
+    EXPOSE 80
+    ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Live Server (Express, Next.js SSR, ...)">
+    Build your app, then run it as a live Node process.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM node:20-slim
+    WORKDIR /app
+    COPY --from=build /app ./
+    EXPOSE 3000
+    CMD ["node", "server.js"]
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+<Tip>Match your deployment's port setting to whatever your Dockerfile `EXPOSE`s and your app listens on — see [Deployment Configuration](/deploying/deployment-configuration).</Tip>
+
+---
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Browse Node.js Frameworks" icon="layers" href="/languages/javascript">
+    See every JavaScript/TypeScript framework with a dedicated guide.
+  </Card>
+  <Card title="Environment Variables" icon="key" href="/deploying/environment-variables">
+    Manage secrets and configuration without baking them into your image.
+  </Card>
+</CardGroup>

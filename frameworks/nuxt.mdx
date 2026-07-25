@@ -1,0 +1,84 @@
+---
+title: "Nuxt"
+sidebarTitle: "Nuxt"
+description: "Deploy Nuxt applications on VectorIHub with a Dockerfile — static generation and server-side rendering both supported."
+icon: "server"
+---
+
+# Nuxt
+
+Nuxt is a full-stack framework built on Vue. Your Dockerfile determines whether it ships as static files or a live Node server — both are fully supported.
+
+<CardGroup cols={2}>
+  <Card title="Static or Server" icon="layers">
+    Choose the build output that matches your `nuxt.config.ts` `ssr` setting.
+  </Card>
+  <Card title="Nitro Server Output" icon="package">
+    Nuxt's Node server preset produces a self-contained `.output/` bundle.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<Tabs>
+  <Tab title="Server (SSR)">
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM node:20-slim
+    WORKDIR /app
+    COPY --from=build /app/.output ./.output
+    EXPOSE 3000
+    CMD ["node", ".output/server/index.mjs"]
+    ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Static Generation">
+    Set `ssr: false` in `nuxt.config.ts` first.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run generate
+
+    FROM nginx:alpine
+    COPY --from=build /app/.output/public /usr/share/nginx/html
+    EXPOSE 80
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Environment Variables
+
+<CodeGroup>
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  runtimeConfig: {
+    apiSecret: process.env.API_SECRET,
+    public: {
+      apiUrl: process.env.NUXT_PUBLIC_API_URL,
+    },
+  },
+});
+```
+</CodeGroup>
+
+<Warning>Only values under `runtimeConfig.public` are exposed to the browser — everything else stays server-side.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

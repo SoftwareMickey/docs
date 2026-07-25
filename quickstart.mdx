@@ -1,53 +1,59 @@
 ---
 title: "Quickstart"
-description: "Deploy your first application to VectorIHub in under 5 minutes."
+description: "Deploy your first Dockerized application to VectorIHub in under 5 minutes."
 ---
 
-Welcome to VectorIHub! This guide will walk you through the process of containerizing and deploying your first AI application.
+Welcome to VectorIHub! This guide walks you through deploying your first application — built from your own Dockerfile — to the infrastructure of your choice.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following:
 
 * A VectorIHub account (Sign up at [vectorihub.com](https://vectorihub.com))
-* A GitHub repository with your application code
-* A basic configuration file (optional, but recommended)
+* A GitHub repository containing a `Dockerfile`
+* An infrastructure target — a VPS you manage, or a supported cloud provider (AWS, Azure, DigitalOcean)
+
+<Warning>
+  A `Dockerfile` in your repository is required. See [Dockerfile Requirements](/deploying/dockerfile-requirements) for what VectorIHub expects it to define.
+</Warning>
 
 ---
 
-## 3 Steps to Launch
-
-Follow these steps to get your app live on our global infrastructure.
+## 4 Steps to Launch
 
 <Steps>
   <Step title="Connect your Repository">
     Log in to the [VectorIHub Dashboard](https://vectorihub.com) and click **Your Project**. Select **deploy repo**.
-    
+
     <Info>
-      VectorIHub automatically detects your language (Python, Node.js, Go) and prepares the environment.
+      VectorIHub builds your Docker image directly from your repository's `Dockerfile`.
     </Info>
   </Step>
 
-  <Step title="Configure your Environment">
-    Upload your environment variables if any are required by your application.
-    
+  <Step title="Configure your Deployment">
+    Set your port, environment variables, and health check path.
+
     <CodeGroup>
     ```yaml .env (Example)
-    PORT: 5173
-    DB-URL: https://example.database.com
+    PORT=5173
+    DATABASE_URL=https://example.database.com
     ```
     </CodeGroup>
   </Step>
 
+  <Step title="Choose Your Infrastructure">
+    Select where this deployment should run — a VPS you manage, or a supported cloud provider.
+
+    <Info>
+      See [Infrastructure Providers](/infrastructure) for what's supported today.
+    </Info>
+  </Step>
+
   <Step title="Deploy & Monitor">
-    Click **"Deploy"**. Our engine will start the **Auto-Dockerization** process.
-    
+    Click **"Deploy"**. VectorIHub builds your image from your Dockerfile and deploys it to your chosen infrastructure.
+
     <Check>
-      Your app will be live at `https://your-app.vectorihub.run` once the build completes!
+      Your app will be live once the build and deployment complete!
     </Check>
   </Step>
 </Steps>
-
----
-
----

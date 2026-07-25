@@ -1,0 +1,81 @@
+---
+title: "Astro"
+sidebarTitle: "Astro"
+description: "Deploy Astro applications on VectorIHub with a Dockerfile — static, hybrid, and server-rendered sites all supported."
+icon: "rocket"
+---
+
+# Astro
+
+Astro is a content-focused web framework that ships minimal JavaScript by default. Your Dockerfile — and your `output` config — determine whether it ships as static files or a live server.
+
+<CardGroup cols={2}>
+  <Card title="Static, Hybrid, or Server" icon="layers">
+    Choose the Dockerfile pattern that matches your `astro.config.mjs` `output` setting.
+  </Card>
+  <Card title="UI Framework Agnostic" icon="puzzle-piece">
+    React, Vue, Svelte, or no UI framework at all — all supported inside Astro.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<Tabs>
+  <Tab title="Server (output: server/hybrid)">
+    Requires `@astrojs/node` configured in `astro.config.mjs`.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM node:20-slim
+    WORKDIR /app
+    COPY --from=build /app/dist ./dist
+    COPY --from=build /app/node_modules ./node_modules
+    EXPOSE 4321
+    CMD ["node", "./dist/server/entry.mjs"]
+    ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Static (default)">
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM nginx:alpine
+    COPY --from=build /app/dist /usr/share/nginx/html
+    EXPOSE 80
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Environment Variables
+
+<CodeGroup>
+```js
+// Server-side only
+const dbUrl = import.meta.env.DATABASE_URL;
+
+// Exposed to the browser (must be prefixed)
+const apiUrl = import.meta.env.PUBLIC_API_URL;
+```
+</CodeGroup>
+
+<Warning>Only variables prefixed with `PUBLIC_` are exposed to the browser — everything else stays server-side.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

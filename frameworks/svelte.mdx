@@ -1,0 +1,79 @@
+---
+title: "Svelte"
+sidebarTitle: "Svelte / SvelteKit"
+description: "Deploy Svelte and SvelteKit applications on VectorIHub with a Dockerfile — static and server-rendered apps both supported."
+icon: "flame"
+---
+
+# Svelte / SvelteKit
+
+Svelte compiles your components into highly efficient JavaScript at build time. Your Dockerfile — and your SvelteKit adapter choice — determine whether it ships as static files or a live server.
+
+<CardGroup cols={2}>
+  <Card title="Static or Server" icon="layers">
+    Choose the adapter and Dockerfile pattern that match your deployment shape.
+  </Card>
+  <Card title="Node Adapter" icon="package">
+    `@sveltejs/adapter-node` produces a self-contained server build.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<Tabs>
+  <Tab title="Server (adapter-node)">
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM node:20-slim
+    WORKDIR /app
+    COPY --from=build /app/build ./build
+    COPY --from=build /app/node_modules ./node_modules
+    EXPOSE 3000
+    CMD ["node", "build/index.js"]
+    ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Static (adapter-static)">
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM nginx:alpine
+    COPY --from=build /app/build /usr/share/nginx/html
+    EXPOSE 80
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Environment Variables
+
+<CodeGroup>
+```js
+// Server-side only
+import { DATABASE_URL } from '$env/static/private';
+
+// Exposed to the browser (must be prefixed)
+import { PUBLIC_API_URL } from '$env/static/public';
+```
+</CodeGroup>
+
+<Warning>Only variables prefixed with `PUBLIC_` are exposed to the browser — everything else stays server-side.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

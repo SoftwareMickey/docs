@@ -1,0 +1,61 @@
+---
+title: "Fastify"
+sidebarTitle: "Fastify"
+description: "Deploy Fastify applications on VectorIHub with a Dockerfile."
+icon: "zap"
+---
+
+# Fastify
+
+Fastify is a fast, low-overhead Node.js web framework. Package it in a standard Node.js Dockerfile and deploy it as a live server.
+
+<CardGroup cols={2}>
+  <Card title="No Build Step Needed" icon="rocket">
+    Plain Fastify apps run directly — no compilation required.
+  </Card>
+  <Card title="Automatic Port Binding" icon="settings">
+    Set `PORT` from the environment and match it in your Dockerfile's `EXPOSE`.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+</CodeGroup>
+
+<CodeGroup>
+```js server.js
+const fastify = require("fastify")();
+
+fastify.get("/", async () => {
+  return { message: "Hello from Fastify on VectorIHub" };
+});
+
+fastify.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" });
+```
+</CodeGroup>
+
+<Tip>Bind to `0.0.0.0`, not `localhost` — Fastify refuses external connections by default otherwise.</Tip>
+
+## Environment Variables
+
+<CodeGroup>
+```js
+const dbUrl = process.env.DATABASE_URL;
+```
+</CodeGroup>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

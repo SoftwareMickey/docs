@@ -24,33 +24,57 @@
             ]
           },
           {
-            "group": "React",
+            "group": "Deploying with Docker",
             "pages": [
-              "/react/index",
-              "/react/supported-react-types",
-              "/react/deploying-react-app",
-              "/react/environment-variables",
-              "/react/congratulations"
+              "/deploying/dockerfile-requirements",
+              "/deploying/deployment-configuration",
+              "/deploying/environment-variables"
             ]
           },
           {
-            "group": "Node Js",
+            "group": "Languages",
             "pages": [
-              "/nodejs/index",
-              "/nodejs/supported-nodejs-types",
-              "/nodejs/deploying-nodejs-app",
-              "/nodejs/environment-variables",
-              "/nodejs/congratulations"
+              "/languages/javascript",
+              "/languages/go"
             ]
           },
           {
-            "group": "Golang",
+            "group": "Runtimes",
             "pages": [
-              "/go/index",
-              "/go/supported-go-types",
-              "/go/deploying-go-app",
-              "/go/environment-variables",
-              "/go/congratulations"
+              "/runtimes/nodejs",
+              "/runtimes/go"
+            ]
+          },
+          {
+            "group": "Frameworks",
+            "pages": [
+              "/frameworks/react",
+              "/frameworks/vue",
+              "/frameworks/angular",
+              "/frameworks/nextjs",
+              "/frameworks/nuxt",
+              "/frameworks/svelte",
+              "/frameworks/astro",
+              "/frameworks/remix",
+              "/frameworks/express",
+              "/frameworks/fastify",
+              "/frameworks/nestjs",
+              "/frameworks/hapi",
+              "/frameworks/koa",
+              "/frameworks/adonisjs",
+              "/frameworks/gin",
+              "/frameworks/fiber",
+              "/frameworks/echo",
+              "/frameworks/chi"
+            ]
+          },
+          {
+            "group": "Infrastructure Providers",
+            "pages": [
+              "/providers/vps",
+              "/providers/aws",
+              "/providers/azure",
+              "/providers/digitalocean"
             ]
           }
         ]
@@ -59,8 +83,8 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Frameworks",
-          "href": "/frameworks",
+          "anchor": "Infrastructure",
+          "href": "/infrastructure",
           "icon": "book-open-cover"
         },
         {
@@ -81,6 +105,11 @@
         "label": "Changelog",
         "href": "/changelog",
         "icon": "cloud"
+      },
+      {
+        "label": "Blog",
+        "href": "/blog",
+        "icon": "pen-nib"
       },
       {
         "label": "Support",

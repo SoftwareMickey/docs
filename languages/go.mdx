@@ -1,0 +1,56 @@
+---
+title: "Go"
+sidebarTitle: "Go"
+description: "Deploy any Go project on VectorIHub — package it with a Dockerfile and deploy it to any supported infrastructure."
+icon: "golang"
+---
+
+# Go
+
+Go is fully supported on VectorIHub — package your compiled binary with a `Dockerfile` and deploy it like any other language. Go's static binaries make for especially small, fast-starting images.
+
+<CardGroup cols={2}>
+  <Card title="Bring Your Own Dockerfile" icon="docker" href="/deploying/dockerfile-requirements">
+    A standard multi-stage Go build — no VectorIHub-specific build config required.
+  </Card>
+  <Card title="Any Module Setup" icon="package">
+    Works with any project using `go.mod`.
+  </Card>
+</CardGroup>
+
+---
+
+## Example Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM golang:1.22 AS build
+WORKDIR /app
+COPY . .
+RUN go build -o server .
+
+FROM debian:bookworm-slim
+COPY --from=build /app/server /server
+EXPOSE 8080
+CMD ["/server"]
+```
+</CodeGroup>
+
+<Tip>A multi-stage build keeps your final image small — only the compiled binary ships, not the Go toolchain.</Tip>
+
+## Frameworks built on Go
+
+<CardGroup cols={2}>
+  <Card title="Gin" href="/frameworks/gin" icon="martini-glass" />
+  <Card title="Fiber" href="/frameworks/fiber" icon="route" />
+  <Card title="Echo" href="/frameworks/echo" icon="server" />
+  <Card title="Chi" href="/frameworks/chi" icon="server" />
+</CardGroup>
+
+<Info>
+  Plain `net/http` servers and custom routers built on the standard library work the same way — no framework required.
+</Info>
+
+<Card title="Deploying on the Go runtime" icon="route" href="/runtimes/go">
+  Runtime-specific Dockerfile notes and the full deployment workflow.
+</Card>

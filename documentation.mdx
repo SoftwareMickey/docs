@@ -1,68 +1,64 @@
 ---
 title: 'Documentation'
-description: 'Deploy any stack from GitHub to live in minutes with VectorIHub'
+description: 'Build once. Deploy anywhere. A consistent deployment experience across any infrastructure.'
 ---
 
 <Info>
-  **VectorIHub** is designed to auto-dockerize, build, and deploy developer projects with minimal configuration.
+  **VectorIHub** deploys your Dockerized application consistently across any supported infrastructure provider.
 </Info>
 
 ## Welcome to VectorIHub
 
-VectorIHub is a cloud development and deployment platform that eliminates the "it works on my machine" headache. We bridge the gap between your GitHub repository and a live production environment.
+VectorIHub is a deployment platform, not another cloud hosting provider. You define your application once — with a Dockerfile — and VectorIHub deploys it consistently, whether the target is a VPS, AWS, Azure, DigitalOcean, or another provider.
 
 <CardGroup cols={2}>
-  <Card title="Zero Configuration" icon="wand-magic-sparkles" color="#16A34A">
-    No more manual Dockerfile writing. We detect your stack and containerize it for you.
+  <Card title="Bring Your Own Dockerfile" icon="docker" color="#16A34A">
+    Your Dockerfile is the single source of truth for how your app is built and run — no guessing at your build process.
   </Card>
-  <Card title="Global Infrastructure" icon="globe" color="#07C983">
-    Deploy to a high-performance environment with built-in SSL and domain routing.
+  <Card title="Deploy Anywhere" icon="globe" color="#07C983">
+    The same application deploys consistently to whichever infrastructure provider you choose.
   </Card>
 </CardGroup>
 
 ## The VectorIHub Pipeline
 
-Instead of manually managing servers, VectorIHub automates the entire infrastructure lifecycle:
-
 <Steps>
   <Step title="Connect">
     Link your GitHub repository (Public or Private) to the VectorIHub dashboard.
   </Step>
-  <Step title="Analyze">
-    Our engine clones your project and intelligently detects the runtime (Node, Go, Python, Rust, etc.).
+  <Step title="Build">
+    VectorIHub builds a Docker image from your repository's Dockerfile.
   </Step>
-  <Step title="Build & Deploy">
-    We generate an optimized Docker image, build it, and launch your container on **VHB Cloud**.
+  <Step title="Configure">
+    Set your port, environment variables, and health checks once in the dashboard.
   </Step>
-  <Step title="Live">
-    Your application is provisioned with a public URL, SSL certificate, and optional custom domain.
+  <Step title="Deploy">
+    Choose your target infrastructure — VectorIHub deploys your image there and keeps the experience consistent across providers.
   </Step>
 </Steps>
 
 ## Core Philosophy
 
-> **Make deployment as simple as pushing code.**
-> 
-> Whether you are deploying a frontend app, backend API, or complex microservices, VectorIHub orchestrates the infrastructure so you can focus on shipping.
+> **Build once. Deploy anywhere.**
+>
+> Your application shouldn't need to be redesigned because you changed infrastructure providers. VectorIHub keeps your deployment experience the same regardless of where it runs.
 
 ---
 
 ## Key Features
 
-Explore the tools that make VectorIHub the fastest way to go live.
-
 <AccordionGroup>
-  <Accordion title="Auto-Dockerization Engine" icon="docker">
-    Our proprietary engine generates production-ready Docker configurations tailored to your specific framework requirements, ensuring best practices for security and performance.
+  <Accordion title="Dockerfile-Based Builds" icon="docker">
+    Your Dockerfile already describes your dependencies, build process, runtime, and startup command — VectorIHub builds from it directly, so builds are predictable and language-agnostic.
   </Accordion>
-  <Accordion title="SSL & Domain Management" icon="shield-check">
-    Every deployment gets an automatic `vectorihub.app` subdomain. We handle DNS verification, SSL provisioning, and custom domain mapping out of the box.
+  <Accordion title="Infrastructure Portability" icon="shuffle">
+    Deploy the same application to a VPS, AWS, Azure, or DigitalOcean without redesigning your deployment workflow.
   </Accordion>
   <Accordion title="Multi-Environment CI/CD" icon="layer-group">
-    Manage Development, Staging, and Production environments seamlessly. Test changes in isolated containers before merging to the main branch.
+    Manage Development, Staging, and Production environments seamlessly. Test changes safely before promoting to production.
   </Accordion>
-  <Accordion title="Efficient Resource Pooling" icon="microchip">
-    Using **VectorIHub Resources**, you can run multiple containers within a shared resource pool, maximizing compute efficiency and reducing costs.
+  <Accordion title="Zero-Downtime Deploys" icon="shield-check">
+    Blue-green deployments by default — your previous version stays live until the new one passes health checks.
   </Accordion>
 </AccordionGroup>
 
@@ -70,16 +66,11 @@ Explore the tools that make VectorIHub the fastest way to go live.
 
 ## Next Steps
 
-Ready to get started? Choose your path below:
-
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Get live in 5 minutes.
+    Deploy your first Dockerized app.
   </Card>
-  <Card title="AI Tools" icon="robot" href="/ai-tools/cursor">
-    Integrate with Cursor.
-  </Card>
-  <Card title="API Ref" icon="code" href="/api-reference/introduction">
-    Manage via API.
+  <Card title="Infrastructure Providers" icon="server" href="/infrastructure">
+    See every provider VectorIHub can deploy to.
   </Card>
 </CardGroup>

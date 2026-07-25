@@ -1,18 +1,20 @@
 ---
 title: "Introduction to VectorIHub"
-description: "From source code to production-ready containers in seconds."
+description: "Build once. Deploy anywhere. A consistent deployment experience across any infrastructure."
 ---
 
 ## Overview
 
-**VectorIHub** is a cloud hosting and deployment platform engineered to bridge the gap between development and production. By leveraging **Auto-Dockerization**, we eliminate the need for manual Dockerfile configuration, allowing you to focus on writing code while we handle the containerization, orchestration, and scaling.
+**VectorIHub** is a deployment platform built around a simple idea: an application should be defined once and deployed consistently to any infrastructure.
+
+Rather than another cloud hosting provider, VectorIHub sits between your application and your infrastructure. You describe how your app is built with a **Dockerfile**, and VectorIHub deploys it — consistently — to the infrastructure you choose.
 
 <CardGroup cols={2}>
-  <Card title="Auto-Dockerization" icon="docker" href="#auto-dockerization">
-    Automatically detect framework patterns like Node.js and Python.
+  <Card title="Bring Your Own Dockerfile" icon="docker" href="/deploying/dockerfile-requirements">
+    Your Dockerfile is the single source of truth for how your app is built and run.
   </Card>
-  <Card title="Instant Deployment" icon="bolt" href="#deployment-flow">
-    Zero-friction infrastructure with global scaling built-in.
+  <Card title="Deploy Anywhere" icon="globe" href="/infrastructure">
+    The same deployment targets a VPS, AWS, Azure, DigitalOcean, or another provider — without changing your app.
   </Card>
 </CardGroup>
 
@@ -20,116 +22,46 @@ description: "From source code to production-ready containers in seconds."
 
 ## How It Works
 
-VectorIHub analyzes your repository to determine the best environment for your application. No more `EXPOSE` or `WORKDIR` headaches.
-
 <Steps>
+  <Step title="Add a Dockerfile">
+    Your Dockerfile describes your dependencies, build process, runtime, startup command, and exposed ports.
+  </Step>
   <Step title="Connect your Repository">
     Link your GitHub or GitLab account to VectorIHub.
   </Step>
-  <Step title="Pattern Detection">
-    Our engine scans your code for framework signatures (e.g., `package.json`, `go.mod`).
+  <Step title="Configure Your Deployment">
+    Set your port, environment variables, and health checks once in the dashboard.
   </Step>
-  <Step title="Build & Deploy">
-    We generate a secure, optimized Docker image and deploy it to our global edge network.
+  <Step title="Choose Your Infrastructure & Deploy">
+    Pick where your app runs — VectorIHub handles building your image and deploying it there.
   </Step>
 </Steps>
 
-<Note>
-  VectorIHub currently provides a **Trial Tier** with no credit card required. You can deploy your first project in under 2 minutes.
-</Note>
+---
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do I need a Dockerfile to use VectorIHub?">
+    Yes. Your Dockerfile is how VectorIHub knows how to build and run your application — this keeps builds predictable and works for any language or framework that can produce a Docker image.
+  </Accordion>
+  <Accordion title="What happens during production updates?">
+    We use blue-green deployments by default. Your previous version stays live until the new container passes its health check, so updates ship with zero downtime.
+  </Accordion>
+  <Accordion title="Can I move my app to a different infrastructure provider later?">
+    Yes — that's the point. Your application definition doesn't change when your target infrastructure does.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
-## Technical Architecture
+## Next Steps
 
-Frequently Asked Questions
-<AccordionGroup>
-  <Accordion title="Do I need to know Docker to use VectorIHub?">
-    Not at all. VectorIHub handles the creation, layering, and optimization of your containers. However, if you have a custom Dockerfile, we’ll respect and use it.
-  </Accordion>
-  <Accordion title="What happens during production updates?">
-    We utilize Blue-Green deployments by default. Your old version stays live until the new container passes health checks, ensuring zero downtime.
-  </Accordion>
-</AccordionGroup>
-
-<Update label="New Feature" date="February 2026">
-  Added native support for React runtimes.
-</Update>
-
-## Why Choose VectorIHub?
-
-VectorIHub is built to remove the "infrastructure tax" from your development cycle. By automating the most tedious parts of the DevOps lifecycle, we allow you to focus on the only thing that matters: your code.
-
-<CardGroup cols={1}>
-  <Card title="Zero Config" icon="wand-sparkles">
-  No more writing complex Dockerfiles. We handle the containerization logic for you.
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Deploy your first Dockerized app in under 5 minutes.
   </Card>
-  <Card title="Infinite Scale" icon="arrows-up-to-line">
-  Your app grows with your traffic automatically, from 1 user to 1 million.
-  </Card>
-  <Card title="Cost Efficient" icon="wallet">
-  Only pay for what you use with our granular, resource-based billing.
+  <Card title="Features" icon="layers" href="/features">
+    See the full list of what VectorIHub handles for you.
   </Card>
 </CardGroup>
-
-## Core Platform Benefits
-
-<AccordionGroup>
-  <Accordion title="Speed to Market" icon="rocket">
-  Traditional DevOps requires manual environment setup, which can take hours or even days. With VectorIHub, the transition from git push to a live URL happens in minutes.
-
-  * **Instant CI/CD:** Built-in pipelines triggered automatically by your git commits.
-  * **Pattern Detection:** Automatic recognition of Node.js, Python, and Go project structures to eliminate manual config.
-  </Accordion>
-
-  <Accordion title="Built-in Reliability" icon="shield-check">
-  We provide an "opinionated" infrastructure that follows industry best practices for security and uptime, so you don't have to be a SRE expert.
-
-  * **Zero-Downtime Deploys:** Automatic blue-green deployments ensure your app stays online during updates.
-  * **Health Monitoring:** Intelligent, self-healing containers that automatically restart if they crash or become unresponsive.
-  </Accordion>
-</AccordionGroup>
-
-## Comparison: Manual vs. VectorIHub
-<Tabs>
-  <Tab title="The Old Way (Manual)">
-    <Error>
-    Time Sink: 4-8 hours setting up Docker, registries, and SSL.
-    </Error>
-    <Steps>
-      <Step title="Write Dockerfile">Manually define layers, OS, and dependencies.</Step>
-      <Step title="Configure CI/CD">Set up GitHub Actions or Jenkins scripts.</Step>
-      <Step title="Manage SSL">Manual Let's Encrypt renewals or Nginx config.</Step>
-      <Step title="Provisioning">Renting a VPS and manually installing updates.</Step>
-    </Steps>
-  </Tab>
-
-  <Tab title="The VectorIHub Way">
-    <Check>
-    Efficiency: 2 minutes to go live with a secure, production-grade URL.
-    </Check>
-    <Steps>
-      <Step title="Connect Repo">Select your GitHub/GitLab repository.</Step>
-      <Step title="Auto-Build">Our engine detects your framework and builds the image.</Step>
-      <Step title="Live!">Your app is deployed with automatic SSL and scaling.</Step>
-    </Steps>
-  </Tab>
-</Tabs>
-
-## Deep Dive: Advanced Advantages
-
-<AccordionGroup>
-  <Accordion title="Optimized Resource Isolation">
-  Every application runs in its own isolated container. This prevents "noisy neighbor" syndrome and ensures that a memory leak in one service doesn't crash your entire cluster.
-  </Accordion>
-  <Accordion title="Security First Architecture">
-  VectorIHub automatically applies security patches to the base images we use for auto-dockerization. You get enterprise-grade security without having to audit your own base OS.
-  </Accordion>
-  <Accordion title="Developer Experience (DX)">
-  We prioritize the developer. From our intuitive dashboard, everything is designed to reduce cognitive load and prevent "DevOps burnout."
-  </Accordion>
-</AccordionGroup>
-
-<Tip>
-Start with our Trial Tier to experience these benefits firsthand—no credit card or long-term commitment required.
-</Tip>

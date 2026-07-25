@@ -1,0 +1,59 @@
+---
+title: "DigitalOcean"
+sidebarTitle: "DigitalOcean"
+description: "Deploy your Dockerized application to your own DigitalOcean account."
+icon: "digital-ocean"
+---
+
+# DigitalOcean
+
+Deploy your application into your own DigitalOcean account. VectorIHub provisions and manages the resources your container needs, using credentials you control.
+
+<CardGroup cols={2}>
+  <Card title="Your Own Account" icon="key">
+    Resources are provisioned in your DigitalOcean account — you retain ownership and billing.
+  </Card>
+  <Card title="Consistent Workflow" icon="check-check">
+    The same Dockerfile-based deployment you'd use on any other supported provider.
+  </Card>
+</CardGroup>
+
+---
+
+## Requirements
+
+<Columns>
+  <Column>
+    <Check>A DigitalOcean account</Check>
+    <Check>An API token with sufficient permissions to provision resources</Check>
+    <Check>A `Dockerfile` in your repository</Check>
+  </Column>
+  <Column>
+    <Info>
+      Connect your DigitalOcean account once in the dashboard — VectorIHub handles provisioning for every deployment you target at it afterward.
+    </Info>
+  </Column>
+</Columns>
+
+## Connecting DigitalOcean
+
+<Steps>
+  <Step title="Connect Your DigitalOcean Account">
+    In the VectorIHub dashboard, add your DigitalOcean API token.
+  </Step>
+  <Step title="Connect Your Repository">
+    Link the repository containing your `Dockerfile`.
+  </Step>
+  <Step title="Configure Your Deployment">
+    Set your port, environment variables, and health check path.
+  </Step>
+  <Step title="Deploy">
+    VectorIHub builds your image and deploys it into your DigitalOcean account.
+  </Step>
+</Steps>
+
+<Tip>Good fit for teams who want cloud-managed infrastructure without AWS or Azure's complexity.</Tip>
+
+<Card title="Dockerfile Requirements" icon="docker" href="/deploying/dockerfile-requirements">
+  What your Dockerfile needs to define before deploying.
+</Card>

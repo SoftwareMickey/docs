@@ -1,0 +1,73 @@
+---
+title: "Dockerfile Requirements"
+sidebarTitle: "Dockerfile Requirements"
+description: "What your Dockerfile needs to define before deploying on VectorIHub."
+icon: "docker"
+---
+
+# Dockerfile Requirements
+
+VectorIHub builds directly from your repository's `Dockerfile` — it's the single source of truth for how your application is built and run. If your project can produce a Docker image, VectorIHub can deploy it, regardless of language or framework.
+
+<Warning>
+  A `Dockerfile` is required at the root of your repository (or at the path you configure). VectorIHub does not generate one for you.
+</Warning>
+
+## What Your Dockerfile Should Define
+
+<Columns>
+  <Column>
+    <Check>Base image and runtime</Check>
+    <Check>Dependency installation</Check>
+    <Check>Build steps, if any</Check>
+  </Column>
+  <Column>
+    <Check>A startup command (`CMD` or `ENTRYPOINT`)</Check>
+    <Check>The port your app listens on (`EXPOSE`)</Check>
+  </Column>
+</Columns>
+
+## Example
+
+<CodeGroup>
+```dockerfile Node.js
+FROM node:20-slim
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+COPY . .
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+```dockerfile Go
+FROM golang:1.22 AS build
+WORKDIR /app
+COPY . .
+RUN go build -o server .
+
+FROM debian:bookworm-slim
+COPY --from=build /app/server /server
+EXPOSE 8080
+CMD ["/server"]
+```
+</CodeGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Read your port from an environment variable">
+    Bind to `process.env.PORT`, `os.Getenv("PORT")`, or your language's equivalent, rather than hardcoding a port — this keeps your image portable across deployments and providers.
+  </Accordion>
+  <Accordion title="Keep images small">
+    Use slim/alpine base images and multi-stage builds where possible — smaller images build and deploy faster.
+  </Accordion>
+  <Accordion title="Don't bake secrets into the image">
+    Read secrets from environment variables at runtime instead of `COPY`-ing them into the image. See [Environment Variables](/deploying/environment-variables).
+  </Accordion>
+</AccordionGroup>
+
+<Card title="Configure Your Deployment" icon="sliders" href="/deploying/deployment-configuration">
+  Set your port, environment variables, and health checks after your Dockerfile is in place.
+</Card>

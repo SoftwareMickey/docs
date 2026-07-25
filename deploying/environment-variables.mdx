@@ -1,0 +1,112 @@
+---
+title: "Managing Environment Variables"
+sidebarTitle: "Environment Variables"
+description: "Securely manage API keys, database URLs, and secrets in VectorIHub using environment variables."
+icon: "key"
+---
+
+# Managing Environment Variables
+
+Most applications rely on API keys, database connections, and third-party services. VectorIHub makes it easy to manage these securely using **environment variables** — so you never have to bake secrets into your Docker image.
+
+<Note>
+Environment variables are injected into your container at runtime and are never stored in your image or repository.
+</Note>
+
+<CardGroup cols={1}>
+  <Card title="Secure by Default" icon="shield">
+    Keep secrets out of your GitHub repository and your Docker image.
+  </Card>
+  <Card title="Runtime Injection" icon="cpu">
+    Variables are injected into your container at runtime — no rebuild needed for value changes.
+  </Card>
+  <Card title="Works With Any Language" icon="globe">
+    Since variables are injected at the container level, they're available to any language or framework your Dockerfile runs.
+  </Card>
+</CardGroup>
+
+---
+
+## Adding Environment Variables
+
+<Steps>
+  <Step title="Open Project Dashboard">
+    Go to your project inside the **VectorIHub Dashboard**.
+  </Step>
+  <Step title="Navigate to Environment Settings">
+    Open **Settings → Environment Variables**.
+  </Step>
+  <Step title="Add Key-Value Pairs">
+    ```bash
+    Key: DATABASE_URL
+    Value: postgres://username:password@host:5432/mydb
+    ```
+    <Check>
+    Your variables are now securely stored and ready for deployment.
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Accessing Variables in Your App
+
+Environment variables are available the same way they would be in any container — read them however your language normally reads process environment variables:
+
+<CodeGroup>
+```js Node.js
+const dbUrl = process.env.DATABASE_URL;
+```
+```go Go
+dbURL := os.Getenv("DATABASE_URL")
+```
+```python Python
+import os
+db_url = os.environ["DATABASE_URL"]
+```
+</CodeGroup>
+
+## Best Practices
+
+<Columns>
+  <Column>
+    <Check>Never commit secrets like API keys to GitHub</Check>
+    <Check>Never `COPY` a `.env` file containing secrets into your image</Check>
+    <Check>Add safe fallbacks for local development</Check>
+  </Column>
+  <Column>
+    <Warning>
+      Hardcoding secrets in your source code or Dockerfile can expose sensitive data and create security risks.
+    </Warning>
+  </Column>
+</Columns>
+
+---
+
+## Updating Environment Variables
+
+Environment variable updates are applied on your next deployment.
+
+<AccordionGroup>
+  <Accordion title="How updates are applied">
+    - Modify or add variables in the dashboard
+    - Trigger a redeploy or push new code
+    - VectorIHub restarts your container with the updated variables
+  </Accordion>
+  <Accordion title="When should you redeploy?">
+    Redeploy whenever you:
+    - Change API keys or database credentials
+    - Update third-party integrations
+    - Add new configuration values
+  </Accordion>
+</AccordionGroup>
+
+<Badge color="amber">Requires Redeploy</Badge>
+
+---
+
+## Summary
+
+<Check>
+Store secrets securely in the VectorIHub dashboard and read them at runtime the same way you would in any container — no code changes for VectorIHub-specific SDKs required.
+</Check>

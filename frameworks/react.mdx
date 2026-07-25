@@ -1,0 +1,59 @@
+---
+title: "React"
+sidebarTitle: "React"
+description: "Deploy React applications on VectorIHub with a Dockerfile — Vite, Create React App, or a custom bundler."
+icon: "react"
+---
+
+# React
+
+React is a popular JavaScript library for building dynamic user interfaces. Since React apps build to static files, they're typically served through a lightweight web server inside your container.
+
+<CardGroup cols={2}>
+  <Card title="Any Bundler" icon="rocket">
+    Vite, Create React App, or a custom Webpack/Parcel setup — all work the same way.
+  </Card>
+  <Card title="Static Serving" icon="globe">
+    Your production build is served by nginx inside your container.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+```
+</CodeGroup>
+
+<Tip>Create React App outputs to `build/` instead of `dist/` — adjust the `COPY --from=build` path accordingly.</Tip>
+
+## Environment Variables
+
+Environment variables for React are baked in at build time, so reference them in your Dockerfile's build stage using your bundler's convention:
+
+<CodeGroup>
+```jsx Vite
+const apiUrl = import.meta.env.VITE_API_URL;
+```
+```jsx Create React App
+const apiUrl = process.env.REACT_APP_API_URL;
+```
+</CodeGroup>
+
+<Warning>Only use public-safe keys — anything bundled into your build is visible to the browser.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

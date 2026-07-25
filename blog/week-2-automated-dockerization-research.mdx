@@ -1,0 +1,44 @@
+---
+title: "Week 2 — Exploring Automated Dockerization"
+description: "Chasing a zero-configuration deployment experience by removing Docker complexity from developers entirely — and the edge cases that kept appearing."
+date: "2026-06-14"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · June 14, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 2 of 8*
+
+*June 8 – June 14, 2026 · Automatic Application Containerization Research*
+
+---
+
+With the foundation in place, week two chased a tempting goal: remove Docker complexity from developers completely. The idea was that a user provides source code, and VectorIHub automatically creates the required Docker environment.
+
+In practice, that meant exploring framework detection, runtime identification, dependency installation, image generation, and automatic startup commands — all in service of a zero-configuration deployment experience.
+
+The work produced a much clearer picture of the deployment pipeline:
+
+```
+Source Code → Detection → Build → Container → Deployment
+```
+
+But the deeper VectorIHub went into automatic detection, the more exceptions appeared. A Next.js app, a Go service, a Python API, and a Java application each demanded different build assumptions. Automatic Docker generation kept producing unpredictable edge cases — the kind that never fully end, because every framework brings its own.
+
+**Up next:** the reality check that turned the whole product around.
+
+<CardGroup cols={2}>
+  <Card title="← Week 1: Building the Foundation" href="/blog/week-1-building-the-foundation" />
+  <Card title="Week 3: The Dockerization Reality Check →" href="/blog/week-3-dockerization-reality-check" />
+</CardGroup>
+
+<Card title="See what shipped this week" icon="route" href="/changelog#automated-dockerization-research">
+  v0.1.1 · Dockerization Research — in the changelog.
+</Card>

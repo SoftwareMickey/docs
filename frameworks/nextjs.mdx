@@ -1,0 +1,84 @@
+---
+title: "Next.js"
+sidebarTitle: "Next.js"
+description: "Deploy Next.js applications on VectorIHub with a Dockerfile — static exports and server-rendered apps both supported."
+icon: "layers"
+---
+
+# Next.js
+
+Next.js is a React framework for building full-stack web applications. Your Dockerfile determines whether it ships as a static export or a live server — both are fully supported.
+
+<CardGroup cols={2}>
+  <Card title="Static or Server" icon="layers">
+    Choose the build output that matches your `next.config.js` `output` setting.
+  </Card>
+  <Card title="Standalone Output" icon="package">
+    Next's `standalone` build mode produces a minimal, self-contained server bundle.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<Tabs>
+  <Tab title="Server (SSR / standalone)">
+    Set `output: "standalone"` in `next.config.js` first.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM node:20-slim
+    WORKDIR /app
+    COPY --from=build /app/.next/standalone ./
+    COPY --from=build /app/.next/static ./.next/static
+    COPY --from=build /app/public ./public
+    EXPOSE 3000
+    CMD ["node", "server.js"]
+    ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Static Export">
+    Set `output: "export"` in `next.config.js` first.
+
+    <CodeGroup>
+    ```dockerfile Dockerfile
+    FROM node:20-slim AS build
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    FROM nginx:alpine
+    COPY --from=build /app/out /usr/share/nginx/html
+    EXPOSE 80
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Environment Variables
+
+<CodeGroup>
+```js
+// Server-side only
+const dbUrl = process.env.DATABASE_URL;
+
+// Exposed to the browser (must be prefixed)
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+```
+</CodeGroup>
+
+<Warning>Only variables prefixed with `NEXT_PUBLIC_` are exposed to the browser — everything else stays server-side.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>

@@ -1,0 +1,47 @@
+---
+title: "Week 3 — The Dockerization Reality Check"
+description: "The turning point: moving build responsibility to the application, and why Docker became the packaging layer instead of something to replace."
+date: "2026-06-21"
+authors: muli
+image: "/logo.png"
+---
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.5rem 0 2rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · June 21, 2026 · 2 min read</div>
+  </div>
+</div>
+
+*VectorIHub Development Journey · Part 3 of 8*
+
+*June 15 – June 21, 2026 · Moving Responsibility to the Application*
+
+---
+
+This was the turning point. After two weeks of chasing automatic Dockerization, it became clear the effort was solving the wrong problem.
+
+The ecosystem already had a mature container standard — Docker. So rather than trying to replace Docker workflows, VectorIHub could build on top of them.
+
+The decision was simple:
+
+> **Developers provide the Dockerfile, and VectorIHub handles deployment.**
+
+That single change reduced complexity while increasing reliability, and it reframed the entire product — from *"VectorIHub builds your application"* to *"VectorIHub deploys your application anywhere."*
+
+The architectural split that came out of this week still defines the platform today:
+
+- **Docker** became the application packaging layer.
+- **VectorIHub** became the deployment portability layer.
+
+**Up next:** the biggest strategic shift of all — giving up on owning infrastructure.
+
+<CardGroup cols={2}>
+  <Card title="← Week 2: Exploring Automated Dockerization" href="/blog/week-2-automated-dockerization-research" />
+  <Card title="Week 4: The BYOC Pivot →" href="/blog/week-4-byoc-pivot" />
+</CardGroup>
+
+<Card title="See what shipped this week" icon="route" href="/changelog#dockerfile-based-deployments">
+  v0.1.2 · Dockerfile-Based Deployments — in the changelog.
+</Card>

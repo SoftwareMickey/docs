@@ -1,0 +1,59 @@
+---
+title: "Angular"
+sidebarTitle: "Angular"
+description: "Deploy Angular applications on VectorIHub with a Dockerfile."
+icon: "angular"
+---
+
+# Angular
+
+Angular is a full-featured platform for building web applications. Like other SPA frameworks, Angular builds to static files served through a lightweight web server.
+
+<CardGroup cols={2}>
+  <Card title="Standard Angular CLI" icon="rocket">
+    Works with any project scaffolded via the Angular CLI.
+  </Card>
+  <Card title="Static Serving" icon="globe">
+    Your production build is served by nginx inside your container.
+  </Card>
+</CardGroup>
+
+---
+
+## Dockerfile
+
+<CodeGroup>
+```dockerfile Dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist/<project-name>/browser /usr/share/nginx/html
+EXPOSE 80
+```
+</CodeGroup>
+
+<Tip>Replace `&lt;project-name&gt;` with the `name` field in your `angular.json` — Angular nests build output under a project-specific folder.</Tip>
+
+## Environment Variables
+
+Angular apps typically read configuration from environment files at build time, rather than `process.env` at runtime:
+
+<CodeGroup>
+```ts src/environments/environment.ts
+export const environment = {
+  production: true,
+  apiUrl: 'https://api.vectorihub.com',
+};
+```
+</CodeGroup>
+
+<Warning>Only use public-safe values — anything bundled into your build is visible to the browser.</Warning>
+
+<Card title="Node.js Runtime Notes" icon="route" href="/runtimes/nodejs">
+  More Dockerfile patterns for static vs. server-rendered Node.js apps.
+</Card>
