@@ -46,6 +46,26 @@ beaver version
 
 ---
 
+## Updating the CLI
+
+Run the built-in update command — it checks the latest release, downloads the matching archive for your OS and architecture, verifies its checksum, and replaces the running binary in place:
+
+```bash
+beaver update
+```
+
+<Tip>
+  Pass `--version` to install a specific release instead of the latest:
+
+  ```bash
+  beaver update --version 0.1.1
+  ```
+</Tip>
+
+`beaver update` works the same way on macOS, Linux, and Windows, whether you're inside the interactive shell or running it directly from your terminal.
+
+---
+
 ## Using the CLI
 
 Running `beaver` with no arguments starts an interactive shell — the primary way to use the CLI:
@@ -71,10 +91,11 @@ Goodbye!
 ```
 </CodeGroup>
 
-A few commands — like `github` and `version` — can also be run directly, without opening the shell:
+A few commands — like `github`, `update`, and `version` — can also be run directly, without opening the shell:
 
 ```bash
 beaver github
+beaver update
 beaver version
 ```
 
@@ -89,6 +110,7 @@ beaver version
 | `login`  | Authenticate your VectorIHub account (shell only) |
 | `logout` | Sign out and clear your local session (shell only) |
 | `github` | List your connected GitHub accounts             |
+| `update` | Update the CLI to the latest release             |
 | `version`| Show the installed CLI version                  |
 | `help`   | Show available commands                         |
 | `exit`   | Quit the interactive shell                      |
