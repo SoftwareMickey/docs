@@ -1,0 +1,78 @@
+---
+title: "Smarter Connect Checks"
+description: "beaver connect now verifies host reachability for real, and reads a machine's actual form factor instead of guessing from whatever hardware happens to be present."
+date: "2026-07-26"
+authors: muli
+image: "/images/blog/smarter-connect-checks.svg"
+mode: "center"
+---
+
+<a href="/blog" style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", fontSize: "0.875rem", opacity: 0.7, textDecoration: "none", color: "inherit" }}>← All articles</a>
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "1rem 0 1.5rem" }}>
+  <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+  <div>
+    <div style={{ fontWeight: 600 }}>Raven Muli</div>
+    <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub · July 26, 2026 · 3 min read</div>
+  </div>
+</div>
+
+<div style={{ marginBottom: "2rem" }}>
+<div style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em", opacity: 0.5, marginBottom: "0.625rem" }}>SHARE THIS ARTICLE</div>
+<div style={{ display: "flex", gap: "0.625rem" }}>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https://docs.vectorihub.com/blog/smarter-connect-checks" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "9999px", border: "1px solid var(--gray-a6)", color: "inherit" }}>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+</a>
+<a href="https://twitter.com/intent/tweet?url=https://docs.vectorihub.com/blog/smarter-connect-checks&text=Smarter%20Connect%20Checks" target="_blank" rel="noopener noreferrer" aria-label="Share on X" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "9999px", border: "1px solid var(--gray-a6)", color: "inherit" }}>
+<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+</a>
+<a href="mailto:?subject=Smarter%20Connect%20Checks&body=https://docs.vectorihub.com/blog/smarter-connect-checks" aria-label="Share by email" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "9999px", border: "1px solid var(--gray-a6)", color: "inherit" }}>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+</a>
+</div>
+</div>
+
+<img src="/images/blog/smarter-connect-checks.svg" alt="Smarter Connect Checks" style={{ width: "100%", borderRadius: "0.75rem", margin: "0 0 2rem" }} />
+
+Last time, `beaver connect` learned to inspect a machine and only offer the roles it actually qualifies for. That inspection was mostly self-reported, though — Docker installed, systemd available, disk and memory free. Two of the checks behind it deserved to be more than a best guess, so we tightened them up.
+
+## A real reachability check, not a reminder
+
+Hosting an application only works if the internet can actually reach it. Until now, `connect` handled that with a static line telling you to go verify your own ports were open — useful advice, but not a check.
+
+It's a check now. When you run `connect`, Beaver confirms whether the ports a hosted application would need are actually reachable from the internet, and only warns about the ones that aren't:
+
+```txt
+✓ Public reachability (port 80, 443)
+```
+
+```txt
+⚠ Public reachability: port 443 not reachable from the internet
+```
+
+If a port comes back closed, that's real, actionable information — open it, or plan to put a reverse proxy or tunnel in front of it — rather than a caveat you'd see no matter what.
+
+## Telling laptops from desktops
+
+The other check that got sharper: what kind of machine is this, anyway? `connect` uses that to decide whether to recommend Host duty, or to nudge you to double check first.
+
+The old heuristic leaned on whatever hardware happened to be present — a battery, a Wi-Fi card. That's a reasonable signal on an actual laptop, but it also meant a desktop tower with a Wi-Fi adapter (common enough) could get misread as portable. `connect` now looks at the machine's actual form factor first, falling back to the old signals only when that isn't available. The capability check now shows its work, too — the machine type it detected, not just the verdict:
+
+```txt
+⚠ Portable device (laptop) detected
+  Chassis: Notebook
+  Battery: present
+  Wi-Fi: present
+```
+
+## Same roles, better evidence
+
+None of this changes what qualifies a machine for Builder, Host, or both — it just makes the checks behind that decision something you can actually see and trust, instead of taking on faith.
+
+<CardGroup cols={2}>
+  <Card title="← Server Fleet Management" href="/blog/server-fleet-management" />
+</CardGroup>
+
+<Card title="See what shipped" icon="route" href="/changelog#smarter-connect-checks">
+  v0.1.10 · Smarter Connect Checks — in the changelog.
+</Card>

@@ -1,0 +1,35 @@
+---
+title: "Smarter Connect Checks"
+description: "beaver connect now verifies port reachability for real instead of just reminding you to check, and tells laptops and desktops apart more reliably before recommending a role."
+mode: "center"
+---
+
+<a href="/changelog" style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", fontSize: "0.875rem", opacity: 0.7, textDecoration: "none", color: "inherit" }}>← Changelog</a>
+
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", margin: "1rem 0 1.5rem" }}>
+  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+    <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+    <div>
+      <div style={{ fontWeight: 600 }}>Raven Muli</div>
+      <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub</div>
+    </div>
+  </div>
+  <div style={{ textAlign: "right", fontSize: "0.875rem", opacity: 0.7 }}>
+    <div>v0.1.10</div>
+    <div>26 July 2026</div>
+  </div>
+</div>
+
+---
+
+`beaver connect`'s Host-role check used to end with a blanket reminder to go verify your own port reachability. It now does that verification itself — confirming your ports are actually reachable from the internet, and only warning about the ones that aren't.
+
+Environment detection is more accurate too: `connect` now reads a machine's actual form factor before falling back to guessing from whatever hardware happens to be present, so a desktop with a Wi-Fi card no longer gets misread as a laptop. Every capability check now shows the evidence behind its verdict, not just a pass or fail.
+
+<Card title="Read the full story" icon="newspaper" href="/blog/smarter-connect-checks">
+  Smarter Connect Checks, in Raven's words.
+</Card>
+
+<CardGroup cols={2}>
+  <Card title="← Server Fleet Management" href="/changelog/server-fleet-management" />
+</CardGroup>
