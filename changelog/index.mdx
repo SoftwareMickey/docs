@@ -1,70 +1,265 @@
 ---
 title: "Changelog"
 description: "Product updates and announcements for VectorIHub."
+mode: "center"
 ---
 
-<Update label="v0.1.7 · Build Once. Deploy Anywhere." description="Jul 20 – Jul 26, 2026">
+<Tabs>
+  <Tab title="All">
+    <div style={{ marginTop: "1.5rem" }}>
 
-## Build Once. Deploy Anywhere.
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>26 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.8</div>
+          <a id="introducing-beaver-cli" href="/changelog/introducing-beaver-cli" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Introducing Beaver CLI</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Beaver CLI is the execution engine that runs inside your own infrastructure — bringing building, deploying, and operating applications directly to your servers, while VectorIHub coordinates everything from its control plane.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-VectorIHub's long-term direction is now official: **build once, deploy anywhere**. Our mission has shifted from simplifying hosting to making infrastructure interchangeable — the same application definition should work regardless of where it runs, today and as we add more providers.
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}></div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.7</div>
+          <a id="build-once-deploy-anywhere" href="/changelog/build-once-deploy-anywhere" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Build Once. Deploy Anywhere.</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>VectorIHub's long-term direction is now official: build once, deploy anywhere. Our mission has shifted from simplifying hosting to making infrastructure interchangeable — the same application definition should work regardless of where it runs.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-This closes out the eight-week transition from a cloud hosting platform to a provider-agnostic deployment engine. Thank you to everyone who tested early builds along the way.
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>19 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.6</div>
+          <a id="deployment-engine-maturation" href="/changelog/deployment-engine-maturation" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Deployment Engine Maturation</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Deployments now move through clear lifecycle states — <code>pending</code>, <code>active</code>, <code>failed</code>, <code>terminated</code> — visible from your dashboard at every stage, with improved reliability and observability across the deployment engine.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-</Update>
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>12 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.5</div>
+          <a id="aws-and-vps-support" href="/changelog/aws-and-vps-support" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>AWS and VPS Support</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Deploy to your own AWS account or to any VPS you manage, using the same deployment workflow either way — deployment execution is consistent across both, with no provider-specific steps to learn.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-<Update label="v0.1.6 · Deployment Engine Maturation" description="Jul 13 – Jul 19, 2026">
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>5 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.4</div>
+          <a id="provider-independent-deployment-configuration" href="/changelog/provider-independent-deployment-configuration" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Provider-Independent Deployment Configuration</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Port, environment variables, and health checks are now configured once, independent of which infrastructure provider you deploy to — your configuration stays the same whether you're targeting a VPS today or a cloud provider tomorrow.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-## Deployment Engine Maturation
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>28 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.3</div>
+          <a id="bring-your-own-cloud" href="/changelog/bring-your-own-cloud" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Bring Your Own Cloud</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Introduced Bring Your Own Cloud (BYOC) — deploy onto infrastructure you already own, instead of a VectorIHub-managed environment. This marks our repositioning from a cloud hosting platform to a deployment layer that works across infrastructure providers.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-Deployments now move through clear lifecycle states — `pending`, `active`, `failed`, `terminated` — visible from your dashboard at every stage. We also improved reliability and observability across the deployment engine, so it's easier to see exactly what's happening during a deploy.
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>21 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.2</div>
+          <a id="dockerfile-based-deployments" href="/changelog/dockerfile-based-deployments" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Dockerfile-Based Deployments</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Replaced automatic Dockerization with a simpler, more reliable model — deployments now build directly from a <code>Dockerfile</code> you provide, giving you full control over your build process and improving deployment reliability and scalability.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-</Update>
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>14 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.1</div>
+          <a id="automated-dockerization-research" href="/changelog/automated-dockerization-research" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Automated Dockerization Research</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Spent this week investigating fully automatic Docker image generation across frameworks. The research surfaced a hard truth: automatic build systems introduce edge cases that are difficult to predict or support consistently at scale.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-<Update label="v0.1.5 · AWS and VPS Support" description="Jul 6 – Jul 12, 2026">
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>7 June</div>
+        <div style={{ paddingLeft: "1.75rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.0</div>
+          <a id="foundation" href="/changelog/foundation" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Foundation</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Kicked off VectorIHub's deployment architecture — the initial workflow for turning a connected repository into a running deployment, and the early groundwork for an automated build pipeline.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-## AWS and VPS Support
+    </div>
+  </Tab>
 
-You can now deploy to your own AWS account or to any VPS you manage, using the same deployment workflow either way. Deployment execution is consistent across both — no provider-specific steps to learn.
+  <Tab title="Platform">
+    <div style={{ marginTop: "1.5rem" }}>
 
-</Update>
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>19 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.6</div>
+          <a href="/changelog/deployment-engine-maturation" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Deployment Engine Maturation</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Deployments now move through clear lifecycle states — <code>pending</code>, <code>active</code>, <code>failed</code>, <code>terminated</code> — visible from your dashboard at every stage, with improved reliability and observability across the deployment engine.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-<Update label="v0.1.4 · Provider-Independent Config" description="Jun 29 – Jul 5, 2026">
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>12 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.5</div>
+          <a href="/changelog/aws-and-vps-support" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>AWS and VPS Support</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Deploy to your own AWS account or to any VPS you manage, using the same deployment workflow either way — deployment execution is consistent across both, with no provider-specific steps to learn.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-## Provider-Independent Deployment Configuration
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>5 July</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.4</div>
+          <a href="/changelog/provider-independent-deployment-configuration" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Provider-Independent Deployment Configuration</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Port, environment variables, and health checks are now configured once, independent of which infrastructure provider you deploy to — your configuration stays the same whether you're targeting a VPS today or a cloud provider tomorrow.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-Port, environment variables, and health checks are now configured once, independent of which infrastructure provider you deploy to. Your configuration stays the same whether you're targeting a VPS today or a cloud provider tomorrow.
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>28 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.3</div>
+          <a href="/changelog/bring-your-own-cloud" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Bring Your Own Cloud</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Introduced Bring Your Own Cloud (BYOC) — deploy onto infrastructure you already own, instead of a VectorIHub-managed environment. This marks our repositioning from a cloud hosting platform to a deployment layer that works across infrastructure providers.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-</Update>
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>21 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.2</div>
+          <a href="/changelog/dockerfile-based-deployments" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Dockerfile-Based Deployments</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Replaced automatic Dockerization with a simpler, more reliable model — deployments now build directly from a <code>Dockerfile</code> you provide, giving you full control over your build process and improving deployment reliability and scalability.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-<Update label="v0.1.3 · Bring Your Own Cloud" description="Jun 22 – Jun 28, 2026">
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>14 June</div>
+        <div style={{ paddingLeft: "1.75rem", paddingBottom: "2.25rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.1</div>
+          <a href="/changelog/automated-dockerization-research" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Automated Dockerization Research</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Spent this week investigating fully automatic Docker image generation across frameworks. The research surfaced a hard truth: automatic build systems introduce edge cases that are difficult to predict or support consistently at scale.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-## Bring Your Own Cloud
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>7 June</div>
+        <div style={{ paddingLeft: "1.75rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.0</div>
+          <a href="/changelog/foundation" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Foundation</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Kicked off VectorIHub's deployment architecture — the initial workflow for turning a connected repository into a running deployment, and the early groundwork for an automated build pipeline.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-Introduced Bring Your Own Cloud (BYOC): deploy onto infrastructure you already own, instead of a VectorIHub-managed environment. This marks our repositioning from a cloud hosting platform to a deployment layer that works across infrastructure providers.
+    </div>
+  </Tab>
 
-</Update>
+  <Tab title="CLI">
+    <div style={{ marginTop: "1.5rem" }}>
 
-<Update label="v0.1.2 · Dockerfile-Based Deployments" description="Jun 15 – Jun 21, 2026">
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>26 July</div>
+        <div style={{ paddingLeft: "1.75rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.8</div>
+          <a href="/changelog/introducing-beaver-cli" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Introducing Beaver CLI</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>Beaver CLI is the execution engine that runs inside your own infrastructure — bringing building, deploying, and operating applications directly to your servers, while VectorIHub coordinates everything from its control plane.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-## Dockerfile-Based Deployments
+    </div>
+  </Tab>
 
-Replaced automatic Dockerization with a simpler, more reliable model: deployments now build directly from a `Dockerfile` you provide. This gives you full control over your build process and improves deployment reliability and scalability — Docker is now the packaging layer, and VectorIHub is the deployment layer built on top of it.
+  <Tab title="Company News">
+    <div style={{ marginTop: "1.5rem" }}>
 
-</Update>
+      <div style={{ display: "grid", gridTemplateColumns: "84px 1fr", columnGap: "1.5rem" }}>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, opacity: 0.6, paddingTop: "0.125rem" }}>26 July</div>
+        <div style={{ paddingLeft: "1.75rem" }}>
+          <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.04em", opacity: 0.45, marginBottom: "0.375rem", textTransform: "uppercase" }}>v0.1.7</div>
+          <a href="/changelog/build-once-deploy-anywhere" style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.5rem", display: "block", textDecoration: "none", color: "inherit" }}>Build Once. Deploy Anywhere.</a>
+          <div style={{ opacity: 0.8, marginBottom: "1rem", lineHeight: 1.6 }}>VectorIHub's long-term direction is now official: build once, deploy anywhere. Our mission has shifted from simplifying hosting to making infrastructure interchangeable — the same application definition should work regardless of where it runs.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "22px", height: "22px", borderRadius: "9999px", margin: 0 }} />
+            <span style={{ fontSize: "0.8rem", opacity: 0.85 }}>Raven Muli <span style={{ opacity: 0.6 }}>· Founder, VectorIHub</span></span>
+          </div>
+        </div>
+      </div>
 
-<Update label="v0.1.1 · Dockerization Research" description="Jun 8 – Jun 14, 2026">
-
-## Automated Dockerization Research
-
-We spent this week investigating fully automatic Docker image generation across frameworks. The research surfaced a hard truth: automatic build systems introduce edge cases that are difficult to predict or support consistently at scale — a finding that directly shaped the direction we took next.
-
-</Update>
-
-<Update label="v0.1.0 · Foundation" description="Jun 1 – Jun 7, 2026">
-
-## Foundation
-
-Kicked off VectorIHub's deployment architecture — the initial workflow for turning a connected repository into a running deployment, and the early groundwork for an automated build pipeline.
-
-</Update>
+    </div>
+  </Tab>
+</Tabs>
