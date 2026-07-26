@@ -1,15 +1,19 @@
 ---
 title: "CLI"
 sidebarTitle: "CLI"
-description: "Install and use the VectorIHub command-line interface to authenticate and manage your account from a terminal."
+description: "Install and use beaver, the VectorIHub command-line interface, to authenticate, enroll your own servers, and manage your deployment fleet from a terminal."
 icon: "terminal"
 ---
 
-VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
+VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account and infrastructure from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
 
 <Info>
-  The CLI currently covers authentication and account-level operations (like listing your connected GitHub accounts). Deployment is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
+  `beaver` currently covers authentication, connecting your own servers to your workspace (`connect`), and managing enrolled servers (`server`) — plus account-level operations like listing your connected GitHub accounts. Deploying to a connected server is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
 </Info>
+
+<Card title="Read the announcement" icon="newspaper" href="/changelog/server-fleet-management">
+  `connect` and `server` shipped in v0.1.9 — see what's new in the changelog.
+</Card>
 
 ---
 
@@ -17,7 +21,7 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 
 <Tabs>
   <Tab title="macOS / Linux">
-    Install with the install script — it detects your OS and architecture, downloads the matching release, and installs `beaver` to `/usr/local/bin`:
+    Install with the install script — it detects your OS and architecture, downloads the matching release, verifies its checksum, and installs `beaver` to `/usr/local/bin`:
 
     <CodeGroup>
     ```bash Install script
@@ -29,7 +33,7 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
       Set `INSTALL_DIR` to install somewhere other than `/usr/local/bin`, or `VERSION` to install a specific release instead of the latest:
 
       ```bash
-      curl -fsSL https://cli.vectorihub.com/install.sh | VERSION=0.1.1 sh
+      curl -fsSL https://cli.vectorihub.com/install.sh | INSTALL_DIR=$HOME/.local/bin VERSION=0.1.1 sh
       ```
     </Tip>
   </Tab>
@@ -44,14 +48,38 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 beaver version
 ```
 
+```txt Example output
+🐹 VectorIHub CLI v0.1.3 (a1b2c3d)
+```
+
+<Note>
+  The commit hash only appears on release builds — it's injected via `-ldflags` at build time. A binary built locally with `go build` just shows the version.
+</Note>
+
 ---
 
 ## Updating the CLI
 
-Run the built-in update command — it checks the latest release, downloads the matching archive for your OS and architecture, verifies its checksum, and replaces the running binary in place:
+Run the built-in update command — it checks the latest release, downloads the matching archive for your OS and architecture, verifies its checksum against `checksums.txt`, and atomically replaces the running binary in place:
 
 ```bash
 beaver update
+```
+
+```txt Example output
+Checking for updates...
+Updating beaver v0.1.2 -> v0.1.3...
+Downloading beaver_0.1.3_linux_amd64.tar.gz...
+Verifying checksum...
+
+────────────────────────────────────────────
+
+✓ beaver updated to v0.1.3 🦫
+
+  Previous   v0.1.2
+  Current    v0.1.3
+
+Restart `beaver` to start using the new version.
 ```
 
 <Tip>
@@ -62,60 +90,303 @@ beaver update
   ```
 </Tip>
 
-`beaver update` works the same way on macOS, Linux, and Windows, whether you're inside the interactive shell or running it directly from your terminal.
+`beaver update` works the same way on macOS, Linux, and Windows, whether you're inside the interactive shell or running it directly from your terminal. If you're already on the requested version, it tells you so and exits without downloading anything.
 
 ---
 
 ## Using the CLI
 
-Running `beaver` with no arguments starts an interactive shell — the primary way to use the CLI:
+Running `beaver` with no arguments starts an interactive shell — the primary way to use the CLI, similar to how Claude Code or the Codex CLI work:
 
 ```bash
 beaver
 ```
 
-<CodeGroup>
 ```txt Interactive shell
-$ beaver
-beaver ▸ login
-Email: you@example.com
-Password:
-Login successful! Welcome, you.
+🦫 beaver v0.1.3 (a1b2c3d)
 
-beaver ▸ github
-Connected GitHub accounts:
-  - your-github-username (connected)
+Build once. Deploy anywhere.
 
-beaver ▸ exit
-Goodbye!
+The deployment control plane for infrastructure you own.
+
+Connected:
+  Account     yourname
+  Workspace   yourname's workspace
+
+Quick start:
+
+  login      Authenticate your Beaver account
+  logout     Sign out and clear your local session
+  connect    Enroll this server with Beaver
+  server     Manage enrolled servers — try `server --list`
+  update     Update the CLI to the latest release
+  github     List connected GitHub accounts
+  help       Show available commands
+  exit       Quit the CLI
+
+Ready.
+
+beaver ▸
 ```
-</CodeGroup>
 
-A few commands — like `github`, `update`, and `version` — can also be run directly, without opening the shell:
+If you haven't logged in yet, the banner shows `Not connected — type login to authenticate` instead — the shell never blocks on login, so it always opens instantly even against an unreachable backend.
+
+At the `beaver ▸` prompt, type any command listed under [Command reference](#command-reference) below and press Enter. A few behaviors worth knowing:
+
+- **Command history.** On a real terminal, `beaver` remembers what you've typed — press <kbd>↑</kbd>/<kbd>↓</kbd> to recall previous commands, including across separate sessions (history is persisted to `~/.beaver_history`). Piped or non-interactive input (e.g. scripting `beaver` in CI) transparently falls back to plain line reads instead — commands still work, there's just no history or in-line editing.
+- <kbd>Ctrl</kbd>+<kbd>C</kbd> clears whatever you've typed on the current line and reprompts — it does **not** exit the shell.
+- <kbd>Ctrl</kbd>+<kbd>D</kbd> (EOF), or typing `exit`/`quit`, ends the session:
+
+  ```txt
+  ✓ Session closed.
+
+  Beaver will be ready when you are.
+  ```
+
+### Running commands directly
+
+Most commands also work directly from your OS shell, without opening the interactive shell first:
 
 ```bash
 beaver github
+beaver server --list
 beaver update
 beaver version
 ```
 
 <Note>
-  `login` and `logout` are shell-only. Running `beaver login` directly from your terminal will prompt you to open the shell (`beaver`) and run `login` from there instead — this keeps credential prompts inside one consistent, interactive flow.
+  `login`, `logout`, and `connect` are shell-only — they prompt interactively (for credentials, or through the `connect` wizard), so they only make sense inside `beaver`'s own shell. Running `beaver login` (or `logout`/`connect`) directly from your terminal prints a message telling you to open the shell instead:
+
+  ```txt
+  $ beaver login
+  `login` is only available inside the interactive shell.
+  Run `beaver`, then type `login`.
+  ```
 </Note>
 
-### Available commands
+---
 
-| Command  | Description                                    |
-| -------- | ----------------------------------------------- |
-| `login`  | Authenticate your VectorIHub account (shell only) |
-| `logout` | Sign out and clear your local session (shell only) |
-| `github` | List your connected GitHub accounts             |
-| `update` | Update the CLI to the latest release             |
-| `version`| Show the installed CLI version                  |
-| `help`   | Show available commands                         |
-| `exit`   | Quit the interactive shell                      |
+## Command reference
 
-Your session is stored locally at `~/.beaver_config.json` after `login`, and reused by every command until you `logout`.
+| Command | Description | Shell only |
+| --- | --- | --- |
+| [`login`](#login) | Authenticate your Beaver account | Yes |
+| [`logout`](#logout) | Sign out and clear your local session | Yes |
+| [`connect`](#connect) | Enroll this server with your Beaver workspace | Yes |
+| [`server`](#server) | List and manage servers enrolled with Beaver | No |
+| [`github`](#github) | List your connected GitHub accounts | No |
+| [`update`](#update) | Update the CLI to the latest release | No |
+| [`version`](#version) | Show the installed CLI version | No |
+| [`help`](#help) | Show available commands | No |
+| [`exit`](#exit) | Quit the interactive shell | — |
+
+### login
+
+Authenticates your Beaver account and starts a local session.
+
+```txt
+beaver ▸ login
+Email: you@example.com
+Password:
+Login successful!
+
+  Account     yourname
+  Workspace   yourname's workspace
+```
+
+You'll be prompted for your email, then your password (input is hidden). On success, your session — an auth token, user ID, username, and expiry — is saved to `~/.beaver_config.json` (readable only by you) and reused by every other command until you `logout`. Your workspace is fetched (and lazily created if you've never had one) from the backend, so the name shown here always reflects the real thing.
+
+### logout
+
+Signs out and clears your local session.
+
+```txt
+beaver ▸ logout
+Logged out of yourname.
+```
+
+Removes `~/.beaver_config.json`. If you're not currently logged in, it says so and does nothing — logging out twice isn't an error.
+
+### connect
+
+Enrolls this machine with your Beaver workspace as a deployment target, walking you through a short guided setup:
+
+```txt
+beaver ▸ connect
+```
+
+`connect` confirms you're logged in, checks that this machine is supported, and looks at what's set up on it before letting you choose a role for it — it only offers roles this machine is actually capable of filling, and warns you before you pick one it's not well suited for.
+
+Supported operating systems are **Ubuntu**, **Debian**, and **Rocky Linux**, on **amd64** or **arm64**.
+
+If this machine is already enrolled, you'll be asked whether to reconnect it under your account. A machine already enrolled under a different account can't be taken over from here.
+
+On success, you'll see a summary of the server's role, and it becomes visible in `server --list` and the dashboard.
+
+#### Server roles
+
+| Role | Description |
+| --- | --- |
+| **Builder** | Builds Docker images only. |
+| **Host** | Runs deployed applications only. |
+| **Builder + Host** | Builds images and hosts applications. |
+
+`beaver connect` recommends the role that best fits this machine and only offers roles it qualifies for. A role can be changed later without re-running `connect` — see [`server update --role`](#server-update-machine-id).
+
+### server
+
+Lists and manages the servers enrolled in your workspace via `connect`. None of its subcommands re-run the connect wizard, and none of them touch the machine itself — Beaver never has shell access to your servers.
+
+```bash
+beaver server --list
+```
+
+Bare `beaver server` (no flags, no subcommand) prints help rather than defaulting to any action.
+
+#### `server --list`
+
+Lists every server enrolled in your workspace: display name, machine ID, status, role, OS/architecture, and any labels.
+
+```bash
+beaver server --list
+# or
+beaver server -l
+```
+
+```txt Example output
+Enrolled servers:
+
+  prod-web-1
+    ID:     srv_a88489d41323e0ac
+    Status: connected
+    Role:   builder-host
+    OS:     Ubuntu 24.04.4 LTS (amd64)
+    Labels: env=production, region=us-east
+```
+
+#### `server update [machine-id]`
+
+Updates one or more properties of an already-enrolled server — only the flags you pass are changed, everything else is left as-is.
+
+| Flag | Description |
+| --- | --- |
+| `--name` | New display name, shown in `server --list` and the dashboard. |
+| `--role` | One of `builder`, `host`, or `builder-host`. Beaver does **not** re-verify the machine still qualifies — prompts for confirmation unless `--yes` is given. |
+| `--labels` | Comma-separated `key=value` pairs (e.g. `env=production,region=us-east`). **Replaces the entire label set** — it's not a merge, so include every label you want kept. |
+| `--yes`, `-y` | Skip the role-change confirmation prompt. |
+
+```bash
+beaver server update srv_a88489d41323e0ac --role host
+beaver server update srv_a88489d41323e0ac --labels env=production,region=us-east
+```
+
+Omit the machine ID to pick the server from an interactive list instead — see [Picking a server interactively](#picking-a-server-interactively).
+
+#### `server rename <machine-id> <new-name...>`
+
+Shorthand for `server update --name`. Everything after the machine ID is joined with spaces to form the new name, so it doesn't need to be quoted:
+
+```bash
+beaver server rename srv_a88489d41323e0ac Production Web Server
+```
+
+#### `server remove [machine-id]`
+
+Permanently removes a server from your workspace — a hard delete, not an archive. The physical machine is untouched; its local credentials just stop working, and it disappears from deployments and the dashboard. The same machine can be enrolled again later with `connect`.
+
+```bash
+beaver server remove srv_a88489d41323e0ac
+```
+
+```txt Confirmation prompt
+⚠ You are removing this server from Beaver.
+
+The physical machine will NOT be deleted, stopped, or reconfigured in
+any way — Beaver only forgets about it. Its local credentials
+(~/.beaver_server.json) stop working immediately, and it will disappear
+from deployments and the dashboard.
+
+To bring it back later, run `beaver connect` on the machine again.
+
+Server: srv_a88489d41323e0ac
+
+Continue? (y/N)
+```
+
+| Flag | Description |
+| --- | --- |
+| `--yes`, `-y` | Skip the confirmation prompt. |
+
+Omit the machine ID to pick the server from an interactive list instead.
+
+#### Picking a server interactively
+
+`server update` and `server remove` don't require a machine ID — omit it and you'll get an arrow-key, type-to-filter list of every enrolled server:
+
+```bash
+beaver server remove
+```
+
+```txt
+? Select a server to remove:
+  1. prod-web-1 (srv_a88489d41323e0ac) — connected
+  2. staging-api (srv_f21c9b0a77de4210) — connected
+```
+
+Use <kbd>↑</kbd>/<kbd>↓</kbd> to move the highlight, type any part of a server's number, name, ID, or status to filter the list, and press Enter to confirm. If exactly one server is enrolled, it's selected automatically with no prompt.
+
+### github
+
+Lists the GitHub accounts connected to your VectorIHub workspace.
+
+```bash
+beaver github
+```
+
+```txt Example output
+Connected GitHub accounts:
+  - your-github-username (connected)
+```
+
+Requires a session — run `login` first if you see "you are not logged in".
+
+### update
+
+See [Updating the CLI](#updating-the-cli) above.
+
+### version
+
+Prints the installed CLI version (and commit hash, on release builds).
+
+```bash
+beaver version
+```
+
+### help
+
+Inside the shell, typing `help` (or `-h`/`--help`) prints the list of available commands. `beaver --help` (and `beaver <command> --help`) works the same way from outside the shell too, showing usage for that command.
+
+### exit
+
+Typing `exit` or `quit` — or pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> — closes the interactive shell:
+
+```txt
+✓ Session closed.
+
+Beaver will be ready when you are.
+```
+
+---
+
+## Local files
+
+`beaver` stores everything locally as plain JSON files in your home directory, each readable only by you:
+
+| File | Contents |
+| --- | --- |
+| `~/.beaver_config.json` | Your login session (token, user ID, username, expiry) — created by `login`, removed by `logout`. |
+| `~/.beaver_server.json` | This machine's enrollment credentials (machine ID, server token, hostname, workspace ID, role) — created by `connect`. |
+| `~/.beaver_history` | Interactive shell command history — only on a real terminal; piped/non-interactive sessions don't create it. |
 
 ---
 
