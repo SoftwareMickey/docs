@@ -48,7 +48,7 @@ Most platforms answer with: *"We'll build your application in our cloud."*
 
 VectorIHub takes a different approach. With Beaver CLI, **your infrastructure builds your application.**
 
-When a deployment starts, Beaver CLI runs on your server, clones your repository, builds the Docker image locally, deploys the container, and reports the deployment status back to VectorIHub.
+When a deployment starts, Beaver CLI runs on your server and takes care of the build and deploy process locally, then reports the result back to VectorIHub.
 
 This means:
 
@@ -61,30 +61,7 @@ Your infrastructure stays yours.
 
 ## How it works
 
-A deployment follows a simple flow:
-
-```
-Developer
-   │
-   │ Deploy
-   ▼
-VectorIHub Control Plane
-   │
-   │ Deployment Request
-   ▼
-──────────────────────────────
-Your Infrastructure
-──────────────────────────────
-Beaver CLI
-   ├── Clone repository
-   ├── Build Docker image
-   ├── Deploy container
-   ├── Configure networking
-   ├── Perform health checks
-   └── Report deployment status
-```
-
-The control plane coordinates deployments. Beaver CLI executes them.
+You trigger a deployment from VectorIHub as usual. From there, VectorIHub's control plane coordinates the deployment, and Beaver CLI executes it on your own infrastructure — handling the build and deploy work locally and reporting status back once it's done.
 
 ## Current commands
 
@@ -102,27 +79,9 @@ The first version of Beaver CLI focuses on authentication and project management
 
 The next major feature is one of the most important pieces of Beaver CLI's design.
 
-Running `connect` on a VPS registers that machine with your VectorIHub workspace. Once connected, VectorIHub recognizes the server as deployment infrastructure and can orchestrate deployments to it.
+Running `connect` on a VPS registers that machine with your VectorIHub workspace. Once connected, VectorIHub recognizes the server as deployment infrastructure and can orchestrate deployments to it — no agents hosted by VectorIHub, no managed compute, just your own infrastructure, connected to your workspace.
 
-The flow is simple:
-
-```
-VPS
- │
- beaver connect
- │
- Authenticate
- │
- Register Server
- │
- Generate Machine Identity
- │
- Establish Secure Connection
- │
- Ready for Deployments
-```
-
-After connecting, that server becomes available inside VectorIHub as one of your deployment targets. No agents hosted by VectorIHub, no managed compute — just your own infrastructure, connected to your workspace.
+After connecting, that server becomes available inside VectorIHub as one of your deployment targets.
 
 ## A different philosophy
 
