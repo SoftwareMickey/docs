@@ -8,7 +8,7 @@ icon: "terminal"
 VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account and infrastructure from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
 
 <Info>
-  `beaver` currently covers authentication, connecting your own servers to your workspace (`connect`), and managing enrolled servers (`server`) — plus account-level operations like listing your connected GitHub accounts. Deploying to a connected server is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
+  `beaver` currently covers authentication, checking a machine's readiness (`doctor`), connecting your own servers to your workspace (`connect`), and managing enrolled servers (`server`) — plus account-level operations like listing your connected GitHub accounts. Deploying to a connected server is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
 </Info>
 
 <Card title="Read the announcement" icon="newspaper" href="/changelog/server-fleet-management">
@@ -18,6 +18,10 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 ---
 
 ## Installing the CLI
+
+<Info>
+  New to Beaver on Linux? [Install Beaver CLI on Linux](/installation) walks through install, login, and connecting your first machine in one guide.
+</Info>
 
 <Tabs>
   <Tab title="macOS / Linux">
@@ -118,6 +122,7 @@ Quick start:
   login      Authenticate your Beaver account
   logout     Sign out and clear your local session
   connect    Enroll this server with Beaver
+  doctor     Check whether this machine is ready for Beaver
   server     Manage enrolled servers — try `server --list`
   update     Update the CLI to the latest release
   github     List connected GitHub accounts
@@ -148,6 +153,7 @@ At the `beaver ▸` prompt, type any command listed under [Command reference](#c
 Most commands also work directly from your OS shell, without opening the interactive shell first:
 
 ```bash
+beaver doctor
 beaver github
 beaver server --list
 beaver update
@@ -173,6 +179,7 @@ beaver version
 | [`login`](#login) | Authenticate your Beaver account | Yes |
 | [`logout`](#logout) | Sign out and clear your local session | Yes |
 | [`connect`](#connect) | Enroll this server with your Beaver workspace | Yes |
+| [`doctor`](#doctor) | Check whether this machine is ready for Beaver | No |
 | [`server`](#server) | List and manage servers enrolled with Beaver | No |
 | [`github`](#github) | List your connected GitHub accounts | No |
 | [`update`](#update) | Update the CLI to the latest release | No |
@@ -215,6 +222,10 @@ Enrolls this machine with your Beaver workspace as a deployment target, walking 
 beaver ▸ connect
 ```
 
+<Tip>
+  Run [`doctor`](#doctor) before `connect` — it catches missing requirements early instead of surfacing them partway through the setup wizard.
+</Tip>
+
 `connect` confirms you're logged in, checks that this machine is supported, and looks at what's set up on it before letting you choose a role for it — it only offers roles this machine is actually capable of filling, and warns you before you pick one it's not well suited for.
 
 Supported operating systems are **Ubuntu**, **Debian**, and **Rocky Linux**, on **amd64** or **arm64**.
@@ -232,6 +243,24 @@ On success, you'll see a summary of the server's role, and it becomes visible in
 | **Builder + Host** | Builds images and hosts applications. |
 
 `beaver connect` recommends the role that best fits this machine and only offers roles it qualifies for. A role can be changed later without re-running `connect` — see [`server update --role`](#server-update-machine-id).
+
+<Card title="Choose Your Beaver Setup" icon="compass" href="/choose-your-setup">
+  New to Beaver? Get a 2-minute answer to which role fits your machine before you run `connect`.
+</Card>
+
+<Card title="beaver connect" icon="plug" href="/connect">
+  Read the full walkthrough — prerequisites, verification, and troubleshooting for `connect`.
+</Card>
+
+### doctor
+
+Checks whether this machine is ready to work with Beaver — supported OS/architecture, required software (Docker, Git), connectivity, and configuration problems on an already-connected machine.
+
+```bash
+beaver doctor
+```
+
+Each check reports `PASS`, `WARNING`, or `FAILED`, with guidance for resolving anything that isn't a clean pass. Run it right after installing the CLI and before `connect` — see the [Beaver Doctor guide](/beaver-doctor) for what it checks, example output, and troubleshooting.
 
 ### server
 

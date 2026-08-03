@@ -1,0 +1,69 @@
+---
+title: "Choose Your Beaver Setup"
+sidebarTitle: "Choose Your Setup"
+description: "A 2-minute guide to picking Builder, Host, or Builder + Host before you run beaver connect."
+icon: "compass"
+---
+
+# Choose Your Beaver Setup
+
+You have a machine. What do you want Beaver to do with it?
+
+<CardGroup cols={3}>
+  <Card title="Build applications" icon="hammer" href="#option-1-build-applications-builder">
+    → **Builder**
+  </Card>
+  <Card title="Run applications" icon="server" href="#option-2-run-applications-host">
+    → **Host**
+  </Card>
+  <Card title="Build and run applications" icon="layer-group" href="#option-3-build-and-run-applications-builder-host">
+    → **Builder + Host**
+  </Card>
+</CardGroup>
+
+Pick the option that matches what you want this machine to do, then use it when you run [`beaver connect`](/cli#connect).
+
+---
+
+## Option 1: Build applications → Builder
+
+**What it means:** This machine's job is turning your code into a deployable application. It doesn't run your app for you.
+
+**Who should use it:** Someone who already has (or plans to add) a separate machine to run the application, and wants building kept on its own dedicated machine.
+
+**Example scenario:** You're setting up two machines — one to build your app, one to run it — so a slow or heavy build never competes with your live traffic.
+
+---
+
+## Option 2: Run applications → Host
+
+**What it means:** This machine's job is running your application and keeping it live. It doesn't build anything itself.
+
+**Who should use it:** Someone who already has (or plans to add) a separate Builder, and wants this machine dedicated to serving traffic.
+
+**Example scenario:** You have a Builder producing your app, and you want this machine — or several like it — purely running it in production.
+
+---
+
+## Option 3: Build and run applications → Builder + Host
+
+**What it means:** This one machine does it all — it builds your app and runs it, no second machine required.
+
+**Who should use it:** Anyone getting started, working on a personal or small project, or who just wants the simplest possible setup.
+
+**Example scenario:** You're trying Beaver for the first time, or shipping a small project, and you just want one machine that handles everything.
+
+---
+
+<Check>
+  **For most users starting with Beaver, Builder + Host is the easiest option.** You can always split into a dedicated Builder and Host later — nothing about your app or your Dockerfile has to change.
+</Check>
+
+<CardGroup cols={2}>
+  <Card title="Connect Your Machine" icon="plug" href="/connect">
+    Ready to decide? See what to expect from `beaver connect`, step by step.
+  </Card>
+  <Card title="Machine Roles" icon="layer-group" href="/machine-roles">
+    Want more detail on requirements and when to split roles? Read the full guide.
+  </Card>
+</CardGroup>

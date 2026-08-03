@@ -1,0 +1,130 @@
+---
+title: "Beaver Doctor"
+sidebarTitle: "Beaver Doctor"
+description: "Verify your machine is ready for Beaver before connecting it or starting a deployment."
+icon: "stethoscope"
+---
+
+# Beaver Doctor
+
+## What is Beaver Doctor?
+
+Beaver Doctor is a diagnostic command that checks whether your machine is ready to work with Beaver. It helps identify missing requirements before you continue with setup.
+
+```bash
+beaver doctor
+```
+
+---
+
+## Recommended first step
+
+<Warning>
+  Run `beaver doctor` immediately after installing the CLI — **before** running `connect` or starting a deployment. Before connecting your machine or starting a deployment, verify that your environment is ready.
+</Warning>
+
+<Steps>
+  <Step title="Install the CLI">
+    See [Install Beaver CLI on Linux](/installation).
+  </Step>
+  <Step title="Run beaver doctor">
+    ```bash
+    beaver doctor
+    ```
+    This confirms your machine meets the requirements before you go any further.
+  </Step>
+  <Step title="Fix anything it flags">
+    Resolve any `WARNING` or `FAILED` results using the guidance `doctor` prints — see [Fixing what it finds](#fixing-what-it-finds) below.
+  </Step>
+  <Step title="Continue to beaver connect">
+    Once your environment checks out, move on to [connecting your machine](/connect).
+  </Step>
+</Steps>
+
+Making this your first command after installing means any missing requirement gets caught here, with clear guidance — instead of surfacing later as a confusing failure partway through `connect` or a deployment.
+
+---
+
+## When else to run it
+
+- **After a failed `connect`** — get a clear list of what went wrong instead of guessing
+- **When an already-connected machine is misbehaving** — check whether something has changed (an update, a config change, a network issue)
+- **Anytime you want a health check** — there's no downside to running it
+
+`beaver doctor` works the same way inside the interactive shell or run directly from your OS shell, and it never changes anything on your machine — it only reports.
+
+---
+
+## What it checks
+
+`beaver doctor` groups its checks into four categories:
+
+<CardGroup cols={2}>
+  <Card title="Machine readiness" icon="server">
+    Whether this machine's OS and architecture are supported by Beaver.
+  </Card>
+  <Card title="Required software" icon="box">
+    Whether Docker and Git are installed and working correctly.
+  </Card>
+  <Card title="Connectivity" icon="wifi">
+    Whether this machine can reach the internet and your Beaver workspace.
+  </Card>
+  <Card title="Configuration problems" icon="triangle-alert">
+    Whether anything about this machine's current setup or role is likely to cause issues.
+  </Card>
+</CardGroup>
+
+---
+
+## Reading the results
+
+Each check reports one of three statuses:
+
+| Status | Meaning |
+| --- | --- |
+| **PASS** | Everything is set up correctly for this check — nothing to do. |
+| **WARNING** | Not broken, but something needs attention — for example, an outdated version or a suboptimal setting. |
+| **FAILED** | A required piece is missing or not working — this needs to be fixed before the machine can be used. |
+
+```txt Example output
+beaver ▸ doctor
+Running diagnostics...
+
+  ✓ PASS     Operating system supported (Ubuntu 24.04, amd64)
+  ✓ PASS     Docker installed and running
+  ⚠ WARNING  Git version is older than recommended
+  ✗ FAILED   Port 443 is not reachable
+
+2 passed, 1 warning, 1 failed
+```
+
+---
+
+## Fixing what it finds
+
+`beaver doctor` doesn't just report problems — every `WARNING` or `FAILED` result comes with guidance on how to resolve it:
+
+```txt
+✗ FAILED   Docker is not installed
+  → Install Docker Engine, then run `beaver doctor` again.
+
+⚠ WARNING  Git version is older than recommended
+  → Update Git to a supported version for the smoothest experience.
+```
+
+Re-run `beaver doctor` after making a change to confirm it resolved the issue.
+
+<Tip>
+  A `WARNING` won't stop you from connecting a machine — a `FAILED` check generally will, until it's resolved.
+</Tip>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="beaver connect" icon="plug" href="/connect">
+    Connect your machine once `doctor` gives it a clean bill of health.
+  </Card>
+  <Card title="Install Beaver CLI on Linux" icon="download" href="/installation">
+    Get set up on a fresh Linux server.
+  </Card>
+</CardGroup>

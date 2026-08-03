@@ -20,8 +20,24 @@
             "group": "Getting started",
             "pages": [
               "documentation",
-              "quickstart",
-              "cli"
+              "installation",
+              "beaver-doctor",
+              "cli",
+              "choose-your-setup",
+              "connect",
+              "machine-roles",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Infrastructure Setup",
+            "pages": [
+              "/infrastructure-setup",
+              "/infrastructure-setup/aws",
+              "/infrastructure-setup/google-cloud",
+              "/infrastructure-setup/azure",
+              "/infrastructure-setup/custom-vps-providers",
+              "/infrastructure-setup/firewall-requirements"
             ]
           },
           {
@@ -68,15 +84,6 @@
               "/frameworks/echo",
               "/frameworks/chi"
             ]
-          },
-          {
-            "group": "Infrastructure Providers",
-            "pages": [
-              "/providers/vps",
-              "/providers/aws",
-              "/providers/azure",
-              "/providers/digitalocean"
-            ]
           }
         ]
       }
@@ -85,7 +92,7 @@
       "anchors": [
         {
           "anchor": "Infrastructure",
-          "href": "/infrastructure",
+          "href": "/infrastructure-setup",
           "icon": "book-open-cover"
         },
         {

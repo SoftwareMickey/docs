@@ -1,0 +1,135 @@
+---
+title: "beaver connect"
+sidebarTitle: "beaver connect"
+description: "Connect your own infrastructure to Beaver and prepare it for its role."
+icon: "plug"
+---
+
+# beaver connect
+
+`beaver connect` is how you bring a machine you own — a VPS, a cloud instance, a bare-metal box — into your Beaver workspace so it can build and/or run your applications.
+
+## What is `beaver connect`?
+
+Running `connect` does two things:
+
+- **Connects the machine to your Beaver workspace.** Once connected, it shows up in `server --list` and the dashboard, and Beaver can deploy to it.
+- **Prepares it for the role you choose.** Depending on whether you pick Builder, Host, or Builder + Host, `connect` sets the machine up to do that job.
+
+<Info>
+  `connect` is only available inside the interactive `beaver` shell — run `beaver` first, then type `connect` at the prompt. See the [CLI reference](/cli#connect) for the full command walkthrough.
+</Info>
+
+---
+
+## Before connecting
+
+Have these ready on the machine before you run `connect`:
+
+<Columns>
+  <Column>
+    <Check>A supported Linux distribution (Ubuntu, Debian, or Rocky Linux)</Check>
+    <Check>Docker installed and running</Check>
+  </Column>
+  <Column>
+    <Check>Git installed</Check>
+    <Check>Internet access</Check>
+  </Column>
+</Columns>
+
+<Tip>
+  Not sure your machine is set up correctly yet? `connect` will tell you if something's missing before it lets you pick a role — see [Verification](#verification) below.
+</Tip>
+
+---
+
+## Choosing a role
+
+Partway through `connect`, you'll be asked what this machine is for:
+
+<CardGroup cols={3}>
+  <Card title="Builder" icon="hammer">
+    Builds your application.
+  </Card>
+  <Card title="Host" icon="server">
+    Runs your application.
+  </Card>
+  <Card title="Builder + Host" icon="layer-group">
+    Does both.
+  </Card>
+</CardGroup>
+
+`connect` only offers roles this machine is actually capable of filling, and warns you before letting you pick one it's not well suited for.
+
+<Card title="Choose Your Beaver Setup" icon="compass" href="/choose-your-setup">
+  Not sure which one you need? Get a 2-minute answer before you run `connect`.
+</Card>
+
+<Card title="Machine Roles" icon="layer-group" href="/machine-roles">
+  Want the full picture — requirements, when to split roles, example setups? Read the complete guide.
+</Card>
+
+You're not locked in — change a machine's role anytime afterward with [`server update --role`](/cli#server-update-machine-id), without re-running `connect`.
+
+---
+
+## Verification
+
+Before offering you a role, `connect` checks the machine over and confirms:
+
+- **System compatibility** — the OS and architecture are supported
+- **Required software** — Docker and Git are installed and working
+- **Network availability** — the machine can reach the internet
+
+If something doesn't check out, `connect` tells you what's missing instead of letting you continue with a role the machine can't actually fill.
+
+---
+
+## Troubleshooting
+
+<Tip>
+  Run [`beaver doctor`](/beaver-doctor) for an automated health check before working through these manually — it covers most of the issues below and suggests fixes.
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Docker isn't installed, or connect says it can't find it">
+    Install Docker Engine and make sure it's running before retrying:
+
+    ```bash
+    docker --version
+    ```
+
+    If this fails or Docker isn't running, install it for your distribution and start the Docker service, then run `connect` again.
+  </Accordion>
+
+  <Accordion title="Permission errors when connect tries to use Docker">
+    On most Linux distributions, only `root` or members of the `docker` group can use Docker by default. Add your user to the `docker` group, then start a new shell session before retrying:
+
+    ```bash
+    sudo usermod -aG docker $USER
+    ```
+  </Accordion>
+
+  <Accordion title="connect can't reach the internet">
+    The machine needs outbound internet access to connect to Beaver. Check that:
+
+    - The machine has a working internet connection (`ping` or `curl` an external site)
+    - No firewall or security group is blocking outbound traffic
+    - A proxy, if your network requires one, is configured for your shell session
+  </Accordion>
+
+  <Accordion title="This machine is already enrolled">
+    If the machine was connected before, `connect` asks whether to reconnect it under your account. A machine already enrolled under a *different* account can't be taken over this way — remove it from that account first, or use a different machine.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="CLI Reference" icon="terminal" href="/cli#connect">
+    See every `beaver` command, including `connect` in context.
+  </Card>
+  <Card title="Machine Roles" icon="layer-group" href="/machine-roles">
+    Read the full guide to Builder, Host, and Builder + Host.
+  </Card>
+</CardGroup>

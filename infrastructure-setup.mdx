@@ -1,0 +1,53 @@
+---
+title: "Infrastructure Setup"
+description: "Prepare a machine on your infrastructure of choice, then connect it to Beaver."
+icon: "server"
+---
+
+## Deploy Anywhere You Already Run
+
+Beaver deploys to infrastructure you own — a cloud VM, a bare-metal box, or any Linux VPS. Preparing a machine follows the same shape everywhere: create it, open the right ports, install Beaver, and connect it.
+
+<CardGroup cols={2}>
+  <Card title="AWS" icon="aws" href="/infrastructure-setup/aws">
+    Prepare an EC2 instance.
+  </Card>
+  <Card title="Google Cloud" icon="google" href="/infrastructure-setup/google-cloud">
+    Prepare a Compute Engine VM.
+  </Card>
+  <Card title="Azure" icon="microsoft" href="/infrastructure-setup/azure">
+    Prepare a Virtual Machine.
+  </Card>
+  <Card title="Custom VPS Providers" icon="server" href="/infrastructure-setup/custom-vps-providers">
+    Contabo, Hetzner, Hostinger, DigitalOcean, or any other Linux VPS.
+  </Card>
+</CardGroup>
+
+<Card title="Firewall Requirements" icon="shield" href="/infrastructure-setup/firewall-requirements">
+  Understand why ports need to be opened at both the cloud and server level before you start.
+</Card>
+
+---
+
+## The Same Workflow, Every Provider
+
+<Steps>
+  <Step title="Create a machine">
+    Provision a Linux server through your provider of choice.
+  </Step>
+  <Step title="Open the required ports">
+    Allow SSH (22), and whichever of HTTP (80), HTTPS (443), or a custom app port your application needs.
+  </Step>
+  <Step title="Install Beaver">
+    Follow [Install Beaver CLI on Linux](/installation), then run [`beaver doctor`](/beaver-doctor) to confirm the machine is ready.
+  </Step>
+  <Step title="Connect it">
+    Run [`beaver connect`](/connect) and choose a [role](/machine-roles) for the machine.
+  </Step>
+</Steps>
+
+<Note>
+  You retain ownership and control of your own infrastructure — Beaver deploys onto machines you provision and manage, not onto Beaver-owned infrastructure.
+</Note>
+
+<Tip>Using a provider that isn't listed above? See [Custom VPS Providers](/infrastructure-setup/custom-vps-providers) — any Linux server with SSH, Docker, and internet access works the same way.</Tip>

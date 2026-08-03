@@ -1,0 +1,265 @@
+---
+title: "Custom VPS Providers"
+sidebarTitle: "Custom VPS Providers"
+description: "Connect a Linux server from Contabo, Hetzner, Hostinger, DigitalOcean, or any other VPS provider to Beaver."
+icon: "server"
+---
+
+# Custom VPS Providers
+
+Beaver is designed to work with your own infrastructure. It doesn't matter which company your server comes from — if it's a compatible Linux machine, you can connect it.
+
+You can connect servers from:
+
+- Contabo
+- Hetzner
+- Hostinger VPS
+- DigitalOcean Droplets
+- Any other Linux VPS provider
+
+<Check>The provider doesn't matter, as long as the server meets Beaver's requirements below. Beaver treats every connected machine the same way, regardless of where it's hosted.</Check>
+
+---
+
+## Server requirements
+
+<Columns>
+  <Column>
+    **Operating system**
+    - A Linux server
+    - Ubuntu LTS is recommended
+
+    **Software**
+    - Docker installed
+    - Git installed
+  </Column>
+  <Column>
+    **Resources**
+    - CPU: depends on your application's workload
+    - RAM: depends on your application's workload
+    - Disk: depends on your application's images and data
+
+    **Network**
+    - Internet connectivity
+    - Required ports available (see [Required Ports](#required-ports))
+  </Column>
+</Columns>
+
+---
+
+## Preparing your VPS server
+
+The process is the same regardless of provider:
+
+<Steps>
+  <Step title="Create a VPS server with your provider">
+    Provision a server through your provider's dashboard or CLI.
+  </Step>
+  <Step title="Choose an operating system">
+    Ubuntu LTS is recommended. Debian and Rocky Linux are also supported.
+  </Step>
+  <Step title="Connect through SSH">
+    ```bash
+    ssh username@server-ip
+    ```
+  </Step>
+  <Step title="Install Beaver CLI">
+    Follow [Install Beaver CLI on Linux](/installation) to install and verify the CLI.
+  </Step>
+  <Step title="Run beaver connect">
+    ```bash
+    beaver
+    ```
+    ```txt
+    beaver ▸ login
+    beaver ▸ connect
+    ```
+  </Step>
+  <Step title="Select a machine role">
+    Choose **Builder**, **Host**, or **Builder + Host** when prompted.
+
+    <Card title="Machine Roles" icon="layer-group" href="/machine-roles">
+      Read the full guide to what each role means and which to pick.
+    </Card>
+  </Step>
+</Steps>
+
+---
+
+## Firewall configuration
+
+Most VPS providers have two separate firewall layers, and **both must allow the traffic you need**:
+
+<Columns>
+  <Column>
+    **1. Provider firewall**
+
+    Configured from your provider's dashboard, outside the server itself.
+
+    - **Contabo:** server firewall / network settings
+    - **Hetzner:** Cloud Firewall (Hetzner Cloud only)
+    - **DigitalOcean:** Cloud Firewall
+    - **Hostinger:** firewall / network controls
+  </Column>
+  <Column>
+    **2. Server firewall**
+
+    Runs on the server itself.
+
+    - Example: Ubuntu's `ufw`
+  </Column>
+</Columns>
+
+<Warning>
+  Allowing a port in only one layer isn't enough — traffic has to pass both the provider firewall and the server's own firewall to reach your application.
+</Warning>
+
+---
+
+## Required ports
+
+### SSH
+
+| Port | Purpose |
+| --- | --- |
+| **22/TCP** | Managing your server remotely |
+
+### HTTP
+
+| Port | Purpose |
+| --- | --- |
+| **80/TCP** | Serving web applications |
+
+### HTTPS
+
+| Port | Purpose |
+| --- | --- |
+| **443/TCP** | Secure web traffic |
+
+### Application ports
+
+Some applications need additional ports beyond 22, 80, and 443. For example, a custom application running on port `3000` may need port `3000` opened, depending on how it's deployed — see [Deployment Configuration](/deploying/deployment-configuration).
+
+See [Firewall Requirements](/infrastructure-setup/firewall-requirements) for a deeper, worked example of opening a custom port across both firewall layers.
+
+---
+
+## Provider examples
+
+The steps below just point you to where each provider configures networking — Beaver behaves the same way no matter which one you use.
+
+### Contabo
+
+Contabo provides VPS servers where you control the operating system directly.
+
+<Steps>
+  <Step title="Create a VPS" />
+  <Step title="Select a Linux OS" />
+  <Step title="Connect through SSH" />
+  <Step title="Configure the firewall, if enabled" />
+  <Step title="Install Beaver" />
+  <Step title="Connect the machine" />
+</Steps>
+
+<Info>Contabo behaves like a standard Linux server — no special configuration is required beyond the steps above.</Info>
+
+### Hetzner
+
+Hetzner provides both cloud servers and dedicated servers.
+
+<Steps>
+  <Step title="Create a server" />
+  <Step title="Configure Cloud Firewall, if using Hetzner Cloud" />
+  <Step title="Allow the required ports" />
+  <Step title="SSH into the server" />
+  <Step title="Install Beaver" />
+  <Step title="Connect the machine" />
+</Steps>
+
+<Info>Hetzner's Cloud Firewall is separate from the server's own firewall — both need the required ports open.</Info>
+
+### Hostinger VPS
+
+Hostinger VPS gives you root access to a Linux server.
+
+<Steps>
+  <Step title="Create a VPS" />
+  <Step title="Access the server through SSH" />
+  <Step title="Configure the firewall" />
+  <Step title="Install Beaver" />
+  <Step title="Connect the machine" />
+</Steps>
+
+<Info>Firewall configuration depends on which security settings you've enabled on your Hostinger VPS.</Info>
+
+### DigitalOcean
+
+DigitalOcean Droplets are Linux virtual machines.
+
+<Steps>
+  <Step title="Create a Droplet" />
+  <Step title="Configure Cloud Firewall, if used" />
+  <Step title="Allow the required ports" />
+  <Step title="SSH into the Droplet" />
+  <Step title="Install Beaver" />
+  <Step title="Connect the machine" />
+</Steps>
+
+<Info>DigitalOcean's Cloud Firewall works separately from any firewall running on Ubuntu itself (like `ufw`) — both need the required ports open.</Info>
+
+### Other VPS providers
+
+If your provider gives you:
+
+- Linux server access
+- SSH access
+- Docker support
+- Internet connectivity
+
+then it can generally be used with Beaver. This includes:
+
+- Bare metal servers
+- Private servers
+- Self-hosted machines
+- Company infrastructure
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Cannot SSH into server">
+    - Confirm the server is running
+    - Confirm the SSH port (22) is open
+    - Confirm your provider's firewall rules allow SSH from your IP
+  </Accordion>
+
+  <Accordion title="Beaver cannot connect">
+    - Confirm the server has internet connectivity
+    - Confirm Docker is installed and running
+    - Confirm you have the required permissions to run Docker and install software
+  </Accordion>
+
+  <Accordion title="Application is not reachable">
+    Traffic has to pass every layer in order — check each one:
+
+    ```mermaid
+    flowchart TD
+        A[Provider Firewall] --> B[Server Firewall]
+        B --> C[Application Port]
+    ```
+
+    Confirm the port is open at the provider level, open at the server level, and that your application is actually listening on it.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Install Beaver CLI on Linux" icon="download" href="/installation">
+    Install, log in, and connect your server.
+  </Card>
+  <Card title="Machine Roles" icon="layer-group" href="/machine-roles">
+    Decide whether this server should build, run, or do both.
+  </Card>
+</CardGroup>
