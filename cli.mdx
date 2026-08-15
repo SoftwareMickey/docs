@@ -42,11 +42,13 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
     </Tip>
   </Tab>
   <Tab title="Windows">
-    Install with PowerShell. The installer detects amd64 or arm64, downloads the matching ZIP, verifies its checksum, installs `beaver.exe` in your user profile, and adds it to your `PATH`:
+    Install with PowerShell. The installer detects x86, x64, or ARM64, downloads the matching ZIP, verifies its checksum, installs `beaver.exe` in your user profile, and adds it to your `PATH`:
 
     ```powershell
     irm https://cli.vectorihub.com/install.ps1 | iex
     ```
+
+    Run this in PowerShell, not Command Prompt. From Command Prompt, use `powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cli.vectorihub.com/install.ps1 | iex"`.
 
     See [Install Beaver CLI on Windows](/installation-windows) for verification, custom installation directories, and troubleshooting.
   </Tab>

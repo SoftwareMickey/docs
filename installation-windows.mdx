@@ -29,7 +29,7 @@ Install the Beaver command-line interface on Windows with PowerShell. The instal
 
 <Steps>
   <Step title="Open PowerShell">
-    Open **PowerShell** from the Start menu. Administrator permission is not required; Beaver installs only for your Windows account.
+    Open **PowerShell** from the Start menu. Administrator permission is not required; Beaver installs only for your Windows account. The `irm` command below is a PowerShell alias, so do not run it directly in Command Prompt (`cmd.exe`).
   </Step>
 
   <Step title="Install Beaver">
@@ -37,6 +37,12 @@ Install the Beaver command-line interface on Windows with PowerShell. The instal
 
     ```powershell
     irm https://cli.vectorihub.com/install.ps1 | iex
+    ```
+
+    If you started in Command Prompt, launch PowerShell and run the installer with:
+
+    ```batch
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cli.vectorihub.com/install.ps1 | iex"
     ```
 
     The installer shows the detected architecture and each verification step. It installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin` and adds that directory to your user `PATH`.
@@ -73,7 +79,7 @@ Pass parameters to the installer when you need a pinned version or a different d
 
 <CodeGroup>
 ```powershell Specific version
-& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.4
+& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.6
 ```
 
 ```powershell Custom directory
