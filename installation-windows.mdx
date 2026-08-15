@@ -18,7 +18,7 @@ Install the Beaver command-line interface on Windows with PowerShell. The instal
     <Check>Windows on arm64</Check>
   </Column>
   <Column>
-    <Check>PowerShell</Check>
+    <Check>Windows PowerShell 5.1 or PowerShell 7+</Check>
     <Check>Internet access to `cli.vectorihub.com`</Check>
   </Column>
 </Columns>
@@ -45,7 +45,7 @@ Install the Beaver command-line interface on Windows with PowerShell. The instal
     powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cli.vectorihub.com/install.ps1 | iex"
     ```
 
-    The installer shows the detected architecture and each verification step. It installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin` and adds that directory to your user `PATH`.
+    The installer works with the Windows PowerShell 5.1 included with Windows as well as PowerShell 7+. It shows the detected architecture and each verification step, installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin`, and adds that directory to your user `PATH`.
   </Step>
 
   <Step title="Open a new terminal and verify">
@@ -79,7 +79,7 @@ Pass parameters to the installer when you need a pinned version or a different d
 
 <CodeGroup>
 ```powershell Specific version
-& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.6
+& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.7
 ```
 
 ```powershell Custom directory
@@ -104,6 +104,18 @@ When you choose a custom directory, add it to your user `PATH` if it is not alre
 
   <Accordion title="The installer reports a checksum or download failure">
     The installer deliberately refuses to install an archive whose SHA-256 checksum does not match the release manifest. Check your internet connection and try again. If your network uses a proxy or security filter, allow access to `https://cli.vectorihub.com`.
+  </Accordion>
+
+  <Accordion title="The installer says the release service returned no version">
+    Beaver could not retrieve the current release version from `https://cli.vectorihub.com/latest.txt`. Check your internet connection, proxy, or network security filter, then retry. You can also temporarily install a known release explicitly:
+
+    ```powershell
+    & ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.7
+    ```
+  </Accordion>
+
+  <Accordion title="The installer stops unexpectedly">
+    Copy the diagnostic information printed below the error. It includes the PowerShell version, process and native Windows architectures, failing line, and command without exposing credentials. This information helps support identify Windows PowerShell 5.1 compatibility issues quickly.
   </Accordion>
 
   <Accordion title="I need to remove Beaver">
