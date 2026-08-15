@@ -1,0 +1,114 @@
+---
+title: "Install Beaver CLI on Windows"
+sidebarTitle: "Windows installation"
+description: "Install and verify the Beaver CLI on Windows with PowerShell."
+icon: "download"
+---
+
+# Install Beaver CLI on Windows
+
+Install the Beaver command-line interface on Windows with PowerShell. The installer selects the right release, verifies its SHA-256 checksum, and adds Beaver to your user `PATH`.
+
+## Supported environments
+
+<Columns>
+  <Column>
+    <Check>Windows on amd64 (x86_64)</Check>
+    <Check>Windows on arm64</Check>
+  </Column>
+  <Column>
+    <Check>PowerShell</Check>
+    <Check>Internet access to `cli.vectorihub.com`</Check>
+  </Column>
+</Columns>
+
+<Info>
+  Windows supports the Beaver CLI, including login, account commands, and `beaver update`. Connecting a Builder or Host machine remains Linux-only because it requires Docker and the Beaver Agent on a supported Linux server.
+</Info>
+
+<Steps>
+  <Step title="Open PowerShell">
+    Open **PowerShell** from the Start menu. Administrator permission is not required; Beaver installs only for your Windows account.
+  </Step>
+
+  <Step title="Install Beaver">
+    Run the installer:
+
+    ```powershell
+    irm https://cli.vectorihub.com/install.ps1 | iex
+    ```
+
+    It installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin` and adds that directory to your user `PATH`.
+  </Step>
+
+  <Step title="Open a new terminal and verify">
+    Close PowerShell, open a new PowerShell window, then check the installed version:
+
+    ```powershell
+    beaver version
+    ```
+
+    If you see a version number, installation is complete.
+  </Step>
+
+  <Step title="Sign in or update">
+    Start the Beaver shell to sign in:
+
+    ```powershell
+    beaver
+    ```
+
+    Then enter `login`. To install the latest release later, run:
+
+    ```powershell
+    beaver update
+    ```
+  </Step>
+</Steps>
+
+## Install a specific version or location
+
+Pass parameters to the installer when you need a pinned version or a different destination:
+
+<CodeGroup>
+```powershell Specific version
+& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -Version 0.9.4
+```
+
+```powershell Custom directory
+& ([scriptblock]::Create((irm https://cli.vectorihub.com/install.ps1))) -InstallDir "$HOME\bin"
+```
+</CodeGroup>
+
+When you choose a custom directory, add it to your user `PATH` if it is not already there, then open a new terminal.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="beaver is not recognized as a command">
+    Close and reopen PowerShell after installation so it receives the updated user `PATH`. To confirm the default installation exists, run:
+
+    ```powershell
+    & "$env:LOCALAPPDATA\Programs\Beaver\bin\beaver.exe" version
+    ```
+
+    If that works, make sure `%LOCALAPPDATA%\Programs\Beaver\bin` is listed in your user `PATH`, then open a new terminal.
+  </Accordion>
+
+  <Accordion title="The installer reports a checksum or download failure">
+    The installer deliberately refuses to install an archive whose SHA-256 checksum does not match the release manifest. Check your internet connection and try again. If your network uses a proxy or security filter, allow access to `https://cli.vectorihub.com`.
+  </Accordion>
+
+  <Accordion title="I need to remove Beaver">
+    Delete `%LOCALAPPDATA%\Programs\Beaver\bin\beaver.exe`, then remove `%LOCALAPPDATA%\Programs\Beaver\bin` from your user `PATH`. To also remove local Beaver credentials, delete `%USERPROFILE%\.beaver_config.json`, `%USERPROFILE%\.beaver_server.json`, and `%USERPROFILE%\.beaver_onboarding.json`.
+  </Accordion>
+</AccordionGroup>
+
+<CardGroup cols={2}>
+  <Card title="CLI reference" icon="terminal" href="/cli">
+    Learn every Beaver command, including updates.
+  </Card>
+  <Card title="Linux server installation" icon="server" href="/installation">
+    Install and connect a supported Linux Builder or Host.
+  </Card>
+</CardGroup>

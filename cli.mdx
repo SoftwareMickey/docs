@@ -20,7 +20,7 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 ## Installing the CLI
 
 <Info>
-  New to Beaver on Linux? [Install Beaver CLI on Linux](/installation) walks through install, login, and connecting your first machine in one guide.
+  New to Beaver? [Install Beaver CLI on Linux](/installation) walks through connecting a Linux machine, while [Windows installation](/installation-windows) covers installing the CLI on Windows.
 </Info>
 
 <Tabs>
@@ -42,7 +42,13 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
     </Tip>
   </Tab>
   <Tab title="Windows">
-    Download the `windows_amd64` (or `windows_arm64`) `.zip` for the [latest version](https://cli.vectorihub.com/latest.txt) from `https://cli.vectorihub.com/`, extract it, and move `beaver.exe` to a directory on your `PATH`.
+    Install with PowerShell. The installer detects amd64 or arm64, downloads the matching ZIP, verifies its checksum, installs `beaver.exe` in your user profile, and adds it to your `PATH`:
+
+    ```powershell
+    irm https://cli.vectorihub.com/install.ps1 | iex
+    ```
+
+    See [Install Beaver CLI on Windows](/installation-windows) for verification, custom installation directories, and troubleshooting.
   </Tab>
 </Tabs>
 

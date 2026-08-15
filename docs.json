@@ -21,6 +21,7 @@
             "pages": [
               "documentation",
               "installation",
+              "installation-windows",
               "beaver-doctor",
               "cli",
               "choose-your-setup",
