@@ -7,12 +7,13 @@ icon: "download"
 
 # Install Beaver CLI on Windows
 
-Install the Beaver command-line interface on Windows with PowerShell. The installer selects the right release, verifies its SHA-256 checksum, and adds Beaver to your user `PATH`.
+Install the Beaver command-line interface on Windows with PowerShell. The installer detects whether your machine is x86, x64, or ARM64, selects the matching release, verifies its SHA-256 checksum, and adds Beaver to your user `PATH`.
 
 ## Supported environments
 
 <Columns>
   <Column>
+    <Check>Windows on x86 (32-bit)</Check>
     <Check>Windows on amd64 (x86_64)</Check>
     <Check>Windows on arm64</Check>
   </Column>
@@ -38,7 +39,7 @@ Install the Beaver command-line interface on Windows with PowerShell. The instal
     irm https://cli.vectorihub.com/install.ps1 | iex
     ```
 
-    It installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin` and adds that directory to your user `PATH`.
+    The installer shows the detected architecture and each verification step. It installs `beaver.exe` to `%LOCALAPPDATA%\Programs\Beaver\bin` and adds that directory to your user `PATH`.
   </Step>
 
   <Step title="Open a new terminal and verify">
