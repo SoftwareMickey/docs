@@ -1,0 +1,15 @@
+---
+title: "beaver observe"
+description: "Follow a service's logs, traffic, metrics, and health."
+---
+
+## Examples
+
+```bash
+beaver observe [service]
+beaver observe api --logs --follow
+beaver observe api --traffic --range 7d
+beaver observe api --metrics cpu
+```
+
+Use `--logs`, `--traffic`, or `--metrics` to select evidence, and `--follow` to keep watching. `--tail`, `--range`, and `--desktop-notify` refine the view.

@@ -1,0 +1,15 @@
+---
+title: "beaver containers and container"
+description: "List deployed containers and operate on one container."
+---
+
+## Examples
+
+```bash
+beaver containers
+beaver container api inspect
+beaver container api logs --tail 200
+beaver container api history
+```
+
+Use `containers` to list services. The `container` command inspects, logs, redeploys, restarts, rolls back, or deletes one service. Use `--tail` for logs and `--yes` for supported confirmations.

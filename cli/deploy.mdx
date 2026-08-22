@@ -1,0 +1,18 @@
+---
+title: "beaver deploy"
+description: "Deploy the current Dockerfile project or Compose stack."
+---
+
+## Examples
+
+```bash
+beaver
+beaver deploy
+beaver deploy --single
+beaver deploy --git
+beaver deploy --dry-run
+```
+
+`beaver` and `beaver deploy` deploy the current project. Beaver detects a Compose project or Dockerfile, unless you select `--single` or `--git`. Use `--dry-run` to complete preflight without deploying, `--logs` to stream build output, and `--wait` for CI.
+
+For scripted deployment, provide `--project-id`, `--repo`, `--branch`, `--host-id`, `--container-name`, `--docker-user`, and `--container-port`. Run `beaver deploy --help` for the full flag set.

@@ -1,0 +1,18 @@
+---
+title: "beaver compose"
+description: "Detect, deploy, and operate Docker Compose stacks."
+---
+
+## Examples
+
+```bash
+beaver compose detect
+beaver compose deploy
+beaver compose stacks
+beaver compose stack show <stack-id>
+beaver compose stack networks <stack-id>
+beaver compose release watch <release-id>
+beaver compose release rollback <release-id>
+```
+
+Run `detect` before deployment to preview the discovered services and resources. Use stack and release commands to inspect or control an existing Compose deployment.

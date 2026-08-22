@@ -1,0 +1,15 @@
+---
+title: "beaver firewall"
+description: "Manage deployment firewall policy, rules, bans, and WAF settings."
+---
+
+## Examples
+
+```bash
+beaver firewall overview <deployment-id>
+beaver firewall rules <deployment-id>
+beaver firewall rule add <deployment-id> --type ip --action block --value 203.0.113.10
+beaver firewall lockdown <deployment-id> --yes
+```
+
+Firewall rules support IP, path, method, query, and header conditions. Lockdown blocks all traffic until unlocked. Use `--service` for an individual Compose service.

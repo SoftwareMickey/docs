@@ -1,0 +1,14 @@
+---
+title: "beaver recover"
+description: "Diagnose a service and optionally apply a safe recovery action."
+---
+
+## Examples
+
+```bash
+beaver recover [service] --explain
+beaver recover [service] --restart [--yes]
+beaver recover [service] --rollback
+```
+
+Diagnosis is read-only by default. `--restart` and `--rollback` request a recovery action and may prompt for confirmation.

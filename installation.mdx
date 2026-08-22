@@ -75,22 +75,16 @@ This guide takes a fresh Linux server from nothing to a connected Beaver machine
   </Step>
 
   <Step title="Log in">
-    Start the interactive shell and log in to your Beaver account:
+    Log in to your Beaver account:
 
     ```bash
-    beaver
-    ```
-
-    At the `beaver ▸` prompt, type:
-
-    ```txt
-    login
+    beaver login
     ```
 
     You'll be prompted for your email and password:
 
     ```txt
-    beaver ▸ login
+    $ beaver login
     Email: you@example.com
     Password:
     Login successful!
@@ -101,10 +95,10 @@ This guide takes a fresh Linux server from nothing to a connected Beaver machine
   </Step>
 
   <Step title="Connect your machine">
-    Still at the `beaver ▸` prompt, connect this machine to your workspace:
+    Connect this machine to your workspace:
 
-    ```txt
-    connect
+    ```bash
+    beaver connect
     ```
 
     `connect` checks the machine over, then asks which role you want it to fill.
@@ -150,8 +144,8 @@ This guide takes a fresh Linux server from nothing to a connected Beaver machine
     `beaver` supports Ubuntu, Debian, and Rocky Linux on amd64 or arm64. If your server runs a different distribution, `connect` may still warn you that the machine isn't supported — check [Supported environments](#supported-environments) above before provisioning a server.
   </Accordion>
 
-  <Accordion title="login or connect says 'only available inside the interactive shell'">
-    `login` and `connect` are shell-only commands. Run `beaver` by itself first to open the interactive shell, then type `login` or `connect` at the `beaver ▸` prompt — don't pass them as arguments directly from your OS shell.
+  <Accordion title="login or connect cannot complete">
+    Both commands run directly from your OS shell. Run `beaver doctor --verbose`, resolve its first failed check, then retry `beaver login` or `beaver connect`.
   </Accordion>
 
   <Accordion title="connect can't reach the internet">

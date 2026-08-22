@@ -1,0 +1,17 @@
+---
+title: "beaver machine"
+description: "Inspect fleet health and perform machine maintenance."
+---
+
+## Examples
+
+```bash
+beaver machine list
+beaver machine overview <machine-id>
+beaver machine metrics <machine-id> --window 24h
+beaver machine fleet-overview
+beaver machine reboot-impact <machine-id>
+beaver machine cleanup-plan <machine-id>
+```
+
+Use `reboot-impact` and `cleanup-plan` before their mutating counterparts. See `beaver machine --help` for alerts, policies, approvals, maintenance windows, monitoring, and security commands.

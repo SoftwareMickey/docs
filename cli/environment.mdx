@@ -1,0 +1,15 @@
+---
+title: "beaver environment"
+description: "Manage project environments and container variables."
+---
+
+## Examples
+
+```bash
+beaver environment list
+beaver environment create
+beaver environment vars pull api
+beaver environment vars diff api
+```
+
+Environments select deployment settings such as staging or production. Review variable changes before `push`; never commit secrets.

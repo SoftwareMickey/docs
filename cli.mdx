@@ -1,14 +1,14 @@
 ---
-title: "CLI"
-sidebarTitle: "CLI"
-description: "Install and use beaver, the VectorIHub command-line interface, to authenticate, enroll your own servers, and manage your deployment fleet from a terminal."
+title: "Beaver CLI reference"
+sidebarTitle: "CLI reference"
+description: "Install Beaver CLI and use the public command surface for deployment, operations, and account management."
 icon: "terminal"
 ---
 
 VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account and infrastructure from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
 
 <Info>
-  `beaver` currently covers authentication, checking a machine's readiness (`doctor`), connecting your own servers to your workspace (`connect`), and managing enrolled servers (`server`) — plus account-level operations like listing your connected GitHub accounts. Deploying to a connected server is managed from the [dashboard](https://vectorihub.com) — see the [Quickstart](/quickstart) to deploy your first app.
+  The current CLI covers authentication, machine enrollment, project preparation, deployment, live inspection, recovery, fleet operations, security, billing, integrations, and AI-assisted workflows.
 </Info>
 
 <Card title="Read the announcement" icon="newspaper" href="/changelog/server-fleet-management">
@@ -108,10 +108,10 @@ Restart `beaver` to start using the new version.
 
 ## Using the CLI
 
-Running `beaver` with no arguments starts an interactive shell — the primary way to use the CLI, similar to how Claude Code or the Codex CLI work:
+Running `beaver` with no arguments deploys the current project, matching the direct workflow used by modern deployment CLIs. Open the optional interactive shell with `beaver shell`:
 
 ```bash
-beaver
+beaver shell
 ```
 
 ```txt Interactive shell
@@ -144,9 +144,9 @@ beaver ▸
 
 If you haven't logged in yet, the banner shows `Not connected — type login to authenticate` instead — the shell never blocks on login, so it always opens instantly even against an unreachable backend.
 
-At the `beaver ▸` prompt, type any command listed under [Command reference](#command-reference) below and press Enter. A few behaviors worth knowing:
+At the `beaver ▸` prompt, type any command listed under the command reference below and press Enter. A few behaviors worth knowing:
 
-- **Command history.** On a real terminal, `beaver` remembers what you've typed — press <kbd>↑</kbd>/<kbd>↓</kbd> to recall previous commands, including across separate sessions (history is persisted to `~/.beaver_history`). Piped or non-interactive input (e.g. scripting `beaver` in CI) transparently falls back to plain line reads instead — commands still work, there's just no history or in-line editing.
+- **Command history.** On a real terminal, `beaver shell` remembers what you've typed — press <kbd>↑</kbd>/<kbd>↓</kbd> to recall previous commands, including across separate sessions. Piped or non-interactive input transparently falls back to plain line reads instead.
 - <kbd>Ctrl</kbd>+<kbd>C</kbd> clears whatever you've typed on the current line and reprompts — it does **not** exit the shell.
 - <kbd>Ctrl</kbd>+<kbd>D</kbd> (EOF), or typing `exit`/`quit`, ends the session:
 
@@ -158,7 +158,7 @@ At the `beaver ▸` prompt, type any command listed under [Command reference](#c
 
 ### Running commands directly
 
-Most commands also work directly from your OS shell, without opening the interactive shell first:
+All public commands work directly from your OS shell. The interactive shell is optional:
 
 ```bash
 beaver doctor
@@ -166,272 +166,188 @@ beaver github
 beaver server --list
 beaver update
 beaver version
+beaver login
+beaver connect
 ```
 
 <Note>
-  `login`, `logout`, and `connect` are shell-only — they prompt interactively (for credentials, or through the `connect` wizard), so they only make sense inside `beaver`'s own shell. Running `beaver login` (or `logout`/`connect`) directly from your terminal prints a message telling you to open the shell instead:
-
-  ```txt
-  $ beaver login
-  `login` is only available inside the interactive shell.
-  Run `beaver`, then type `login`.
-  ```
+  Use `beaver --help` to discover commands, `beaver help <command>` or `beaver <command> --help` for detailed usage, `beaver --cwd <path>` to run from another project directory, and `beaver --no-color` for plain output.
 </Note>
 
 ---
 
-## Command reference
+## Current command reference
 
-| Command | Description | Shell only |
-| --- | --- | --- |
-| [`login`](#login) | Authenticate your Beaver account | Yes |
-| [`logout`](#logout) | Sign out and clear your local session | Yes |
-| [`connect`](#connect) | Enroll this server with your Beaver workspace | Yes |
-| [`doctor`](#doctor) | Check whether this machine is ready for Beaver | No |
-| [`server`](#server) | List and manage servers enrolled with Beaver | No |
-| [`github`](#github) | List your connected GitHub accounts | No |
-| [`update`](#update) | Update the CLI to the latest release | No |
-| [`version`](#version) | Show the installed CLI version | No |
-| [`help`](#help) | Show available commands | No |
-| [`exit`](#exit) | Quit the interactive shell | — |
+The command surface has expanded beyond the original setup-only workflow. The following reference reflects the current CLI. Run `beaver <command> --help` for the exact flags shipped in your version.
 
-### login
-
-Authenticates your Beaver account and starts a local session.
-
-```txt
-beaver ▸ login
-Email: you@example.com
-Password:
-Login successful!
-
-  Account     yourname
-  Workspace   yourname's workspace
-```
-
-You'll be prompted for your email, then your password (input is hidden). On success, your session — an auth token, user ID, username, and expiry — is saved to `~/.beaver_config.json` (readable only by you) and reused by every other command until you `logout`. Your workspace is fetched (and lazily created if you've never had one) from the backend, so the name shown here always reflects the real thing.
-
-### logout
-
-Signs out and clears your local session.
-
-```txt
-beaver ▸ logout
-Logged out of yourname.
-```
-
-Removes `~/.beaver_config.json`. If you're not currently logged in, it says so and does nothing — logging out twice isn't an error.
-
-### connect
-
-Enrolls this machine with your Beaver workspace as a deployment target, walking you through a short guided setup:
-
-```txt
-beaver ▸ connect
-```
-
-<Tip>
-  Run [`doctor`](#doctor) before `connect` — it catches missing requirements early instead of surfacing them partway through the setup wizard.
-</Tip>
-
-`connect` confirms you're logged in, checks that this machine is supported, and looks at what's set up on it before letting you choose a role for it — it only offers roles this machine is actually capable of filling, and warns you before you pick one it's not well suited for.
-
-Supported operating systems are **Ubuntu**, **Debian**, and **Rocky Linux**, on **amd64** or **arm64**.
-
-If this machine is already enrolled, you'll be asked whether to reconnect it under your account. A machine already enrolled under a different account can't be taken over from here.
-
-On success, you'll see a summary of the server's role, and it becomes visible in `server --list` and the dashboard.
-
-#### Server roles
-
-| Role | Description |
-| --- | --- |
-| **Builder** | Builds Docker images only. |
-| **Host** | Runs deployed applications only. |
-| **Builder + Host** | Builds images and hosts applications. |
-
-`beaver connect` recommends the role that best fits this machine and only offers roles it qualifies for. A role can be changed later without re-running `connect` — see [`server update --role`](#server-update-machine-id).
-
-<Card title="Choose Your Beaver Setup" icon="compass" href="/choose-your-setup">
-  New to Beaver? Get a 2-minute answer to which role fits your machine before you run `connect`.
-</Card>
-
-<Card title="beaver connect" icon="plug" href="/connect">
-  Read the full walkthrough — prerequisites, verification, and troubleshooting for `connect`.
-</Card>
-
-### doctor
-
-Checks whether this machine is ready to work with Beaver — supported OS/architecture, required software (Docker, Git), connectivity, and configuration problems on an already-connected machine.
+### Daily project workflow
 
 ```bash
-beaver doctor
+beaver init [--guided|--propose]
+beaver validate
+beaver contract show
+beaver plan [--env <environment>] [--json]
+beaver deploy [--single|--git] [--dockerfile <path>]
+beaver inspect [service]
+beaver observe [service] [--logs|--traffic|--metrics <name>] [--follow]
+beaver status [--env <environment>] [--explain]
+beaver recover [service] [--explain|--restart|--rollback]
+beaver diff [service] [release-a] [release-b]
 ```
 
-Each check reports `PASS`, `WARNING`, or `FAILED`, with guidance for resolving anything that isn't a clean pass. Run it right after installing the CLI and before `connect` — see the [Beaver Doctor guide](/beaver-doctor) for what it checks, example output, and troubleshooting.
+Use `init` to prepare the current directory, `validate` to check it without deploying, `contract show` to view normalized configuration, and `plan` to preview a deployment. `deploy` uses the current directory by default; its non-interactive flags include `--project-id`, `--repo`, `--branch`, `--commit`, `--builder-id`, `--host-id`, `--container-name`, `--container-port`, `--host-port`, `--docker-user`, `--image`, `--deployment-path`, `--env-file`, repeatable `--env-var KEY=value`, `--env`, `--framework`, `--dry-run`, `--logs`, `--wait`, `--timeout`, `--output`, `--json`, `--quiet`, and `--yes`.
 
-### server
+After a successful deploy, use `inspect` for a summary, `observe` for logs/traffic/metrics, `status` for declared-versus-live comparison, `diff` for release comparison, and `recover` for diagnosis or an explicitly requested restart/rollback. Deployment IDs can be inspected with `beaver deployment`.
 
-Lists and manages the servers enrolled in your workspace via `connect`. None of its subcommands re-run the connect wizard, and none of them touch the machine itself — Beaver never has shell access to your servers.
+### Containers, deployments, and Compose
 
 ```bash
+beaver containers
+beaver container <name> inspect|logs|history|redeploy|restart|rollback|delete
+beaver deployment list <container>
+beaver deployment show|status|logs|watch|retry|cancel <deployment-id>
+beaver compose detect
+beaver compose deploy
+beaver compose stacks
+beaver compose stack show|networks|volumes|delete <stack-id>
+beaver compose release show|watch|rollback|retry|cancel <release-id>
+```
+
+Container commands inspect, log, redeploy, restart, roll back, or delete one deployed container. Deployment commands provide history, status, request logs, live progress, retry, and cancellation by ID. Compose commands detect resources, deploy a stack, and operate its stacks and releases. Confirm destructive actions; use `--yes` where supported.
+
+### Projects, environments, and domains
+
+```bash
+beaver project list|show <project-id>|create|delete <project-id>
+beaver environment list|create|delete <environment-id>
+beaver environment vars list|pull|push|diff [service]
+beaver domain list|add|verify <domain-id>|certificate <domain-id>|remove <domain-id>
+```
+
+Projects group applications, containers, and environments. Use `--env` with `plan`, `deploy`, and `status`. Review environment-variable changes before pushing and never commit secrets. Domain verification requires DNS propagation; `certificate` provisions or reprovisions TLS.
+
+### Fleet and local machine operations
+
+```bash
+beaver doctor [--verbose]
+beaver connect [--verbose]
 beaver server --list
+beaver server update [machine-id] [--name <name>] [--role builder|host|builder-host] [--labels key=value,...] [--yes]
+beaver server rename <machine-id> <new-name>
+beaver server remove [machine-id] [--yes]
+beaver agent install|start|stop|status|logs
+beaver git --auth
+beaver docker --auth
 ```
 
-Bare `beaver server` (no flags, no subcommand) prints help rather than defaulting to any action.
+`doctor` checks local prerequisites and offers targeted repairs. `connect` enrolls the current Linux machine as a Builder, Host, or Builder + Host. `server` manages enrolled machines; it does not delete the physical machine. `agent` manages the local Beaver background service. Git and Docker are focused authentication checks.
 
-#### `server --list`
-
-Lists every server enrolled in your workspace: display name, machine ID, status, role, OS/architecture, and any labels.
+Fleet visibility and maintenance:
 
 ```bash
-beaver server --list
-# or
-beaver server -l
+beaver machine list|overview|show|live|services|docker|events|metrics|trends|alerts|alert-rules|approvals|security|exposure|log-inventory <machine-id>
+beaver machine fleet-overview|fleet-drift|fleet-capacity|groups
+beaver machine group-policy <group-id>
+beaver machine policy <machine-id>
+beaver machine policy set <machine-id>
+beaver machine reboot-impact|reboot|package-update|cleanup-plan|cleanup|maintenance-windows|maintenance-runs <machine-id>
+beaver machine restart-service <machine-id> --service <service-name>
+beaver machine monitoring <machine-id>
 ```
 
-```txt Example output
-Enrolled servers:
+Use `reboot-impact` and `cleanup-plan` before mutating actions. Metrics support the documented `--window`/`--metric` options; event views may support `--limit`, `--category`, and `--severity`.
 
-  prod-web-1
-    ID:     srv_a88489d41323e0ac
-    Status: connected
-    Role:   builder-host
-    OS:     Ubuntu 24.04.4 LTS (amd64)
-    Labels: env=production, region=us-east
+### Firewall, scaling, and Edge
+
+```bash
+beaver firewall overview|policy|rules|revisions|events|bans|waf|intel <deployment-id>
+beaver firewall rule add|update|delete <deployment-id> [rule-id]
+beaver firewall rollback <deployment-id> <revision-id>
+beaver firewall preset apply <deployment-id> --preset <name>
+beaver firewall ban <deployment-id> --ip <ip> --reason <reason>
+beaver firewall unban <deployment-id> <ip> [--yes]
+beaver firewall login-protect <deployment-id> --path <path>
+beaver firewall lockdown|unlock <deployment-id>
+beaver firewall visibility <deployment-id> --public|--private
 ```
 
-#### `server update [machine-id]`
+Firewall rule types are `ip`, `path`, `method`, `query`, and `header`; actions are `allow`, `block`, `rate-limit`, and `challenge`. `lockdown` blocks all traffic until `unlock`. A visibility or WAF change may require redeployment. Use `--service` for one Compose service.
 
-Updates one or more properties of an already-enrolled server — only the flags you pass are changed, everything else is left as-is.
+```bash
+beaver scaling policy|set|replicas|events|rollouts|deploy-set <container>
+beaver scaling cutover|discard <container> <rollout-id>
+beaver scaling canary <container>
+beaver scaling canary-status <rollout-id>
+beaver edge apps
+beaver edge app add|show|update|remove|verify|rotate-secret|origin-protection|origin-protection-recheck [connected-app-id]
+beaver edge backends <connected-app-id>
+beaver edge backend add|remove|import <connected-app-id> [backend-id]
+beaver edge detected-services <machine-id>
+beaver edge logs|traffic|speed <connected-app-id>
+beaver edge firewall policy|rules|revisions <connected-app-id>
+beaver edge firewall rule add|update|delete <connected-app-id> [rule-id]
+beaver edge firewall rollback <connected-app-id> <revision-id>
+beaver edge firewall preset apply|ban|unban|lockdown|unlock <connected-app-id>
+```
 
-| Flag | Description |
+Scaling manages replica policies and staged or gradual traffic changes. Edge Connected Apps front existing external services; verify the domain and origin before making one public. Use each command's help for operation-specific fields.
+
+### Account, billing, integrations, and AI
+
+```bash
+beaver account profile show|update
+beaver account mfa setup|verify|disable
+beaver account feedback
+beaver workspace show|recreate
+beaver plans
+beaver billing subscription|checkout|cancel|downgrade-hobby|payments
+beaver github accounts|install|branches
+beaver integrations status
+beaver integrations remove <integration-id>
+beaver ai connect [provider]
+beaver ai providers
+beaver ai models
+beaver ai provider add|test|update|remove [provider-id]
+```
+
+These commands manage profile/MFA, workspace recovery, plans and hosted checkout, payments, GitHub/integrations, and AI provider credentials. Treat credentials like passwords.
+
+### Alie
+
+```bash
+beaver alie
+beaver alie --resume [session-name-or-id]
+beaver alie sessions|session|model|usage|compact|fork <session>
+beaver alie status|model-profile|knowledge|runbooks|goals|policies|autopilot
+beaver alie approvals|approve|reject|audit <approval-id>
+beaver alie approval-policies|approval-policy set
+beaver alie api-keys|create|revoke <key-id>
+beaver alie spend-cap|spend-cap set
+beaver alie add|review <policy-id>
+```
+
+Alie explains infrastructure findings and can propose actions. Approval prompts and workspace policies determine whether a proposed action may proceed; review pending approvals and the audit view.
+
+## Troubleshooting
+
+| Symptom | What to do |
 | --- | --- |
-| `--name` | New display name, shown in `server --list` and the dashboard. |
-| `--role` | One of `builder`, `host`, or `builder-host`. Beaver does **not** re-verify the machine still qualifies — prompts for confirmation unless `--yes` is given. |
-| `--labels` | Comma-separated `key=value` pairs (e.g. `env=production,region=us-east`). **Replaces the entire label set** — it's not a merge, so include every label you want kept. |
-| `--yes`, `-y` | Skip the role-change confirmation prompt. |
+| Not logged in | Run `beaver login`, then `beaver whoami`. |
+| `connect` stops | Run `beaver doctor --verbose`; fix the first failed check. |
+| Enrolled machine unavailable | Run `beaver agent status` and `beaver agent logs`; verify network and Docker. |
+| Deployment waits or fails | Run `beaver deployment status <id>` and `beaver deployment logs <id>`; check Dockerfile, context, machines, registry, and variables. |
+| Domain verification fails | Check DNS, wait for propagation, then rerun `beaver domain verify <id>`. |
+| CI cannot run an interactive command | Supply IDs and flags, use `--yes`, and select `--json`/`--quiet`. |
+| Flag is rejected | Run `beaver <command> --help`; update if installed help disagrees. |
+
+When reporting an issue, include `beaver version`, the exact command, the first error, and relevant doctor output. Redact tokens, passwords, private keys, and secret values.
+
+### Utilities
 
 ```bash
-beaver server update srv_a88489d41323e0ac --role host
-beaver server update srv_a88489d41323e0ac --labels env=production,region=us-east
-```
-
-Omit the machine ID to pick the server from an interactive list instead — see [Picking a server interactively](#picking-a-server-interactively).
-
-#### `server rename <machine-id> <new-name...>`
-
-Shorthand for `server update --name`. Everything after the machine ID is joined with spaces to form the new name, so it doesn't need to be quoted:
-
-```bash
-beaver server rename srv_a88489d41323e0ac Production Web Server
-```
-
-#### `server remove [machine-id]`
-
-Permanently removes a server from your workspace — a hard delete, not an archive. The physical machine is untouched; its local credentials just stop working, and it disappears from deployments and the dashboard. The same machine can be enrolled again later with `connect`.
-
-```bash
-beaver server remove srv_a88489d41323e0ac
-```
-
-```txt Confirmation prompt
-⚠ You are removing this server from Beaver.
-
-The physical machine will NOT be deleted, stopped, or reconfigured in
-any way — Beaver only forgets about it. Its local credentials
-(~/.beaver_server.json) stop working immediately, and it will disappear
-from deployments and the dashboard.
-
-To bring it back later, run `beaver connect` on the machine again.
-
-Server: srv_a88489d41323e0ac
-
-Continue? (y/N)
-```
-
-| Flag | Description |
-| --- | --- |
-| `--yes`, `-y` | Skip the confirmation prompt. |
-
-Omit the machine ID to pick the server from an interactive list instead.
-
-#### Picking a server interactively
-
-`server update` and `server remove` don't require a machine ID — omit it and you'll get an arrow-key, type-to-filter list of every enrolled server:
-
-```bash
-beaver server remove
-```
-
-```txt
-? Select a server to remove:
-  1. prod-web-1 (srv_a88489d41323e0ac) — connected
-  2. staging-api (srv_f21c9b0a77de4210) — connected
-```
-
-Use <kbd>↑</kbd>/<kbd>↓</kbd> to move the highlight, type any part of a server's number, name, ID, or status to filter the list, and press Enter to confirm. If exactly one server is enrolled, it's selected automatically with no prompt.
-
-### github
-
-Lists the GitHub accounts connected to your VectorIHub workspace.
-
-```bash
-beaver github
-```
-
-```txt Example output
-Connected GitHub accounts:
-  - your-github-username (connected)
-```
-
-Requires a session — run `login` first if you see "you are not logged in".
-
-### update
-
-See [Updating the CLI](#updating-the-cli) above.
-
-### version
-
-Prints the installed CLI version (and commit hash, on release builds).
-
-```bash
+beaver completion bash|zsh|fish|powershell
+beaver history
 beaver version
 ```
 
-### help
-
-Inside the shell, typing `help` (or `-h`/`--help`) prints the list of available commands. `beaver --help` (and `beaver <command> --help`) works the same way from outside the shell too, showing usage for that command.
-
-### exit
-
-Typing `exit` or `quit` — or pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> — closes the interactive shell:
-
-```txt
-✓ Session closed.
-
-Beaver will be ready when you are.
-```
-
----
-
-## Local files
-
-`beaver` stores everything locally as plain JSON files in your home directory, each readable only by you:
-
-| File | Contents |
-| --- | --- |
-| `~/.beaver_config.json` | Your login session (token, user ID, username, expiry) — created by `login`, removed by `logout`. |
-| `~/.beaver_server.json` | This machine's enrollment credentials (machine ID, server token, hostname, workspace ID, role) — created by `connect`. |
-| `~/.beaver_history` | Interactive shell command history — only on a real terminal; piped/non-interactive sessions don't create it. |
-
----
-
-<CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Deploy your first Dockerized app from the dashboard.
-  </Card>
-  <Card title="Documentation" icon="book-open-cover" href="/documentation">
-    Learn how VectorIHub's deployment pipeline works.
-  </Card>
-</CardGroup>
+Use `completion <bash|zsh|fish|powershell>` to generate shell completion; `history` accepts `--since <duration>` and `--project <project>`; `version` verifies an installation or update. The `admin` namespace is reserved for administrative workflows and is not part of the end-user command surface.

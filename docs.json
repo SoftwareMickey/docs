@@ -23,7 +23,6 @@
               "installation",
               "installation-windows",
               "beaver-doctor",
-              "cli",
               "choose-your-setup",
               "connect",
               "machine-roles",
@@ -86,6 +85,46 @@
               "/frameworks/echo",
               "/frameworks/chi"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "CLI",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["cli"]
+          },
+          {
+            "group": "Deployments",
+            "pages": [
+              "cli/init", "cli/validate", "cli/contract", "cli/plan", "cli/deploy",
+              "cli/inspect", "cli/observe", "cli/status", "cli/recover", "cli/diff",
+              "cli/containers", "cli/container", "cli/deployment", "cli/compose",
+              "cli/logs", "cli/metrics", "cli/traffic"
+            ]
+          },
+          {
+            "group": "Project management",
+            "pages": ["cli/project", "cli/environment", "cli/domain"]
+          },
+          {
+            "group": "Infrastructure",
+            "pages": [
+              "cli/doctor", "cli/connect", "cli/server", "cli/agent", "cli/machine",
+              "cli/firewall", "cli/scaling", "cli/edge"
+            ]
+          },
+          {
+            "group": "Account and integrations",
+            "pages": [
+              "cli/login", "cli/logout", "cli/whoami", "cli/github", "cli/integrations",
+              "cli/account", "cli/workspace", "cli/billing", "cli/plans", "cli/ai", "cli/alie"
+            ]
+          },
+          {
+            "group": "Utilities",
+            "pages": ["cli/git", "cli/docker", "cli/completion", "cli/history", "cli/update", "cli/version", "cli/shell"]
           }
         ]
       }

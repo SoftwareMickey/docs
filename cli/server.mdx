@@ -1,0 +1,17 @@
+---
+title: "beaver server"
+description: "Manage enrolled build and host machines."
+---
+
+## Examples
+
+```bash
+beaver server --list
+beaver server update <machine-id> --name "Production API"
+beaver server update <machine-id> --role host
+beaver server update <machine-id> --labels env=production,region=us-east
+beaver server rename <machine-id> <name>
+beaver server remove [machine-id] [--yes]
+```
+
+`--labels` replaces the complete label set. Removing a server disconnects it from Beaver; it does not delete the physical machine.

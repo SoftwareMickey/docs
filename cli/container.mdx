@@ -1,0 +1,16 @@
+---
+title: "beaver container"
+description: "Inspect and operate on one deployed container."
+---
+
+## Examples
+
+```bash
+beaver container <name> inspect
+beaver container <name> logs --tail 200
+beaver container api redeploy
+beaver container api rollback
+beaver container api delete --yes
+```
+
+Use `--yes` for supported destructive confirmations and `--json` or `--output` for scripts.
