@@ -1,0 +1,46 @@
+---
+title: "MinIO"
+sidebarTitle: "MinIO"
+description: "Provision managed, S3-compatible object storage and attach it to your application."
+icon: "box-archive"
+---
+
+MinIO is S3-compatible object storage — a common choice for applications that need file or
+blob storage with an API compatible with the S3 ecosystem, without using an external cloud
+provider's storage service.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    Run `beaver service catalog` for the current supported version.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-storage --type minio
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-storage --env-prefix S3
+```
+
+Your application receives connection details (endpoint, access key, secret key) as an
+environment variable using the prefix you choose. It's usable once the attachment takes
+effect — for most services, that's your next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-storage
+beaver service resize paperclip-storage --cpu 1 --memory 1024
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

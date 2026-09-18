@@ -1,15 +1,139 @@
 ---
 title: "beaver account"
-description: "Manage profile, multi-factor authentication, and feedback."
+sidebarTitle: "account"
+description: "Manage your profile, two-factor authentication, and send feedback."
+icon: "user"
 ---
+
+<Info>
+  New here? [Accounts and workspaces](/concepts/accounts-and-workspaces) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver account` covers everything scoped to *you* as a user — as opposed to
+[`workspace`](/cli/workspace) (your team/org) or [`billing`](/cli/billing) (payment). Use it
+to view or edit your profile, turn on two-factor authentication (MFA), or send feedback
+straight from the CLI.
+
+## Syntax
+
+```bash
+beaver account <subcommand> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `profile show` | Print your current profile fields. |
+| `profile update` | Change one or more profile fields. |
+| `mfa setup` | Start enabling two-factor authentication. |
+| `mfa verify` | Finish enabling MFA with a code from your authenticator app. |
+| `mfa disable` | Turn MFA off. |
+| `feedback` | Send feedback to the Beaver team. |
+
+## Flags
+
+### `profile update`
+
+<ParamField query="--full-name" type="string" default="">
+  New display name.
+</ParamField>
+<ParamField query="--username" type="string" default="">
+  New username.
+</ParamField>
+<ParamField query="--bio" type="string" default="">
+  New bio text.
+</ParamField>
+<ParamField query="--location" type="string" default="">
+  New location text.
+</ParamField>
+<ParamField query="--avatar" type="string" default="">
+  New avatar image URL.
+</ParamField>
+
+Only the flags you pass are changed; omitted fields are left as-is.
+
+### `mfa verify`
+
+<ParamField query="--code" type="string" default="" required>
+  The 6-digit code from your authenticator app. Required.
+</ParamField>
+
+### `mfa disable`
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+### `feedback`
+
+<ParamField query="--rating" type="integer" default="">
+  Rating from 1–5. Optional.
+</ParamField>
+<ParamField query="--title" type="string" default="">
+  Short feedback title.
+</ParamField>
+<ParamField query="--description" type="string" default="">
+  Feedback details. If omitted along with `--title`, you're prompted for the rest interactively.
+</ParamField>
+
+## Consequences
+
+- `profile update` changes are account-wide and visible immediately wherever your profile is
+  shown; they don't affect running deployments or machines.
+- `mfa setup` generates a new TOTP secret and QR code every time it's run — running it again
+  before finishing `mfa verify` invalidates the previous, unfinished setup.
+- `mfa disable` removes two-factor protection from your account — password alone protects it
+  afterward.
+
+<Warning>
+  `mfa disable` reduces your account's protection to password-only. Make sure you have a
+  strong, unique password before disabling MFA.
+</Warning>
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash View and update profile
 beaver account profile show
-beaver account profile update
-beaver account mfa setup
-beaver account feedback
+beaver account profile update --full-name "Ada Lovelace" --location "Remote"
 ```
 
-Keep recovery information available before disabling multi-factor authentication.
+```bash Enable MFA
+beaver account mfa setup
+# scan the QR or enter the secret in your authenticator app
+beaver account mfa verify --code 123456
+```
+
+```bash Send feedback
+beaver account feedback --rating 5 --title "Love the CLI" --description "Deploy flow is great"
+```
+
+</CodeGroup>
+
+**Expected output** (`mfa setup`, reviewed against source):
+
+```text
+Secret: JBSWY3DPEHPK3PXP
+QR code (data URI — paste into a browser address bar to view):
+data:image/png;base64,...
+
+Add this to your authenticator app, then run: beaver account mfa verify --code <6-digit-code>
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `mfa verify` success | `✓ MFA enabled` | Two-factor authentication is now required at login. |
+| `mfa verify` wrong code | `that code wasn't accepted — check your authenticator app and try again` | Check the time on your device and authenticator app, retry. |
+| `mfa disable` declined | `Cancelled.` | Nothing changed; MFA remains on. |
+
+## Used in
+
+- [`login`](/cli/login) — sign in before managing your profile.

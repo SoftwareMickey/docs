@@ -1,0 +1,46 @@
+---
+title: "NATS"
+sidebarTitle: "NATS"
+description: "Provision a managed NATS server and attach it to your application."
+icon: "right-left"
+---
+
+NATS is a lightweight, high-performance messaging system — a simpler alternative to Kafka or
+RabbitMQ for services that need fast pub/sub or request/reply messaging without heavier
+broker overhead.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    2.10 (default), 2.11 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance by default; check `beaver service cluster create` for clustered setups.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-bus --type nats
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-bus --env-prefix NATS
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-bus
+beaver service resize paperclip-bus --cpu 1 --memory 512
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

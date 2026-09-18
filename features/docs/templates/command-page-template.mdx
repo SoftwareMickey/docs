@@ -1,0 +1,103 @@
+---
+title: "beaver {group} {verb}"
+sidebarTitle: "{verb}"
+description: "One sentence: what a user gets from this command."
+icon: "terminal"
+---
+
+{/*
+Era 2 V6 template — CLI Documentation Closure roadmap. Copy this file, fill each
+section, delete this comment block. Every section is required (Invariant 2);
+"N/A" with a one-line reason is an acceptable fill for Consequences/Results &
+Failures on a pure-read command, but the section still appears. Run every draft
+through /features/docs/DISCLOSURE.md before publishing (Invariant 6).
+
+Placeholder convention in this template: `curly braces` mark something to fill
+in. MDX parses bare `<angle-bracket-text>` outside code fences as JSX, so this
+template deliberately avoids that syntax anywhere except inside ```bash blocks,
+where it's inert text and matches how beaver's own --help output writes
+required/optional arguments.
+*/}
+
+## Purpose
+
+{/* Invariant 3: problem before syntax. One paragraph: what does a user reach
+for this command to do, and when. Not a restatement of the syntax. */}
+
+## Syntax
+
+```bash
+beaver {group} {verb} <required-arg> [optional-arg] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<required-arg>` | Yes | what it identifies, how to find a valid value |
+
+## Flags
+
+{/* One <ParamField> per flag. Shared flags (--wait, --yes, --json, etc.) link
+to /cli/shared-flags instead of restating their behavior (Invariant 8) — only
+note a *local* interaction here if this command's use of the shared flag
+differs from the norm. */}
+
+<ParamField query="--example-flag" type="string" default="">
+  What it controls. Accepted values. What happens if omitted.
+</ParamField>
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes) for the
+  general behavior; no command-specific interaction here.
+</ParamField>
+
+## Consequences
+
+{/* Invariant 4. Answer explicitly:
+- What changes — locally, remotely, or both?
+- Does this affect a running application? Is a redeploy/restart implied?
+- Is the action reversible? If not, say so plainly with a <Warning>.
+- What happens on failure or timeout, if the command can time out? */}
+
+<Warning>
+  Only include this block if the action is irreversible or affects a running
+  workload. Delete it for a pure-read command.
+</Warning>
+
+## Examples
+
+{/* Invariant 5: use the fixed fictional vocabulary from VOCABULARY.md. Show
+the simplest useful case first, then one realistic combination. */}
+
+<CodeGroup>
+
+```bash Basic
+beaver {group} {verb} example-id
+```
+
+```bash With flags
+beaver {group} {verb} example-id --example-flag value --yes
+```
+
+</CodeGroup>
+
+**Expected output:**
+
+```text
+paste or closely approximate real output — mark as verified or reviewed, see
+Era 13 V44's marking convention, once established
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | | |
+| A common error | | |
+
+## Used in
+
+{/* Invariant 7: link every task guide (Era 12) that exercises this command.
+Leave as a short list; do not restate the guide's content here. */}
+
+- `Guide name` (link once the Era 12 guide exists) — one clause on how this command fits
+  that workflow

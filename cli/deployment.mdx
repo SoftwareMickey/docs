@@ -1,15 +1,96 @@
 ---
 title: "beaver deployment"
-description: "Inspect and control deployments by deployment ID."
+sidebarTitle: "deployment"
+description: "Inspect and control individual deployments by deployment ID."
+icon: "list-check"
 ---
+
+While [`beaver deploy`](/cli/deploy) starts a new release and [`beaver
+container`](/cli/container) operates on a running container, `beaver deployment` is the
+history and control surface for **individual deployment attempts** — build progress, logs,
+retries, and cancellation, addressed by deployment ID.
+
+## Purpose
+
+Use `beaver deployment` when you need to look at (or act on) one specific deployment attempt
+rather than a container's current state — for example, watching a build in progress, reading
+its logs, or retrying/cancelling it.
+
+## Syntax
+
+```bash
+beaver deployment <subcommand> [deployment-id] [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | List deployments for a container. |
+| `show [deployment-id]` | Show one deployment's detail. |
+| `status [deployment-id]` | Show where the deployment sits: queued, building, hosting, healthy, failed, or cancelled — plus retry count and, if failed, why. |
+| `logs [deployment-id]` | Show HTTP request/access logs recorded for this deployment (method, path, status, latency) — not build logs. |
+| `watch <deployment-id>` | Follow a deployment live until it finishes. |
+| `retry <deployment-id>` | Retry a failed deployment. |
+| `cancel <deployment-id>` | Cancel an in-progress deployment. |
+
+## Flags
+
+<ParamField query="--container" type="string" default="">
+  On `list`: container name or ID. Omit to choose interactively.
+</ParamField>
+<ParamField query="--status" type="string" default="">
+  On `list`: only show deployments with this status.
+</ParamField>
+<ParamField query="--page" type="integer" default="1">
+  On `logs`: page number.
+</ParamField>
+<ParamField query="--limit" type="integer" default="100">
+  On `logs`: results per page (max 500).
+</ParamField>
+<ParamField query="--logs" type="boolean" default="false">
+  On `watch`: stream raw build/host logs instead of the live summary board.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `retry`/`cancel`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+`retry` starts a new build/deploy attempt for the same target; `cancel` stops an in-progress
+one. Neither affects a container's currently-running release until the retried/cancelled
+attempt itself would have replaced it.
 
 ## Examples
 
-```bash
-beaver deployment list <container>
-beaver deployment show <deployment-id>
-beaver deployment watch <deployment-id>
-beaver deployment retry <deployment-id>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List and inspect
+beaver deployment list --container api
+beaver deployment show dep_abc123
 ```
 
-Use this command for precise deployment history, progress, logs, retries, and cancellation.
+```bash Follow a build live
+beaver deployment watch dep_abc123
+```
+
+```bash Retry after a failure
+beaver deployment retry dep_abc123 --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `watch` on a finished deployment | Final status immediately, no live updates | Nothing further — it already finished. |
+| `retry` on a still-running deployment | An error explaining it isn't retryable yet | Wait for it to finish or fail, or `cancel` it first. |
+
+## Used in
+
+- [`deploy`](/cli/deploy) — creates the deployments this command inspects and controls.
+- [`container`](/cli/container) — `container <name> history` is the container-scoped view of
+  the same underlying deployment history.

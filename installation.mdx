@@ -113,6 +113,23 @@ This guide takes a fresh Linux server from nothing to a connected Beaver machine
 
 ---
 
+## Staying up to date
+
+Check your installed version any time with `beaver version`. Update in place with:
+
+```bash
+beaver update
+```
+
+This replaces the local binary with the latest release (or a specific one, with `beaver
+update --version <version>`) and requires a restart of any running `beaver` process before
+the new binary takes effect. If the requested version is already installed, `update` exits
+without changing anything.
+
+Beaver aims to keep the CLI and server compatible across recent versions, so you don't need
+to update immediately after every release — but if a command behaves unexpectedly or
+`beaver doctor` reports a version mismatch, updating is the first thing to try.
+
 ## Common installation problems
 
 <Tip>

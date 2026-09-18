@@ -1,0 +1,66 @@
+# Era 13 V45 — Disclosure boundary final sweep
+
+Full-repo grep of every `cli/*.mdx` page (60 files, all Eras 3–11 families plus the
+pre-existing pages Phase 2 touched) against the complete Era 2 V5 checkpoint-term list —
+both the infrastructure set (`reconcile`, `drift`, `desired state`, `contract`, `placement`,
+`routing`, `schema`, `orchestration`, `job`, `dispatch`, `queue`) and the AI-surface set
+(`tool definition`, `system prompt`, `context injection`, `tool-use loop`, `agent harness`,
+`model routing`). Every hit read manually, per the checklist — a hit is a prompt to check,
+not an automatic flag.
+
+## Zero hits (never appear anywhere in `cli/`)
+
+`contract`, `orchestration`, `dispatch`, `tool definition`, `system prompt`, `context
+injection`, `tool-use loop`, `agent harness`, `model routing`. `job` is used only as a
+literal noun in unrelated senses (none found describing an internal job-execution system).
+
+## Hits reviewed and found compliant
+
+- **`reconcile`/`drift`/`desired state`** (`autoscale.mdx`, `config.mdx`, `reconcile.mdx`,
+  `health.mdx`, `scaling.mdx`, `state.mdx`, `machine.mdx`): every instance either (a) quotes
+  a literal CLI flag/output string the user actually sees (`--no-reconcile`,
+  `fleet-drift`, "recorded desired state" — the exact wording of a real error message read
+  from `commands/statecmd/*.go`), or (b) describes the observable outcome only ("one row per
+  field that drifted, when detected, when cleared" — the same shape as the DISCLOSURE.md
+  worked example). One line tightened anyway for clarity, not because it was non-compliant:
+  `config.mdx`'s `sync` row changed from "reconcile the config file with..." to "bring the
+  config file back in line with..." to reduce checkpoint-term density even though the
+  original was already outcome-level.
+- **`placement`** (`cloud.mdx`, `scaling.mdx`, `service.mdx`): `cloud.mdx`'s "Workload
+  placement" section explicitly distinguishes `workload` (intent, what you configure) from
+  `placements` (history — which node a replica landed on, no algorithm described) — this is
+  the exact distinction the Era 6 V19 disclosure pass established, still holding.
+  `service.mdx`'s "placement" means only "which machine it's running on," shown, not decided.
+- **`routing`** (`domain.mdx`, `route.mdx`): generic infra vocabulary ("public routing
+  configuration," "public-routing health") — no routing algorithm or internal decision logic
+  described anywhere.
+- **`schema`** (`config.mdx`, `validate.mdx`): `config.mdx`'s `schema` subcommand section is
+  the gap-006 determination re-confirmed — it documents the JSON Schema for the user's own
+  local `.beaver/config.yml` file, explicitly stated as such ("a schema for your local YAML
+  file's shape, not a description of any internal processing behind it"). `validate.mdx`'s
+  "schema version" refers to the literal `schema_version` YAML key.
+- **`queue`** (`container.mdx`, `deployment.mdx`, `promote.mdx`): every instance is either a
+  literal status value the user sees (`queued`, part of the documented status enum
+  `queued|building|hosting|healthy|failed|cancelled`) or the `--no-queue` flag's documented,
+  observable effect ("fails immediately... instead of queueing... runs automatically once
+  the agent reconnects") — no queue implementation described.
+- **AI-surface terms**: zero hits across `ai.mdx`, `alie.mdx`, `skills.mdx` for any of the
+  six Era-11 terms. The one `scope` hit outside the `--scope` flag's own (observable, "which
+  knowledge rules apply where") meaning is this repo's own disclosure note stating what's
+  *not* documented — meta-commentary, not a leak.
+
+## Second pass
+
+Re-read the full hit list fresh a second time (not from memory of the first pass), per the
+Era 9/11 two-pass requirement extended here to the whole `cli/` tree per V45's scope. No
+additional findings. No sentence anywhere in `cli/*.mdx` explains *how* the platform decides,
+matches, schedules, or reconciles anything internally — every hit describes what the command
+does or what the user sees.
+
+## Result
+
+Acceptance-gate criterion 6 met: a reviewer can grep any published `cli/*.mdx` page for
+orchestration/routing/schema/internal-API language and find none that crosses the Invariant 6
+line. Zero redactions needed in this pass (contrast with Era 9 V30, which found and fixed one
+real leak-adjacent issue — a stale, never-shipped `contract show` page — before this sweep
+even started).

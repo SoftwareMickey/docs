@@ -1,0 +1,46 @@
+---
+title: "Connecting to services locally"
+description: "Open an authenticated tunnel to a managed service's database — it's never exposed on a public port."
+sidebarTitle: "Connecting to services locally"
+icon: "network-wired"
+---
+
+A managed service's database isn't exposed on a public port. To reach it from your own
+machine — a SQL client, a GUI database tool, a script — you open a **tunnel** through Beaver.
+
+```bash
+beaver service connect paperclip-db --local-port 5433
+```
+
+## Why not just expose the port
+
+Every publicly reachable port is one more thing to secure and monitor. A tunnel gets you the
+same access — run queries against `paperclip-db` from your own client — without the database
+ever needing a public-facing port at all.
+
+## What you can see and control
+
+Opening a tunnel binds a local port on your machine (pick one, or let Beaver choose a free
+one) and relays it through an authenticated, encrypted connection to the service's real
+database. The tunnel has a lease lifetime; the server picks a reasonable default, and you
+can request a longer one up to a maximum.
+
+## When it stops working
+
+The tunnel closes when its lease expires or you end it — reconnect if you need it longer.
+If the connection fails immediately rather than after a lease expiry, check that the service
+itself is running before assuming a networking problem.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services" href="/concepts/services">
+    The service you're connecting to.
+  </Card>
+  <Card title="Service databases and credentials" href="/concepts/service-databases-and-credentials">
+    The credentials your local client will need.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    `connect`'s exact syntax and flags.
+  </Card>
+</CardGroup>

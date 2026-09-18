@@ -1,15 +1,173 @@
 ---
 title: "beaver firewall"
-description: "Manage deployment firewall policy, rules, bans, and WAF settings."
+sidebarTitle: "firewall"
+description: "Manage Beaver Firewall policy, rules, bans, WAF, and visibility for a deployment."
+icon: "shield-halved"
 ---
+
+<Info>
+  New here? [Firewall](/concepts/firewall) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+`beaver firewall` (this page) is the **machine-deployment-scoped** firewall — addressed by
+deployment ID. [`beaver edge firewall`](/cli/edge#edge-firewall) is its Connected-App-scoped
+mirror, with the same rule/policy model applied to a Connected App's traffic instead.
+
+## Purpose
+
+Beaver Firewall is per-router WAF/rate-limit/header/IP policy for a managed container,
+addressed by deployment ID (stable across redeploys). Use `--service` for one service within
+a Compose stack that shares a deployment ID.
+
+## Syntax
+
+```bash
+beaver firewall <subcommand> <deployment-id> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `overview <deployment-id>` | Firewall status at a glance. |
+| `policy <deployment-id>` / `policy set <deployment-id>` | Show or change firewall policy. |
+| `rules <deployment-id>` | List rules. |
+| `rule add/update/delete <deployment-id>` | Manage individual rules. |
+| `revisions <deployment-id>` | Firewall change history. |
+| `rollback <deployment-id> <revision-id>` | Roll back to a previous revision. |
+| `events <deployment-id>` | Blocked/allowed request events. |
+| `preset apply <deployment-id>` | Apply a named preset. |
+| `intel <deployment-id>` | Threat-intelligence signals for this deployment. |
+| `bans <deployment-id>` / `ban <deployment-id>` / `unban <deployment-id> <ip>` | List, add, or remove IP bans. |
+| `login-protect <deployment-id>` | Configure brute-force protection on a login path. |
+| `lockdown <deployment-id>` / `unlock <deployment-id>` | Block, or restore, all traffic. |
+| `visibility <deployment-id>` / `visibility set <deployment-id>` | Show, or change, whether a service is public or internal-only. |
+| `waf <deployment-id>` / `waf set <deployment-id>` | Show or change WAF configuration. |
+
+## Flags
+
+<ParamField query="--service" type="string" default="">
+  Compose service name, for a stack sharing this deployment ID. Applies to every subcommand.
+</ParamField>
+<ParamField query="--enabled" type="string" default="">
+  On `policy set`/`waf set`: `true` or `false`.
+</ParamField>
+<ParamField query="--security-headers" type="string" default="">
+  On `policy set`: `true` or `false`.
+</ParamField>
+<ParamField query="--max-body-bytes" type="integer" default="0">
+  On `policy set`: max request body size in bytes.
+</ParamField>
+<ParamField query="--rate-limit" type="integer" default="0">
+  On `policy set`: requests-per-minute cap.
+</ParamField>
+<ParamField query="--concurrency" type="integer" default="0">
+  On `policy set`: max concurrent requests.
+</ParamField>
+<ParamField query="--type" type="string" default="" required>
+  On `rule add`: condition type — `ip`, `path`, `method`, `query`, or `header`. Required.
+</ParamField>
+<ParamField query="--action" type="string" default="" required>
+  On `rule add`: `allow`, `block`, `rate-limit`, or `challenge`. Required.
+</ParamField>
+<ParamField query="--value" type="string" default="">
+  On `rule add`: condition value.
+</ParamField>
+<ParamField query="--method" type="string" default="">
+  On `rule add`: HTTP method to match — only used when `--type method`.
+</ParamField>
+<ParamField query="--conditions" type="string" default="">
+  On `rule update`: new conditions, as raw JSON.
+</ParamField>
+<ParamField query="--limit" type="integer" default="0">
+  On `revisions`/`events`: max results to return.
+</ParamField>
+<ParamField query="--grouped" type="boolean" default="false">
+  On `events`: group events by rule/IP instead of a flat list.
+</ParamField>
+<ParamField query="--preset" type="string" default="" required>
+  On `preset apply`: preset name. Required.
+</ParamField>
+<ParamField query="--ip" type="string" default="" required>
+  On `ban`: IP address. Required.
+</ParamField>
+<ParamField query="--reason" type="string" default="">
+  On `ban`: reason for the ban.
+</ParamField>
+<ParamField query="--duration" type="integer" default="">
+  On `ban`: ban duration in minutes. Defaults to the server default.
+</ParamField>
+<ParamField query="--path" type="string" default="" required>
+  On `login-protect`: login path to protect. Required.
+</ParamField>
+<ParamField query="--threshold" type="integer" default="">
+  On `login-protect`: failed attempts before banning.
+</ParamField>
+<ParamField query="--public" type="boolean" default="false">
+  On `visibility set`: make the service publicly reachable.
+</ParamField>
+<ParamField query="--private" type="boolean" default="false">
+  On `visibility set`: make the service internal-only.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `rule delete`/`unban`/`lockdown`: skip the confirmation prompt.
+</ParamField>
+
+More specific rules and explicit `allow`/`block` decisions take precedence over general
+policy — beyond that, the internal evaluation order isn't exposed here.
+
+## Consequences
+
+<Warning>
+  `lockdown` blocks **all** traffic to the deployment, not just traffic matching a rule — use
+  it for an active incident and run `unlock` to restore normal traffic.
+</Warning>
+
+<Warning>
+  `visibility set --private` makes the service unreachable from outside your private network
+  immediately. Confirm nothing external depends on it before switching.
+</Warning>
+
+`rollback` replaces the deployment's current firewall configuration with a prior revision —
+whatever is set now is overwritten, not merged.
 
 ## Examples
 
-```bash
-beaver firewall overview <deployment-id>
-beaver firewall rules <deployment-id>
-beaver firewall rule add <deployment-id> --type ip --action block --value 203.0.113.10
-beaver firewall lockdown <deployment-id> --yes
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Check status
+beaver firewall overview dep_abc123
 ```
 
-Firewall rules support IP, path, method, query, and header conditions. Lockdown blocks all traffic until unlocked. Use `--service` for an individual Compose service.
+```bash Add a rate-limit rule
+beaver firewall rule add dep_abc123 --type path --value /login --action rate-limit
+```
+
+```bash Ban an IP
+beaver firewall ban dep_abc123 --ip 203.0.113.10 --reason "credential stuffing"
+```
+
+```bash On one Compose service
+beaver firewall policy dep_abc123 --service api
+```
+
+```bash Emergency lockdown
+beaver firewall lockdown dep_abc123 --yes
+beaver firewall unlock dep_abc123
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `rule add` missing `--type`/`--action` | Required-flag error | Pass both. |
+| `visibility set` with neither `--public` nor `--private` | An error asking for one | Pass exactly one. |
+| `lockdown` declined | Command exits without change | Traffic continues normally. |
+
+## Used in
+
+- [`edge`](/cli/edge#edge-firewall) — the Connected-App-scoped mirror of this same model.

@@ -1,14 +1,75 @@
 ---
 title: "beaver agent"
-description: "Manage the local Beaver background service."
+sidebarTitle: "agent"
+description: "Manage beaverd, the background service that keeps a machine connected to Beaver."
+icon: "circle-nodes"
 ---
+
+<Info>
+  New here? [Machine and agent operation](/concepts/machine-and-agent-operation) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaverd` is the background agent that must be running for `beaver machine` commands and
+deployments to reach a given host — `beaver connect` installs and starts it automatically,
+but you'll reach for `beaver agent` directly to check its status, restart it after a system
+change, or follow its logs while troubleshooting.
+
+## Syntax
+
+```bash
+beaver agent <subcommand>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `install` | Install and start `beaverd` as a background service. |
+| `start` | Start the service. |
+| `stop` | Stop the service. |
+| `restart` | Restart the service. |
+| `status` | Show the service's current status. |
+| `logs` | Follow the service's logs. |
+
+## Consequences
+
+`beaver connect` must be able to reach a running `beaverd` to verify a machine — stopping the
+agent (`agent stop`) makes that machine unreachable for `machine`/`deploy`-style commands
+until it's started again. `restart` briefly interrupts that reachability while the service
+comes back up; it doesn't affect containers already running on the machine.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Install and check
 beaver agent install
 beaver agent status
+```
+
+```bash Restart after a system change
+beaver agent restart
+```
+
+```bash Follow logs while troubleshooting
 beaver agent logs
 ```
 
-Install and inspect the service that keeps an enrolled machine available to Beaver. Use `beaver agent start` or `beaver agent stop` to control it. Run `beaver doctor` when setup or connectivity fails.
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `status` — running | Service status and uptime | Nothing — informational. |
+| `status` — not running | Service reported as stopped | Run `beaver agent start`, or `beaver doctor` if it won't start. |
+| Machine unreachable from `beaver machine`/`deploy` | Connection error naming the machine | Check `beaver agent status` on that machine; run `beaver doctor`. |
+
+## Used in
+
+- [`connect`](/cli/connect) — installs and starts the agent as part of the connect wizard.
+- [`doctor`](/cli/doctor) — verifies the agent connection as one of its checks.

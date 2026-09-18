@@ -1,18 +1,264 @@
 ---
 title: "beaver deploy"
-description: "Deploy the current Dockerfile project or Compose stack."
+sidebarTitle: "deploy"
+description: "Build and deploy one application from your Dockerfile or a connected GitHub repository."
+icon: "rocket"
 ---
+
+<Info>
+  New here? [Deployments](/concepts/deployments) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver deploy` (or just `beaver` with no subcommand) builds and deploys the application in
+your current directory. It always requires a Dockerfile — see [Dockerfile
+requirements](/deploying/dockerfile-requirements) for what Beaver expects in it; there is no
+auto-detection or auto-dockerization of frameworks. For [deployment configuration](/deploying/deployment-configuration)
+(ports, resources, health checks) and [environment variables](/deploying/environment-variables),
+see those guides — this page covers the command itself.
+
+## Required deployment target
+
+Every deployment runs in a [Beaver Cloud](/concepts/beaver-cloud). Select an existing
+cloud in the wizard, pass `--cloud production`, or save `cloud: production` in
+`.beaver/config.yml`. Beaver chooses the builder and host from that cloud.
+
+If you have no cloud yet, create one and add your machines:
+
+```bash
+beaver cloud create production
+beaver deploy --cloud production
+```
+
+The create command lets you select enrolled machines. A cloud needs available machines
+before it can run your application. Deployment stops with guidance if no cloud exists;
+it never falls back to a standalone node.
+
+## Syntax
+
+```bash
+beaver deploy [flags]
+```
+
+Takes no positional arguments. What gets deployed depends on your current directory and
+flags, in this order:
+
+1. `--git` forces the GitHub-repository wizard outright — pick any repository your connected
+   GitHub account can see, not just the one you're standing in.
+2. A Dockerfile (`./Dockerfile`, or the path given by `--dockerfile`) is the default for any
+   directory that has one — Beaver discovers the git remote, branch, and exact commit from
+   your local working tree and deploys that precise revision. This is what `beaver deploy`
+   does with zero flags in a normal project directory.
+3. Otherwise, the GitHub-repository wizard (the same one `--git` forces).
+
+**Compose projects are deliberately explicit** — a `compose.yml` beside a Dockerfile does not
+change this command's behavior; use [`beaver compose deploy`](/cli/compose) for a multi-service
+release instead. Beaver never infers a Compose file means you wanted one.
+
+`beaver deploy` never uploads, packages, or otherwise transfers your directory's files
+anywhere — "deploy the current directory" means Beaver discovers which git remote and
+revision it corresponds to, then the enrolled builder machine clones and builds that revision
+itself from GitHub. Only a git reference (repo, branch, commit) travels from your machine to
+Beaver.
+
+Before deploying, the command refuses to run with uncommitted local changes or unpushed
+commits — what gets built must be something the builder machine can independently fetch from
+the remote.
+
+**A given repository + branch is deployed once.** The first `beaver deploy` for a
+repository+branch registers it; a normal `git push` to that branch triggers every later
+release automatically. Running `beaver deploy` again for the same repository+branch is
+refused with a pointer to the existing deployment — use [`beaver container <name>
+redeploy`](/cli/container) instead.
+
+<Note>
+  Standalone node targets are no longer supported. Legacy `--machine`, `--best-machine`,
+  `--host-id`, and `--builder-id` flags return a migration error. Replace them with `--cloud`.
+</Note>
+
+## Flags
+
+### Core
+
+<ParamField query="--git" type="boolean" default="false">
+  Use the GitHub-repository deploy wizard instead of local Dockerfile discovery.
+</ParamField>
+<ParamField query="--dockerfile" type="string" default="">
+  Path to the Dockerfile to deploy. Must be inside the detected git repository.
+</ParamField>
+<ParamField query="--logs" type="boolean" default="false">
+  Stream raw build/host logs instead of the live summary board.
+</ParamField>
+<ParamField query="--dry-run" type="boolean" default="false">
+  Run every preflight check and print the plan, but don't actually deploy.
+</ParamField>
+<ParamField query="--cloud" type="string" default="">
+  Select the required [Beaver Cloud](/cli/cloud) by name or slug. Beaver chooses the builder
+  and host from its members.
+  Overrides a committed `cloud:` pin in `.beaver/config.yml` for this deploy only.
+</ParamField>
+<ParamField query="--auto-create-environment" type="boolean" default="false">
+  Create a new environment for this branch without prompting. For non-interactive/CI use.
+</ParamField>
+<ParamField query="--skip-preflight" type="boolean" default="false">
+  Proceed even if preflight reports a blocking finding. Recorded as a server-side audit row.
+</ParamField>
+<ParamField query="--acknowledge-data-loss" type="boolean" default="false">
+  Proceed even though this deploy drops a volume the running release mounts. See Consequences
+  below.
+</ParamField>
+
+### Non-interactive / CI
+
+Passing `--project-id`, `--repo`, `--branch`, `--cloud`, `--container-name`, and
+`--docker-user` together skips every interactive prompt — this is the supported path for
+scripted and CI deploys.
+
+<ParamField query="--project-id" type="string" default="" required>
+  Target project ID. Required for non-interactive mode.
+</ParamField>
+<ParamField query="--repo" type="string" default="" required>
+  GitHub repository to deploy: `owner/repo` or a full GitHub URL. Required.
+</ParamField>
+<ParamField query="--branch" type="string" default="" required>
+  Git branch to deploy. Required.
+</ParamField>
+<ParamField query="--commit" type="string" default="">
+  Exact commit SHA to pin the deploy to. Defaults to the branch's current tip.
+</ParamField>
+<ParamField query="--deployment-path" type="string" default="">
+  Subdirectory the Dockerfile/build context lives in, for a monorepo. Defaults to the repo
+  root.
+</ParamField>
+<ParamField query="--container-name" type="string" default="">
+  Container name. Defaults to `deployment.container_name` from `.beaver/config.yml`.
+</ParamField>
+<ParamField query="--image" type="string" default="">
+  Docker image name. Defaults to `deployment.image` from `.beaver/config.yml`, else
+  `<docker-user>/<container-name>`.
+</ParamField>
+<ParamField query="--docker-user" type="string" default="" required>
+  Docker Hub username used for image tags. Required for non-interactive mode.
+</ParamField>
+<ParamField query="--container-port" type="integer" default="">
+  Port the app listens on inside the container. Defaults to `deployment.port` from
+  `.beaver/config.yml`; required (one way or the other) for non-interactive mode.
+</ParamField>
+<ParamField query="--host-port" type="integer" default="">
+  Public host port. Defaults to the same value as `--container-port`.
+</ParamField>
+<ParamField query="--env" type="string" default="production">
+  Deployment environment: `production`, `staging`, or `development`.
+</ParamField>
+<ParamField query="--environment-id" type="string" default="">
+  A specific [environment](/cli/environment) ID to deploy into — skips branch-based
+  environment resolution entirely.
+</ParamField>
+<ParamField query="--env-file" type="string" default="">
+  Path to a `.env`-style file of environment variables to set. See [environment
+  variables](/deploying/environment-variables).
+</ParamField>
+<ParamField query="--env-var" type="string" default="">
+  An environment variable to set, `KEY=value`. Repeatable. Distinct from `--env`, which is the
+  deployment environment name.
+</ParamField>
+<ParamField query="--framework" type="string" default="">
+  Optional framework hint. This does not change how the image is built — your Dockerfile is
+  always the build source — it's metadata only (used for display, not build behavior).
+</ParamField>
+<ParamField query="--network" type="string" default="">
+  A Docker network this container must already find on the target host, `NAME` or
+  `NAME:ALIAS`. Repeatable. Agent-hosted deploys only.
+</ParamField>
+<ParamField query="--volume" type="string" default="">
+  A named Docker volume this container must already find on the target host,
+  `NAME:TARGET`. Repeatable. Agent-hosted deploys only.
+</ParamField>
+<ParamField query="--bind" type="string" default="">
+  A host path to bind-mount into the container, `SOURCE:TARGET` or `SOURCE:TARGET:ro`.
+  Repeatable. Agent-hosted deploys only — a security warning prints for privileged paths like
+  `/var/run/docker.sock`.
+</ParamField>
+
+### Shared
+
+<ParamField query="--wait" type="boolean" default="false">
+  Block until the deploy reaches a terminal state instead of returning once it's accepted.
+  See [shared flags](/cli/shared-flags#wait) for exactly what this waits for and what happens
+  on timeout.
+</ParamField>
+
+## Consequences
+
+A deploy builds a new image from your Dockerfile and starts a new release; whether this
+causes downtime depends on your deployment configuration (see [deployment
+configuration](/deploying/deployment-configuration)). Preflight runs first and can block the
+deploy on a finding — `--skip-preflight` overrides that block but is recorded as an audit
+row, not a silent bypass.
+
+<Warning>
+  If a deploy would drop a volume the running release currently mounts, it's blocked by
+  default — pass `--acknowledge-data-loss` only once you've confirmed that data loss is
+  intended. There is no undo for a dropped volume.
+</Warning>
 
 ## Examples
 
-```bash
-beaver
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Local Dockerfile
+cd paperclip/
 beaver deploy
-beaver deploy --single
+```
+
+```bash Deploy from a GitHub repo
 beaver deploy --git
+```
+
+```bash Dry run
 beaver deploy --dry-run
 ```
 
-`beaver` and `beaver deploy` deploy the current project. Beaver detects a Compose project or Dockerfile, unless you select `--single` or `--git`. Use `--dry-run` to complete preflight without deploying, `--logs` to stream build output, and `--wait` for CI.
+```bash Non-interactive / CI
+beaver deploy \
+  --project-id proj_abc \
+  --repo ada/paperclip \
+  --branch main \
+  --cloud production \
+  --container-name paperclip-web \
+  --docker-user ada \
+  --wait
+```
 
-For scripted deployment, provide `--project-id`, `--repo`, `--branch`, `--host-id`, `--container-name`, `--docker-user`, and `--container-port`. Run `beaver deploy --help` for the full flag set.
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+✓ Preflight passed
+Building paperclip-web from Dockerfile...
+✓ Build complete
+✓ Deployed to srv_web01
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Deployment started in the selected Beaver Cloud | Check `beaver deployment list` or `beaver status`. |
+| Uncommitted/unpushed changes | Refusal naming the issue | Commit and push, then retry. |
+| Repository+branch already deployed | Refusal pointing at the existing deployment | Use `beaver container <name> redeploy`, or push to the branch to trigger a normal release. |
+| Preflight blocks | A blocking finding listed | Fix it, or pass `--skip-preflight` if intentional (audited). |
+| Volume would be dropped | Blocked with a data-loss warning | Confirm intent, then pass `--acknowledge-data-loss`. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — the full connect-to-promote walkthrough.
+- [Dockerfile requirements](/deploying/dockerfile-requirements)
+- [Deployment configuration](/deploying/deployment-configuration)
+- [Environment variables](/deploying/environment-variables)

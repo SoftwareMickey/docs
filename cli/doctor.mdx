@@ -1,12 +1,114 @@
 ---
 title: "beaver doctor"
-description: "Diagnose local Beaver prerequisites and connection health."
+sidebarTitle: "doctor"
+description: "Diagnose local Beaver prerequisites and connection health, with safe auto-repair."
+icon: "stethoscope"
 ---
+
+<Info>
+  New here? [Machine and agent operation](/concepts/machine-and-agent-operation) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Run `beaver doctor` after installation, before [`beaver connect`](/cli/connect), or any time
+an enrolled machine or your local setup stops working. It checks the system, network, Docker,
+Git, authentication, workspace, machine registration, capabilities, and the Beaver Agent —
+the same prerequisites `connect` walks through — and offers to fix what it safely can.
+
+## Syntax
+
+```bash
+beaver doctor [flags]
+```
+
+Takes no arguments.
+
+## Flags
+
+<ParamField query="--verbose" type="boolean" default="false">
+  Show additional safe technical details and the exact commands executed during checks and
+  repairs. Equivalent to `BEAVER_DEBUG=1`.
+</ParamField>
+
+## What each check reports
+
+Every check resolves to one of four statuses:
+
+| Status | Symbol | Meaning |
+| --- | --- | --- |
+| Healthy | `✓` | The check passed. |
+| Warning | `⚠` | Non-blocking issue — worth attention, doesn't fail the run. |
+| Failed | `✗` | Blocking issue — must be resolved for this machine to work with Beaver. |
+| Skipped | `○` | Not applicable in this environment. |
+
+A check only passes after `doctor` verifies the real, current condition — it never assumes a
+previous pass still holds. Each result includes a short summary and, when relevant, a "Why"
+line and a "Next" action to take. With `--verbose`, a "Technical" line adds the exact
+underlying check performed.
+
+## Consequences
+
+For issues `doctor` can repair locally (for example, adding your user to the Docker group),
+it lists them and asks **"Fix now?"** before touching anything — nothing is changed without
+that confirmation. After repairing, it rechecks the repaired conditions automatically.
+
+<Note>
+  Some repairs (like Docker group membership) only take effect in a new terminal session —
+  `doctor` tells you explicitly when this applies and what to do (close and reopen your
+  terminal or SSH session, then run `beaver connect` to continue).
+</Note>
 
 ## Examples
 
-```bash
-beaver doctor [--verbose]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver doctor
 ```
 
-Run this after installation, before `connect`, and when an enrolled machine becomes unavailable. Fix the first failed check, then retry.
+```bash With technical detail
+beaver doctor --verbose
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+Beaver Doctor
+
+Beaver is checking this machine and the live services it depends on.
+A check only passes after Beaver verifies the real condition.
+
+✓ Docker installation — Docker is installed
+✓ Docker daemon — Docker daemon is running
+✗ Docker access — Your user can't run docker without sudo
+  Why: Your user isn't in the docker group yet.
+  Next: Beaver can add you to the docker group.
+
+Beaver can safely repair the following local issues:
+  • Docker access: Your user can't run docker without sudo
+
+Fix now? [Y/n]
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Everything passes | "Everything looks good. This machine is ready for Beaver." | Nothing further. |
+| Only warnings | "Core checks passed, with warnings shown above." | Optional to address. |
+| A failed check with no auto-repair | `✗` with a "Next" action, exit code non-zero | Follow the printed next action, then re-run. |
+| A repair completes | `✓ Repair command completed`, then a recheck | Continue; rerunning `doctor` is always safe. |
+
+## Used in
+
+- [Connect and machine roles](/guides/connect-and-machine-roles) — run `doctor` any time a
+  connected machine seems off.
+- [`connect`](/cli/connect) — `doctor` checks the same prerequisites the connect wizard
+  walks through, and is the first thing to run if `connect` or a machine stops working.

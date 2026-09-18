@@ -1,0 +1,50 @@
+---
+title: "Integrations"
+description: "Connect GitHub so Beaver can see your repositories, deploy from them, and keep pulling new commits."
+sidebarTitle: "Integrations"
+icon: "plug"
+---
+
+An **integration** connects a third-party service — currently GitHub — to your workspace, so
+Beaver can see your repositories when you link a project instead of you deploying from a
+local directory every time.
+
+```bash
+beaver integrations
+beaver github
+```
+
+## Why bother
+
+Without an integration, "deploying" means running `beaver deploy` from wherever your code
+happens to be checked out. With GitHub connected, a project can track a repository directly —
+new commits are visible to Beaver the moment they land, and you don't have to be at your
+laptop with the right branch checked out for a deploy to happen.
+
+## What you can see and control
+
+Connecting GitHub asks you to authorize Beaver's GitHub App and choose which repositories it
+can see — all of them, or a selected subset. `beaver integrations` lists what's connected;
+`beaver github` manages the connection, including which repositories are selectable when
+you link a project. Disconnecting revokes access immediately; projects already linked keep
+their last-known settings but can't pull new commits until reconnected.
+
+## When access breaks
+
+Access can expire or be revoked from GitHub's side — an org admin removes the app, a token
+expires — without Beaver initiating it. If a project stops seeing new commits, check the
+integration's status first before assuming the problem is on Beaver's end.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Projects" href="/concepts/projects">
+    Where linking a repository actually happens.
+  </Card>
+  <Card title="Integrations command reference" href="/cli/integrations">
+    Exact syntax for listing and managing integrations.
+  </Card>
+  <Card title="GitHub command reference" href="/cli/github">
+    Repository selection and connection management.
+  </Card>
+</CardGroup>

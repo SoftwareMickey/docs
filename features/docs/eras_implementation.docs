@@ -1,0 +1,305 @@
+# CLI Documentation Closure — Era Implementation Status
+
+A per-era rollup across the ~47-version roadmap (`00-architecture.docs`). Summary/index
+only — each era's `.docs` file carries its own per-version Goal/Reuses/Implement/Validate/
+Done-when, and `gaps/00-index.docs` carries the open questions found during audit.
+
+Legend: ✅ done · 🟡 in progress · ⬜ not started · ⚠️ partial · ⛔ blocked
+
+**Overall: ✅ All four phases done, verified 2026-09-17 · re-verified 2026-09-17. Phase 1
+(Eras 1–2): ground truth and templates — re-verification found and fixed 3 real extraction
+bugs (`gaps/011`) and a stale flag-count figure (`gaps/009`). Phase 2 (Eras 3–11): every
+family reference page published — re-verification (a systematic per-family flag-coverage
+cross-check, all 54 groups) found and closed 2 planning omissions (`environment`, `project`
+never assigned to any era) plus a third unassigned group (`speccmd`, now `cli/spec.mdx`),
+rewrote 3 pre-existing stub pages that predated this roadmap and were never actually
+completed despite "documented" status (`environment.mdx`, `project.mdx`, `init.mdx`), and
+added missing flags to 5 otherwise-substantial pages (`config`, `alie`, `edge`, `firewall`,
+`container`) — full account in `gaps/012`. Phase 3 (Era 12): four task guides published, nav
+wired, every Era 1 naming ambiguity traced to its resolution — `gaps/003` (`plan`/`plans`)
+now fully resolved rather than deferred: both are real, current commands, confirmed via
+source. Phase 4 (Era 13): every example marked verified-or-reviewed, a full-repo disclosure
+sweep found zero leaks — re-swept 2026-09-17 across every page changed in re-verification,
+same result. The per-change gate lives in `beaver-cli/CLAUDE.md`, the periodic-refresh
+cadence is recorded in `00-architecture.docs` (the per-family flag-coverage cross-check used
+in this re-verification is now the recommended first step of that cadence, per `gaps/012`).
+`mint broken-links` clean throughout.**
+
+Repo: `mintlify` (this repo — the docs site). Source of truth audited: `beaver-cli`
+(`~/Desktop/vhb/beaver-cli`, `commands/`, 458 Go files, ~65 top-level groups). Backend
+(`~/Desktop/works/vhb-server`) is referenced only if a command's behavior needs server-side
+confirmation (mirrors how `features/cloud/eras_implementation.docs` in `beaver-desktop`
+flags "the code wins" over stale docs) — not otherwise in scope.
+
+---
+
+## Pre-work already captured (folds into Era 1)
+
+A first-pass census was run against `beaver-cli/commands/` while scoping this roadmap:
+
+- Full `Use:` extraction across all 458 Go files (415 command definitions found).
+- Per-group flag-definition site counts (proxy for doc effort): `machine` 60, `config` 55,
+  `alie` 53, `edge` 42, `firewall` 41, `service` 37, `cloud` 34, `deploy` 32, `scaling` 24,
+  `compose` 24, and a long tail down to single-digit groups.
+- Diff of `beaver-cli/commands/*` directories against `cli/*.mdx` basenames: 28 command
+  groups have **no** matching doc page (`admin`, `auth`, `autoscale`, `cloud`, `config`,
+  `coupon`, `deployui`, `envbanner`, `health`, `initcmd`, `integration`, `internal`,
+  `mcpcmd`, `mystic`, `observability`, `preflight`, `projectconfig`, `projectcontext`,
+  `projectcontract`, `promote`, `reconcilecmd`, `route`, `service`, `skillscmd`, `speccmd`,
+  `state`, `statecmd`, `ui`); 15 existing doc pages have no matching top-level command
+  directory (`containers`, `contract`, `init`, `integrations`, `login`, `logout`, `logs`,
+  `metrics`, `plan`, `plans`, `shell`, `traffic`, `validate`, `version`, `whoami`) — several
+  of these are legitimate (they map to a subcommand of an undocumented parent, e.g.
+  `logs`/`metrics`/`traffic` → `observability`; `login`/`logout`/`whoami` → `auth`), others
+  may be stale (`plan`/`plans` predate the current model per `CLAUDE.md`).
+- Full subcommand listing pulled for the two largest zero-coverage groups: `service` (37
+  distinct `Use:` strings across `service`, `database`, `cluster`, `backup-destination`
+  subgroups) and `cloud` (29 distinct `Use:` strings).
+- `statecmd` (`apply`/`drift`/`history`/`pull`/`rollback`/`status`) and `projectcontract`
+  (`plan`/`diff`/`push`/`pull`/`rollback`/`status`/`validate`/`containers`/`delete`) flagged
+  as the highest disclosure-risk families — their vocabulary (drift, reconcile, contract,
+  plan) is adjacent to the internal deployment-contract schema `CLAUDE.md` names as a trade
+  secret.
+
+**This pre-work does not replace Era 1** — V1–V4 formalize it into the checked-in,
+row-per-command inventory this roadmap is graded against, including flag-level detail (not
+just subcommand names) and a maturity classification per row (implemented-usable /
+available-but-limited / placeholder-unfinished / documented-but-stale).
+
+---
+
+## Phase 1 — Ground truth
+
+### Era 1 — Command Inventory & Audit (V1–V4) — ✅ done, verified 2026-09-17 · **GATING**
+
+Built as real, checked-in artifacts under `inventory/`, not just prose:
+
+- **V1** `extract_commands.py` — parses every `.go` file under `beaver-cli/commands/` for
+  literal `&cobra.Command{}` definitions (Pass A) and factory-function-generated commands
+  (Pass B: `return &cobra.Command{}` inside a helper, resolved package-wide since Go files in
+  one directory share a package; Pass C: commands passed inline into `AddCommand()` with no
+  variable). Flags are attributed by matching each `<var>.Flags().XVar(...)` call's receiver
+  variable back to the command it was declared against — the actual pattern this codebase
+  uses (flags registered in a bottom-of-file `init()`, not nested in the literal). Iterated
+  four times against real bugs found by spot-checking (Validate's own instruction): an
+  attribution bug that put a different command's flags on the wrong page, a regex that
+  silently dropped every other line in a multi-command `var (...)` block, and two rounds of
+  cross-file/inline factory-call resolution. Final spot-check against the 5 named groups
+  (service, cloud, config, machine, alie) matched independent manual greps closely.
+  **439 distinct commands, 481 flags, 53 real command-group directories.**
+  **Re-verified 2026-09-17** (per-era status headers had drifted out of sync with these
+  artifacts — see `01-command-inventory-and-audit.docs`'s own note): a repeat of this same
+  spot-check found 3 more real extraction bugs — anonymous inline command literals
+  (`config init`/`config sync`), two root-level commands entirely outside `commands/`
+  (`beaver shell`, `beaver destroy` — the latter destructive and completely undocumented),
+  and systematically off source line numbers. All fixed in `extract_commands.py`; pipeline
+  re-run end to end. **Now 443 distinct commands, 54 real command-group directories.** Full
+  account in `gaps/00-index.docs` entry 011.
+- **V2** `cross_reference.py` — diffs command groups against `cli/*.mdx`, applying the
+  manual mapping worked out for the 15 orphaned pages found in scoping (observability
+  subcommands, auth subcommands, etc.). Output: `doc_status.csv`.
+- **V3** maturity pass folded into `build_summary.py` — checked for `Hidden: true` (found:
+  all 3 `admin` commands, 1 `mcpcmd` command) and stub/TODO patterns (repo-wide grep found
+  exactly one: `ai connect`'s API-key path is genuinely unimplemented, falls back to
+  subscription sign-in — the CLI is otherwise not stubbed, confirming `docs.txt`'s own
+  framing that the gap is documentation, not unfinished code).
+- **V4** `00-summary.docs` — the consolidated artifact. Also found, not anticipated in
+  scoping: **7 directories with zero `cobra.Command` definitions anywhere**
+  (`deployui`, `envbanner`, `internal`, `projectconfig`, `projectcontext`, `state`, `ui` — 43
+  files total, confirmed by direct grep) — these are support/library packages, not CLI
+  surface, and are excluded from the inventory entirely rather than treated as an
+  undocumented gap. This resolves `gaps/004` (`internal`'s publication status) definitively
+  rather than leaving it a judgment call for Era 10.
+
+**Headline finding:** `service` (46 commands, incl. nested `database`/`cluster`/
+`backup-destination`) and `cloud` (31 commands) are the two largest command groups in the
+entire CLI and have **zero** existing documentation — matches the pre-work estimate exactly.
+
+### Era 2 — Disclosure Boundary & Templates (V5–V7) — ✅ done, verified 2026-09-17
+
+- **V5** `DISCLOSURE.md` — the checklist, the named checkpoint-term list, and two worked
+  examples (`machine drain` compliant-as-written; `state drift` shown both compliant and
+  non-compliant, calibrated directly against the `docs.txt` `--wait` example).
+- **V6** `templates/command-page-template.mdx` + `templates/example-machine-reboot.mdx` (the
+  worked example, filled from real, source-verified `beaver machine reboot`/`reboot-impact`
+  behavior in `commands/machine/maintenance.go`). Both rendered via a live `mint dev` and
+  fetched over HTTP (200, correct `<title>`, components confirmed rendered rather than
+  showing as literal escaped text) — caught and fixed one real bug along the way: MDX
+  requires `{/* */}` comments, not HTML `<!-- -->`, which failed the build on first attempt.
+- **V7** `cli/shared-flags.mdx` — **published for real**, not just planned, since Phase 2
+  family pages need it to exist to link against. Content is the actual authoritative source,
+  not a frequency guess: found that `--json`/`--output`/`--quiet`/`--yes`/`--wait`/
+  `--timeout` are registered by one shared function, `output.RegisterFlags()`
+  (`beaver-cli/output/output.go`), called by outside `commands/` entirely, so
+  `commands.csv` doesn't show these flags on those commands (logged as a known, deliberate
+  extraction-scope gap in `inventory/00-summary.docs` rather than silently wrong). Read
+  `output.Wait`'s actual polling/timeout implementation directly to write the `--wait`
+  section to the same standard the `docs.txt` conversation itself set as the bar. `mint
+  broken-links` clean after publishing (one broken link found and fixed first — a literal
+  placeholder link in the template, not a real page). **Re-verified 2026-09-17:** the "69
+  commands" figure above was a stale hand-count (raw call-site grep gives 145, which also
+  isn't the right number, since some call sites are loops covering 20+ commands each) —
+  `build_summary.py` now computes the true distinct-command count live from source on every
+  regeneration instead of hardcoding it (currently 196). `cli/shared-flags.mdx`'s six flag
+  entries re-checked word-for-word against `output.go` source: accurate, no drift.
+
+---
+
+## Phase 2 — Reference build-out, by family
+
+### Era 3 — Identity, Session & Account (V8–V10) — ✅ done, verified 2026-09-17
+
+`auth` (login/logout/whoami — currently three orphaned pages, consolidate under one family
+page or cross-link tightly), `account` (has a page — verify/extend), `billing` (has a page —
+verify/extend), `coupon` (no page — small, 2 files).
+
+**Phase 2 re-verification, 2026-09-17 — gap found and closed:** neither `environment` nor
+`project` was assigned to any Phase 2 era in `00-architecture.docs`'s family table — a real
+planning omission, not a deliberate exclusion. Both had pre-existing pages
+(`cli/environment.mdx`, `cli/project.mdx`) already wired into `docs.json` nav, but each was a
+19-line stub with no Purpose/Syntax/Flags/Consequences sections and most of its flags
+undocumented (`environment`: 6/7 flags missing, including `--reveal` on a command that prints
+secrets; `project`: 2/3 missing, including the irreversible `delete`'s consequences going
+unstated). Both rewritten to the Era 2 V6 template this pass, source-verified against
+`commands/environment/*.go` and `commands/project/project.go`. See `gaps/00-index.docs` entry
+012.
+
+### Era 4 — Connect, Machine & Health (V11–V14) — ✅ done, verified 2026-09-17
+
+`connect` (single wizard command, has a page — verify against the 23-file implementation),
+`machine` (60 flag sites, largest single group by that measure, has a page — likely needs
+the deepest verification pass of any "already documented" family), `doctor`, `agent`,
+`health` (no page), `recover`.
+
+### Era 5 — Deploy & Containers (V15–V18) — ✅ done, verified 2026-09-17
+
+`deploy` (32 flag sites, single flat command, has a page), `compose`, `container`/
+`containers`, `docker`, `deployment`, `deployui` (no page), `promote` (no page).
+
+**Phase 2 re-verification, 2026-09-17:** `container.mdx` was missing `open`'s `--live` flag
+— added. `container.mdx`/`containers.mdx`'s mapping in `cross_reference.py` corrected (both
+now attributed to the `container` group, since `containers` is a second top-level command
+literal in the same source file — content itself was already accurate, this was a
+tooling/attribution fix, not a content gap). `beaver destroy` (found missing from the
+inventory in the Phase 1 pass) was already correctly documented on `container.mdx` — no
+content gap there, confirmed by re-reading.
+
+### Era 6 — Infrastructure Pools (V19–V22) — ✅ done, verified 2026-09-17
+
+`cloud` (**no page**, 29 subcommands, second-largest zero-coverage group), `scaling`,
+`autoscale` (no page), `edge` (42 flag sites), `domain`, `firewall` (41 flag sites).
+
+**Phase 2 re-verification, 2026-09-17:** `edge.mdx` was missing `firewall rule add`'s
+`--name`/`--method` and `firewall rule update`'s `--conditions` and `firewall ban`'s
+`--reason` — added, source-verified against `commands/edge/firewall.go`. `firewall.mdx`
+(the standalone deployment-scoped family, distinct from `edge`'s Connected-App-scoped one)
+was missing `rule add`'s `--method` — added.
+
+### Era 7 — Services & Data (V23–V26) — ✅ done, verified 2026-09-17
+
+`service` (**no page**, 37 subcommands including nested `database`/`cluster`/
+`backup-destination` groups — largest undocumented surface in the whole CLI), `integration`
+(no page; `integrations.mdx` exists — reconcile naming), `github`.
+
+### Era 8 — Observability & Diagnostics (V27–V29) — ✅ done, verified 2026-09-17
+
+`observability` (no page as a family, but its subcommands `logs`/`metrics`/`traffic`/
+`latency`/`active`/`live` each have a standalone page today — decide in V27 whether to keep
+them standalone or consolidate under one `observability` reference with the individual pages
+as redirects/aliases), `observe`, `history`, `status`, `inspect`, `diff`.
+
+### Era 9 — Config, State & Contracts (V30–V33) — ✅ done, verified 2026-09-17 · **highest disclosure risk**
+
+`config` (55 flag sites, highest density in the CLI, no page despite the size), `state`/
+`statecmd`, `projectconfig`, `projectcontext`, `projectcontract` (`contract.mdx`/
+`validate.mdx` exist and map here — verify they don't already leak reconcile/contract
+internals; if they do, this era's first job is redaction, not just completion).
+
+**Phase 2 re-verification, 2026-09-17:** confirmed via `main.go` directly that
+`projectcontract`'s commands are wired at runtime as `beaver plan`, `beaver validate`, and
+`beaver config push/pull/diff/status/rollback/delete/containers` — there is no `beaver
+projectcontract <verb>` invocation at all; the Go package name is internal-only. `contract.mdx`
+(a 1-line-Purpose stub for a command, `beaver contract show`, that no longer exists in source
+at all) had already been correctly deleted. Its replacement coverage is `plan.mdx` (accurate,
+already matches `PlanCmd` source exactly) and `validate.mdx` (accurate, matches `ValidateCmd`
+source exactly) for the two root commands, plus `config.mdx` for the seven nested ones —
+`config.mdx` already covered `push`/`pull`/`diff`/`status`/`rollback`/`delete`/`containers`
+correctly. Added to `config.mdx` this pass: the six `ConfigCmd`-level persistent flags used
+by `init`/`sync` (`--strategy`/`--domain`/`--health-path`/`--compose-file`/`--project-id`/
+`--port`, the last explicitly noted as informational-only per its own `--help` text), and
+`bind add`/`volume add`'s flags (`--source`/`--target`/`--read-only`/`--yes-i-know`/
+`--external`), previously undocumented. `health`'s `--tcp`/`--command` and `show`'s
+`--effective` are genuinely reserved/not-yet-functional per their own source comments —
+correctly left undocumented per Invariant 3 rather than described as working. `cross_reference.py`'s
+group-to-page mapping updated to reflect the real `projectcontract` → `plan`/`validate`/`config`
+relationship, closing every previously-orphaned page in this family.
+
+### Era 10 — Admin, Preflight & Platform Ops (V34–V36) — ✅ done, verified 2026-09-17
+
+`admin`, `preflight` (13 flag sites, no page), `mystic`, `envbanner`, `initcmd` (`init.mdx`
+exists, reconcile naming), `internal` (9 files — name strongly suggests operator/CI-only;
+V34's first job is deciding whether any of this belongs in public docs at all).
+
+**Phase 2 re-verification, 2026-09-17:** `init.mdx` was an 18-line example-only stub (no
+Purpose/Syntax/Consequences, missing the `--from-existing` flag entirely) despite `initcmd`
+being marked resolved in Phase 1's gap 010 — "resolved" there meant the public/internal
+classification question, not page completeness. Rewritten to the full template this pass,
+source-verified against `commands/initcmd/init.go`.
+
+**Admin removed, 2026-09-17 (`gaps/013`):** explicit user instruction to remove all admin
+documentation. `cli/admin.mdx` deleted, removed from `docs.json`. This supersedes gap 010's
+`documented-minimal` classification for `admin` — no page at all now, not even a minimal
+one. `admin` reverts to `undocumented` in the regenerated inventory; see `gaps/013` before
+re-creating this page.
+
+### Era 11 — AI Surface (V37–V39) — ✅ done, verified 2026-09-17
+
+`ai` (has a page), `alie` (has a page but 56 files/41 subcommands/22 flag sites — almost
+certainly under-documented relative to size), `skillscmd` (no page), `mcpcmd` (no page —
+MCP wiring is a plausible disclosure risk, verify before publishing anything about it).
+
+**Phase 2 re-verification, 2026-09-17:** `alie.mdx` was missing the `audit` command entirely
+(source: `commands/alie/audit.go`, "Show Alie's tool and action audit trail" — added with
+its `--event-type`/`--limit` flags) and `sessions`' `--all` / `delete`'s `--force` flags —
+all added, source-verified, two-read disclosure pass applied per this family's own elevated-
+risk status (no mechanism language found or introduced). **`speccmd` was never assigned to
+any era at all** in `00-architecture.docs`'s family table — a second planning omission
+alongside `environment`/`project` (Era 3's note). `beaver spec` is real, visible, and
+carries an explicit compatibility promise in its own source comment ("third-party editors
+and Beaver Desktop should be able to find and rely on it") — `cli/spec.mdx` written this
+pass and wired into `docs.json`'s Utilities group. `mcpcmd` stays excluded per gap 005's
+prior resolution — re-confirmed, not re-litigated.
+
+---
+
+## Phase 3 — Guides and integration
+
+### Era 12 — Workflow Guides & Navigation (V40–V43) — ✅ done, verified 2026-09-17
+
+Task guides tying reference pages into outcomes (deploy, connect + machine-roles, scaling,
+rollback/recover); `docs.json` nav updates; resolves the naming mismatches logged in Era 1's
+pre-work (`plan`/`plans` staleness, `logs`/`metrics`/`traffic` vs. `observability`,
+`login`/`logout`/`whoami` vs. `auth`, `integrations` vs. `integration`, `init` vs.
+`initcmd`, `contract`/`validate` vs. `projectcontract`).
+
+---
+
+## Phase 4 — Verify and sustain
+
+### Era 13 — Verification & Sustaining Process (V44–V47) — ✅ done, verified 2026-09-17
+
+`mint broken-links`; the verified-vs-reviewed audit of every example; the CLI-change →
+docs-review gate; the recurring inventory-refresh cadence so this gap does not reopen.
+
+---
+
+## Cross-cutting risk register
+
+| Risk | Era | Mitigation designed in |
+| --- | --- | --- |
+| A page accidentally documents the reconcile/contract/orchestration mechanism | 9 (mainly), all | Invariant 6 checklist applied per-page; Era 9 gets an explicit second pass before publish |
+| `service`/`config` pages become unreasonably long single files | 7, 9 | V23/V30 decide per-family whether to split into sub-pages (mirrors `cli/`'s existing pattern of separate pages per concern) before writing |
+| Naming mismatches between CLI groups and existing doc pages cause dead or duplicate content | 1, 12 | Era 1 inventory records every mismatch found; Era 12 is the reconciliation pass, not each family era improvising its own fix |
+| A command looks implemented in `Use:`/help text but is actually a stub | 1 | V3's maturity classification requires a source spot-check, not help-text trust (Invariant 1) |
+| The AI/MCP surface (`alie`, `mcpcmd`) discloses agent-tool or transport internals | 11 | Same Invariant 6 checklist, applied explicitly rather than assumed covered by the general rule |
+| Docs drift again after this roadmap ships | 13 | V44–V47 is a standing process, not a cleanup; gate criterion 8 requires it be discoverable from the CLI repo itself |

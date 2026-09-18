@@ -1,15 +1,85 @@
 ---
 title: "beaver project"
+sidebarTitle: "project"
 description: "Create, list, inspect, and delete Beaver projects."
+icon: "folder"
 ---
+
+<Info>
+  New here? [Projects](/concepts/projects) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+A project is the top-level grouping every container and environment in Beaver belongs to.
+Use `beaver project create` when starting something new, `list`/`show` to find a project's
+ID, and `delete` only when you mean to permanently remove everything in it.
+
+## Syntax
+
+```bash
+beaver project [list|show|create|delete] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<project-id>` (`show`, `delete`) | Yes | A project ID, as shown by `list`. |
+
+## Flags
+
+<ParamField query="--name" type="string" default="">
+  On `create`: project name. Required.
+</ParamField>
+<ParamField query="--description" type="string" default="">
+  On `create`: project description. Optional.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `delete`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+`create` makes a new, empty project — no containers, no environments yet.
+
+<Warning>
+  `delete` is a **hard delete, not an archive**: every container and deployment inside the
+  project is removed along with their Docker networks, and none of it can be recovered
+  afterward. Containers keep running on their host machines until Beaver's own cleanup
+  catches up — this command does not itself stop them first.
+</Warning>
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List and inspect
 beaver project list
-beaver project show <project-id>
-beaver project create
-beaver project delete <project-id>
+beaver project show proj_paperclip
 ```
 
-Projects group an application, its containers, and environments. Confirm deletion carefully.
+```bash Create
+beaver project create --name paperclip --description "Paperclip SaaS app"
+```
+
+```bash Delete
+beaver project delete proj_paperclip --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `create` without `--name` | An error naming `--name` as required | Re-run with `--name`. |
+| `delete` without `--yes` | A confirmation prompt describing what will be removed | Confirm, or add `--yes` for scripts. |
+| `delete` succeeds | The project is gone; its containers stop once cleanup catches up | Nothing further — this can't be undone. |
+
+## Used in
+
+- [`environment`](/cli/environment) — environments belong to a project.
+- [`deploy`](/cli/deploy), [`container`](/cli/container) — operate within a project's scope.

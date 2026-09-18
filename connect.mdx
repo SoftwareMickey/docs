@@ -17,7 +17,7 @@ Running `connect` does two things:
 - **Prepares it for the role you choose.** Depending on whether you pick Builder, Host, or Builder + Host, `connect` sets the machine up to do that job.
 
 <Info>
-  `connect` is only available inside the interactive `beaver` shell — run `beaver` first, then type `connect` at the prompt. See the [CLI reference](/cli#connect) for the full command walkthrough.
+  `connect` is only available inside the interactive `beaver` shell — run `beaver` first, then type `connect` at the prompt. See the [CLI reference](/cli/connect) for the full command walkthrough.
 </Info>
 
 ---
@@ -69,7 +69,7 @@ Partway through `connect`, you'll be asked what this machine is for:
   Want the full picture — requirements, when to split roles, example setups? Read the complete guide.
 </Card>
 
-You're not locked in — change a machine's role anytime afterward with [`server update --role`](/cli#server-update-machine-id), without re-running `connect`.
+You're not locked in — change a machine's role anytime afterward with [`server update --role`](/cli/server), without re-running `connect`.
 
 ---
 
@@ -82,6 +82,22 @@ Before offering you a role, `connect` checks the machine over and confirms:
 - **Network availability** — the machine can reach the internet
 
 If something doesn't check out, `connect` tells you what's missing instead of letting you continue with a role the machine can't actually fill.
+
+---
+
+## Removing a machine safely
+
+<Warning>
+  `beaver machine remove` is permanent and has no undo. The physical machine itself is never
+  touched — Beaver only forgets about it, and its local credentials stop working immediately.
+</Warning>
+
+Before removing a machine, check what's still running on it (`beaver containers` filtered to
+that machine, or `beaver machine <id> inspect`) — anything deployed there stops being
+reachable through Beaver once the machine is removed, since Beaver no longer knows about it.
+Move or redeploy anything you need kept running to a different machine first. Once nothing
+depends on it, `beaver machine <id> remove` disconnects and forgets it; the machine ID is
+freed, so the same physical machine can be reconnected later with `beaver connect` if needed.
 
 ---
 
@@ -126,7 +142,7 @@ If something doesn't check out, `connect` tells you what's missing instead of le
 ---
 
 <CardGroup cols={2}>
-  <Card title="CLI Reference" icon="terminal" href="/cli#connect">
+  <Card title="CLI Reference" icon="terminal" href="/cli/connect">
     See every `beaver` command, including `connect` in context.
   </Card>
   <Card title="Machine Roles" icon="layer-group" href="/machine-roles">

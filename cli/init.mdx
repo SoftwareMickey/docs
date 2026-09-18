@@ -1,14 +1,84 @@
 ---
 title: "beaver init"
-description: "Prepare the current directory for Beaver."
+sidebarTitle: "init"
+description: "Prepare the current directory for Beaver by generating .beaver/config.yml."
+icon: "sparkles"
 ---
+
+## Purpose
+
+Run `beaver init` in a new project directory to generate `.beaver/config.yml` — by default,
+inferred from what's already deployed for this project if anything is, otherwise from your
+Dockerfile/Compose file. It's the usual first command in a new project, before
+[`beaver validate`](/cli/validate) and [`beaver deploy`](/cli/deploy).
+
+## Syntax
+
+```bash
+beaver init [flags]
+```
+
+Takes no required arguments.
+
+## Flags
+
+<ParamField query="--guided" type="boolean" default="false">
+  Run a narrated, step-by-step setup and deployment flow instead of writing the config file
+  silently.
+</ParamField>
+<ParamField query="--propose" type="boolean" default="false">
+  Print a proposed `.beaver/config.yml` generated from your current deployment, without
+  writing it. Preview-only — combine with normal shell redirection if you want to save the
+  output yourself.
+</ParamField>
+<ParamField query="--from-existing" type="boolean" default="false">
+  No-op, kept for compatibility. Generating the config from what's currently deployed is now
+  the default behavior when no local config file exists — this flag doesn't change anything
+  further.
+</ParamField>
+
+See [shared flags](/cli/shared-flags) for `--json`/`--quiet`/etc., also accepted.
+
+## Consequences
+
+Writes `.beaver/config.yml` in the current directory. If a config file already exists, prefer
+[`beaver config sync`](/cli/config) to bring it back in line with current facts rather than
+re-running `init`. `--propose` is the only read-only mode — plain `init` and `--guided` both
+write the file.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Default
+cd paperclip/
 beaver init
+```
+
+```bash Guided
 beaver init --guided
+```
+
+```bash Preview only
 beaver init --propose
 ```
 
-Creates or synchronizes this directory's Beaver configuration. Use `--guided` for a narrated setup or `--propose` to preview changes without writing them. Continue with [`beaver validate`](/cli/validate).
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `.beaver/config.yml` written, a summary of what was inferred | Run `beaver validate`, then `beaver deploy`. |
+| Config file already exists | A prompt or refusal, depending on flags | Use `beaver config sync` to update an existing file instead. |
+| Nothing to infer from (no deployment, no Dockerfile/Compose) | An error naming what's missing | Add a Dockerfile (see [Dockerfile requirements](/deploying/dockerfile-requirements)) or deploy first, then re-run. |
+
+## Used in
+
+- [`validate`](/cli/validate) — check the generated file before deploying.
+- [`config`](/cli/config) — every other authoring/tuning subcommand operates on the file
+  `init` creates.

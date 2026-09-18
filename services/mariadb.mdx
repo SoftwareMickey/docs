@@ -1,0 +1,50 @@
+---
+title: "MariaDB"
+sidebarTitle: "MariaDB"
+description: "Provision a managed MariaDB database and attach it to your application."
+icon: "database"
+---
+
+MariaDB is a MySQL-compatible relational database — a drop-in choice if your application or
+ORM targets the MySQL wire protocol but you prefer MariaDB's engine and licensing.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    10.11 (default), 11.4 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Logical databases" icon="table">
+    One service can host multiple isolated databases, one per attached application.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-db --type mariadb
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-db --env-prefix DATABASE
+```
+
+Your application receives a connection string as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-db
+beaver service backup paperclip-db
+beaver service resize paperclip-db --cpu 2 --memory 2048
+```
+
+See [Service databases and credentials](/concepts/service-databases-and-credentials) for
+reveal/rotate/detach behavior, and [Backups and restoration](/concepts/backups-and-restoration)
+for scheduling and restoring.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

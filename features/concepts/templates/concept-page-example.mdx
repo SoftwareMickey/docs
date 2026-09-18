@@ -1,0 +1,53 @@
+---
+title: "Services"
+description: "Attach a managed database, cache, or similar backing component to your application instead of running and maintaining it yourself."
+sidebarTitle: "Services"
+icon: "database"
+---
+
+A **service** is a managed backing component — a database, cache, or similar dependency —
+that you attach to your application instead of running and maintaining yourself.
+
+```bash
+beaver service create paperclip-db --type postgres
+beaver service attach paperclip-web --database paperclip-db
+```
+
+## What attaching one actually does
+
+`paperclip-web` needs a Postgres database. Instead of running Postgres on the same machine
+and managing its backups and upgrades by hand, you provision a service (`paperclip-db`) and
+attach it. Your application receives a connection string as an environment variable, using a
+prefix you choose, and can use it once the attachment takes effect — for most services,
+that's your next deployment.
+
+## What you can see and control
+
+You can resize a service's resources, upgrade its version, and detach it later. Detaching
+removes the injected variable but does **not** delete the underlying database — only
+deleting the service itself does that.
+
+<Warning>
+  Deleting a service permanently removes its data. Detaching an application from a service
+  does not delete the service — delete it separately if that's actually what you want.
+</Warning>
+
+Some service types don't support in-place version upgrades and require provisioning a new
+service and migrating data across.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Service databases and credentials" href="/concepts/service-databases-and-credentials">
+    What's inside a service once it's attached.
+  </Card>
+  <Card title="Persistent storage" href="/concepts/persistent-storage">
+    What a service's data actually lives on.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Provisioning, attaching, resizing, upgrades — exact syntax.
+  </Card>
+  <Card title="Environments and variables" href="/deploying/environment-variables">
+    How the injected connection variable behaves like any other.
+  </Card>
+</CardGroup>

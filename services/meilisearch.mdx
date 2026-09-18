@@ -1,0 +1,45 @@
+---
+title: "Meilisearch"
+sidebarTitle: "Meilisearch"
+description: "Provision a managed Meilisearch instance and attach it to your application."
+icon: "magnifying-glass"
+---
+
+Meilisearch is a fast, open-source search engine — a common choice for adding instant,
+typo-tolerant full-text search to an application without standing up a heavier search stack.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    1.10, 1.11 (default) — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-search --type meilisearch
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-search --env-prefix MEILI
+```
+
+Your application receives connection details (host and API key) as an environment variable
+using the prefix you choose. It's usable once the attachment takes effect — for most
+services, that's your next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-search
+beaver service resize paperclip-search --cpu 1 --memory 1024
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

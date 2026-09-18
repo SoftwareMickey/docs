@@ -1,0 +1,107 @@
+# Era 11 — AI Surface (V37–V39)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17 · elevated disclosure risk**
+
+`alie` is the single largest raw command tree in the CLI (56 files, 41 `Use:` sites, 22 flag
+sites) and already has a page — almost certainly thin relative to that size. This family
+also carries a disclosure question distinct from infrastructure commands: agent-tool
+definitions, MCP transport details, and skill-invocation wiring are all plausible places for
+implementation detail to leak even though the vocabulary doesn't sound as obviously
+internal as Era 9's (`drift`, `contract`).
+
+Commands: `ai`, `alie`, `skillscmd`, `mcpcmd`.
+
+---
+
+## V37 — `alie` deep verification and disclosure pass
+
+### Goal
+`cli/alie.mdx` actually covers the 41-subcommand surface, with every AI-tool-adjacent
+section run through a disclosure check for agent/tool internals specifically.
+
+### Reuses
+The Era 2 V5 checklist, extended with AI-specific terms to watch for: *tool definition,
+system prompt, context injection, tool-use loop, agent harness, model routing* — the
+equivalents, for this family, of Era 9's *reconcile/drift/contract* list.
+
+### Implement
+- Full flag/subcommand diff against the V1 inventory — given 41 `Use:` sites, apply the
+  Era 2 V6 split rule (overview + likely 2–3 sub-pages by function, e.g. conversation/
+  session commands vs. tool/skill-management commands vs. configuration).
+- Document what a user can ask Alie to do and how they invoke/configure it (session
+  management, output modes, any `--json`/non-interactive flags) — all observable and
+  legitimately public.
+- Explicitly **do not** document: which specific tools are wired into which internal
+  gateway, how approval/scope resolution works server-side, or any prompt/context-injection
+  mechanics — these mirror exactly what `beaver-desktop/features/gui/09` keeps private on
+  the GUI side (Alie's `Scope` stays server-resolved, never a client-visible detail) and
+  what `features/cloud/alie/` keeps deferred; the CLI page should be consistent with that
+  same boundary, not a back door to the same internals through a different surface.
+
+### Validate
+- Disclosure checklist applied specifically to any section describing tool invocation or
+  approval flows.
+- Coverage checked against the full 41-subcommand inventory, not just the commands the
+  existing thin page already covered.
+
+### Done when
+`alie`'s inventory rows are `documented`, and the disclosure pass is recorded as explicitly
+done for the tool/approval-adjacent sections.
+
+---
+
+## V38 — `ai`
+
+### Goal
+Verify/extend the existing `ai.mdx` (10 flag sites) — likely the general AI-feature toggle/
+configuration surface, distinct from `alie`'s conversational command set.
+
+### Reuses
+Existing `cli/ai.mdx`; V37's disclosure-term list, applied here too.
+
+### Implement
+- Flag diff; clarify the relationship between `ai` and `alie` explicitly at the top of
+  whichever page comes second (readers need the distinction stated, not inferred) — verify
+  against source rather than assuming from naming that one is "settings" and the other is
+  "the assistant."
+
+### Validate
+- The `ai`/`alie` relationship statement is source-verified.
+
+### Done when
+`ai`'s inventory row is `documented` and clearly distinguished from `alie`.
+
+---
+
+## V39 — `skillscmd` and `mcpcmd` (new)
+
+### Goal
+Write both missing pages, with `mcpcmd` getting the most careful disclosure treatment in
+this era — MCP (Model Context Protocol) wiring is the most transport/protocol-adjacent
+command in the whole roadmap.
+
+### Reuses
+V37's disclosure discipline; `skillscmd`'s likely relationship to `alie`'s skill/tool
+vocabulary (cross-link rather than duplicate if so).
+
+### Implement
+- `skillscmd`: document what a "skill" is from the user's perspective (a capability they can
+  invoke or configure) and how to list/use them, without describing the skill-loading or
+  dispatch mechanism.
+- `mcpcmd`: verify first what this actually exposes — if it's a way for users to connect
+  their *own* MCP servers/clients to `beaver`, that's a legitimate, fully-documentable
+  integration feature (syntax, config, expected behavior); if it exposes internal
+  MCP-transport plumbing used by the platform itself, that portion is excluded per the same
+  logic as Era 10's `internal` group. This determination is made from source, not assumed
+  either way.
+
+### Validate
+- `mcpcmd`'s public-vs-excluded determination (in whole or by subcommand) is explicit and
+  source-verified, following the Era 10 V34 classification pattern for the same kind of
+  decision.
+
+### Done when
+Both rows resolved (`documented` or `excluded-with-a-logged-reason`); Era 11 closes with
+the AI surface's disclosure boundary applied as deliberately as Era 9's.

@@ -1,0 +1,141 @@
+# Era 3 — Mental Model & Setup (V6–V9)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** `concepts/how-beaver-fits-together.mdx` (V6, new — the canonical
+diagram/vocabulary every later page reuses) and `concepts/accounts-and-workspaces.mdx` (V9,
+new) written. V7 (Choosing my setup) and V8 (Installation/CLI basics) executed as merges per
+Era 1's classification — `choose-your-setup.mdx` gained a "what you supply, what Beaver
+manages" note; `installation.mdx` gained a "Staying up to date" section (version
+compatibility, `beaver update`). One real bug found during review: several later-era pages
+initially linked to `/concepts/choosing-my-setup` and `/concepts/connecting-machines` as if
+they were new pages — wrong, since V7/T2 and Era 4 V11/T6 are merges with no page of their
+own. Fixed by pointing every such link at the real merge target (`/choose-your-setup`,
+`/connect`) instead. `mint broken-links` clean.
+
+Covers T1–T4 (`concepts-explained.txt`'s "How Beaver fits together," "Choosing my setup,"
+"Installation and CLI basics," "Accounts and workspaces"). V6 is the single highest-leverage
+version in the roadmap: it fixes the one entity diagram and vocabulary every later concept
+page's "how this relates" section reuses (Invariant 8).
+
+---
+
+## V6 — How Beaver fits together (T1)
+
+### Goal
+One new concept page giving the product-level mental model: workspace → project →
+environment → machine/cloud → deployment → container → service, and how they relate.
+
+### Reuses
+Nothing existing — no page currently does this at the entity-relationship level; `features.mdx`
+lists features but doesn't relate them. This is genuinely net-new (V2's classification:
+`new-page`).
+
+### Implement
+- `concepts/how-beaver-fits-together.mdx` using the Era 2 template.
+- One diagram (entities + relationship arrows only, per `DISCLOSURE-ADDENDUM.md`'s system
+  diagram rule) — built from an existing Mintlify-supported approach (a described flow using
+  `<Steps>`/`<Card>` layout, or an embedded image under `images/`, whichever the actual
+  drafting session finds renders cleanest; no new component).
+- Defines the vocabulary every later page's relationship section links back to: this page
+  becomes the canonical link target for "see how this fits into the bigger picture."
+
+### Validate
+- Every entity named in the diagram maps to a real product concept from the T1–T34 list, so
+  no later page introduces a relationship this diagram doesn't already show.
+- Passes `DISCLOSURE-ADDENDUM.md` review — no placement/scheduling arrows.
+
+### Done when
+The page exists and is confirmed as the one diagram every later era's "relates to" section
+links to, rather than each page drawing its own.
+
+---
+
+## V7 — Choosing my setup (T2)
+
+### Goal
+Resolve the `merge-into-choose-your-setup` classification from Era 1 V2: keep the existing
+onboarding narrative in `Getting started`, but ensure it now answers T2's full scope (single
+machine vs. cloud, laptop viability, machine roles, prerequisites, what infrastructure the
+user supplies) and links forward into the new Concepts group for depth it doesn't need to
+carry itself.
+
+### Reuses
+`choose-your-setup.mdx` as-is; extends rather than forks it (Invariant 9).
+
+### Implement
+- Gap-check `choose-your-setup.mdx` against T2's five sub-points; add only what's missing.
+- Add a forward link from `choose-your-setup.mdx` into `how-beaver-fits-together.mdx` (V6)
+  and into `machine-roles.mdx`/`connect.mdx` where the onboarding narrative currently
+  under-explains a concept it references in passing.
+
+### Validate
+- No new standalone page created for T2 (per the V2 classification) unless the gap-check
+  finds the existing narrative structurally can't hold the missing content without becoming
+  a reference page itself — if so, escalate and log the deviation here rather than silently
+  splitting.
+
+### Done when
+`choose-your-setup.mdx` answers T2 completely and links into the new mental-model page.
+
+---
+
+## V8 — Installation and CLI basics (T3)
+
+### Goal
+Same merge pattern as V7, targeting `installation.mdx` / `installation-windows.mdx` /
+`beaver-doctor.mdx` / `cli.mdx`.
+
+### Reuses
+The four existing pages; the sibling roadmap's `cli.mdx` (its own "Overview" page in the CLI
+tab) for what it already covers about interactive shell vs. terminal commands, help, and
+completion, so this version doesn't re-explain flag-level material that belongs there.
+
+### Implement
+- Confirm platform coverage, update/version-compatibility explanation, and
+  interactive-vs-terminal distinction are present at the concept level across these pages;
+  add what's missing.
+- This is the one T# where the existing reference page (`cli.mdx`) already partially
+  overlaps a "concept" role — resolve by keeping `cli.mdx` as the CLI tab's overview
+  (syntax-adjacent) and any conceptual "why use the interactive shell" framing in
+  `installation.mdx` or a short new section there, not duplicated in both.
+
+### Validate
+- No content contradicts between `cli.mdx` and whichever Getting-Started page ends up
+  carrying the conceptual framing.
+
+### Done when
+A reader gets a complete "how do I install and use the CLI at all" story without needing
+the CLI tab's reference pages first.
+
+---
+
+## V9 — Accounts and workspaces (T4)
+
+### Goal
+A new concept page: login/logout/whoami as account identity, workspace as the scoping unit,
+what deleting or recreating a workspace means.
+
+### Reuses
+`cli/login.mdx`/`cli/logout.mdx`/`cli/whoami.mdx` (or the sibling roadmap's Era 3 `auth`
+family page, whichever exists by the time this version runs) as the reference-layer link
+target; nothing existing covers this at concept level.
+
+### Implement
+- `concepts/accounts-and-workspaces.mdx` using the Era 2 template.
+- Prerequisites section: none (this is typically the first concept a new user needs).
+- Relationship section links to `how-beaver-fits-together.mdx` (workspace sits above
+  project) and forward to `choose-your-setup.mdx`.
+- Consequences section states workspace deletion/recreation effects at the observable level
+  (what becomes inaccessible, what is not recoverable) without describing storage internals.
+
+### Validate
+- Passes disclosure review; links resolve (reference page may be a placeholder if the
+  sibling roadmap's `auth` family isn't written yet — noted honestly, per that roadmap's own
+  Invariant 9 marking convention, not left silently broken).
+
+### Done when
+Page exists, is placed in the new Concepts group (pending Era 12 nav wiring), and closes
+Era 3.

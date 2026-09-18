@@ -1,0 +1,139 @@
+---
+title: "beaver preflight"
+sidebarTitle: "preflight"
+description: "Check whether a project is ready to deploy, without changing anything."
+icon: "list-check"
+---
+
+<Info>
+  New here? [Preflight and planning](/concepts/preflight-and-planning) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Run `beaver preflight` before a deploy (or let `beaver deploy` run it automatically) to catch
+issues ahead of time: missing resource limits, tracked secrets, a Dockerfile port that
+doesn't match your deployment config, and more — organized the same way [`beaver
+doctor`](/cli/doctor)'s checks are, by verdict.
+
+## Syntax
+
+```bash
+beaver preflight [flags]
+beaver preflight inspect <job-id>
+```
+
+## What each check reports
+
+Like `doctor`, every finding has a severity, and the overall run gets one of three verdicts:
+
+| Verdict | Meaning |
+| --- | --- |
+| **Ready** | No blocking findings. |
+| **Ready with warnings** | Non-blocking findings exist — worth reviewing, doesn't stop a deploy. |
+| **Blocked** | At least one blocking finding — resolve it (or pass `--yes` with `--fix` where applicable) before deploying. |
+
+Each finding includes a category (repository, security, and others), a title, detail, and
+often a suggested fix.
+
+## Flags
+
+<ParamField query="--local" type="boolean" default="false">
+  Run repository checks only — no network I/O.
+</ParamField>
+<ParamField query="--remote" type="boolean" default="false">
+  Also include remote machine, runtime, capacity, and dependency checks. Runs by default if
+  your project has a pinned host.
+</ParamField>
+<ParamField query="--full" type="boolean" default="false">
+  Additionally run a live deployment rehearsal on the pinned host — a throwaway candidate
+  deploy that builds, health-checks, verifies dependencies, then tears down — streaming each
+  stage as it runs.
+</ParamField>
+<ParamField query="--verbose" type="boolean" default="false">
+  Also show informational findings and checks that passed, not just problems.
+</ParamField>
+<ParamField query="--fix" type="boolean" default="false">
+  Create the Beaver-managed resources preflight found missing, then re-check. Never touches
+  resources outside Beaver's own management.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Answer yes to every `--fix` prompt. Required for non-interactive use of `--fix`.
+</ParamField>
+<ParamField query="--plan" type="boolean" default="false">
+  Render the deployment as an infrastructure plan (`+`/`-`/`~`/`=` per change) instead of the
+  prose report.
+</ParamField>
+<ParamField query="--fail-on-warning" type="boolean" default="false">
+  Exit non-zero on a warning verdict too, not just Blocked — for stricter CI pipelines.
+</ParamField>
+<ParamField query="--builder" type="string" default="">
+  With `--full`, when an image is needed: machine ID to build on. Skips the interactive
+  picker.
+</ParamField>
+<ParamField query="--service" type="string" default="">
+  With `--full` on a multi-service project: rehearse only this service and what it depends
+  on.
+</ParamField>
+<ParamField query="--env-file" type="string" default="">
+  With `--full`: a `.env`-style file of variables to set on the rehearsal candidate. Defaults
+  to the deployment's committed `env_file:` if unset.
+</ParamField>
+<ParamField query="--env-var" type="string" default="">
+  With `--full`: an environment variable to set on the rehearsal candidate, `KEY=value`.
+  Repeatable; overrides `--env-file`.
+</ParamField>
+<ParamField query="--json" type="boolean" default="false">
+  Print the machine-readable preflight report.
+</ParamField>
+
+### `inspect <job-id>`
+
+Show the status and recent events of a deployment-rehearsal job started by `--full`.
+
+## Consequences
+
+`preflight` itself never deploys anything — `--full`'s rehearsal builds and briefly runs a
+throwaway candidate (never taking production traffic), then tears it down regardless of the
+outcome. `--fix` only creates Beaver-managed resources it found missing; it never modifies
+anything outside Beaver's own management.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Quick local check
+beaver preflight --local
+```
+
+```bash Full check with remote and rehearsal
+beaver preflight --full
+```
+
+```bash Fix what's safely fixable, non-interactively
+beaver preflight --fix --yes
+```
+
+```bash Strict CI gate
+beaver preflight --fail-on-warning
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Ready | "READY" verdict, exit 0 | Proceed to deploy. |
+| Ready with warnings | Warnings listed, exit 0 (unless `--fail-on-warning`) | Review; not required to fix before deploying. |
+| Blocked | Blocking findings with fixes, non-zero exit | Resolve each finding, or `--fix` where applicable. |
+
+## Used in
+
+- [`deploy`](/cli/deploy) — runs preflight automatically; `--skip-preflight` on `deploy`
+  overrides a block.
+- [`doctor`](/cli/doctor) — machine-level diagnostics, distinct from this project-level check.

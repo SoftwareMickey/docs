@@ -1,0 +1,321 @@
+# CLI Documentation Closure — Gaps Index
+
+Open questions and deliberate exclusions surfaced by the initial `beaver-cli` audit
+(2026-09-17) that this roadmap depends on resolving, or has already decided not to resolve.
+Same role as `beaver-desktop/features/*/gaps/00-index.docs`: the backlog to work from when a
+version's status note says "verify," "classify," or "needs a live smoke-test."
+
+Two kinds of entry:
+- **Blocking** — a version cannot be completed as specified until this is resolved.
+- **Deferred / decision-needed** — doesn't block the roadmap, but needs an explicit answer
+  before the affected page(s) publish.
+
+---
+
+## 001 — `container` vs. `containers` naming — **DECISION-NEEDED (Era 5 V16)**
+
+`beaver-cli/commands/container/container.go` registers both `Use: "container <name> <action>
+[args]"` and `Use: "containers"` as apparently distinct commands, and this repo has separate
+`container.mdx` and `containers.mdx` pages already. Not yet confirmed whether both are live,
+top-level, user-facing commands or whether one is legacy.
+
+**Consequence:** Era 5 V16 must confirm both are real before treating the existing two-page
+split as correct; if one is stale, it needs to be merged/redirected rather than left as an
+apparently-duplicate pair.
+
+---
+
+## 002 — `observe` vs. `observability` overlap — **DECISION-NEEDED (Era 8 V27–V28)**
+
+`observe/observe.go` registers a standalone `Use: "observe [service]"` command, separate
+from the `observability` group (`logs`/`metrics`/`traffic`/`latency`/`active`/`live`). Not
+yet confirmed whether these overlap in function or are cleanly distinct (e.g. `observe`
+might be a single-pane summary while `observability` subcommands are the individual views).
+
+**Consequence:** Era 8 V27's family-shape decision and V28's `observe` verification must
+state the relationship explicitly. If they overlap significantly, the docs need to say so
+rather than presenting two commands that appear to do the same thing with no explanation.
+
+---
+
+## 003 — `plan`/`plans` staleness — **DECISION-NEEDED (Era 12 V42)**
+
+`cli/plan.mdx` and `cli/plans.mdx` exist with no matching `beaver-cli/commands/` directory.
+Per `CLAUDE.md`'s note on the prior product model ("Build Once. Deploy Anywhere." replacing
+an earlier hosting-plan-centric model), these are the strongest candidates in the whole
+audit for pages describing a **removed** command from before the repositioning, rather than
+a naming mismatch with something that still exists.
+
+**Consequence:** Era 1 V2 must confirm via source (not inference from `CLAUDE.md` alone)
+whether any current command produces "plan" semantics (e.g. `service database` or `billing`
+subcommands might use the word incidentally). If nothing current matches, both pages are
+removed (with a redirect if there's meaningful inbound-link risk) in Era 12 V42, per
+`CLAUDE.md`'s general instruction not to reintroduce the prior model — but the removal
+itself, not just the staleness, must be an explicit, logged decision.
+
+---
+
+## 004 — `internal` command group publication status — **RESOLVED (Era 1 V2, 2026-09-17)**
+
+`beaver-cli/commands/internal/` (9 files) was the strongest naming signal in the audit that
+this group might not belong in public docs. Era 1's extraction settled it definitively
+rather than leaving it a judgment call: **`internal/` contains zero `cobra.Command`
+definitions anywhere** (confirmed by direct grep for `cobra.Command` across every file in
+the directory) — it is a support/library package, not a command group at all. The same is
+true of `deployui`, `envbanner`, `projectconfig`, `projectcontext`, `state`, and `ui` (43
+files total across all seven).
+
+**Resolution:** all seven directories are excluded from the command inventory entirely —
+not as an `excluded` classification decision (Era 10's original plan), but because there is
+no command to classify. Era 10 V34's classification work now applies only to `admin` and
+`mcpcmd`, whose `Hidden: true` commands are real commands with a real visibility question.
+See `inventory/00-summary.docs`, "Excluded directories" table.
+
+---
+
+## 005 — `mcpcmd` public-vs-internal transport question — **DECISION-NEEDED (Era 11 V39)**
+
+Unclear from the group name alone whether `mcpcmd` (2 files) exposes a user-facing MCP
+integration (connecting external MCP clients/servers to `beaver` — legitimately
+documentable) or internal MCP transport plumbing used by the platform's own AI features
+(not documentable, per Invariant 6 and the same logic as gap 004).
+
+**Consequence:** Era 11 V39 must resolve this from source before drafting; the two possible
+answers lead to very different pages (a full integration guide vs. an exclusion entry).
+
+**Resolution (Era 11 V39, 2026-09-17):** `mcpcmd`'s only command is `mcp-serve`
+(`commands/mcpcmd/mcpcmd.go`), and it is internal transport plumbing, not a user-facing
+integration. Confirmed directly from source: `Hidden: true`, and its own doc comment states
+"a user never types this... an integration point for the harness config `harness/claude.go`
+and `harness/codexserver.go` generate" — it's spawned by an AI coding harness (Claude Code,
+Codex) as a child process over stdio, not something a `beaver` user runs. **Determination:
+excluded**, no page written. This is the same shape as gap 004's exclusions, just found via
+a real (but hidden) command rather than an empty directory.
+
+---
+
+## 006 — `config schema` disclosure risk — **BLOCKING (Era 9 V31)**
+
+`config schema` is a plausible name for a command that either (a) prints a JSON Schema used
+to validate a user's own config file (safe, genuinely useful to document — helps users write
+valid config, IDE autocomplete, etc.) or (b) surfaces something closer to the internal
+deployment-contract schema `CLAUDE.md` explicitly protects. The audit could not distinguish
+these from the command name and file count alone.
+
+**Consequence:** Era 9 V31 cannot write this subcommand's section until the actual output is
+checked against source. This is the single most consequential disclosure determination in
+the roadmap — a wrong call here is the exact scenario `docs.txt` opened by worrying about.
+
+---
+
+## 007 — Live-verification gaps (multiple commands) — **DEFERRED (Era 13 V44)**
+
+Several commands' consequences can plausibly be inferred from source but would be better
+confirmed by actually running them: `service cluster upgrade`/`replace-member` (does the
+cluster stay available during the operation?), `promote` (does it rebuild or reuse an
+existing artifact?), `status`'s exact output fields. None of these block their family era's
+initial draft (source review is sufficient per Invariant 1 to write a reasonable first
+pass), but all are flagged for Era 13 V44's live-verification pass rather than shipping as
+permanently "reviewed against source only" if a live check is feasible by then.
+
+**Consequence:** Not blocking. These pages ship from Eras 4/5/7/8 marked "reviewed against
+source"; V44 upgrades the marking to "verified" for whichever of these a live run confirms.
+
+---
+
+## 008 — No automated inventory-refresh tooling in V1 — **DEFERRED (post-roadmap, noted in Era 13 V47)**
+
+The Era 1 extraction (grep-based `Use:`/flag-site census) is manual and was run once during
+scoping. Era 13 V47 establishes a *periodic manual* re-run cadence, not automation.
+
+**Consequence:** Not blocking for this roadmap's V1. If the manual cadence proves to lag
+(discovered via the Era 13 V46 per-change gate catching drift the periodic refresh should
+have caught first), a small script formalizing the extraction becomes the natural follow-up
+— out of scope here, recorded so it's a decision to defer, not an oversight.
+
+---
+
+## 009 — `output.RegisterFlags()` shared flags invisible to `commands.csv` — **RESOLVED (Era 2 V7, 2026-09-17; count corrected 2026-09-17)**
+
+Found while building the shared-flags page: `--json`/`--output`/`--quiet`/`--yes`/`--wait`/
+`--timeout` are attached to a large set of commands via one shared call,
+`output.RegisterFlags(cmd)` (defined in `beaver-cli/output/output.go`, outside `commands/`).
+`extract_commands.py`'s literal `Flags().Kind("name", ...)` pattern doesn't match this
+indirect call, so `commands.csv` under-reports these commands' flag counts by 6 each.
+
+**Resolution:** not fixed in the extractor (a deliberate scope decision — see
+`inventory/00-summary.docs`'s note on this gap for why re-deriving statistically would be
+worse than the direct source read already in hand). `cli/shared-flags.mdx` documents all six
+flags authoritatively from `output.go` directly, including `--wait`'s actual poll/timeout
+behavior (`output.Wait`: polls periodically until done, context-cancelled, or timeout;
+timeout does not cancel the underlying operation, only the CLI's wait).
+
+**Count correction (Phase 1 re-verification, 2026-09-17):** the original "69 commands"
+figure was a hand-estimate and was stale — a raw `grep -c output.RegisterFlags` gives 145
+call sites, but call sites and affected commands aren't 1:1 (some call sites are one command,
+some are a `for _, c := range []*cobra.Command{...}` loop covering 20+ commands in one call).
+`build_summary.py` now computes the real distinct-command count live from source every
+regeneration (`count_register_flags_commands()`) instead of hardcoding a number — currently
+**196 commands**. Re-running `build_summary.py` after any `beaver-cli` change keeps this
+figure current automatically; no more manual re-counting.
+
+**Consequence for Phase 2:** every family era should check whether its group's commands call
+`output.RegisterFlags` (`grep -rn output.RegisterFlags commands/<group>/`) before assuming a
+command has no `--wait`/`--json`/etc. just because it's absent from `commands.csv`.
+
+---
+
+## 010 — Era 10 V34 classification results — **RESOLVED (Era 10 V34–V36, 2026-09-17)**
+
+Per-command classification, source-verified (all three `admin` commands confirmed
+`Hidden: true` directly in `commands/admin/*.go`; `mystic`/`preflight`/`initcmd` confirmed
+not hidden and registered as ordinary root commands in `main.go`):
+
+- **`admin` (all 3 commands)** — **operator-only-but-mentionable**, not fully excluded.
+  Reason to not exclude outright: `commands/connect/connect.go` prints `beaver admin
+  connect-edge-node` directly in a user-facing error message when an admin account attempts
+  `beaver connect`, so the name is already exposed to end users on a real error path.
+  `cli/admin.mdx` published as a minimal page (what it is, who it's for, no flag detail) per
+  the lighter template V35 specifies for this classification tier.
+- **`mystic`** — **public**. Not hidden; `doctor`/`stats` are genuinely useful end-user
+  diagnostics for build performance. Full page written (`cli/mystic.mdx`).
+- **`preflight`** — **public**. Full page written (`cli/preflight.mdx`), check-category
+  structure mirrors `doctor.mdx` per V35's consistency requirement.
+- **`initcmd`** — **public**; existing `cli/init.mdx` already accurate, left as-is.
+- **`envbanner`, `internal`** — already resolved **excluded** by gap 004 (zero
+  `cobra.Command` definitions — library code, not CLI surface). No further action needed;
+  V36's "log the excluded commands" requirement was already satisfied by gap 004's entry.
+
+**Consequence:** Era 10 (V34–V36) closes with zero ambiguous rows for this family — every
+command is `documented`, `documented-minimal` (admin), or `excluded-with-a-logged-reason`
+(via gap 004).
+
+---
+
+## 011 — Era 1 extractor under-counted commands; fixed (Phase 1 re-verification) — **RESOLVED (2026-09-17)**
+
+Phase 1's own re-verification pass (V1's mandated "spot-check 5 groups against a fresh
+manual grep") found and fixed three real extraction bugs in `extract_commands.py`, none of
+which were caught by the original scoping run:
+
+1. **Anonymous inline command literals** (`parent.AddCommand(&cobra.Command{Use: "init",
+   ...}, &cobra.Command{Use: "sync", ...})` — no var assignment, no factory function) were
+   invisible to every existing pass. Found via `commands/config/wizard.go`'s `config init`
+   and `config sync` — two real, currently undocumented commands that did not exist
+   *anywhere* in the inventory before this fix. New Pass D added to the extractor.
+2. **Root-level commands outside `commands/` entirely** — `beaver shell` (`root/root.go`)
+   and `beaver destroy <container>` (`main.go`, a destructive short-form alias for
+   `container <name> delete`) were never scanned at all, since `CLI_ROOT` only walks
+   `commands/`. `beaver destroy` in particular had zero documentation coverage anywhere in
+   the repo. Both files now scanned explicitly as a synthetic `root` group, with the
+   program's own `beaver` root command filtered back out.
+3. **Systematic source-line under-reporting**: `CMD_ASSIGN_RE`'s leading `(?:^|\n)\s*` can
+   swallow blank/comment lines before a `var Foo = &cobra.Command{` line, anchoring the
+   recorded line number to whatever precedes it instead of the actual line — verified
+   concretely on `commands/account/account.go` (recorded line 32, actual line 34). Fixed by
+   citing the variable-name capture group's own position instead of the whole match's start.
+
+A full-repo sweep after all three fixes (every `&cobra.Command{` literal in `commands/` +
+the two root files, checked against Pass A/B/C/D's coverage) confirms **zero remaining
+unaccounted literals** — up from 442→443 confirmed-correct commands with accurate line
+numbers, from an inventory that silently dropped 4 real commands and mis-cited most of the
+rest by 1+ lines.
+
+Also resolved in the same pass — three more "documented under a different name" mappings
+`cross_reference.py` was missing (the pages exist and are correct; only the group↔page
+mapping table was incomplete): `reconcilecmd` ↔ `cli/reconcile.mdx`, `skillscmd` ↔
+`cli/skills.mdx`, `statecmd` ↔ `cli/state.mdx`, plus `root` ↔ `cli/shell.mdx`. And two pages
+that are real and current but aren't a per-group reference page at all —
+`cli/shared-flags.mdx` (Era 2 V7's own deliverable) and `cli/containers.mdx` (a second,
+legitimate top-level command inside the `container` group directory, not a separate group)
+— reclassified out of "orphan" into a new `NOT_A_GROUP_PAGE` exemption list instead of
+appearing as unresolved gaps on every future run.
+
+**Remaining real, still-open items after this pass** (not extractor bugs — genuine
+documentation gaps for Phase 2 to pick up): `beaver spec` (`speccmd`, visible, compatibility-
+promised, zero doc page) and `beaver destroy` (found by fix #2 above, zero doc page, and
+destructive — high priority for whichever family era picks it up, most naturally alongside
+`container.mdx`/`containers.mdx` since `destroy` is explicitly a short-form alias for
+`container <name> delete`). `mcpcmd` stays excluded per gap 005.
+
+**Consequence:** every later era's "my family's rows" filter (V4's stated purpose) is now
+reading from a genuinely complete, line-accurate inventory rather than one with silent gaps.
+
+---
+
+## 012 — Phase 2 re-verification: two groups never assigned to any era; several pages stale/thin despite "done" status — **RESOLVED (2026-09-17)**
+
+A full Phase 2 re-verification (per-family flag-coverage cross-check: every `commands.csv`
+flag checked for a literal mention on its mapped page, all 54 groups) found real content
+gaps despite every Era 3–11 status header reading "✅ done, verified 2026-09-17":
+
+**Planning omissions** — two real command groups were never listed in any Phase 2 era's
+family assignment in `00-architecture.docs` at all (not excluded, just never scoped to
+anyone): `environment` (9 commands, 7 flags) and `project` (5 commands, 3 flags). A third,
+`speccmd` (`beaver spec`), was likewise unassigned. Nothing enforced that the family table's
+implicit coverage was exhaustive against the actual 54-group inventory.
+
+**Stale/thin pages carried forward from before this roadmap** — `cli/environment.mdx` and
+`cli/project.mdx` were both pre-existing 19-line example-only stubs (no Purpose/Syntax/
+Flags/Consequences sections, matching neither the Era 2 V6 template nor this repo's other
+family pages) that were never rewritten despite `doc_status.csv` marking both `documented`
+— a reminder that "documented" there means "a page with this name exists," per
+`cross_reference.py`'s own docstring ("weak signal, still useful triage"), not "complete."
+`cli/init.mdx` was the same shape (18 lines, missing `--from-existing`).
+
+**Small real gaps in otherwise-substantial pages**, all source-verified and fixed: `config.mdx`
+missing `ConfigCmd`'s six non-interactive seed flags and `bind add`/`volume add`'s flags
+entirely; `alie.mdx` missing the `audit` command and three flags; `edge.mdx` missing four
+flags across `firewall rule add`/`update`/`ban`; `firewall.mdx` missing one; `container.mdx`
+missing `open`'s `--live`.
+
+**Confirmed accurate on re-check, not gaps:** `plan.mdx`/`validate.mdx` (verified word-for-
+word against `projectcontract.PlanCmd`/`ValidateCmd` source — both exactly right); `beaver
+destroy` (found missing from the *inventory* in the Phase 1 pass, but already correctly
+documented on `container.mdx` all along — a tooling gap, not a content gap); `plans.mdx`
+(Phase 1's gap 003 flagged this as a stale-page candidate — re-verification found `beaver
+plans` is a real, current `billing` subcommand, correctly cross-linked from `billing.mdx`;
+gap 003 is now fully closed, not deferred).
+
+**Resolution:** all six pages rewritten or extended (`environment.mdx`, `project.mdx`,
+`init.mdx` fully rewritten to template; `config.mdx`/`alie.mdx`/`edge.mdx`/`firewall.mdx`/
+`container.mdx` extended with the specific missing content); `cli/spec.mdx` written new and
+added to `docs.json`'s Utilities group; `cross_reference.py`'s `MANUAL_GROUP_TO_PAGES`
+corrected for `projectcontract` (→ `plan`/`validate`/`config`, not a nonexistent own page),
+`container` (→ also `containers`), `billing` (→ also `plans`), and `speccmd` (→ `spec`);
+`KNOWN_STALE_PAGES` emptied now that gap 003 is fully resolved rather than deferred. Full
+pipeline re-run: **0 orphan pages, 1 correctly-excluded undocumented group (`mcpcmd`)**, down
+from the prior run's residual ambiguity. `mint broken-links` clean. Disclosure re-check
+(checkpoint-term grep) on every changed page: all hits reviewed, all compliant — no
+mechanism language found or introduced.
+
+**Consequence:** a status header of "done, verified" on an era file is a claim about scope
+having been *addressed*, not proof every page reached template-complete — this gap exists so
+a future session re-reads that distinction rather than trusting the header alone. The
+per-family flag-coverage cross-check used to find this (commands.csv flags vs. literal
+mentions on the mapped page) is cheap enough to re-run after any future `beaver-cli` change
+and is the recommended first step of Era 13's periodic-refresh cadence (gap 008), not just a
+one-time audit.
+
+---
+
+## 013 — `admin` public documentation removed entirely — **SUPERSEDES gap 010's `admin` resolution (2026-09-17)**
+
+Explicit user instruction: "remove in the docs all admin sections." `cli/admin.mdx` deleted,
+removed from `docs.json`'s Utilities group. This replaces gap 010's earlier
+**operator-only-but-mentionable / `documented-minimal`** classification for `admin` with a
+stricter one: **not published at all**, full stop — not even the minimal page. The
+underlying facts gap 010 found are unchanged and still worth keeping in mind if this is
+revisited: all 3 `admin` commands are `Hidden: true` in source, and
+`commands/connect/connect.go` prints `beaver admin connect-edge-node` in a user-facing error
+message on `beaver connect` (still visible as plain text on `cli/connect.mdx`'s Results &
+Failures table — not a link, doesn't break anything, left as-is since it's describing real
+error output a user might see, not a doc page).
+
+**Consequence:** `admin` reverts to `doc_status: undocumented` in the regenerated inventory
+(`00-summary.docs`), the same bucket `mcpcmd` already sits in for a different reason
+(internal transport, gap 005) — both are now "intentionally not public," just via different
+paths (mcpcmd: never had a page; admin: had one, removed by instruction). If a future session
+re-runs the Era 1 extraction and sees `admin` as "undocumented," this entry is why — it is
+not a rediscovered gap to fill, it's a standing decision. Don't re-create `cli/admin.mdx`
+without checking this entry first.

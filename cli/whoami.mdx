@@ -1,12 +1,80 @@
 ---
 title: "beaver whoami"
-description: "Show the account associated with the current session."
+sidebarTitle: "whoami"
+description: "Show which account this CLI is currently signed in as."
+icon: "id-badge"
 ---
+
+Part of the session family: [`login`](/cli/login) → **whoami** (this page) →
+[`logout`](/cli/logout).
+
+## Purpose
+
+A cheap, offline "am I signed in, and as whom" check — it reads the local session file
+directly rather than making a network call, so it works even without connectivity and never
+fails just because your account or the API is unreachable.
+
+## Syntax
+
+```bash
+beaver whoami [flags]
+```
+
+Takes no arguments.
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the result as JSON. See [shared flags](/cli/shared-flags#json) — no command-specific
+  interaction here.
+</ParamField>
+
+<ParamField query="--output" type="string" default="table">
+  Output format: `table`, `json`, or `yaml`. See [shared flags](/cli/shared-flags#output).
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
-beaver whoami [--json]
+<Info>
+  **Verified**: the commands on this page were executed against a live `beaver` build during this review; example output reflects what was actually returned (with real account/workspace values replaced by the fictional vocabulary).
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver whoami
 ```
 
-Use this non-destructive check before an account-scoped command.
+```bash Scripted
+beaver whoami --json
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+ACCOUNT
+✓ Signed in
+ada
+
+User ID   usr_abc123
+Session   Active · expires in 29d 8h · Sep 17, 2026 · 9:00 AM UTC
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Signed in | Account name, user ID, session expiry | Nothing — informational. |
+| Not signed in | `You are not signed in.` (exit reflects `logged_in: false` in `--json`) | Run `beaver login`. |
+| Session expired | `Expired · expired <duration> ago` in the Session line | Run `beaver login` again. |
+
+## Used in
+
+- Scripted preflight checks before running authenticated commands — link added when the Era
+  12 workflow guide publishes.

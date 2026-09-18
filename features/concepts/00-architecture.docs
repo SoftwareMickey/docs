@@ -1,0 +1,262 @@
+# Concept Layer — Architecture & Roadmap
+
+## What this is
+
+A roadmap to build the missing top layer of the docs stack the user designed in
+`concepts-explained.txt`: **concept pages**. This repo already has, or is separately
+building (`/features/docs/`, "CLI Documentation Closure"), the bottom two layers —
+task guides (`guides/*.mdx`, the "Workflows" nav group) and exhaustive command reference
+(`cli/*.mdx`, the "CLI" tab). It has no consistent middle layer that answers, product-level,
+"what is this, why would I use it, what do I need first, how does it relate to the rest of
+the system, what are its limits" — before a user ever reaches a command's syntax.
+
+This is a **documentation engineering roadmap**, not a product feature — it produces
+`.mdx` concept pages, a `docs.json` nav change, and a sustaining process. It ships no code
+and requires no changes in `beaver-cli` or `vhb-server`.
+
+The thesis, stated as a single testable claim:
+
+> Every concept named in `concepts-explained.txt`'s topic checklist has a concept page that
+> explains what it is, the problem it solves, when to use it, its prerequisites, its
+> relationship to the rest of the system, and its user-visible behavior and limits — with
+> zero description of internal mechanism — and every such page is linked forward to the task
+> guide(s) that use it and the command reference that operates it, and is reachable from
+> Guides navigation without going through the CLI tab.
+
+## Why this, why now
+
+`concepts-explained.txt` is the user's own design conversation settling exactly this
+question ("should I explain concepts or are commands enough") and landing on: **concept →
+task guide → command reference**, three layers, each with a distinct job, linked together,
+with one disclosure rule held constant across all three:
+
+> Explain what users can control and observe; keep how Beaver implements it private.
+
+That transcript also produced a 34-topic checklist (reproduced in Era 1) of everything a
+user would want explained at the concept level — from "how Beaver fits together" down to
+"administrative commands." Almost none of it exists today as dedicated concept content.
+What exists instead:
+
+- A handful of Getting-Started pages (`choose-your-setup.mdx`, `machine-roles.mdx`,
+  `connect.mdx`) that are already partly concept-shaped, written as onboarding narrative.
+- `infrastructure-setup.mdx` and `features.mdx`, which are directory/overview pages, not
+  per-concept explanations.
+- The sibling roadmap `/features/docs/` ("CLI Documentation Closure"), which is explicitly
+  building the *command reference* layer (`cli/*.mdx`) and, in its own Era 12, a small set
+  of *task guides* (`guides/*.mdx`). It does not build concept pages — Invariant 7 there
+  deliberately keeps reference and guides separate and neither one is the "what/why/when"
+  layer this roadmap adds above both.
+
+This roadmap fills the gap between those two efforts without duplicating either.
+
+## The same disclosure line, applied one layer higher
+
+This repo's `CLAUDE.md` and the sibling roadmap's `DISCLOSURE.md` already establish: no
+matching/detection logic, no build/deployment mechanics, no internal "deployment contract"
+schema, ever, in public docs. Concept pages are *more* exposed to this risk than command
+reference pages, not less — a command page can hide behind "here is the flag and its
+value"; a concept page is explicitly answering "how does this work," which is exactly the
+question a competitor wants answered too. Era 2 of this roadmap does not re-derive the
+disclosure rule; it extends the sibling roadmap's `DISCLOSURE.md` with concept-specific
+checkpoint terms (system diagrams, cross-feature relationships, "why" explanations are the
+new risk surface a command page never had to navigate) — see `DISCLOSURE-ADDENDUM.md`.
+
+## Relationship to `/features/docs/` (CLI Documentation Closure)
+
+| Their roadmap | This roadmap |
+| --- | --- |
+| Produces `cli/*.mdx` — exhaustive syntax/flags/consequences per command family. | Produces new concept pages — one page per topic in the Era 1 checklist. |
+| Era 12 (`12-workflow-guides-and-navigation.docs`) adds four core task guides (`guides/*.mdx`) and wires `docs.json`'s **CLI tab** nav. | Adds a new **Concepts group in the Guides tab** and links it to both the existing task guides and the CLI reference pages — does not touch the CLI tab's structure. |
+| Owns `DISCLOSURE.md`, the page template, the fictional-example vocabulary (its Era 2). | Reuses all three as-is; adds only the concept-specific addendum (this roadmap's Era 2). Does not re-litigate command-level disclosure rules. |
+| Their Era 1 inventory is commands-and-flags extracted from `beaver-cli` source. | This roadmap's Era 1 inventory is the 34-topic checklist from `concepts-explained.txt`, cross-referenced against *existing pages* (not source code) to find what's already partly written. |
+
+**Sequencing:** this roadmap's Era 1 can start immediately — it does not block on or wait
+for the CLI roadmap's family eras. But every concept page's "command reference" link (its
+closing section) should point at a *finished* reference page where one exists, and at a
+placeholder/"reference coming soon" note where the CLI roadmap hasn't reached that family
+yet. Era 12 here (link wiring) is therefore easiest run after the CLI roadmap's Phase 2 is
+further along, though it is not formally gated on it — a concept page is useful even before
+its reference page exists.
+
+---
+
+## Layering — who owns what
+
+| Layer | Owns | Changes here |
+| --- | --- | --- |
+| `beaver-cli` / `vhb-server` (source of truth) | actual behavior, limits, prerequisites | **Nothing.** Read-only against source and shipped behavior, same as the sibling roadmap's Invariant 1. |
+| `/features/docs/` (sibling roadmap) | command reference pages, shared-flags reference, disclosure checklist, page template, fictional vocabulary | **Nothing changed**, only reused. |
+| This repo (`mintlify`) | new concept `.mdx` pages, the new "Concepts" nav group, cross-links into existing guides/reference | Everything this roadmap produces. |
+| `/features/concepts/` (this roadmap, planning-only) | the topic inventory, placement decisions, the disclosure addendum, the version plan, the gap log | Not published, not linked from `docs.json`, not part of the site build — same role as `/features/docs/` and `beaver-desktop/features/*`. |
+
+---
+
+## Invariants
+
+1. **Concept, not command, altitude.** A concept page never contains a full flag table or
+   exhaustive syntax — that's the reference page's job (Invariant 7 below). If a concept
+   page finds itself listing every flag, it has drifted into reference territory and needs
+   to link out instead.
+2. **Every topic from the Era 1 checklist gets a resolution** — a new page, a merge into an
+   existing page (with the merge target named), or an explicit "deferred, and why" — never
+   silently dropped.
+3. **What/why/when before how.** Every concept page opens with the problem it solves and
+   when a user reaches for it, mirroring the sibling roadmap's Invariant 3 one layer up.
+4. **Prerequisites are explicit.** What must already exist (a connected machine, a project,
+   an environment) is stated before the page describes the feature itself.
+5. **Relationships are explicit.** How this concept relates to adjacent ones (a service
+   relates to projects, environments, and containers; scaling relates to machines and
+   resources) is a required section, not incidental prose — this is the connective tissue a
+   command reference page has no room for.
+6. **Observable behavior and limits only — the disclosure boundary.** What persists, what
+   requires a redeploy, what the user can control and observe, and the feature's stated
+   limitations: yes. Matching/placement/scheduling algorithms, internal schemas, the
+   reconcile/contract engine, orchestration internals, credential provisioning mechanics:
+   never — per `CLAUDE.md`, the sibling roadmap's `DISCLOSURE.md`, and this roadmap's
+   `DISCLOSURE-ADDENDUM.md` (Era 2).
+7. **Every concept page links to its task guide(s) and its command reference**, and — new
+   relative to the sibling roadmap — every existing task guide and command reference page
+   this roadmap touches gains a link *back* to the concept page. This is the concept →
+   guide → reference chain becoming bidirectional and complete in the concept direction.
+8. **One diagram vocabulary.** Where a page needs a "how this fits together" diagram
+   (Era 3's "How Beaver fits together" is the canonical one), it uses one consistent set of
+   shapes/labels across every page that reuses it, defined once in Era 3 V6, not redrawn
+   per page.
+9. **No duplicate explanations.** If a concept is already explained adequately inside an
+   existing Getting-Started page's narrative (e.g. `choose-your-setup.mdx`), this roadmap
+   does not fork a second explanation — it either extracts/promotes that content into the
+   new Concepts group with a redirect, or links to it, decided per-topic in Era 1 and
+   executed in Era 12, never both existing separately drifting apart.
+10. **Docs are part of the change, going forward.** A new feature area needs a concept page
+    before or alongside its task guide and reference pages, not as a backlog item
+    rediscovered later — Era 13 makes this a standing checklist item alongside the sibling
+    roadmap's own Era 13 process, in the same `CLAUDE.md` section rather than a second,
+    competing one.
+
+---
+
+## The mental model this roadmap teaches (concept page structure)
+
+Every concept page (Eras 3–11) follows this shape — deliberately different from the command
+reference shape in `/features/docs/00-architecture.docs`, so a reader can tell which layer
+they're on from the page shape alone:
+
+```
+Frontmatter (title, description, sidebarTitle, icon)
+      │
+What it is & the problem it solves   ← Invariant 3
+      │
+When to use it (practical example)   ← concrete, not exhaustive
+      │
+Prerequisites                        ← Invariant 4
+      │
+How it relates to other concepts     ← Invariant 5 (Cards/links to adjacent concepts)
+      │
+What you can see and control         ← behavior, persistence, connectivity, redeploy
+      │              requirements — Invariant 6, never mechanism
+      ▼
+Limitations                          ← stated plainly, not buried
+      │
+      ▼
+Next steps: task guide(s) → command reference   ← Invariant 7
+```
+
+---
+
+## Data model
+
+**None.** This roadmap produces `.mdx` files, a `docs.json` nav diff, and planning artifacts
+under `/features/concepts/`. No schema, no database, no new Mintlify component — every page
+uses the existing catalog (`components.txt`), primarily `<Card>`/`<CardGroup>` for the
+relationship section and `<Steps>`/`<Note>`/`<Warning>` where the sibling roadmap's template
+already establishes their use.
+
+---
+
+## Phase / Era / Version index
+
+**45 versions, 13 eras, 4 phases.**
+
+### Phase 1 — Foundation (reuse, don't rebuild)
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 1 | `01-inventory-and-placement.docs` | V1–V3 | Take the 34-topic checklist from `concepts-explained.txt`, cross-reference against existing pages, classify each topic (new page / merge / defer), decide the nav home |
+| 2 | `02-template-and-disclosure.docs` | V4–V5 | Fix the concept-page template above as a checked-in template file; extend the sibling roadmap's `DISCLOSURE.md` with concept-specific checkpoint terms |
+
+### Phase 2 — Write the concept pages, grouped by product area
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 3 | `03-mental-model-and-setup.docs` | V6–V9 | How Beaver fits together, Choosing my setup, Installation & CLI basics, Accounts & workspaces — **gating era**, every later page's diagram/vocabulary depends on V6 |
+| 4 | `04-connecting-infrastructure.docs` | V10–V13 | Integrations, Connecting machines, Machine & agent operation, Beaver Cloud |
+| 5 | `05-projects-and-configuration.docs` | V14–V17 | Projects, Configuration, Environments & variables, Building applications |
+| 6 | `06-deploy-pipeline.docs` | V18–V21 | Preflight & planning, Deployments, Containers & replicas, Compose applications |
+| 7 | `07-networking-and-scaling.docs` | V22–V25 | Domains & routing, Scaling & resources, Firewall, Edge & performance controls |
+| 8 | `08-services-core.docs` | V26–V28 | Services, Service databases & credentials, Service clusters |
+| 9 | `09-data-persistence.docs` | V29–V31 | Persistent storage, Backups & restoration, Connecting to services locally |
+| 10 | `10-observability-and-operations.docs` | V32–V35 | Observability, State & drift, Rollback/promotion/recovery, Automation |
+| 11 | `11-ai-billing-admin-troubleshooting.docs` | V36–V39 | AI connections & Alie, Plans & billing, Troubleshooting, Administrative commands (disclosure classification pass) |
+
+### Phase 3 — Integration
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 12 | `12-navigation-and-integration.docs` | V40–V42 | New "Concepts" `docs.json` nav group; bidirectional linking into guides and CLI reference; resolve every Era 1 merge/defer decision |
+
+### Phase 4 — Verify and sustain
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 13 | `13-verification-and-sustaining.docs` | V43–V45 | `mint broken-links`, two-pass disclosure re-read, fold into the sibling roadmap's `CLAUDE.md` sustaining section rather than a second process |
+
+**The gating eras are 1, 2, and 3.** Nothing in the rest of Phase 2 starts until the
+inventory (Era 1) fixes what's new vs. merged vs. deferred, the template and disclosure
+addendum (Era 2) are settled, and Era 3 fixes the one system diagram and vocabulary every
+later concept page's "how this relates" section reuses. Skipping ahead reproduces the exact
+per-family drift the sibling roadmap's own Era 1 was designed to prevent, one layer up.
+
+---
+
+## Explicitly not in this roadmap
+
+- **No internal architecture, algorithm, schema, or protocol docs, anywhere, ever** — same
+  absolute rule as the sibling roadmap, applied to a layer that is at *higher* risk of
+  drifting there because "how this relates to the rest of the system" invites it.
+- **No new command reference content.** Flags, syntax, exit codes stay in `cli/*.mdx`,
+  owned by `/features/docs/`. A concept page that starts listing flags has scope-crept.
+- **No rewriting `blog/` or `changelog/`** — same historical-record exception as `CLAUDE.md`
+  states.
+- **No new Mintlify components** — existing catalog only.
+- **No forking the existing Getting-Started narrative pages.** Per Invariant 9, overlap is
+  resolved by promotion/link, not duplication.
+- **No GUI/desktop-app documentation.** `beaver-desktop/features/gui` is consulted here only
+  as a *versioning-format reference* (phase/era/version structure, `.docs` conventions,
+  `eras_implementation.docs` rollup, `gaps/` log) — not as content to document. This
+  roadmap's subject is the CLI/product concept surface in `mintlify`, not the desktop app.
+
+---
+
+## Acceptance gate (V45)
+
+This roadmap is done when:
+
+1. Every one of the 34 checklist topics has a traceable resolution: a published concept
+   page, a named merge target, or a logged, reasoned deferral — zero topics left unresolved.
+2. Every published concept page matches the Era 2 template and passes the
+   `DISCLOSURE-ADDENDUM.md` checklist on a dedicated read-through (not sampled).
+3. Every concept page links forward to at least one task guide or command reference page
+   (whichever exists); every linked guide/reference page links back.
+4. A new "Concepts" group exists in `docs.json`'s Guides tab, outside the CLI tab, positioned
+   so a first-time reader reaches it before Workflows and before diving into the CLI tab.
+5. No concept content is duplicated between the new Concepts group and existing
+   Getting-Started pages — every overlap Era 1 found is resolved per Invariant 9.
+6. `mint broken-links` is clean across the new pages and everything they now link into.
+7. A reviewer can grep every new concept page for the checkpoint terms in
+   `DISCLOSURE-ADDENDUM.md` (plus the sibling roadmap's own list) and find none used to
+   describe mechanism — spot-checked for most pages, a mandatory second pass for Era 11's
+   AI/admin topics, same discipline as the sibling roadmap's Era 9/11.
+8. The sustaining note lives in the same `CLAUDE.md` section the sibling roadmap's Era 13
+   already added to (`beaver-cli/CLAUDE.md`'s "Keeping the public CLI reference in sync"),
+   extended rather than duplicated, so a future feature addition sees one checklist covering
+   concept + guide + reference, not two competing ones.

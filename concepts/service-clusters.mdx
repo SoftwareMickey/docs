@@ -1,0 +1,46 @@
+---
+title: "Service clusters"
+description: "Run a service across multiple members instead of one, for availability a single instance can't provide."
+sidebarTitle: "Service clusters"
+icon: "circle-nodes"
+---
+
+A **service cluster** runs a service across multiple members instead of one, so one member
+going down doesn't take your data access down with it.
+
+```bash
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+```
+
+## When it's worth the extra members
+
+A single-instance service going down takes your application's data access down with it. If
+that's a risk you're not willing to accept, or your workload has outgrown what one instance
+can serve, a cluster is the answer — check the reference for which service types support it.
+
+## What you can see and control
+
+Each member reports its own health independently, not just as one combined cluster status.
+You can resize the cluster (add or remove members), upgrade its version, and replace a
+member that's been lost. Not every operation guarantees zero downtime — check a specific
+action's availability impact before running it against a cluster serving live traffic.
+
+## If a cluster loses members
+
+If enough members are lost at once, the cluster may only serve part of its normal operations
+until replacements are added back. Recovering from that is a supported, explicit action —
+replacing the lost member — not something that happens automatically.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services" href="/concepts/services">
+    A cluster is a configuration of a service, not a separate concept.
+  </Card>
+  <Card title="Backups and restoration" href="/concepts/backups-and-restoration">
+    Still needed even with a cluster — availability isn't backup.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Cluster create, resize, upgrade, and replace-member — exact syntax.
+  </Card>
+</CardGroup>

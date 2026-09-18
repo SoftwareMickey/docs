@@ -1,15 +1,70 @@
 ---
-title: "beaver containers and container"
-description: "List deployed containers and operate on one container."
+title: "beaver containers"
+sidebarTitle: "containers"
+description: "List every deployed container across your workspace, with optional historical stats."
+icon: "cubes"
 ---
+
+<Info>
+  New here? [Containers and replicas](/concepts/containers-and-replicas) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+`beaver containers` (this page) **lists** every deployed container; [`beaver
+container`](/cli/container) (singular) **operates on one** named container. Both are real,
+distinct top-level commands — not a typo of each other.
+
+## Purpose
+
+Use `beaver containers` to see every container across your workspace at a glance, with
+status, and optionally historical resource stats. Use `beaver container <name> <action>` once
+you know which one you want to act on.
+
+## Syntax
+
+```bash
+beaver containers [flags]
+```
+
+Takes no arguments — it always lists everything visible to your account.
+
+## Flags
+
+<ParamField query="--stats" type="boolean" default="false">
+  Show historical Prometheus/cAdvisor resource summaries alongside each container.
+</ParamField>
+<ParamField query="--since" type="string" default="1h">
+  Historical metrics window for `--stats`, e.g. `1h` or `24h`.
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
 beaver containers
-beaver container api inspect
-beaver container api logs --tail 200
-beaver container api history
 ```
 
-Use `containers` to list services. The `container` command inspects, logs, redeploys, restarts, rolls back, or deletes one service. Use `--tail` for logs and `--yes` for supported confirmations.
+```bash With historical stats
+beaver containers --stats --since 24h
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | A table of containers and status | Use `beaver container <name> <action>` to act on one. |
+| No containers deployed yet | An empty list | Run `beaver deploy` to deploy your first one. |
+
+## Used in
+
+- [`deploy`](/cli/deploy) — check `beaver containers` after a deploy to confirm it landed.

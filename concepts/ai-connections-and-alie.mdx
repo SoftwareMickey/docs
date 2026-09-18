@@ -1,0 +1,48 @@
+---
+title: "AI connections and Alie"
+description: "Chat with Alie about your infrastructure — it proposes actions, and nothing runs until you approve it, the same as if you'd typed the command yourself."
+sidebarTitle: "AI & Alie"
+icon: "wand-magic-sparkles"
+---
+
+**Alie** is Beaver's infrastructure AI. You chat with it about your infrastructure, and it
+can propose actions that run through the same approval controls a human-typed command would.
+
+```bash
+beaver alie
+beaver alie approvals
+```
+
+## The one rule that matters
+
+Alie proposes actions with real infrastructure effects — a redeploy, a scaling change — and,
+depending on policy, waits for your explicit confirmation before running them.
+`beaver alie approvals` lists everything waiting on your confirmation; nothing proceeds
+without it, unless you've configured a specific tool's approval mode to skip that step.
+
+<Warning>
+  An approval confirms Alie can proceed with a specific proposed action — it does not grant
+  broader access. Review what's actually being proposed before approving, the same way you
+  would before running the equivalent command yourself.
+</Warning>
+
+## What you can see and control
+
+Chatting with Alie starts a session; you can resume, rename, archive, or delete sessions, and
+switch which model a session uses where your provider supports more than one. Workspace
+context and skills are what let Alie reference your actual projects and infrastructure by
+name rather than requiring you to spell everything out each time.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Alie command reference" href="/cli/alie">
+    Sessions, approvals, and policy, exact syntax.
+  </Card>
+  <Card title="AI command reference" href="/cli/ai">
+    Connecting a provider.
+  </Card>
+  <Card title="Plans and billing" href="/concepts/plans-and-billing">
+    AI usage is measured and can factor into plan limits.
+  </Card>
+</CardGroup>

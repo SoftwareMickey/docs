@@ -1,16 +1,142 @@
 ---
 title: "beaver ai"
-description: "Connect and manage AI providers."
+sidebarTitle: "ai"
+description: "Connect AI provider API keys for use by Alie, either machine-local or Beaver-cloud-stored."
+icon: "microchip"
 ---
 
-## Examples
+<Info>
+  New here? [AI connections and Alie](/concepts/ai-connections-and-alie) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  `beaver ai` manages **provider connections** — the API keys [`beaver alie`](/cli/alie)
+  uses. It's the settings surface; `alie` is the conversational assistant itself. This page
+  covers `ai`; see `alie`'s page for the assistant.
+</Note>
+
+## Purpose
+
+`beaver ai` has two distinct ways to give Alie a provider API key, and the difference matters
+for where your key ends up:
+
+| Command | Where the key lives |
+| --- | --- |
+| `ai connect` | **Primary path.** Stored only on this machine; used by the local background agent. The key never leaves your machine. |
+| `ai provider add` | **Fallback path.** Encrypted at rest in Beaver's own database. Used only when no machine-local (`ai connect`) connection exists for the same provider. |
+
+Use `ai connect` when you can — it's the interactive, machine-local flow. Use `ai provider
+add` for a non-interactive/CI setup, or when you specifically want the connection available
+without depending on any one machine being online.
+
+<Note>
+  Not every provider listed is fully wired up yet — `beaver ai connect`'s interactive menu
+  currently lists OpenAI and Anthropic as usable; Gemini, Kimi, and local-model support are
+  shown but not yet enabled. Check the menu's own status when you run it, since this can
+  change.
+</Note>
+
+## Syntax
 
 ```bash
 beaver ai connect [provider]
+beaver ai disconnect <provider>
 beaver ai providers
-beaver ai models
-beaver ai provider add
+beaver ai provider add [flags]
 beaver ai provider test <provider-id>
+beaver ai provider update <provider-id> [flags]
+beaver ai provider remove <provider-id> [flags]
+beaver ai models --provider <name>
 ```
 
-Treat provider credentials like passwords. Do not put them in source control or shell history.
+| Command | Purpose |
+| --- | --- |
+| `connect [provider]` | Interactively connect a provider's API key to this machine (machine-local). |
+| `disconnect <provider>` | Remove this machine's local connection to a provider. |
+| `providers` (plural) | List every connected provider. |
+| `provider add` (singular) | Store a provider API key in Beaver's own database (cloud-stored fallback). |
+| `provider test <provider-id>` | Test a stored provider credential. |
+| `provider update <provider-id>` | Update a stored provider credential. |
+| `provider remove <provider-id>` | Remove a stored provider credential. |
+| `models --provider <name>` | List available models for a connected provider. |
+
+## Flags
+
+<ParamField query="--provider" type="string" default="" required>
+  On `provider add`: `openai`, `claude`, `gemini`, or `local`. Required. On `models`:
+  provider name. Required.
+</ParamField>
+<ParamField query="--api-key-stdin" type="boolean" default="false">
+  On `provider add`: read the API key from stdin. This is the **only** accepted input
+  method — there is no flag to pass a key directly, since a flag's value is visible in shell
+  history and process listings, and stdin isn't. Required unless `--provider local`.
+</ParamField>
+<ParamField query="--base-url" type="string" default="">
+  On `provider add`: base URL override, for a self-hosted/local provider.
+</ParamField>
+<ParamField query="--label" type="string" default="">
+  On `provider add`/`provider update`: a display label for this credential.
+</ParamField>
+<ParamField query="--model" type="string" default="">
+  On `provider update`: new default model.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `provider remove`: skip the confirmation prompt.
+</ParamField>
+
+## Consequences
+
+`connect`/`provider add` requires this machine to already be enrolled (via [`beaver
+connect`](/cli/connect)) — reporting the connection needs this machine's own server
+identity.
+
+<Warning>
+  `provider add`'s key is stored in Beaver's own database (encrypted at rest), unlike
+  `connect`'s machine-local key. Prefer `connect` unless you specifically need the
+  cloud-stored fallback.
+</Warning>
+
+`disconnect`/`provider remove` only removes Beaver's stored connection to that provider; it
+deliberately does **not** sign you out of any separate Codex or Claude Code session, since
+those credentials belong to you and may be used by other tools independent of Beaver.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Interactive connect (machine-local, preferred)
+beaver ai connect
+```
+
+```bash Non-interactive fallback, from a CI secret
+echo "$OPENAI_API_KEY" | beaver ai provider add --provider openai --api-key-stdin
+```
+
+```bash Check connections and models
+beaver ai providers
+beaver ai models --provider openai
+```
+
+```bash Disconnect
+beaver ai disconnect openai
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `connect`/`provider add` success | Confirmation the provider is connected | Use `beaver alie` with that provider. |
+| Machine not enrolled | An error pointing at `beaver connect` | Enroll the machine first. |
+| `provider add` without `--api-key-stdin` (non-`local`) | `--api-key-stdin is required` | Pipe the key in via stdin instead of a flag. |
+| `provider test` fails | The specific validation error | Check the API key and base URL. |
+
+## Used in
+
+- [`alie`](/cli/alie) — uses the provider connections this command manages.
+- [`connect`](/cli/connect) — machine enrollment required before connecting a provider.

@@ -1,0 +1,729 @@
+group,file,cmd_line,use,short_desc,aliases,hidden,deprecated,source_kind,flag_name,flag_shorthand,flag_kind,flag_default,flag_usage,flag_line
+account,commands/account/account.go,34,account,"Manage your profile, MFA, and feedback",,false,,literal,,,,,,
+account,commands/account/account.go,43,profile,Show or update your profile,,false,,literal,,,,,,
+account,commands/account/account.go,51,show,Show your profile,,false,,literal,,,,,,
+account,commands/account/account.go,101,update,Update fields on your profile,,false,,literal,full-name,,String,"""""",new display name,292
+account,commands/account/account.go,101,update,Update fields on your profile,,false,,literal,username,,String,"""""",new username,293
+account,commands/account/account.go,101,update,Update fields on your profile,,false,,literal,bio,,String,"""""",new bio,294
+account,commands/account/account.go,101,update,Update fields on your profile,,false,,literal,location,,String,"""""",new location,295
+account,commands/account/account.go,101,update,Update fields on your profile,,false,,literal,avatar,,String,"""""",new avatar image URL,296
+account,commands/account/account.go,145,mfa,Manage two-factor authentication,,false,,literal,,,,,,
+account,commands/account/account.go,150,setup,Start MFA setup,,false,,literal,,,,,,
+account,commands/account/account.go,180,verify,Finish MFA setup by verifying a code,,false,,literal,code,,String,"""""",6-digit code from your authenticator app (required),299
+account,commands/account/account.go,213,disable,Disable two-factor authentication,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,300
+account,commands/account/account.go,246,feedback,Send feedback to the Beaver team,,false,,literal,rating,,Int,0,"rating, 1-5 (optional)",303
+account,commands/account/account.go,246,feedback,Send feedback to the Beaver team,,false,,literal,title,,String,"""""",short feedback title,304
+account,commands/account/account.go,246,feedback,Send feedback to the Beaver team,,false,,literal,description,,String,"""""",feedback details,305
+admin,commands/admin/admin.go,11,admin,Administrative commands,,true,,literal,,,,,,
+admin,commands/admin/admin.go,17,connect-edge-node,Connect a Beaver edge node,,true,,literal,,,,,,
+admin,commands/admin/bootstrap.go,19,bootstrap,Bootstrap the first Beaver super administrator,,true,,literal,,,,,,
+agent,commands/agent/agent.go,18,agent,Manage the beaverd agent daemon on this machine,,false,,literal,,,,,,
+agent,commands/agent/control.go,15,start,Start the beaverd service,,false,,literal,,,,,,
+agent,commands/agent/control.go,23,stop,Stop the beaverd service,,false,,literal,,,,,,
+agent,commands/agent/control.go,31,restart,Restart the beaverd service,,false,,literal,,,,,,
+agent,commands/agent/control.go,39,status,Show beaverd's service status,,false,,literal,,,,,,
+agent,commands/agent/control.go,59,logs,Follow beaverd's logs,,false,,literal,,,,,,
+agent,commands/agent/install.go,39,install,Install and start beaverd as a background service,,false,,literal,,,,,,
+ai,commands/ai/ai.go,20,ai,Manage this machine's AI provider connections,,false,,literal,,,,,,
+ai,commands/ai/ai.go,29,disconnect <provider>,Remove this machine's Alie provider connection,,false,,literal,,,,,,
+ai,commands/ai/connect.go,47,connect [provider],Connect an AI provider's API key to this machine,,false,,literal,,,,,,
+ai,commands/ai/providers.go,37,providers,List every connected AI provider,,false,,literal,,,,,,
+ai,commands/ai/providers.go,78,models,List available models for a connected provider,,false,,literal,provider,,String,"""""","provider name, e.g. openai (required)",288
+ai,commands/ai/providers.go,118,add,Store a provider API key in Beaver's own database,,false,,literal,provider,,String,"""""","provider name: openai, claude, gemini, or local (required)",290
+ai,commands/ai/providers.go,118,add,Store a provider API key in Beaver's own database,,false,,literal,api-key-stdin,,Bool,false,"read the API key from stdin (required unless --provider is \""local\"")",291
+ai,commands/ai/providers.go,118,add,Store a provider API key in Beaver's own database,,false,,literal,base-url,,String,"""""","base URL override, for a self-hosted/local provider",292
+ai,commands/ai/providers.go,118,add,Store a provider API key in Beaver's own database,,false,,literal,label,,String,"""""",a display label for this credential,293
+ai,commands/ai/providers.go,180,test <provider-id>,Test a stored provider credential,,false,,literal,,,,,,
+ai,commands/ai/providers.go,215,update <provider-id>,Update a stored provider credential,,false,,literal,model,,String,"""""",new default model,295
+ai,commands/ai/providers.go,215,update <provider-id>,Update a stored provider credential,,false,,literal,label,,String,"""""",new display label,296
+ai,commands/ai/providers.go,251,remove <provider-id>,Remove a stored provider credential,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,297
+ai,commands/ai/providers.go,276,provider,"Add, test, update, or remove a Beaver-cloud-stored provider credential",,false,,literal,,,,,,
+alie,commands/alie/alie.go,17,alie,Alie — Beaver's infrastructure AI,,false,,literal,resume,r,StringP,"""""","choose a session to resume, or pass a session name/id",45
+alie,commands/alie/audit.go,16,audit,Show Alie's tool and action audit trail,,false,,literal,tool,,String,"""""",filter by tool name,86
+alie,commands/alie/audit.go,16,audit,Show Alie's tool and action audit trail,,false,,literal,event-type,,String,"""""",filter by event type,87
+alie,commands/alie/audit.go,16,audit,Show Alie's tool and action audit trail,,false,,literal,container,,String,"""""",filter by container ID,88
+alie,commands/alie/audit.go,16,audit,Show Alie's tool and action audit trail,,false,,literal,limit,,Int,50,maximum events to show (1-500),89
+alie,commands/alie/commands.go,17,model [session],Show or change a session's model,,false,,literal,model,,String,"""""",model ID to use,196
+alie,commands/alie/commands.go,17,model [session],Show or change a session's model,,false,,literal,effort,,String,"""""","reasoning effort: minimal, low, medium, or high",197
+alie,commands/alie/commands.go,135,usage [session],Show token usage for an Alie session,,false,,literal,,,,,,
+alie,commands/alie/commands.go,158,status,Show connected AI providers and their available models,,false,,literal,,,,,,
+alie,commands/alie/compact.go,13,compact [session],Force-compact an Alie session into a structured summary,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,52,approve <approval-id>,Approve a pending action,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,73,reject <approval-id>,Reject a pending action,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,99,approvals,List pending approvals,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,133,approval-policies,List per-tool approval policy overrides,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,164,approval-policy,Set a tool's approval mode,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,169,set,Set a tool's approval mode,,false,,literal,tool,,String,"""""",tool name (required),261
+alie,commands/alie/controlplane.go,169,set,Set a tool's approval mode,,false,,literal,mode,,String,"""""",auto or approval (required),262
+alie,commands/alie/controlplane.go,202,model-profile,Show this workspace's default AI provider/model,,false,,literal,,,,,,
+alie,commands/alie/controlplane.go,234,set,Set this workspace's default AI provider/model,,false,,literal,provider,,String,"""""",provider name (required),265
+alie,commands/alie/controlplane.go,234,set,Set this workspace's default AI provider/model,,false,,literal,model,,String,"""""",model ID (required),266
+alie,commands/alie/controlplane.go,234,set,Set this workspace's default AI provider/model,,false,,literal,latency,,String,"""""","fast, balanced, or quality",267
+alie,commands/alie/controlplane2.go,18,knowledge,List team knowledge rules Alie applies to every relevant turn,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,53,add,Add a team knowledge rule,,false,,literal,rule,,String,"""""",the knowledge statement (required),504
+alie,commands/alie/controlplane2.go,53,add,Add a team knowledge rule,,false,,literal,scope,,String,"""""","scope, if not workspace-wide",505
+alie,commands/alie/controlplane2.go,83,delete <id>,Delete a team knowledge rule,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,506
+alie,commands/alie/controlplane2.go,112,runbooks,List reusable remediation runbooks,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,145,add,Add a runbook,,false,,literal,name,,String,"""""",runbook name (required),509
+alie,commands/alie/controlplane2.go,145,add,Add a runbook,,false,,literal,description,,String,"""""",what triggers this runbook,510
+alie,commands/alie/controlplane2.go,145,add,Add a runbook,,false,,literal,error-rate-threshold,,Float64,0,error rate percent that triggers this runbook (required),511
+alie,commands/alie/controlplane2.go,145,add,Add a runbook,,false,,literal,container-id,,String,"""""",scope to one container (optional),512
+alie,commands/alie/controlplane2.go,182,autopilot,Show this workspace's autopilot level,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,206,set,Set this workspace's autopilot level,,false,,literal,level,,String,"""""","off, safe, diagnostic, action, or destructive (required)",514
+alie,commands/alie/controlplane2.go,249,goals,List standing infrastructure goals,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,282,add,Add a standing goal,,false,,literal,metric,,String,"""""","latency_p95, availability, monthly_cost, or security_posture (required)",517
+alie,commands/alie/controlplane2.go,282,add,Add a standing goal,,false,,literal,operator,,String,"""""",below or above (required),518
+alie,commands/alie/controlplane2.go,282,add,Add a standing goal,,false,,literal,target,,Float64,0,threshold value (required),519
+alie,commands/alie/controlplane2.go,282,add,Add a standing goal,,false,,literal,container-id,,String,"""""",scope to one container (optional),520
+alie,commands/alie/controlplane2.go,332,policies,List infrastructure policies,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,366,add,Add an infrastructure policy,,false,,literal,statement,,String,"""""",human-readable policy statement (required),522
+alie,commands/alie/controlplane2.go,366,add,Add an infrastructure policy,,false,,literal,metric,,String,"""""","latency_p95, availability, monthly_cost, or security_posture (required)",523
+alie,commands/alie/controlplane2.go,366,add,Add an infrastructure policy,,false,,literal,direction,,String,"""""",below or above (required),524
+alie,commands/alie/controlplane2.go,366,add,Add an infrastructure policy,,false,,literal,threshold,,Float64,0,threshold value,525
+alie,commands/alie/controlplane2.go,366,add,Add an infrastructure policy,,false,,literal,container-id,,String,"""""",scope to one container (optional),526
+alie,commands/alie/controlplane2.go,399,review <policy-id>,Mark a policy reviewed,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,423,api-keys,List Alie API keys,,false,,literal,,,,,,
+alie,commands/alie/controlplane2.go,452,create,Create a new Alie API key,,false,,literal,name,,String,"""""",a label for this key,528
+alie,commands/alie/controlplane2.go,482,revoke <id>,Revoke an Alie API key,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,529
+alie,commands/alie/fork.go,14,fork <session>,"Fork an Alie session into a new one, seeded from its current state",,false,,literal,,,,,,
+alie,commands/alie/report.go,34,report <task-id>,Report that a harness task's result was wrong,,false,,literal,category,,String,"""""",What was wrong: ,94
+alie,commands/alie/report.go,34,report <task-id>,Report that a harness task's result was wrong,,false,,literal,note,,String,"""""",Optional detail (secrets are removed before it is stored),95
+alie,commands/alie/session.go,13,session [session],Show details for an Alie session,,false,,literal,,,,,,
+alie,commands/alie/sessions.go,78,sessions,List your Alie sessions,,false,,literal,all,,Bool,false,include archived/inactive sessions,366
+alie,commands/alie/sessions.go,286,rename <session> <new-name>,Rename an Alie session,,false,,literal,,,,,,
+alie,commands/alie/sessions.go,309,delete <session>,Delete an Alie session,,false,,literal,force,,Bool,false,skip the confirmation prompt,367
+alie,commands/alie/sessions.go,343,archive <session>,"Archive an Alie session — hidden from the default list, never deleted",,false,,literal,,,,,,
+alie,commands/alie/spendcap.go,18,spend-cap,Show this workspace's AI spend cap and today's spend,,false,,literal,,,,,,
+alie,commands/alie/spendcap.go,47,set,Set this workspace's daily/session AI spend limits,,false,,literal,daily,,Float64,0,daily spend limit in USD (required),118
+alie,commands/alie/spendcap.go,47,set,Set this workspace's daily/session AI spend limits,,false,,literal,session,,Float64,0,per-conversation spend limit in USD (required),119
+alie,commands/alie/task.go,28,task <task-id>,"Show a harness task's timeline, including learned runbooks it was offered",,false,,literal,,,,,,
+auth,commands/auth/auth.go,92,login,Authenticate your Beaver account,,false,,literal,password,,Bool,false,use email/password instead of browser login,153
+auth,commands/auth/auth.go,254,logout,Sign out and clear your local session,,false,,literal,,,,,,
+auth,commands/auth/whoami.go,27,whoami,Show who you're signed in as,,false,,literal,,,,,,
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,min,,Int,0,minimum replicas (== max for a fixed count),49
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,max,,Int,0,maximum replicas,50
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,metric,,String,"""""",automatic-mode metric: cpu | memory | request_rate,51
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,up,,Float64,0,scale-up threshold for --metric,52
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,down,,Float64,0,scale-down threshold for --metric,53
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,clear,,Bool,false,remove the scaling policy,54
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,force,,Bool,false,record even if the local config is out of sync with the recorded desired state,55
+autoscale,commands/autoscale/autoscale.go,31,autoscale [service],"Set a service's replica scaling policy (declared, then applied)",,false,,literal,commit,,Bool,false,git commit the .beaver/config.yml change (never pushes),56
+billing,commands/billing/billing.go,43,plans,List available Beaver plans,,false,,literal,,,,,,
+billing,commands/billing/billing.go,73,billing,Manage this workspace's plan and payments,,false,,literal,,,,,,
+billing,commands/billing/billing.go,79,subscription,Show this workspace's current subscription,,false,,literal,,,,,,
+billing,commands/billing/billing.go,115,checkout,Start a hosted checkout to upgrade to Developer,,false,,literal,cycle,,String,"""""",monthly or yearly (required),258
+billing,commands/billing/billing.go,115,checkout,Start a hosted checkout to upgrade to Developer,,false,,literal,gateway,,String,"""""",paystack or paypal (required),259
+billing,commands/billing/billing.go,155,cancel,Cancel this workspace's subscription renewal,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,260
+billing,commands/billing/billing.go,190,payments,List this workspace's payment history,,false,,literal,,,,,,
+billing,commands/billing/billing.go,227,downgrade-hobby,Move this workspace back to the Hobby plan,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,261
+cloud,commands/cloud/capacity.go,67,capacity [cloud],Show a cloud's capacity as one allocatable pool,,false,,literal,,,,,,
+cloud,commands/cloud/capacity.go,126,node [cloud],Per-node capacity breakdown (interactive picker),,false,,literal,,,,,,
+cloud,commands/cloud/capacity.go,194,trend [cloud],"Allocatable capacity over time, with an exhaustion projection",,false,,literal,,,,,,
+cloud,commands/cloud/cloud.go,18,cloud,Create and operate Beaver Clouds — pools of enrolled machines,,false,,literal,,,,,,
+cloud,commands/cloud/containers.go,61,containers [cloud],"Every container deployed to a cloud, with the node and subnet each replica runs in",,false,,literal,,,,,,
+cloud,commands/cloud/create.go,18,create <name>,Create a Beaver Cloud from a set of machines,,false,,literal,machines,,StringSlice,nil,comma-separated machine names or IDs to add,200
+cloud,commands/cloud/events.go,28,events [cloud],"Timeline of a cloud's membership, network, and recovery events",,false,,literal,limit,,Int,30,maximum events to show,93
+cloud,commands/cloud/events.go,28,events [cloud],"Timeline of a cloud's membership, network, and recovery events",,false,,literal,category,,String,"""""",filter by category (membership|network|capacity|placement|recovery),94
+cloud,commands/cloud/gateway.go,48,gateway [cloud],"Show which members are public entry points, and designate new ones",,false,,literal,,,,,,
+cloud,commands/cloud/gateway.go,118,add [cloud] [machine...],Designate one or more members as public entry points,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,423
+cloud,commands/cloud/gateway.go,118,add [cloud] [machine...],Designate one or more members as public entry points,,false,,literal,cloud,,String,"""""",cloud slug or name (interactive if omitted),424
+cloud,commands/cloud/gateway.go,126,rm [cloud] <machine>,Stop routing public traffic through a member,,false,,literal,,,,,,
+cloud,commands/cloud/list.go,15,list,List every Beaver Cloud in your workspace,"""ls""",false,,literal,,,,,,
+cloud,commands/cloud/machines.go,22,machines [cloud],"List, add, and remove a cloud's machines","""nodes""",false,,literal,cloud,,String,"""""",cloud slug or name (interactive if omitted),244
+cloud,commands/cloud/machines.go,73,add [machine],Add a machine to a cloud,,false,,literal,override,,StringSlice,nil,preflight finding IDs to admit past,245
+cloud,commands/cloud/machines.go,125,rm [machine],Remove a machine from a cloud,"""remove""",false,,literal,yes,y,Bool,false,skip the confirmation prompt,246
+cloud,commands/cloud/manage.go,15,rename <cloud> <new-name>,Rename a cloud,,false,,literal,,,,,,
+cloud,commands/cloud/manage.go,48,rm [cloud],Delete a cloud (must have no machines),"""delete""",false,,literal,yes,y,Bool,false,skip the confirmation prompt,102
+cloud,commands/cloud/network.go,24,network [cloud],Show a cloud private network,,false,,literal,matrix,,Bool,false,include the full node-to-node connectivity matrix,132
+cloud,commands/cloud/network.go,24,network [cloud],Show a cloud private network,,false,,literal,debug,,Bool,false,"include low-level WireGuard detail (keys, endpoints, handshakes)",133
+cloud,commands/cloud/network.go,85,enable <cloud>,Enable a cloud's private network (establishes encrypted tunnels between its machines),,false,,literal,cidr,,String,"""""",overlay CIDR to use (default: proposed automatically),134
+cloud,commands/cloud/network.go,85,enable <cloud>,Enable a cloud's private network (establishes encrypted tunnels between its machines),,false,,literal,yes,,Bool,false,skip the confirmation prompt,135
+cloud,commands/cloud/preflight.go,40,preflight <machine>...,Check whether machines are eligible to form (or join) a Beaver Cloud,,false,,literal,cloud,,String,"""""",re-check the members of this existing cloud (by slug),154
+cloud,commands/cloud/preflight.go,40,preflight <machine>...,Check whether machines are eligible to form (or join) a Beaver Cloud,,false,,literal,cidr,,String,"""""",check a specific overlay CIDR for collisions instead of proposing one,155
+cloud,commands/cloud/preflight.go,40,preflight <machine>...,Check whether machines are eligible to form (or join) a Beaver Cloud,,false,,literal,fix,,Bool,false,"install missing pieces (wireguard-tools, ip_forward, time sync) on the machines, then re-check",156
+cloud,commands/cloud/preflight.go,40,preflight <machine>...,Check whether machines are eligible to form (or join) a Beaver Cloud,,false,,literal,yes,y,Bool,false,skip the --fix confirmation prompt,157
+cloud,commands/cloud/reserve.go,44,reserve [cloud],View or change a cloud's system reserve (capacity withheld before scheduling),,false,,literal,,,,,,
+cloud,commands/cloud/reserve.go,98,set [cloud],"Set a system-reserve override (cloud-wide, or --node for one machine)",,false,,literal,node,,String,"""""",apply to a single machine instead of the whole cloud,240
+cloud,commands/cloud/reserve.go,98,set [cloud],"Set a system-reserve override (cloud-wide, or --node for one machine)",,false,,literal,cpu,,Float64,0,CPU cores to reserve,241
+cloud,commands/cloud/reserve.go,98,set [cloud],"Set a system-reserve override (cloud-wide, or --node for one machine)",,false,,literal,memory,,Int,0,memory (MB) to reserve,242
+cloud,commands/cloud/reserve.go,98,set [cloud],"Set a system-reserve override (cloud-wide, or --node for one machine)",,false,,literal,disk,,Float64,0,disk (GB) to reserve,243
+cloud,commands/cloud/reserve.go,98,set [cloud],"Set a system-reserve override (cloud-wide, or --node for one machine)",,false,,literal,yes,y,Bool,false,skip the confirmation prompt,244
+cloud,commands/cloud/reserve.go,158,clear [cloud],Remove a system-reserve override (back to defaults),,false,,literal,node,,String,"""""",clear a single machine's override instead of the cloud-wide one,246
+cloud,commands/cloud/reserve.go,158,clear [cloud],Remove a system-reserve override (back to defaults),,false,,literal,yes,y,Bool,false,skip the confirmation prompt,247
+cloud,commands/cloud/services.go,40,services [cloud],Service discovery — every app in the cloud and the addresses it resolves to,,false,,literal,,,,,,
+cloud,commands/cloud/services.go,126,allows [cloud],Cross-project reachability allows for the cloud network (default: same-project only),,false,,literal,,,,,,
+cloud,commands/cloud/services.go,176,add [cloud],Allow two projects in this cloud to reach each other,,false,,literal,project-a,,String,"""""",first project ID,243
+cloud,commands/cloud/services.go,176,add [cloud],Allow two projects in this cloud to reach each other,,false,,literal,project-b,,String,"""""",second project ID,244
+cloud,commands/cloud/services.go,176,add [cloud],Allow two projects in this cloud to reach each other,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,245
+cloud,commands/cloud/services.go,211,rm [cloud] <allow-id>,Remove a cross-project allow,,false,,literal,,,,,,
+cloud,commands/cloud/status.go,32,status [cloud],"Show a cloud's capacity, applications, and health",,false,,literal,,,,,,
+cloud,commands/cloud/status.go,131,inspect [cloud],Per-node breakdown of a cloud,,false,,literal,,,,,,
+cloud,commands/cloud/workload.go,64,workload [cloud],How each of a cloud's applications is spread across its nodes,,false,,literal,,,,,,
+cloud,commands/cloud/workload.go,122,set [cloud] <container>,Set an application's placement policy (spread | pack | pinned),,false,,literal,policy,,String,"""""",placement policy: spread | pack | pinned,451
+cloud,commands/cloud/workload.go,122,set [cloud] <container>,Set an application's placement policy (spread | pack | pinned),,false,,literal,pin,,String,"""""",machine ID to pin to (required for --policy pinned),452
+cloud,commands/cloud/workload.go,122,set [cloud] <container>,Set an application's placement policy (spread | pack | pinned),,false,,literal,lb,,String,"""""",internal load balancing: dns (multi-A round-robin) | proxy (through the node's local proxy),453
+cloud,commands/cloud/workload.go,122,set [cloud] <container>,Set an application's placement policy (spread | pack | pinned),,false,,literal,yes,y,Bool,false,skip the confirmation prompt,454
+cloud,commands/cloud/workload.go,227,placements [cloud],The cloud's placement decision log — why each replica landed where it did,,false,,literal,,,,,,
+completion,commands/completion/completion.go,27,completion [bash|zsh|fish|powershell],Generate a shell completion script,,false,,literal,,,,,,
+compose,commands/compose/compose.go,233,compose,Work with Docker Compose projects,,false,,literal,,,,,,
+compose,commands/compose/compose.go,336,detect,"Detect and preview a docker-compose file's services, networks, volumes, and env vars",,false,,literal,file,,String,"""""",path to the compose file (default: search compose.yml/compose.yaml/docker-compose.yml/docker-compose.yaml in the current directory),1448
+compose,commands/compose/compose.go,336,detect,"Detect and preview a docker-compose file's services, networks, volumes, and env vars",,false,,literal,profile,,StringSlice,nil,"activate one or more compose profiles for this preview (repeatable, or comma-separated) — mirrors `compose deploy --profile`",1449
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,file,,String,"""""","path to the compose file (default: the current directory's compose.yml/compose.yaml/docker-compose.yml/docker-compose.yaml, or a prompt when several compose files are present)",1452
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,project-id,,String,"""""",target project ID (required),1453
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,machine-id,,String,"""""",enrolled machine ID to build AND host on (shorthand for --builder-id/--host-id set to the same machine),1454
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,builder-id,,String,"""""",enrolled machine ID to build buildable services on (required if the compose file has one; see `server --list`),1455
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,host-id,,String,"""""",enrolled machine ID to host every service on (required — see `server --list`),1456
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,url,,String,"""""","the compose project's repo URL, if any buildable service needs one cloned (default: auto-detected from the current directory's git remote)",1457
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,branch,,String,"""""","git branch to build from (default: auto-detected from the current directory's checked-out branch, else \""main\"")",1458
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,docker-user,,String,"""""","Docker Hub username for image tags (default: the builder's verified Docker Hub username, else your logged-in username)",1459
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,name,,StringArray,nil,name a buildable service's container and image as service=name (repeatable) — the image becomes <docker-user>/<name>; the wizard prompts for these when not passed,1460
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,profile,,StringSlice,nil,"activate one or more compose profiles (repeatable, or comma-separated) — a service with no profiles always deploys",1461
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,env-file,,String,"""""",path to a dotenv file whose variables are applied to every compose service (service environment entries take precedence),1462
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,environment-id,,String,"""""","features/env/ Environment ID this release binds to (default: resolved from the project+branch's existing mapping, if any — see `beaver environment list`)",1463
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,logs,,Bool,false,"stream the formatted, labelled build and host logs for every service instead of the live summary board",1464
+compose,commands/compose/compose.go,688,deploy [flags],Deploy a Docker Compose project,,false,,literal,skip-preflight,,Bool,false,proceed even if preflight reports a blocking finding (recorded as a server-side audit row),1465
+compose,commands/compose/lifecycle.go,103,status [stack-id],Show Compose stack status,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,124,logs <stack-id>,Show build and host logs for a Compose stack,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,144,destroy <stack-id>,Permanently destroy a Compose stack,"""down""",false,,literal,yes,y,Bool,false,skip the confirmation prompt,546
+compose,commands/compose/lifecycle.go,172,stacks,List your Compose stacks,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,211,stack,Inspect and manage one Compose stack,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,216,show <stack-id>,Show a stack's latest release and services,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,240,delete <stack-id>,Permanently delete a Compose stack,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,547
+compose,commands/compose/lifecycle.go,273,release <stack-id>,Show a stack's current (latest) release,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,299,networks <stack-id>,List a stack's shared Docker networks,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,334,volumes <stack-id>,List a stack's named Docker volumes,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,380,release,Inspect and control one Compose release,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,385,show <release-id>,Show one release's status and per-service detail,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,407,watch <release-id>,Watch a release's status until every service finishes,,false,,literal,logs,,Bool,false,stream each service's raw build/host logs instead of the live summary board,550
+compose,commands/compose/lifecycle.go,430,rollback <release-id>,Roll every service back to a target release,,false,,literal,target-release,,String,"""""",release ID to roll back to (required),551
+compose,commands/compose/lifecycle.go,430,rollback <release-id>,Roll every service back to a target release,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,552
+compose,commands/compose/lifecycle.go,480,retry <release-id>,Retry a failed release,,false,,literal,,,,,,
+compose,commands/compose/lifecycle.go,505,cancel <release-id>,Cancel a queued release,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,553
+config,commands/config/bind.go,18,bind,Author host bind mounts,,false,,literal,service,,String,"""""",deployment service to edit (required when multiple deployments exist),175
+config,commands/config/bind.go,20,add,Declare a host bind mount,,false,,literal,source,,String,"""""",absolute host path to mount,176
+config,commands/config/bind.go,20,add,Declare a host bind mount,,false,,literal,target,,String,"""""",absolute mount path inside the container,177
+config,commands/config/bind.go,20,add,Declare a host bind mount,,false,,literal,read-only,,Bool,false,mount the path read-only,178
+config,commands/config/bind.go,20,add,Declare a host bind mount,,false,,literal,yes-i-know,,Bool,false,acknowledge a privileged bind source (not covered by --yes),179
+config,commands/config/bind.go,50,remove <source>,Remove a host bind-mount declaration,,false,,literal,,,,,,
+config,commands/config/bind.go,68,list,List declared host bind mounts,,false,,literal,,,,,,
+config,commands/config/builderhost.go,22,builder,Choose and verify the machine this project builds on,,false,,literal,,,,,,
+config,commands/config/builderhost.go,29,host,Choose and verify the machine this project runs on,,false,,literal,machine-id,,String,"""""",enrolled machine ID to set (skips the interactive picker and verification),161
+config,commands/config/builderhost.go,29,host,Choose and verify the machine this project runs on,,false,,literal,name,,String,"""""",display name to record alongside --machine-id,162
+config,commands/config/builderhost.go,29,host,Choose and verify the machine this project runs on,,false,,literal,docker-user,,String,"""""",Docker Hub username this machine pushes/pulls as (recorded alongside --machine-id; auto-detected by the interactive picker),163
+config,commands/config/builderhost.go,29,host,Choose and verify the machine this project runs on,,false,,literal,clear,,Bool,false,remove this section (the platform picks a machine at deploy time),164
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,file,,String,"""""",configuration file to operate on,69
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,json,,Bool,false,print one machine-readable JSON envelope,70
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,dry-run,,Bool,false,show the proposed write without changing files,71
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,diff,,Bool,false,show a diff before writing,72
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,reset,,Bool,false,replace configuration with detected defaults,73
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,no-backup,,Bool,false,do not create a backup before writing,74
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,non-interactive,,Bool,false,resolve configuration without prompts,75
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,defaults,,Bool,false,allow detected/default values in non-interactive mode,76
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,yes,y,Bool,false,confirm ordinary config writes without prompting,77
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,no-push,,Bool,false,write .beaver/config.yml but don't save it to Beaver,78
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,strategy,,String,"""""",deployment strategy (rolling or recreate),79
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,domain,,String,"""""",primary domain,80
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,health-path,,String,"""""",HTTP health path,81
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,port,,Int,0,detected application port (informational until the config schema supports it),82
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,service,,String,"""""",configure one Compose service as a standalone deployment,83
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,compose-file,,String,"""""",Compose file to inspect when several are present,84
+config,commands/config/config.go,26,config,Inspect and author this project's Beaver configuration,,false,,literal,project-id,,String,"""""",Beaver project ID to bind to this configuration,85
+config,commands/config/config.go,31,inspect,Inspect this project without changing any files,,false,,literal,verbose,,Bool,false,include matched Dockerfile lines,86
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,http,,String,"""""","HTTP health-check path (absolute, e.g. /healthz)",342
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,interval,,String,"""""","time between checks, e.g. 10s",343
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,timeout,,String,"""""","per-check timeout, e.g. 5s",344
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,retries,,Int,0,consecutive failures before unhealthy (>= 1),345
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,tcp,,String,"""""",reserved — TCP health checks are not supported yet,346
+config,commands/config/health.go,22,health [SERVICE],Configure a deployment's health check (pass SERVICE when several exist),,false,,literal,command,,String,"""""",reserved — command health checks are not supported yet,347
+config,commands/config/health.go,29,disable [SERVICE],Remove the health section (the platform default applies),,false,,literal,,,,,,
+config,commands/config/network.go,18,network,Author required Docker networks,,false,,literal,service,,String,"""""",deployment service to edit (required when multiple deployments exist),208
+config,commands/config/network.go,24,add <name>,Declare an existing Docker network,,false,,literal,alias,,String,"""""",container DNS alias on the network,209
+config,commands/config/network.go,24,add <name>,Declare an existing Docker network,,false,,literal,external,,Bool,false,network already exists on the target host,210
+config,commands/config/network.go,47,remove <name>,Remove a Docker network declaration,,false,,literal,,,,,,
+config,commands/config/network.go,70,list,List declared Docker networks,,false,,literal,,,,,,
+config,commands/config/replicas.go,34,replicas [service] [count],Set how many replicas each service runs,,false,,literal,clear,,Bool,false,remove one service (with SERVICE) or the whole replicas: section,449
+config,commands/config/replicas.go,41,resources [SERVICE],Set the CPU and memory each container gets,,false,,literal,cpu,,Float64,0,CPU cores to allocate (the enforced ceiling — resources.limit),450
+config,commands/config/replicas.go,41,resources [SERVICE],Set the CPU and memory each container gets,,false,,literal,memory,,Int,0,memory in MB to allocate (the enforced ceiling — resources.limit),451
+config,commands/config/replicas.go,41,resources [SERVICE],Set the CPU and memory each container gets,,false,,literal,request-cpu,,Float64,0,"CPU cores to reserve day-to-day (resources.request; optional, must not exceed --cpu)",452
+config,commands/config/replicas.go,41,resources [SERVICE],Set the CPU and memory each container gets,,false,,literal,request-memory,,Int,0,"memory in MB to reserve day-to-day (resources.request; optional, must not exceed --memory)",453
+config,commands/config/replicas.go,41,resources [SERVICE],Set the CPU and memory each container gets,,false,,literal,clear,,Bool,false,remove the resources: section,454
+config,commands/config/schema.go,11,schema,Print the current .beaver/config.yml JSON Schema,,false,,literal,,,,,,
+config,commands/config/set.go,19,set <path> <value>,Set one configuration value,,false,,literal,service,,String,"""""",deployment service to edit (required when multiple deployments exist),14
+config,commands/config/set.go,20,unset <path>,Remove one configuration value,,false,,literal,service,,String,"""""",deployment service to edit (required when multiple deployments exist),15
+config,commands/config/show.go,44,show [container] [list],Show this project's Beaver configuration,,false,,literal,yaml,,Bool,false,print the raw YAML,21
+config,commands/config/show.go,44,show [container] [list],Show this project's Beaver configuration,,false,,literal,effective,,Bool,false,note future environment-overlay support,22
+config,commands/config/show.go,44,show [container] [list],Show this project's Beaver configuration,,false,,literal,revision,,String,"""""",show one specific saved revision by id (or a unique id prefix) instead of picking/current,23
+config,commands/config/validate.go,17,validate,Validate .beaver/config.yml without deploying,,false,,literal,,,,,,
+config,commands/config/volume.go,17,volume,Author required Docker volumes,,false,,literal,service,,String,"""""",deployment service to edit (required when multiple deployments exist),152
+config,commands/config/volume.go,19,add <name>,Declare an existing Docker volume,,false,,literal,target,,String,"""""",absolute mount path inside the container,153
+config,commands/config/volume.go,19,add <name>,Declare an existing Docker volume,,false,,literal,external,,Bool,false,volume already exists on the target host,154
+config,commands/config/volume.go,40,remove <name>,Remove a Docker volume declaration,,false,,literal,,,,,,
+config,commands/config/volume.go,58,list,List declared Docker volumes,,false,,literal,,,,,,
+config,commands/config/wizard.go,29,init,Infer and write Beaver configuration,,false,,literal,,,,,,
+config,commands/config/wizard.go,30,sync,Reconcile Beaver configuration with Compose and Dockerfile facts,,false,,literal,,,,,,
+connect,commands/connect/connect.go,18,connect,Prepare and connect this machine to Beaver,,false,,literal,verbose,v,Bool,false,show safe technical details while connecting,47
+container,commands/container/container.go,231,containers,List containers deployed through Beaver,,false,,literal,stats,,Bool,false,Show historical Prometheus/cAdvisor service summaries,956
+container,commands/container/container.go,231,containers,List containers deployed through Beaver,,false,,literal,since,,String,"""1h""",Historical metrics window (for example 1h or 24h),957
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,json,,Bool,false,Print output as JSON (shorthand for --output json),963
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,quiet,,Bool,false,Suppress human-readable status lines; print only the requested data,965
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,tail,,Int,200,"Number of log lines to show, for the logs action",966
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,yes,y,Bool,false,"Skip the confirmation prompt, for rollback/stop",967
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,follow,f,Bool,false,"Stream logs live instead of a one-shot tail, for the logs action",968
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,skip-preflight,,Bool,false,"Proceed even if preflight reports a blocking finding, for the redeploy/rollback actions (recorded as a server-side audit row)",970
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,no-queue,,Bool,false,"Fail immediately when the container's machine is offline, instead of queueing the redeploy/rollback to run when its agent reconnects",971
+container,commands/container/container.go,305,container <name> <action> [args],Inspect and operate on a single container,,false,,literal,acknowledge-data-loss,,Bool,false,Proceed even though this redeploy/rollback drops a volume the running release mounts,972
+container,commands/container/open.go,83,open [name],Open a container's dashboard page (or live app) in your browser,,false,,literal,live,,Bool,false,Open the container's own live app URL instead of its dashboard page,119
+coupon,commands/coupon/coupon.go,21,coupon,Redeem a Beaver coupon code,,false,,literal,,,,,,
+coupon,commands/coupon/coupon.go,46,redeem <code>,Redeem an entitlement coupon (e.g. extra machines) for this workspace,,false,,literal,,,,,,
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,git,,Bool,false,use the GitHub-repository deploy wizard instead of local Dockerfile discovery,233
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,dockerfile,,String,"""""",path to the Dockerfile to deploy (must be inside the detected git repository),234
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,logs,,Bool,false,stream raw build/host logs instead of the live summary board,235
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,dry-run,,Bool,false,"run every preflight check and print the plan, but don't actually deploy",236
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,auto-create-environment,,Bool,false,"create a new environment for this branch without prompting, for non-interactive/CI use",237
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,skip-preflight,,Bool,false,proceed even if preflight reports a blocking finding (recorded as a server-side audit row),238
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,acknowledge-data-loss,,Bool,false,proceed even though this deploy drops a volume the running release mounts,239
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,machine,,String,"""""","deploy to this enrolled machine, overriding the .beaver/config.yml host pin for this deploy only",240
+deploy,commands/deploy/deploy.go,98,deploy,Deploy one application from a Dockerfile or connected GitHub repository,"""d""",false,,literal,best-machine,,Bool,false,let preflight pick the best compatible enrolled host and deploy there,242
+deployment,commands/deployment/deployment.go,297,deployment,Inspect and control one deployment by ID,,false,,literal,,,,,,
+deployment,commands/deployment/deployment.go,322,list,List a container's deployment history,,false,,literal,container,,String,"""""",container name or ID (omit to choose interactively),778
+deployment,commands/deployment/deployment.go,322,list,List a container's deployment history,,false,,literal,status,,String,"""""",only show deployments with this status,779
+deployment,commands/deployment/deployment.go,395,show [deployment-id],Show one deployment's full detail,,false,,literal,,,,,,
+deployment,commands/deployment/deployment.go,469,status [deployment-id],Show a deployment's current build/host workflow state,,false,,literal,,,,,,
+deployment,commands/deployment/deployment.go,528,logs [deployment-id],Show HTTP request logs for this deployment,,false,,literal,page,,Int,1,page number,781
+deployment,commands/deployment/deployment.go,528,logs [deployment-id],Show HTTP request logs for this deployment,,false,,literal,limit,,Int,100,results per page (max 500),782
+deployment,commands/deployment/deployment.go,644,watch <deployment-id>,Show a deployment's live progress until it finishes,,false,,literal,logs,,Bool,false,stream raw build/host logs instead of the live summary board,784
+deployment,commands/deployment/deployment.go,669,retry <deployment-id>,Retry a failed or cancelled deployment,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,786
+deployment,commands/deployment/deployment.go,697,cancel <deployment-id>,Cancel a deployment that's still queued,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,787
+diff,commands/diff/diff.go,32,diff [service] [release-a] [release-b],"Compare two releases: code, config, and image",,false,,literal,,,,,,
+docker,commands/docker/docker.go,20,docker,Check this machine's Docker setup,,false,,literal,auth,,Bool,false,Check Docker Hub authentication status,28
+doctor,commands/doctor/doctor.go,20,doctor,Diagnose and repair this machine's Beaver setup,,false,,literal,verbose,v,Bool,false,show safe technical details and executed commands,27
+domain,commands/domain/domain.go,88,domain,Manage custom domains on a container,,false,,literal,,,,,,
+domain,commands/domain/domain.go,107,list,List a container's domains,,false,,literal,container,,String,"""""",container name or ID (required),350
+domain,commands/domain/domain.go,161,add,Attach a new domain to a container,,false,,literal,container,,String,"""""",container name or ID (required),352
+domain,commands/domain/domain.go,161,add,Attach a new domain to a container,,false,,literal,domain,,String,"""""","the hostname to attach, e.g. app.example.com (required)",353
+domain,commands/domain/domain.go,246,verify <domain-id>,Re-check DNS and (re)trigger verification,,false,,literal,,,,,,
+domain,commands/domain/domain.go,277,certificate <domain-id>,(Re)provision a domain's TLS certificate,,false,,literal,,,,,,
+domain,commands/domain/domain.go,304,remove <domain-id>,Detach a domain from its container,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,355
+edge,commands/edge/app.go,20,add,Connect a new app,,false,,literal,domain,,String,"""""",domain to connect (required),241
+edge,commands/edge/app.go,20,add,Connect a new app,,false,,literal,origin,,String,"""""",your origin server's URL (required),242
+edge,commands/edge/app.go,20,add,Connect a new app,,false,,literal,allow-insecure-origin,,Bool,false,acknowledge an http:// origin (Beaver-to-origin traffic won't be encrypted),243
+edge,commands/edge/app.go,20,add,Connect a new app,,false,,literal,preserve-host-header,,Bool,false,forward the original Host header to your origin,244
+edge,commands/edge/app.go,66,show <connected-app-id>,Show a Connected App,,false,,literal,,,,,,
+edge,commands/edge/app.go,90,update <connected-app-id>,Update a Connected App's settings,,false,,literal,preserve-host-header,,String,"""""",true or false,246
+edge,commands/edge/app.go,124,remove <connected-app-id>,Disconnect a Connected App,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,247
+edge,commands/edge/app.go,150,verify <connected-app-id>,Re-run DNS/TLS verification,,false,,literal,,,,,,
+edge,commands/edge/app.go,171,rotate-secret <connected-app-id>,Rotate the origin secret,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,248
+edge,commands/edge/app.go,197,origin-protection <connected-app-id>,Show origin-IP-protection status,,false,,literal,,,,,,
+edge,commands/edge/app.go,218,origin-protection-recheck <connected-app-id>,Re-run the origin-protection check,,false,,literal,,,,,,
+edge,commands/edge/backends.go,13,backends <connected-app-id>,List a Connected App's backends,,false,,literal,,,,,,
+edge,commands/edge/backends.go,42,backend,"Add, remove, or import backends for a Connected App",,false,,literal,,,,,,
+edge,commands/edge/backends.go,53,add <connected-app-id>,Add a backend,,false,,literal,address,,String,"""""",host:port (required),183
+edge,commands/edge/backends.go,53,add <connected-app-id>,Add a backend,,false,,literal,weight,,Int,0,load-balancing weight (default: 1),184
+edge,commands/edge/backends.go,53,add <connected-app-id>,Add a backend,,false,,literal,enabled,,String,"""""",true or false (default: true),185
+edge,commands/edge/backends.go,92,remove <connected-app-id> <backend-id>,Remove a backend,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,186
+edge,commands/edge/backends.go,116,detected-services <machine-id>,List an observer machine's discovered containers,,false,,literal,,,,,,
+edge,commands/edge/backends.go,147,import <connected-app-id>,Import discovered containers as backends,,false,,literal,detected-service-id,,StringArray,nil,a detected service ID to import (repeatable),187
+edge,commands/edge/edge.go,26,edge,Manage Beaver Edge Connected Apps,,false,,literal,,,,,,
+edge,commands/edge/edge.go,54,apps,List your Connected Apps,,false,,literal,,,,,,
+edge,commands/edge/edge.go,87,app,"Add, show, update, remove, verify, or manage a Connected App",,false,,literal,,,,,,
+edge,commands/edge/firewall.go,17,firewall,Manage the Edge-firewall mirror of Beaver Firewall on a Connected App,,false,,literal,,,,,,
+edge,commands/edge/firewall.go,70,policy <connected-app-id>,,,false,,factory,,,,,,
+edge,commands/edge/firewall.go,71,rules <connected-app-id>,,,false,,factory,,,,,,
+edge,commands/edge/firewall.go,72,overview <connected-app-id>,,,false,,factory,,,,,,
+edge,commands/edge/firewall.go,73,intel <connected-app-id>,,,false,,factory,,,,,,
+edge,commands/edge/firewall.go,74,bans <connected-app-id>,,,false,,factory,,,,,,
+edge,commands/edge/firewall.go,86,set <connected-app-id>,Change a Connected App's firewall policy,,false,,literal,enabled,,String,"""""",true or false,545
+edge,commands/edge/firewall.go,86,set <connected-app-id>,Change a Connected App's firewall policy,,false,,literal,level,,String,"""""","off, basic, standard, or strict",546
+edge,commands/edge/firewall.go,86,set <connected-app-id>,Change a Connected App's firewall policy,,false,,literal,security-headers,,String,"""""",true or false,547
+edge,commands/edge/firewall.go,86,set <connected-app-id>,Change a Connected App's firewall policy,,false,,literal,concurrency,,Int,0,max concurrent requests,548
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,name,,String,"""""",rule name,551
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,type,,String,"""""","condition type: ip, path, method, query, or header (required)",552
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,action,,String,"""""","allow, block, rate-limit, or challenge (required)",553
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,value,,String,"""""",condition value,554
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,path,,String,"""""","path, for --type path",555
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,method,,String,"""""","HTTP method, for --type method",556
+edge,commands/edge/firewall.go,167,add <connected-app-id>,Add a firewall rule,,false,,literal,priority,,Int,0,rule priority (lower runs first),557
+edge,commands/edge/firewall.go,211,update <connected-app-id> <rule-id>,Update a firewall rule,,false,,literal,action,,String,"""""",new action,558
+edge,commands/edge/firewall.go,211,update <connected-app-id> <rule-id>,Update a firewall rule,,false,,literal,conditions,,String,"""""","new conditions, as raw JSON",559
+edge,commands/edge/firewall.go,250,delete <connected-app-id> <rule-id>,Delete a firewall rule,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,560
+edge,commands/edge/firewall.go,274,rule,"Add, update, or delete Edge-firewall rules",,false,,literal,,,,,,
+edge,commands/edge/firewall.go,283,revisions <connected-app-id>,Show a Connected App's firewall change history,,false,,literal,limit,,Int,0,max revisions to return,563
+edge,commands/edge/firewall.go,310,rollback <connected-app-id> <revision-id>,Roll back to a previous firewall revision,,false,,literal,,,,,,
+edge,commands/edge/firewall.go,340,preset,Apply a firewall preset or app template,,false,,literal,,,,,,
+edge,commands/edge/firewall.go,345,apply <connected-app-id>,Apply a security-level preset or an app template,,false,,literal,preset,,String,"""""","off, basic, standard, or strict",566
+edge,commands/edge/firewall.go,345,apply <connected-app-id>,Apply a security-level preset or an app template,,false,,literal,template,,String,"""""","static-website, rest-api, admin-dashboard, auth-service, or webhook-endpoint",567
+edge,commands/edge/firewall.go,389,ban <connected-app-id>,Ban an IP address,,false,,literal,ip,,String,"""""",IP address to ban (required),569
+edge,commands/edge/firewall.go,389,ban <connected-app-id>,Ban an IP address,,false,,literal,reason,,String,"""""",reason for the ban,570
+edge,commands/edge/firewall.go,389,ban <connected-app-id>,Ban an IP address,,false,,literal,duration,,Int,0,ban duration in minutes (default: server default),571
+edge,commands/edge/firewall.go,418,unban <connected-app-id> <ip>,Remove a ban,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,572
+edge,commands/edge/firewall.go,451,login-protect <connected-app-id>,Configure brute-force protection on a login path,,false,,literal,path,,String,"""""",login path to protect (required),574
+edge,commands/edge/firewall.go,451,login-protect <connected-app-id>,Configure brute-force protection on a login path,,false,,literal,rate-limit,,Int,0,requests per minute (default: server default),575
+edge,commands/edge/firewall.go,451,login-protect <connected-app-id>,Configure brute-force protection on a login path,,false,,literal,threshold,,Int,0,failed attempts before banning (default: server default),576
+edge,commands/edge/firewall.go,451,login-protect <connected-app-id>,Configure brute-force protection on a login path,,false,,literal,ban-minutes,,Int,0,ban duration in minutes (default: server default),577
+edge,commands/edge/firewall.go,492,lockdown <connected-app-id>,Block all traffic to a Connected App,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,579
+edge,commands/edge/firewall.go,518,unlock <connected-app-id>,Undo a lockdown,,false,,literal,,,,,,
+edge,commands/edge/logs.go,18,logs <connected-app-id>,Show a Connected App's access logs,,false,,literal,limit,,Int,100,results per page (max 500),69
+edge,commands/edge/logs.go,18,logs <connected-app-id>,Show a Connected App's access logs,,false,,literal,page,,Int,1,page number,70
+edge,commands/edge/speed.go,13,speed <connected-app-id>,Show a Connected App's Speed Insights config,,false,,literal,,,,,,
+edge,commands/edge/speed.go,41,set <connected-app-id>,Enable or disable Speed Insights,,false,,literal,enabled,,String,"""""",true or false (required),72
+edge,commands/edge/traffic.go,15,traffic <connected-app-id>,Show a Connected App's traffic dashboard,,false,,literal,range,,String,"""24h""","1h, 6h, 24h, 7d, or 30d",56
+environment,commands/environment/environment.go,110,environment,Show or manage Beaver environments (a named branch->deploy-target binding on a project),"""env""",false,,literal,,,,,,
+environment,commands/environment/environment.go,204,list,List environments,,false,,literal,user-id,,String,"""""",user ID to list environments for (default: your own),415
+environment,commands/environment/environment.go,263,create,Create a new environment,,false,,literal,name,,String,"""""","environment name — any slug, e.g. testing, development, staging, production (required)",417
+environment,commands/environment/environment.go,263,create,Create a new environment,,false,,literal,project-id,,String,"""""",project ID this environment belongs to (required),418
+environment,commands/environment/environment.go,263,create,Create a new environment,,false,,literal,branch,,String,"""""",git branch to map to this environment (optional),419
+environment,commands/environment/environment.go,360,delete <environment-id>,Delete an environment,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,421
+environment,commands/environment/vars.go,40,vars,Manage a container's environment variables (KEY=value),,false,,literal,,,,,,
+environment,commands/environment/vars.go,72,list [service],List a container's environment variable names,,false,,literal,,,,,,
+environment,commands/environment/vars.go,105,pull [service],Write a container's environment variables to a local .env file,,false,,literal,,,,,,
+environment,commands/environment/vars.go,156,push [service],Import a local .env file's variables,,false,,literal,,,,,,
+environment,commands/environment/vars.go,203,diff [service],Compare a local .env file against what's deployed,,false,,literal,reveal,,Bool,false,print actual values instead of just key names (asks for a second confirmation),259
+environment,commands/environment/vars.go,203,diff [service],Compare a local .env file against what's deployed,,false,,literal,file,,String,"""""",path to the local .env file (default .env),257
+firewall,commands/firewall/firewall.go,35,firewall,Manage Beaver Firewall on a deployment,,false,,literal,service,,String,"""""","Compose service name, for a stack sharing this deployment ID",88
+firewall,commands/firewall/firewall.go,94,policy <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/firewall.go,95,rules <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/firewall.go,96,overview <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/firewall.go,97,intel <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/firewall.go,98,bans <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/firewall.go,99,waf <deployment-id>,,,false,,factory,,,,,,
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,service,,String,"""""",Compose service name,573
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,enabled,,String,"""""",true or false,574
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,security-headers,,String,"""""",true or false,575
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,max-body-bytes,,Int64,0,max request body size in bytes,576
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,rate-limit,,Int,0,requests per minute cap,577
+firewall,commands/firewall/mutations.go,24,set <deployment-id>,Change a deployment's firewall policy,,false,,literal,concurrency,,Int,0,max concurrent requests,578
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,service,,String,"""""",Compose service name,581
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,type,,String,"""""","condition type: ip, path, method, query, or header (required)",582
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,action,,String,"""""","allow, block, rate-limit, or challenge (required)",583
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,value,,String,"""""",condition value,584
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,path,,String,"""""","path, for --type path",585
+firewall,commands/firewall/mutations.go,106,add <deployment-id>,Add a firewall rule,,false,,literal,method,,String,"""""","HTTP method, for --type method",586
+firewall,commands/firewall/mutations.go,146,update <deployment-id> <rule-id>,Update a firewall rule,,false,,literal,service,,String,"""""",Compose service name,587
+firewall,commands/firewall/mutations.go,146,update <deployment-id> <rule-id>,Update a firewall rule,,false,,literal,action,,String,"""""",new action,588
+firewall,commands/firewall/mutations.go,146,update <deployment-id> <rule-id>,Update a firewall rule,,false,,literal,conditions,,String,"""""","new conditions, as raw JSON",589
+firewall,commands/firewall/mutations.go,185,delete <deployment-id> <rule-id>,Delete a firewall rule,,false,,literal,service,,String,"""""",Compose service name,590
+firewall,commands/firewall/mutations.go,185,delete <deployment-id> <rule-id>,Delete a firewall rule,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,591
+firewall,commands/firewall/mutations.go,213,revisions <deployment-id>,Show a deployment's firewall change history,,false,,literal,limit,,Int,0,max revisions to return,595
+firewall,commands/firewall/mutations.go,243,rollback <deployment-id> <revision-id>,Roll back to a previous firewall revision,,false,,literal,service,,String,"""""",Compose service name,594
+firewall,commands/firewall/mutations.go,274,events <deployment-id>,Show blocked/allowed request events,,false,,literal,limit,,Int,0,max events to return,596
+firewall,commands/firewall/mutations.go,274,events <deployment-id>,Show blocked/allowed request events,,false,,literal,grouped,,Bool,false,group events by rule/IP,597
+firewall,commands/firewall/mutations.go,311,apply <deployment-id>,Apply a firewall preset,,false,,literal,service,,String,"""""",Compose service name,600
+firewall,commands/firewall/mutations.go,311,apply <deployment-id>,Apply a firewall preset,,false,,literal,preset,,String,"""""",preset name (required),601
+firewall,commands/firewall/mutations.go,348,ban <deployment-id>,Ban an IP address,,false,,literal,service,,String,"""""",Compose service name,603
+firewall,commands/firewall/mutations.go,348,ban <deployment-id>,Ban an IP address,,false,,literal,ip,,String,"""""",IP address to ban (required),604
+firewall,commands/firewall/mutations.go,348,ban <deployment-id>,Ban an IP address,,false,,literal,reason,,String,"""""",reason for the ban,605
+firewall,commands/firewall/mutations.go,348,ban <deployment-id>,Ban an IP address,,false,,literal,duration,,Int,0,ban duration in minutes (default: server default),606
+firewall,commands/firewall/mutations.go,377,unban <deployment-id> <ip>,Remove a ban,,false,,literal,service,,String,"""""",Compose service name,607
+firewall,commands/firewall/mutations.go,377,unban <deployment-id> <ip>,Remove a ban,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,608
+firewall,commands/firewall/mutations.go,408,login-protect <deployment-id>,Configure brute-force protection on a login path,,false,,literal,service,,String,"""""",Compose service name,610
+firewall,commands/firewall/mutations.go,408,login-protect <deployment-id>,Configure brute-force protection on a login path,,false,,literal,path,,String,"""""",login path to protect (required),611
+firewall,commands/firewall/mutations.go,408,login-protect <deployment-id>,Configure brute-force protection on a login path,,false,,literal,threshold,,Int,0,failed attempts before banning,612
+firewall,commands/firewall/mutations.go,441,lockdown <deployment-id>,Block all traffic to a deployment,,false,,literal,service,,String,"""""",Compose service name,614
+firewall,commands/firewall/mutations.go,441,lockdown <deployment-id>,Block all traffic to a deployment,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,615
+firewall,commands/firewall/mutations.go,467,unlock <deployment-id>,Undo a lockdown,,false,,literal,service,,String,"""""",Compose service name,616
+firewall,commands/firewall/mutations.go,492,visibility <deployment-id>,Make a service public or private,,false,,literal,service,,String,"""""",Compose service name,618
+firewall,commands/firewall/mutations.go,492,visibility <deployment-id>,Make a service public or private,,false,,literal,public,,Bool,false,make the service publicly reachable,619
+firewall,commands/firewall/mutations.go,492,visibility <deployment-id>,Make a service public or private,,false,,literal,private,,Bool,false,make the service internal-only,620
+firewall,commands/firewall/mutations.go,528,set <deployment-id>,Change a deployment's WAF configuration,,false,,literal,service,,String,"""""",Compose service name,623
+firewall,commands/firewall/mutations.go,528,set <deployment-id>,Change a deployment's WAF configuration,,false,,literal,enabled,,String,"""""",true or false (required),624
+firewall,commands/firewall/mutations.go,630,rule,"Add, update, or delete firewall rules",,false,,literal,,,,,,
+firewall,commands/firewall/mutations.go,635,preset,Apply a firewall preset,,false,,literal,,,,,,
+git,commands/git/git.go,23,git,Check GitHub authentication on this machine,,false,,literal,auth,,Bool,false,Check GitHub CLI authentication status,31
+github,commands/github/github.go,34,github,List your connected GitHub accounts,,false,,literal,,,,,,
+github,commands/github/manage.go,17,accounts,List your connected GitHub accounts,,false,,literal,,,,,,
+github,commands/github/manage.go,28,install,Connect a new GitHub account,,false,,literal,return-to,,String,"""""",URL to return to after install (optional),93
+github,commands/github/manage.go,57,branches,List a repository's branches,,false,,literal,repo,,String,"""""",repository URL (required),94
+health,commands/health/health.go,32,health [service],"Set a service's HTTP health-check path (declared, then applied)",,false,,literal,path,,String,"""""",the HTTP health-check path (e.g. /healthz),50
+health,commands/health/health.go,32,health [service],"Set a service's HTTP health-check path (declared, then applied)",,false,,literal,probe-timeout,,Duration,0,per-probe timeout (e.g. 3s),51
+health,commands/health/health.go,32,health [service],"Set a service's HTTP health-check path (declared, then applied)",,false,,literal,clear,,Bool,false,remove the health check,52
+health,commands/health/health.go,32,health [service],"Set a service's HTTP health-check path (declared, then applied)",,false,,literal,force,,Bool,false,record even if the local config is out of sync with the recorded desired state,53
+health,commands/health/health.go,32,health [service],"Set a service's HTTP health-check path (declared, then applied)",,false,,literal,commit,,Bool,false,git commit the .beaver/config.yml change (never pushes),54
+history,commands/history/history.go,24,history,Show what you've run recently,,false,,literal,project,,String,"""""",only show entries for this project,92
+history,commands/history/history.go,24,history,Show what you've run recently,,false,,literal,since,,String,"""""","only show entries newer than this (e.g. 1h, 24h, 1d)",93
+initcmd,commands/initcmd/init.go,44,init,Set up this directory for Beaver,,false,,literal,from-existing,,Bool,false,no-op — generating .beaver/config.yml from what's currently deployed is now the default when no local file exists,122
+initcmd,commands/initcmd/init.go,44,init,Set up this directory for Beaver,,false,,literal,guided,,Bool,false,run the narrated zero-to-live setup and deployment flow,123
+initcmd,commands/initcmd/init.go,44,init,Set up this directory for Beaver,,false,,literal,propose,,Bool,false,"print a new-schema .beaver/config.yml proposal generated from your current deployment, without writing it",124
+inspect,commands/inspect/inspect.go,24,inspect [service],Show what's running for this project,"""s""",false,,literal,,,,,,
+integration,commands/integration/integration.go,27,integrations,List your connected integrations,,false,,literal,,,,,,
+integration,commands/integration/integration.go,61,status,Show connection status per provider,,false,,literal,,,,,,
+integration,commands/integration/integration.go,111,remove <integration-id>,Disconnect an integration,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,140
+machine,commands/machine/approvals.go,18,approvals <machine-id>,List actions Beaver proposed and is waiting to be approved or rejected,,false,,literal,,,,,,
+machine,commands/machine/approvals.go,88,approve <machine-id> <approval-id>,,,false,,factory,yes,y,Bool,false,skip the confirmation prompt,90
+machine,commands/machine/approvals.go,89,reject <machine-id> <approval-id>,,,false,,factory,yes,y,Bool,false,skip the confirmation prompt,91
+machine,commands/machine/cleanup.go,91,cleanup-plan [machine-id],Create a Docker cleanup plan,,false,,literal,prune-build-cache,,Bool,false,also prune the Docker build cache when the plan is applied,764
+machine,commands/machine/cleanup.go,150,cleanup [machine-id],Apply the machine's latest Docker cleanup plan,,false,,literal,,,,,,
+machine,commands/machine/cleanup.go,181,apply <plan-id> [machine-id],Apply a specific Docker cleanup plan,,false,,literal,,,,,,
+machine,commands/machine/cleanup.go,199,plans [machine-id],List a machine's Docker cleanup plans,,false,,literal,,,,,,
+machine,commands/machine/cleanup.go,251,show <plan-id> [machine-id],Show a Docker cleanup plan and its per-item results,,false,,literal,,,,,,
+machine,commands/machine/cleanup.go,269,retry <plan-id> [machine-id],Re-attempt the failed items of a cleanup plan,,false,,literal,,,,,,
+machine,commands/machine/cleanup.go,295,cancel <plan-id> [machine-id],Cancel a cleanup plan that has not been applied yet,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,767
+machine,commands/machine/cleanup.go,295,cancel <plan-id> [machine-id],Cancel a cleanup plan that has not been applied yet,,false,,literal,review,,Bool,false,interactively pick items from the review-required tier,770
+machine,commands/machine/fleet.go,53,fleet-overview,Show every machine in your workspace with health/security summaries and counts,,false,,literal,group,,String,"""""",filter to one machine group,435
+machine,commands/machine/fleet.go,207,fleet-drift,Show every machine with open desired-state drift,,false,,literal,group,,String,"""""",filter to one machine group,436
+machine,commands/machine/fleet.go,236,groups,List machine groups,,false,,literal,,,,,,
+machine,commands/machine/fleet.go,268,create,Create a machine group,,false,,literal,name,,String,"""""",group name (required),440
+machine,commands/machine/fleet.go,296,update <group-id>,Rename a group or reassign its machine membership,,false,,literal,name,,String,"""""",new group name,441
+machine,commands/machine/fleet.go,296,update <group-id>,Rename a group or reassign its machine membership,,false,,literal,machines,,StringSlice,nil,comma-separated machine IDs (replaces group membership),442
+machine,commands/machine/fleet.go,332,delete <group-id>,Delete a machine group,,false,,literal,,,,,,
+machine,commands/machine/fleet.go,359,group-policy <group-id>,Show a group's fleet-wide autopilot policy,,false,,literal,,,,,,
+machine,commands/machine/fleet.go,381,set <group-id>,Set a group's fleet-wide autopilot mode and desired state,,false,,literal,mode,,String,"""""","observe, assisted, or autopilot (required)",445
+machine,commands/machine/fleet.go,381,set <group-id>,Set a group's fleet-wide autopilot mode and desired state,,false,,literal,firewall-enabled,,Bool,false,desired state: firewall enabled,446
+machine,commands/machine/fleet.go,381,set <group-id>,Set a group's fleet-wide autopilot mode and desired state,,false,,literal,ssh-root-login-off,,Bool,false,desired state: SSH root login disabled,447
+machine,commands/machine/fleet.go,381,set <group-id>,Set a group's fleet-wide autopilot mode and desired state,,false,,literal,auto-security-updates,,Bool,false,desired state: security updates applied automatically,448
+machine,commands/machine/fleet.go,381,set <group-id>,Set a group's fleet-wide autopilot mode and desired state,,false,,literal,group,,String,"""""",filter to one machine group,437
+machine,commands/machine/fleet_capacity.go,52,fleet-capacity,Compare fresh Node Exporter headroom across workspace machines,,false,,literal,,,,,,
+machine,commands/machine/fleet_capacity.go,96,search,Find a machine in the capacity report,,false,,literal,,,,,,
+machine,commands/machine/logs.go,55,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,literal,source,,String,"""""",log source ID from log-inventory (required),77
+machine,commands/machine/logs.go,55,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,literal,limit,,Int,200,maximum entries to return (server-clamped),78
+machine,commands/machine/logs.go,55,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,literal,query,,String,"""""",case-insensitive text search,79
+machine,commands/machine/logs.go,55,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,literal,level,,String,"""""",minimum severity: debug|info|warning|error,80
+machine,commands/machine/logs.go,55,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,literal,follow,,Bool,false,stream new entries live instead of one page of history,81
+machine,commands/machine/machine.go,23,machine,Inspect and manage enrolled machines,,false,,literal,,,,,,
+machine,commands/machine/machine.go,226,list,List every enrolled machine,,false,,literal,live,,Bool,false,round-trip the agent for live monitoring component status,688
+machine,commands/machine/machine.go,692,overview [machine-id],,,false,,factory,,,,,,
+machine,commands/machine/machine.go,693,show [machine-id],,,false,,factory,,,,,,
+machine,commands/machine/maintenance.go,65,reboot-impact <machine-id>,Show what a reboot would interrupt,,false,,literal,,,,,,
+machine,commands/machine/maintenance.go,88,reboot <machine-id>,Reboot a machine,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,513
+machine,commands/machine/maintenance.go,102,package-update [machine-id],Apply pending OS package updates,,false,,literal,class,,String,"""security""","update class: security, regular, or kernel",514
+machine,commands/machine/maintenance.go,102,package-update [machine-id],Apply pending OS package updates,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,515
+machine,commands/machine/maintenance.go,102,package-update [machine-id],Apply pending OS package updates,,false,,literal,verbose,v,Bool,false,stream the package-manager output live instead of a progress line,516
+machine,commands/machine/maintenance.go,379,restart-service <machine-id>,Restart one watched service,,false,,literal,service,,String,"""""",service name to restart (required),517
+machine,commands/machine/maintenance.go,379,restart-service <machine-id>,Restart one watched service,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,518
+machine,commands/machine/maintenance.go,396,maintenance-windows <machine-id>,List scheduled recurring maintenance windows,,false,,literal,limit,,Int,0,max windows to return,519
+machine,commands/machine/maintenance.go,423,add <machine-id>,Schedule a recurring maintenance window,,false,,literal,day,,String,"""""","UTC day of week, e.g. sunday (required)",521
+machine,commands/machine/maintenance.go,423,add <machine-id>,Schedule a recurring maintenance window,,false,,literal,hour,,Int,0,UTC hour of day (0-23),522
+machine,commands/machine/maintenance.go,423,add <machine-id>,Schedule a recurring maintenance window,,false,,literal,class,,String,"""""","action class, e.g. package-update (required)",523
+machine,commands/machine/maintenance.go,423,add <machine-id>,Schedule a recurring maintenance window,,false,,literal,enabled,,Bool,true,whether the window is active,524
+machine,commands/machine/maintenance.go,453,update <machine-id> <window-id>,Update a scheduled maintenance window,,false,,literal,day,,String,"""""",UTC day of week,525
+machine,commands/machine/maintenance.go,453,update <machine-id> <window-id>,Update a scheduled maintenance window,,false,,literal,hour,,Int,0,UTC hour of day (0-23),526
+machine,commands/machine/maintenance.go,453,update <machine-id> <window-id>,Update a scheduled maintenance window,,false,,literal,class,,String,"""""",action class,527
+machine,commands/machine/maintenance.go,453,update <machine-id> <window-id>,Update a scheduled maintenance window,,false,,literal,enabled,,Bool,true,whether the window is active,528
+machine,commands/machine/maintenance.go,486,maintenance-runs <machine-id>,Show the audit history of maintenance actions already run,,false,,literal,,,,,,
+machine,commands/machine/monitoring.go,17,monitoring,Manage private Prometheus monitoring,,false,,literal,,,,,,
+machine,commands/machine/monitoring.go,44,status <machine-id>,Show live private Prometheus status,,false,,literal,,,,,,
+machine,commands/machine/monitoring.go,61,query <machine-id>,Run one curated Prometheus health query,,false,,literal,query,,String,"""prometheus_up""","curated query: prometheus_up, prometheus_targets_up, or prometheus_storage_bytes",143
+machine,commands/machine/monitoring.go,99,metrics <machine-id>,Show current/peak machine metrics (Prometheus V2),,false,,literal,since,,String,"""1h""","lookback window (e.g. 1h, 24h, 7d)",144
+machine,commands/machine/monitoring.go,151,enable <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/monitoring.go,151,disable <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/observe.go,811,services [machine-id],Show watched service status,,false,,literal,,,,,,
+machine,commands/machine/observe.go,976,metrics <machine-id>,Show historical resource metrics,,false,,literal,window,,String,"""1h""","time window: 1h, 6h, 24h, 7d, or 30d",1146
+machine,commands/machine/observe.go,1001,events [machine-id],Show a machine's event timeline,,false,,literal,limit,,Int,0,max events to return,1147
+machine,commands/machine/observe.go,1001,events [machine-id],Show a machine's event timeline,,false,,literal,category,,String,"""""",filter by category,1148
+machine,commands/machine/observe.go,1001,events [machine-id],Show a machine's event timeline,,false,,literal,severity,,String,"""""",filter by severity,1149
+machine,commands/machine/observe.go,1054,trends <machine-id>,Project when a resource will hit a threshold,,false,,literal,metric,,String,"""disk_used_gb""",metric to project,1150
+machine,commands/machine/observe.go,1054,trends <machine-id>,Project when a resource will hit a threshold,,false,,literal,window,,String,"""30d""",history window to project from,1151
+machine,commands/machine/observe.go,1080,services [machine-id],Show watched service status,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1081,docker [machine-id],Show Docker host and container inventory,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1082,alerts [machine-id],Show current machine alert states,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1083,alert-rules [machine-id],Show configured machine alert thresholds,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1084,live [machine-id],Fetch a live resource snapshot,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1085,security <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1086,exposure <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1087,log-inventory <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1088,logs <machine-id>,Read (or --follow) one log source's entries from a machine,,false,,factory,,,,,,
+machine,commands/machine/observe.go,1099,set <machine-id>,Create or update an alert rule,,false,,literal,metric,,String,"""""","metric name, e.g. disk_used_pct (required)",1153
+machine,commands/machine/observe.go,1099,set <machine-id>,Create or update an alert rule,,false,,literal,operator,,String,"""""","comparison operator, e.g. gt, gte, lt, lte (required)",1154
+machine,commands/machine/observe.go,1099,set <machine-id>,Create or update an alert rule,,false,,literal,threshold,,Float64,0,threshold value,1155
+machine,commands/machine/observe.go,1099,set <machine-id>,Create or update an alert rule,,false,,literal,for,,Int,0,seconds the condition must hold before firing,1156
+machine,commands/machine/observe.go,1099,set <machine-id>,Create or update an alert rule,,false,,literal,enabled,,Bool,true,whether the rule is active,1157
+machine,commands/machine/policy.go,27,policy <machine-id>,Show a machine's effective autopilot policy,,false,,literal,,,,,,
+machine,commands/machine/policy.go,50,set <machine-id>,Set a machine's autopilot mode and desired state,,false,,literal,mode,,String,"""""","observe, assisted, or autopilot (required)",113
+machine,commands/machine/policy.go,50,set <machine-id>,Set a machine's autopilot mode and desired state,,false,,literal,firewall-enabled,,Bool,false,desired state: firewall enabled,114
+machine,commands/machine/policy.go,50,set <machine-id>,Set a machine's autopilot mode and desired state,,false,,literal,ssh-root-login-off,,Bool,false,desired state: SSH root login disabled,115
+machine,commands/machine/policy.go,50,set <machine-id>,Set a machine's autopilot mode and desired state,,false,,literal,auto-security-updates,,Bool,false,desired state: security updates applied automatically,116
+machine,commands/machine/predictive.go,8,anomalies <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/predictive.go,9,rightsizing <machine-id>,,,false,,factory,,,,,,
+machine,commands/machine/remove.go,19,remove [machine-id],Disconnect and remove an enrolled machine from your workspace,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,51
+mcpcmd,commands/mcpcmd/mcpcmd.go,48,mcp-serve,Serve Beaver's tools over MCP on stdio (spawned by an AI harness),,true,,literal,workspace-root,,String,"""""",the optional workspace root for local repository and config tools,152
+mystic,commands/mystic/mystic.go,21,mystic,"Inspect Mystic, Beaver's build acceleration engine",,false,,literal,,,,,,
+mystic,commands/mystic/mystic.go,26,doctor,Report this machine's Buildx/BuildKit detection,,false,,literal,,,,,,
+mystic,commands/mystic/mystic.go,39,stats,Show this machine's recorded build telemetry,,false,,literal,,,,,,
+observability,commands/observability/logs.go,42,logs <container>,Show HTTP request logs for a container,,false,,literal,limit,,Int,100,results per page (max 500),110
+observability,commands/observability/logs.go,42,logs <container>,Show HTTP request logs for a container,,false,,literal,page,,Int,1,page number,111
+observability,commands/observability/metrics.go,19,metrics,Show a container's resource and request metrics,,false,,literal,,,,,,
+observability,commands/observability/metrics.go,96,cpu <container>,,,false,,factory,,,,,,
+observability,commands/observability/metrics.go,97,storage <container>,,,false,,factory,,,,,,
+observability,commands/observability/metrics.go,98,requests <container>,,,false,,factory,,,,,,
+observability,commands/observability/metrics.go,99,data-transfer <container>,,,false,,factory,,,,,,
+observability,commands/observability/traffic.go,18,traffic <container>,Show a container's traffic dashboard,,false,,literal,range,,String,"""24h""","time range: 1h, 6h, 24h, 7d, or 30d",241
+observability,commands/observability/traffic.go,139,latency <container>,Average/P95/P99/max response latency over the last 24h,,false,,literal,,,,,,
+observability,commands/observability/traffic.go,166,active <container>,Current-users/concurrent-requests estimate,,false,,literal,,,,,,
+observability,commands/observability/traffic.go,197,live <container>,"A live, point-in-time resource snapshot",,false,,literal,,,,,,
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,logs,,Bool,false,show the container's application log tail,106
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,traffic,,Bool,false,show the traffic dashboard summary,107
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,metrics,,String,"""""","show a metrics series: cpu, storage, requests, or data-transfer",108
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,follow,,Bool,false,"with --logs, poll for new output; alone, watch for status/release changes",109
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,tail,,Int,0,"number of log lines to fetch (default 200, or 20 in the default summary view)",110
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,range,,String,"""24h""","with --traffic, the dashboard window: 1h, 6h, 24h, 7d, or 30d",111
+observe,commands/observe/observe.go,39,observe [service],"Follow a project's release, logs, traffic, and health","""l""",false,,literal,desktop-notify,,Bool,false,"with --follow (no --logs), also fire a best-effort OS notification on change",112
+preflight,commands/preflight/inspect.go,20,inspect <job-id>,Show the status and recent events of a deployment-rehearsal job,,false,,literal,,,,,,
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,json,,Bool,false,print the machine-readable preflight report,294
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,local,,Bool,false,run repository checks only (no network I/O),295
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,remote,,Bool,false,include remote machine checks when available,296
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,verbose,,Bool,false,also show informational findings and checks that passed,297
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,fix,,Bool,false,"create the Beaver-managed resources preflight found missing, then re-check (never touches external resources)",298
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,yes,,Bool,false,answer yes to every --fix prompt (required for non-interactive use),299
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,plan,,Bool,false,render the deployment as an infrastructure plan (+/-/~/=) instead of the prose report,300
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,full,,Bool,false,"run the remote checks and a deployment rehearsal (throwaway candidate off-routing: build, health, dependencies, teardown), streaming each step live as it runs",301
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,fail-on-warning,,Bool,false,"exit non-zero on a warning verdict too, for stricter CI pipelines",302
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,builder,,String,"""""",machine id to build on when --full needs an image (skips the interactive builder picker),303
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,service,,String,"""""","with --full on a multi-service project, rehearse only this service and its dependency closure",304
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,env-file,,String,"""""","with --full, a .env-style file whose variables are set on the rehearsal candidate so an app that needs runtime configuration can start (defaults to the deployment's committed env_file: when unset)",305
+preflight,commands/preflight/preflight.go,123,preflight,Check whether a project is ready to deploy without changing anything,,false,,literal,env-var,,StringToString,nil,"with --full, an environment variable to set on the rehearsal candidate, KEY=value (repeatable; overrides --env-file)",306
+project,commands/project/project.go,96,project,Manage Beaver projects,,false,,literal,,,,,,
+project,commands/project/project.go,114,list,List your projects,,false,,literal,,,,,,
+project,commands/project/project.go,153,show <project-id>,Show one project's details,,false,,literal,,,,,,
+project,commands/project/project.go,187,create,Create a new project,,false,,literal,name,,String,"""""",project name (required),289
+project,commands/project/project.go,187,create,Create a new project,,false,,literal,description,,String,"""""",project description,290
+project,commands/project/project.go,235,delete <project-id>,Permanently delete a project,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,292
+projectcontract,commands/projectcontract/cmd_containers.go,19,containers,List every container that has a saved Beaver configuration,,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_delete.go,24,delete <container>,Permanently delete a container's saved configuration,,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_diff.go,16,diff [container],"Show the stored contract, the local one, and the drift between them",,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_plan.go,16,plan <container>,"Show what deploying a container would do, without doing it",,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_pull.go,31,pull [container],Rewrite local config.yml entries from their saved contracts,,false,,literal,force,,Bool,false,take the saved contract even over never-pushed local edits,61
+projectcontract,commands/projectcontract/cmd_pull.go,31,pull [container],Rewrite local config.yml entries from their saved contracts,,false,,literal,dry-run,,Bool,false,show what pulling would change without writing config.yml,62
+projectcontract,commands/projectcontract/cmd_rollback.go,10,rollback <container> <revision-id>,Restore a container's historical contract revision as a new forward revision,,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_status.go,15,status [container],Compare each container's contract against its live runtime and the local config,,false,,literal,,,,,,
+projectcontract,commands/projectcontract/cmd_sync.go,17,push,Validate the local .beaver/ bundle and push each container's config revision,,false,,literal,dry-run,,Bool,false,"validate and show what would be pushed, without persisting any revision",38
+projectcontract,commands/projectcontract/cmd_validate.go,20,validate,Check .beaver/config.yml for errors without deploying anything,,false,,literal,,,,,,
+promote,commands/promote/promote.go,25,promote <target-environment-name>,Promote the current environment image without rebuilding,,false,,literal,yes,,Bool,false,skip confirmation,108
+reconcilecmd,commands/reconcilecmd/reconcile.go,26,reconcile,Make the running deployment match the recorded desired state,,false,,literal,plan,,Bool,false,show what would change without applying anything,46
+recover,commands/recover/recover.go,32,recover [service],"Diagnose a service and, if safe, apply a fix",,false,,literal,explain,,Bool,false,diagnose only (default behavior; this flag exists for explicitness/scripting),97
+recover,commands/recover/recover.go,32,recover [service],"Diagnose a service and, if safe, apply a fix",,false,,literal,rollback,,Bool,false,"after diagnosing, offer to roll back to the last healthy release",98
+recover,commands/recover/recover.go,32,recover [service],"Diagnose a service and, if safe, apply a fix",,false,,literal,restart,,Bool,false,"after diagnosing, offer to restart the running container (agent-hosted only)",99
+route,commands/route/route.go,43,inspect <domain>,"Inspect a public route's live DNS, TLS, and backend health",,false,,literal,,,,,,
+route,commands/route/route.go,70,route,Inspect and diagnose public routes,,false,,literal,,,,,,
+scaling,commands/scaling/resize.go,90,resize <container>,Change a container's CPU and memory in place,,false,,literal,,,,,,
+scaling,commands/scaling/scale.go,22,scale <container> <count>,Set a container's fixed replica count,,false,,literal,,,,,,
+scaling,commands/scaling/scaling.go,89,scaling,Manage a container's replica scaling policy,,false,,literal,,,,,,
+scaling,commands/scaling/scaling.go,104,policy <container>,Show a container's scaling policy,,false,,literal,,,,,,
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,desired-replicas,,Int,0,the replica count to run (required in fixed mode),603
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,min-replicas,,Int,0,minimum allowed replicas (required for automatic mode),604
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,max-replicas,,Int,0,maximum allowed replicas (required for automatic mode),605
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,scaling-metric,,String,"""""","automatic mode's metric: cpu, memory, or request_rate",607
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,scale-up-threshold,,Float64,0,automatic mode: scale up when the metric is at or above this value,608
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,scale-down-threshold,,Float64,0,automatic mode: scale down when the metric is at or below this value,609
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,scale-up-cooldown,,Int,0,automatic mode: seconds to wait after a scale-up before scaling up again,610
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,scale-down-cooldown,,Int,0,automatic mode: seconds to wait after a scale-down before scaling down again,611
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,sustained-window,,Int,0,automatic mode: seconds a threshold breach must persist before acting,612
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,plan,,Bool,false,"show the manifest change, runtime steps, and traffic impact without applying anything",613
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,dry-run,,Bool,false,"like --plan, and also run the server-side preflight for this change",614
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,runtime-only,,Bool,false,"change the running deployment without editing .beaver/config.yml — creates intentional, marked drift",615
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,force,,Bool,false,record the change even if the local config is out of sync with the recorded desired state (local wins),616
+scaling,commands/scaling/scaling.go,155,set <service|container>,"Set a service's replica count or autoscaling policy (declared, then applied)",,false,,literal,commit,,Bool,false,git commit the .beaver/config.yml change (never pushes),617
+scaling,commands/scaling/scaling.go,265,replicas <container>,List a container's running replica slots,,false,,literal,,,,,,
+scaling,commands/scaling/scaling.go,304,events <container>,Show the scaling audit log (scale up/down/reconcile/rollout/self-heal),,false,,literal,limit,,Int,0,max events to return,618
+scaling,commands/scaling/scaling.go,348,rollouts <container>,Show generation-based replacement rollout history,,false,,literal,limit,,Int,0,max rollouts to return,619
+scaling,commands/scaling/scaling.go,382,deploy-set <container>,"Create a standby replica set (blue/green's \""green\"") at zero traffic weight",,false,,literal,image,,String,"""""",candidate generation's image (defaults to the currently-deployed image),624
+scaling,commands/scaling/scaling.go,425,cutover <container> <rollout-id>,Set a standby replica set's traffic weight,,false,,literal,weight,,Int,-1,traffic weight 0-100 for the candidate generation (required),626
+scaling,commands/scaling/scaling.go,466,discard <container> <rollout-id>,Tear down whichever side of a replica set currently has 0% weight,,false,,literal,,,,,,
+scaling,commands/scaling/scaling.go,510,canary <container>,Start a scheduled weighted-traffic canary ramp,,false,,literal,image,,String,"""""",candidate generation's image (defaults to the currently-deployed image),630
+scaling,commands/scaling/scaling.go,510,canary <container>,Start a scheduled weighted-traffic canary ramp,,false,,literal,steps,,String,"""""","comma-separated ascending weight steps, e.g. 5,25,75,100 (required)",631
+scaling,commands/scaling/scaling.go,510,canary <container>,Start a scheduled weighted-traffic canary ramp,,false,,literal,step-interval,,Duration,0,"how long to wait between steps, e.g. 10m (required)",632
+scaling,commands/scaling/scaling.go,510,canary <container>,Start a scheduled weighted-traffic canary ramp,,false,,literal,error-band,,Float64,0,max error-rate percentage points above baseline before the ramp halts,633
+scaling,commands/scaling/scaling.go,573,canary-status <rollout-id>,Show a canary ramp's current step and status,,false,,literal,,,,,,
+server,commands/server/server.go,126,server,Manage servers enrolled with Beaver,,false,,literal,list,l,Bool,false,List servers enrolled in your workspace,421
+server,commands/server/server.go,189,update [machine-id],"Update an enrolled server's name, role, and/or labels",,false,,literal,name,,String,"""""",New display name,425
+server,commands/server/server.go,189,update [machine-id],"Update an enrolled server's name, role, and/or labels",,false,,literal,role,,String,"""""","New role: builder, host, or builder-host",426
+server,commands/server/server.go,189,update [machine-id],"Update an enrolled server's name, role, and/or labels",,false,,literal,labels,,StringToString,nil,Comma-separated key=value pairs (replaces all existing labels),427
+server,commands/server/server.go,189,update [machine-id],"Update an enrolled server's name, role, and/or labels",,false,,literal,yes,y,Bool,false,Skip the role-change confirmation prompt,428
+server,commands/server/server.go,311,rename <machine-id> <new-name>,Rename an enrolled server (shorthand for update --name),,false,,literal,,,,,,
+server,commands/server/server.go,351,remove [machine-id],Remove an enrolled server,,false,,literal,yes,y,Bool,false,Skip the confirmation prompt,423
+service,commands/service/actions.go,48,start [name],Start a stopped service's container,,false,,literal,,,,,,
+service,commands/service/actions.go,58,restart [name],Restart a service's container,,false,,literal,,,,,,
+service,commands/service/actions.go,68,stop [name],Stop a service's container,,false,,literal,,,,,,
+service,commands/service/attach.go,90,attach <name>,"Attach a service to an application, injecting connection env vars",,false,,literal,container,,String,"""""",Application container to attach (name or ID; interactive picker if omitted),351
+service,commands/service/attach.go,90,attach <name>,"Attach a service to an application, injecting connection env vars",,false,,literal,env-prefix,,String,"""""",Prefix for the injected environment variable names,352
+service,commands/service/attach.go,90,attach <name>,"Attach a service to an application, injecting connection env vars",,false,,literal,database,,String,"""""",Logical database to lock to this app (required for Postgres/Redis; picker if omitted),353
+service,commands/service/attach.go,190,detach <name>,Detach a service from an application,,false,,literal,container,,String,"""""",Application container to detach (name or ID; interactive picker if omitted),354
+service,commands/service/attach.go,190,detach <name>,Detach a service from an application,,false,,literal,clean,,Bool,false,Also remove the previously-injected env vars from the application,355
+service,commands/service/attach.go,190,detach <name>,Detach a service from an application,,false,,literal,secure,,Bool,false,Rotate the credential and end active sessions before freeing the database for reassignment,356
+service,commands/service/attached.go,37,attached <container>,List the services attached to one application,,false,,literal,,,,,,
+service,commands/service/backup.go,127,backup <name>,"Take a manual, on-demand backup of a service",,false,,literal,destination,,String,"""""",Off-node backup destination ID to ship this (and future) backups to,406
+service,commands/service/backup.go,176,list [service],List a service's backups,"""ls""",false,,literal,,,,,,
+service,commands/service/backup.go,225,delete <backup-id> [service],Permanently delete one backup,,false,,literal,delete-from-destination,,Bool,false,"Also remove this backup's off-node copy, if it has one",407
+service,commands/service/backup.go,289,schedule <name>,Set (or disable) a service's automatic backup schedule,,false,,literal,retention,,Int,7,How many scheduled backups to keep (manual backups are exempt),409
+service,commands/service/backup.go,341,restore <name>,"Restore a backup into an existing service, overwriting its live data",,false,,literal,backup,,String,"""""",Backup ID (or unique prefix) to restore,411
+service,commands/service/backup_destination.go,33,backup-destination,Manage where backups also ship off this node,"""backup-dest""",false,,literal,,,,,,
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,bucket,,String,"""""",S3 bucket name (--kind s3),247
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,region,,String,"""""",S3 region (--kind s3),248
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,endpoint,,String,"""""","S3-compatible custom endpoint, e.g. a MinIO URL (--kind s3)",249
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,access-key-id,,String,"""""",S3 access key ID (--kind s3),250
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,secret-access-key,,String,"""""",S3 secret access key (--kind s3),251
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,path-style,,Bool,false,"Use S3 path-style addressing, required by most self-hosted S3-compatible servers (--kind s3)",252
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,prefix,,String,"""""",Key prefix within the bucket (--kind s3),253
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,machine-id,,String,"""""",Target machine ID (--kind beaver_machine),254
+service,commands/service/backup_destination.go,57,create <name>,Register a new off-node backup destination,,false,,literal,retention,,Int,0,Off-node retention count (default 30),255
+service,commands/service/backup_destination.go,137,list,List this workspace's off-node backup destinations,"""ls""",false,,literal,,,,,,
+service,commands/service/backup_destination.go,197,delete <id-or-name>,Permanently delete a backup destination,,false,,literal,,,,,,
+service,commands/service/catalog.go,16,catalog,"List every supported service type, its versions, and its defaults",,false,,literal,,,,,,
+service,commands/service/cluster.go,57,cluster,"Manage multi-member, quorum-aware clustered services",,false,,literal,,,,,,
+service,commands/service/cluster.go,122,create <name>,Create a new multi-member clustered service,,false,,literal,type,,String,"""""",Service type (see `beaver service catalog`),662
+service,commands/service/cluster.go,122,create <name>,Create a new multi-member clustered service,,false,,literal,version,,String,"""""",Version (defaults to the type's default),663
+service,commands/service/cluster.go,122,create <name>,Create a new multi-member clustered service,,false,,literal,replicas,,Int,3,Number of members — must be odd and at least 3,664
+service,commands/service/cluster.go,166,list,List this workspace's clustered services,"""ls""",false,,literal,,,,,,
+service,commands/service/cluster.go,200,show [name],Show a cluster and its members,,false,,literal,,,,,,
+service,commands/service/cluster.go,240,delete <name>,Remove a cluster's containers (its data volumes are kept),,false,,literal,,,,,,
+service,commands/service/cluster.go,288,delete-volumes <name>,Permanently destroy a deleted cluster's data volumes,,false,,literal,,,,,,
+service,commands/service/cluster.go,341,upgrade <name>,Roll out a version upgrade one member at a time,,false,,literal,version,,String,"""""",Version to upgrade every member to,665
+service,commands/service/cluster.go,389,replace-member <name> <index>,Replace a permanently lost member on a fresh machine/volume,,false,,literal,,,,,,
+service,commands/service/cluster.go,443,resize <name>,Grow or shrink a cluster's member count,,false,,literal,replicas,,Int,0,New replica count — must be odd and at least 3,666
+service,commands/service/cluster.go,443,resize <name>,Grow or shrink a cluster's member count,,false,,literal,confirm-quorum-reduction,,Bool,false,Required to shrink a cluster (lowers its quorum floor),667
+service,commands/service/cluster.go,501,backup <name>,Back up a cluster from its preferred source member,,false,,literal,,,,,,
+service,commands/service/cluster.go,535,events <name>,Show a cluster's event timeline,,false,,literal,,,,,,
+service,commands/service/cluster.go,577,retry <name>,Resume a partially-bootstrapped cluster,,false,,literal,,,,,,
+service,commands/service/config.go,17,config,Manage a service's catalog-declared configuration tunables,,false,,literal,,,,,,
+service,commands/service/config.go,23,set <name> <key=value>...,Set one or more configuration tunables,,false,,literal,,,,,,
+service,commands/service/connect.go,35,connect [service],Open a local tunnel to a managed service's database,,false,,literal,database,,String,"""""",database name or ID within the service (omit for a service-level tunnel),58
+service,commands/service/connect.go,35,connect [service],Open a local tunnel to a managed service's database,,false,,literal,local-port,,Int,0,local port to bind — 0 (default) picks any free port; an explicit port that is already in use fails rather than silently picking another,59
+service,commands/service/connect.go,35,connect [service],Open a local tunnel to a managed service's database,,false,,literal,ttl,,Int,0,lease lifetime in seconds — 0 uses the server's default (server clamps to a maximum regardless),60
+service,commands/service/create.go,23,create [name],Provision a new Beaver Service,,false,,literal,type,,String,"""""",Service type — omit for an interactive picker (see `beaver service catalog`),147
+service,commands/service/create.go,23,create [name],Provision a new Beaver Service,,false,,literal,version,,String,"""""",Service version (defaults to the catalog's default for the type),148
+service,commands/service/create.go,23,create [name],Provision a new Beaver Service,,false,,literal,no-persistence,,Bool,false,Provision without a data volume (only for types whose catalog spec allows it),149
+service,commands/service/create.go,23,create [name],Provision a new Beaver Service,,false,,literal,machine,,String,"""""",Pin placement to a specific enrolled machine (default: auto-selected by capacity),150
+service,commands/service/create.go,23,create [name],Provision a new Beaver Service,,false,,literal,restore-from,,String,"""""",Restore this backup ID into the new service before it's marked healthy (see `beaver service backup list`),151
+service,commands/service/credentials.go,13,reveal [name],Print a service's live connection string,,false,,literal,,,,,,
+service,commands/service/database.go,22,database,Manage a service's isolated logical databases,"""db""",false,,literal,,,,,,
+service,commands/service/database.go,66,list [service],List a service's isolated logical databases,"""ls""",false,,literal,,,,,,
+service,commands/service/database.go,112,create <name> [service],Create an isolated logical database with its own credential,,false,,literal,,,,,,
+service,commands/service/database.go,147,reveal <name> [service],Print one logical database's connection string,,false,,literal,,,,,,
+service,commands/service/database.go,192,rotate <name> [service],Rotate one logical database's own credential,,false,,literal,,,,,,
+service,commands/service/database.go,248,delete <name> [service],Drop an isolated logical database and its credential,"""rm""",false,,literal,,,,,,
+service,commands/service/delete.go,30,delete <name>,Remove a service's container (its data volume is kept),"""rm""",false,,literal,,,,,,
+service,commands/service/delete.go,75,delete-volume <name>,Permanently destroy a deleted service's data volume,,false,,literal,,,,,,
+service,commands/service/list.go,14,list,List every Beaver Service in your workspace,"""ls""",false,,literal,,,,,,
+service,commands/service/resize.go,19,resize <name>,Change a service's allocated CPU/memory,,false,,literal,cpu,,Float64,0,"New CPU allocation in cores (e.g. 0.5, 2)",63
+service,commands/service/resize.go,19,resize <name>,Change a service's allocated CPU/memory,,false,,literal,memory,,Int,0,New memory allocation in MB (e.g. 4096),64
+service,commands/service/retry.go,13,retry [name],Re-attempt provisioning an unhealthy service,,false,,literal,,,,,,
+service,commands/service/service.go,115,service,"Provision and operate Beaver-managed stateful services (Postgres, Redis, ...)","""services""",false,,literal,,,,,,
+service,commands/service/show.go,15,show [name],"Show one service's status, placement, and attached applications",,false,,literal,,,,,,
+skillscmd,commands/skillscmd/skills.go,30,skills,Inspect and publish this project's skill packages,,false,,literal,,,,,,
+skillscmd,commands/skillscmd/skills.go,68,publish [name...],Publish local skill packages to the workspace registry,,false,,literal,all,,Bool,false,publish every local skill package,167
+skillscmd,commands/skillscmd/skills.go,68,publish [name...],Publish local skill packages to the workspace registry,,false,,literal,platform,,Bool,false,publish platform-wide rather than to this workspace,168
+skillscmd,commands/skillscmd/skills.go,126,published,List the skills published to this workspace,,false,,literal,,,,,,
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,json,,Bool,true,print JSON (currently the only supported format),99
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,slim,,Bool,false,omit long descriptions and examples,100
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,path,,StringSlice,nil,"emit only the subtree at this command path, e.g. --path container,scale",101
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,include-hidden,,Bool,false,"include Hidden commands (for CI drift checking, not for normal use)",102
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,lint,,Bool,false,"check every command's Use string against its Args validator (and report the advisory metadata backlog) instead of printing the spec, exiting non-zero on arity drift",104
+speccmd,commands/speccmd/spec.go,27,spec,Print the Beaver command specification as JSON,,false,,literal,docs,,String,"""""",write the generated CLI reference (one Markdown page per command group) to this directory instead of printing the spec,105
+statecmd,commands/statecmd/apply.go,18,apply,Record the checked-out .beaver/config.yml as the desired state and reconcile (for CI),,false,,literal,no-reconcile,,Bool,false,record the config but don't reconcile runtime,36
+statecmd,commands/statecmd/drift.go,14,drift,Show the drift the monitor detected between recorded state and runtime,,false,,literal,,,,,,
+statecmd,commands/statecmd/pull.go,24,pull,Write the recorded desired state into the local .beaver/config.yml,,false,,literal,force,,Bool,false,overwrite local .beaver/config.yml even if it has uncommitted edits,43
+statecmd,commands/statecmd/pull.go,24,pull,Write the recorded desired state into the local .beaver/config.yml,,false,,literal,dest,,String,"""""",write the recorded config to this directory instead of the working tree,44
+statecmd,commands/statecmd/rollback.go,25,rollback,Restore a previous recorded desired state and reconcile to it,,false,,literal,to,,String,"""""",revision id to restore (default: the one before current),51
+statecmd,commands/statecmd/rollback.go,25,rollback,Restore a previous recorded desired state and reconcile to it,,false,,literal,plan,,Bool,false,show the target revision and diff without applying,52
+statecmd,commands/statecmd/rollback.go,25,rollback,Restore a previous recorded desired state and reconcile to it,,false,,literal,no-reconcile,,Bool,false,restore the recorded config but don't reconcile runtime,53
+statecmd,commands/statecmd/rollback.go,42,history,Show the recorded desired-state revision history,,false,,literal,,,,,,
+statecmd,commands/statecmd/statecmd.go,14,state,Inspect Beaver's declared / recorded / live desired state,,false,,literal,,,,,,
+statecmd,commands/statecmd/status.go,25,status,"Compare the local manifest, the recorded desired state, and the live runtime",,false,,literal,env,,String,"""""",compare against a named environment's override,44
+statecmd,commands/statecmd/status.go,25,status,"Compare the local manifest, the recorded desired state, and the live runtime",,false,,literal,watch,,Bool,false,re-check on an interval until interrupted,45
+status,commands/status/status.go,32,status,Compare this project's .beaver/config.yml against what's actually running,,false,,literal,env,,String,"""""",compare against a named environment's override (falls back to the base config if never declared),86
+status,commands/status/status.go,32,status,Compare this project's .beaver/config.yml against what's actually running,,false,,literal,explain,,Bool,false,attach a suggested next command to each mismatch,87
+update,commands/update/update.go,30,update,Update the CLI to the latest release,,false,,literal,version,,String,"""""",Install a specific release instead of the latest,168
+version,commands/version.go,14,version,Show VectorIHub CLI version information,,false,,literal,,,,,,
+workspace,commands/workspace/workspace.go,28,workspace,Show or recreate your workspace,,false,,literal,,,,,,
+workspace,commands/workspace/workspace.go,41,show,Show your workspace,,false,,literal,,,,,,
+workspace,commands/workspace/workspace.go,80,recreate,Recreate your workspace,,false,,literal,yes,y,Bool,false,skip the confirmation prompt,114
+root,root/root.go,47,shell,Open Beaver's interactive shell,,false,,literal,,,,,,
+root,main.go,69,destroy <container>,Permanently delete one deployed container,,false,,literal,,,,,,

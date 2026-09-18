@@ -1,0 +1,143 @@
+# Era 7 — Services & Data (V23–V26)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+`service` is the **largest undocumented surface in the entire CLI** — 37 distinct
+subcommands across the top-level group plus three nested groups (`database`, `cluster`,
+`backup-destination`), 24 files, 37 flag sites, and **zero existing pages**. This era's V23
+is the single biggest chunk of net-new writing in the whole roadmap.
+
+Commands: `service` (+ `database`, `cluster`, `backup-destination`), `integration`,
+`github`.
+
+---
+
+## V23 — `service` core verbs (new)
+
+### Goal
+A `cli/service.mdx` overview + core-lifecycle page covering the top-level verbs: `create`,
+`list`, `show`, `start`, `stop`, `restart`, `resize`, `delete`, `delete-volume`, `connect`,
+`attach`, `detach`, `attached`, `retry`, `reveal`, `set` (config), `catalog`, `schedule`.
+
+### Reuses
+`languages/*.mdx`/`frameworks/*.mdx` pages for the *kind* of service a user attaches (their
+own app); this version is the operational surface for *managed* services (databases,
+caches) attached to that app — a distinct concept, cross-link rather than conflate.
+
+### Implement
+- Per Era 2 V6's split rule: given 37 subcommands across 4 nested groups, this version
+  covers only the flat top-level verbs; V24–V25 cover `database`/`cluster`/
+  `backup-destination` as their own pages, all cross-linked from a `service.mdx` overview
+  that explains the taxonomy (a "service" vs. its nested `database`/`cluster` resources)
+  first — Invariant 3, purpose before syntax, matters most here because the taxonomy itself
+  needs explaining before any single command does.
+- `reveal` and `attached` get particular Consequences-section care: `reveal` exposes a
+  credential (Invariant 4 + 6 — document that it's a sensitive, confirmed action and what
+  gets shown, never how the credential is stored/generated); `attached` documents what
+  "attached" means observably (this service is reachable from that container/app) without
+  describing the attachment mechanism.
+- `catalog` documents what service types are available to create — this is genuinely public
+  product-catalog information, not an internals leak, and should be thorough.
+
+### Validate
+- `reveal`'s Consequences section explicitly frames it as a sensitive action, matching how
+  `beaver-desktop/features/gui/infra/05-services-section.docs` frames the same operation on
+  the GUI side (masked by default, confirmed reveal) — consistency check, not a dependency.
+- Every one of the ~18 top-level verbs has a source-verified page section.
+
+### Done when
+The `service` top-level verbs are fully `documented`, and the overview page's taxonomy
+section makes the nested `database`/`cluster`/`backup-destination` groups (V24–V25)
+navigable rather than a surprise.
+
+---
+
+## V24 — `service database` and `service backup-destination` (new)
+
+### Goal
+Document the `database` (list/create/reveal/rotate/delete) and `backup-destination`
+(create/list/delete) nested groups.
+
+### Reuses
+V23's overview page as the parent; the taxonomy established there.
+
+### Implement
+- `database`: full flag diff for all 5 subcommands. `rotate` and `reveal` get the same
+  credential-handling care as `service reveal` in V23 — consistent Consequences framing
+  across every credential-touching command in this family, not independently reinvented per
+  command.
+- `backup-destination`: document what a backup destination is from the user's perspective
+  (where backups go) and its relationship to individual service backups (`service backup
+  <name>` — a V23 top-level verb, cross-link) without describing the backup storage/transport
+  mechanism internally.
+
+### Validate
+- Every credential-revealing command in this era (V23's `reveal`, V24's `database reveal`/
+  `rotate`) uses identical Consequences-section language — checked side by side, not
+  independently drafted.
+
+### Done when
+Both nested groups `documented`, credential-handling language consistent across the whole
+`service` family.
+
+---
+
+## V25 — `service cluster` (new)
+
+### Goal
+Document the `cluster` nested group: `create`, `list`, `show`, `delete`, `delete-volumes`,
+`upgrade`, `replace-member`, `resize`, `backup`, `events`, `retry` — 11 subcommands, the
+densest single nested group under `service`.
+
+### Reuses
+V23's overview and taxonomy; the credential-handling pattern from V24 (`cluster` likely
+exposes connection details too — verify and reuse the same framing if so).
+
+### Implement
+- `upgrade` and `replace-member` get the deepest Consequences treatment in this era — these
+  are the two subcommands most likely to affect a running, stateful workload. Document
+  exactly what a user should expect during the operation (brief unavailability? none?) as
+  verified against source/testing, not assumed from the name — if this can't be confirmed
+  from `beaver-cli` alone, flag it for the Era 1 V3-style "needs live smoke-test" punch-list
+  rather than guessing.
+- `delete-volumes` vs. `delete` distinction documented explicitly and prominently
+  (Invariant 4 — irreversible-data-loss commands need the clearest possible warning,
+  `<Warning>` component per the Era 2 template).
+
+### Validate
+- `delete-volumes` has a `<Warning>` clearly distinguishing it from plain `delete`.
+- `upgrade`/`replace-member` consequences are either source-verified or explicitly flagged
+  as needing a live check — never silently assumed.
+
+### Done when
+`cluster` fully `documented`; the `service` family (V23–V25) closes with the largest single
+inventory-row delta of the entire roadmap resolved.
+
+---
+
+## V26 — `integration` and `github`
+
+### Goal
+Write the missing `integration.mdx` (reconciling the `integrations.mdx` naming mismatch
+from Era 1); verify/extend `github.mdx`.
+
+### Reuses
+Existing `cli/integrations.mdx` (Era 1 V2 flagged this as a plural/singular naming
+question — resolve it here); existing `cli/github.mdx`.
+
+### Implement
+- Resolve `integration` vs. `integrations`: check actual command invocation, then either
+  rename/redirect or confirm both are legitimately distinct (unlikely but verify, don't
+  assume) — record the resolution plainly at the top of the page.
+- `github`: flag diff (4 files); this command likely relates to CI/deploy-from-GitHub flows
+  — cross-link to `deploying/*.mdx` and any GitHub Actions guidance rather than duplicating
+  webhook/CI setup concepts.
+
+### Validate
+- The naming resolution is unambiguous and doesn't leave a dangling stale page.
+
+### Done when
+Both rows `documented`; family (V23–V26) has zero remaining gaps — the biggest coverage win
+in the roadmap, closed.

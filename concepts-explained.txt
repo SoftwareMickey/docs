@@ -1,0 +1,192 @@
+I'm thinking should I explain beaver cloud and services in the docs for the users or the commands are just enough??
+
+
+• Yes—explain Beaver Cloud and Services as concepts, alongside the commands. Commands teach users how to act; concept pages help them decide what to use and understand
+  the consequences.
+
+  For each, cover:
+
+  - What it is and which user problem it solves.
+  - When to use it, with a practical example.
+  - What users need beforehand, such as connected machines.
+  - How it relates to projects, containers, and other features.
+  - User-visible behavior and limitations, including persistence, connectivity, and redeploy requirements where applicable.
+  - Links to a getting-started workflow and the command reference.
+
+  Keep the explanation at the product level. For Services, users need to understand what connecting PostgreSQL to their application accomplishes and when the application
+  can use it. They don’t need the internal attachment schema, credential provisioning mechanism, or network implementation.
+
+  A useful structure is concept → task guide → command reference. That gives beginners context and experienced users precise options without exposing the engineering
+  behind the product.
+
+
+› I think I should explain the concepts i.e firewall, scaling etc, then task guide -> command reference without exposing internals to competitors
+
+
+• Yes—that’s a strong structure for Cloud, Services, Firewall, Scaling, Deployments, and other features:
+
+   Layer                What it explains
+  ━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Concept              What the feature does, why it matters, when to use it, and its limitations.
+  ───────────────────  ───────────────────────────────────────────────────────────────────────────────────────────────────
+   Task guide           Prerequisites, steps toward a concrete outcome, how to verify success, and common recovery steps.
+  ───────────────────  ───────────────────────────────────────────────────────────────────────────────────────────────────
+   Command reference    Exact syntax, arguments, every flag, defaults, interactions, and examples.
+
+  Your disclosure rule should be: explain what users can control and observe; keep how Beaver implements it private.
+
+  For scaling, explain replica counts, available modes, user-configurable thresholds, and operational consequences. Keep scheduling algorithms and internal coordination
+  private.
+
+  For firewall, explain rule behavior, supported controls, and how users verify protection. Keep internal detection logic and enforcement architecture private.
+
+  Link all three layers together, and keep syntax and defaults authoritative in the command reference to avoid conflicting explanations. This gives users complete
+  guidance while limiting unnecessary disclosure.
+
+
+› Go through and list all the things you as a user you do like to be explained to you
+
+
+• I’ll review the CLI command families and existing docs, then list the concepts and workflows I’d want explained as a user, alongside the command and flag details.
+
+✔ You approved codex to run rg --files /home/raven/Desktop/vhb/beaver-cli/commands -g '*.go' -g '!**/*tes... this time
+
+• Explored
+  └ List commands
+    Read docs.json
+
+✔ You approved codex to run rg -n 'Use:|Short:' /home/raven/Desktop/vhb/beaver-cli/commands/{cloud,servic... this time
+
+• Ran rg -n 'Use:|Short:' /home/raven/Desktop/vhb/beaver-cli/commands/{cloud,service,firewall,scaling,edge,machine,environment,preflight,statecmd,alie} -g '*.go' -g '!
+  │ **/*test*' -g '!**/embedded*' | head -180; wc -l /home/raven/Desktop/vhb/mintlify/cli/{cloud,service,firewall,scaling,edge,alie,config}.mdx; sed -n '1,95p' /home/
+  │ raven/Desktop/vhb/mintlify/cli/service.mdx; sed -n '1,80p' /home/raven/Desktop/vhb/mintlify/cli/cloud.mdx
+  └   255 /home/raven/Desktop/vhb/mintlify/cli/cloud.mdx
+      330 /home/raven/Desktop/vhb/mintlify/cli/service.mdx
+    … +179 lines (ctrl + t to view transcript)
+
+    ## Network
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• After reviewing the CLI command families and Mintlify navigation, these are the things I’d want explained as a user. You already have substantial reference pages for
+  Cloud, Services, Firewall, Scaling, Edge, Config, and Alie; this is a topic checklist, not a claim that every item is missing.
+
+  For each topic, I’d want the concept, practical guides, and complete command reference.
+
+   Topic                                What I’d want explained
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   How Beaver fits together             The relationship between workspaces, projects, environments, machines, clouds, deployments, containers, replicas, and services.
+                                        A simple product-level diagram would help.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Choosing my setup                    When to use one machine or a cloud; what I can run on a laptop; machine roles; prerequisites; what infrastructure I supply and
+                                        manage.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Installation and CLI basics          Supported platforms, installation, updates, version compatibility, interactive shell versus terminal commands, help, completion,
+                                        and command history.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Accounts and workspaces              Login/logout, account identity, workspace scope, switching context where supported, access requirements, and what deleting or
+                                        recreating a workspace means.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Integrations                         Connecting GitHub and other supported integrations, required permissions, selecting repositories, disconnecting, and fixing
+                                        expired access.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Connecting machines                  Requirements, choosing roles, checking readiness, verifying enrollment, reconnecting, and removing a machine safely.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Machine and agent operation          Understanding machine health, agent installation and updates, start/stop/restart, logs, maintenance, cleanup, policies, and
+                                        approval requests.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Beaver Cloud                         What a cloud provides, when it helps, adding/removing machines, capacity, reservations, placement choices, network health,
+                                        gateways, and the consequences of a machine becoming unavailable.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Projects                             Creating/selecting projects, linking a local repository, accepted names and IDs, multiple applications in one project, and
+                                        project deletion consequences.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Configuration                        What belongs in .beaver/, the supported YAML fields, local versus stored configuration, push/pull/status, revisions, conflicts,
+                                        backups, and how operational commands affect configuration.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Environments and variables           Separating development/staging/production, overrides and precedence, .env files, remote variables, handling secrets, and when
+                                        changes require a redeploy.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Building applications                Supported runtimes and frameworks, Dockerfile requirements, build context and paths, image naming, private images, builder
+                                        selection, and diagnosing build failures.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Preflight and planning               What validation, planning, inspection, rehearsal, build checks, and security checks each establish; warnings versus blockers;
+                                        fixes and overrides.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Deployments                          The full deploy workflow, selecting a destination, ports, health checks, restart policies, deployment strategies, progress
+                                        states, failed deployments, and verifying readiness.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Containers and replicas              How they differ from deployments, lifecycle actions, replica health, opening applications, executing commands, and what survives
+                                        a restart or replacement.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Compose applications                 Supported Compose behavior, configuring multiple applications, environment files, dependencies, and differences users should
+                                        expect from Docker Compose.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Domains and routing                  Custom domains, DNS setup, HTTPS, route matching, backend selection, public/private access, and diagnosing an unreachable
+                                        application.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Scaling and resources                Replica scaling versus CPU/memory resizing, requests versus limits, fixed versus automatic scaling, thresholds, capacity
+                                        constraints, policies, and verifying the resulting state.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Services                             Supported service types and versions, choosing a service, provisioning, attaching applications, injected variables, prefixes,
+                                        redeploy requirements, resizing, upgrades, and lifecycle actions.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Service databases and credentials    Logical databases, application isolation, connection details, credential reveal and rotation, detachment versus access
+                                        revocation, and safe reassignment.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Service clusters                     When a cluster is useful, supported configurations, member health, availability limitations, resizing, upgrades, replacing lost
+                                        members, and recovering partial operations.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Persistent storage                   Volumes versus bind mounts, external storage requirements, placement restrictions, what survives deletion, and which actions
+                                        permanently destroy data.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Backups and restoration              Manual/scheduled backups, retention, destinations, backup status, restoring into a new service, restore compatibility, and
+                                        verifying recovered data.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Connecting to services locally       Supported connection/tunnel workflows, prerequisites, connection lifetime, local client examples, and troubleshooting
+                                        connectivity.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Firewall                             What traffic it protects, policies, rules and their ordering, presets, IP bans, login protection, WAF controls, visibility,
+                                        lockdown, events, and undoing an accidental block.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Edge and performance controls        When to use Edge, connecting applications and backends, available performance settings, interaction with routes/firewall, logs,
+                                        and traffic measurements.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Observability                        Build versus application versus machine logs, metrics and units, traffic reports, live watching, filters, time ranges, and
+                                        interpreting missing or stale data.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   State and drift                      Local, saved, and running state; detecting differences; what pull, apply, reconcile, and rollback change; conflicts and safe
+                                        recovery.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Rollback, promotion, and recovery    Which actions restore application releases versus configuration, moving between environments, recovering failed operations, and
+                                        whether application data is affected.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   AI connections and Alie              Supported connection types, prerequisites, model selection, sessions, tools, approvals, workspace context, skills, usage
+                                        controls, and troubleshooting. Effort should be documented when implemented.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Plans and billing                    Plan limits, usage measurements, infrastructure costs versus Beaver charges, billing management, coupons, and what happens when
+                                        limits are reached.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Automation                           Commands that work without prompts, required flags, output formats, exit codes, wait/timeout behavior, confirmations, and
+                                        examples suitable for scripts or CI.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Troubleshooting                      A symptom-based starting point: deployment stuck, machine offline, service unreachable, capacity exhausted, firewall blocking
+                                        traffic, configuration conflict, or authentication failure.
+  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Administrative commands              Which commands are intended for platform operators, who should use them, and prerequisites. Keep these separate from ordinary
+                                        user workflows.
+
+  Across every command, I’d want consistent answers to these questions:
+
+  - Where do I run it, and what must already exist?
+  - How does it choose its target if I omit an argument?
+  - What does every flag mean, including defaults and combinations?
+  - What changes immediately, and what requires another action?
+  - How do I know it succeeded?
+  - What happens on failure, timeout, cancellation, or retry?
+  - Can I undo it, and could it delete data?
+  - Does it require a particular plan, permission, platform, or version?
+
+  Your disclosure boundary can remain consistent throughout: explain the controls, guarantees, limitations, and consequences users need. Keep the algorithms, private
+  protocols, database structures, and internal coordination in private engineering documentation.
+

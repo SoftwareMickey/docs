@@ -1,12 +1,118 @@
 ---
 title: "beaver connect"
-description: "Enroll the current machine in a Beaver workspace."
+sidebarTitle: "connect"
+description: "Prepare and connect the current machine to your Beaver workspace."
+icon: "link"
 ---
+
+## Purpose
+
+Run `beaver connect` on any machine you want to use with Beaver — your own VPS, a cloud
+instance, or a local box. It's a guided, resumable wizard that gets a machine from "nothing
+installed" to "ready to deploy to," checking prerequisites, signing you in, and registering
+the machine with your workspace. See [Choose your setup](/choose-your-setup) for which
+role(s) to pick and [Machine roles](/machine-roles) for what each role means — this page
+covers the command itself.
+
+`beaver connect` is fully interactive; there's no documented non-interactive/CI flag set, so
+run it once per machine over an interactive shell (including SSH) rather than in an
+unattended script.
+
+## Syntax
+
+```bash
+beaver connect [flags]
+```
+
+Takes no arguments — everything (workspace, role, confirmation) is gathered through prompts.
+
+## Flags
+
+<ParamField query="--verbose" type="boolean" default="false">
+  Show additional safe technical detail while connecting (what's being checked and why a
+  step passed or failed). Equivalent to setting `BEAVER_DEBUG=1`.
+</ParamField>
+
+## Consequences
+
+Each run walks through the same sequence: checking the system and network, preparing Docker,
+checking Git, signing you in, detecting your workspace, inspecting the machine, assessing its
+capabilities, registering it, installing the background agent, and verifying the connection.
+**Existing working components are not reinstalled or replaced** — re-running `connect` on an
+already-connected machine revalidates it rather than starting over.
+
+Progress is saved as you go: if the wizard is interrupted (closed terminal, dropped SSH
+session), running `beaver connect` again resumes from where it left off instead of restarting.
+
+Once complete, the machine becomes visible to `beaver machine list` and usable as a deploy
+target for the role(s) you selected.
 
 ## Examples
 
-```bash
-beaver connect [--verbose]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver connect
 ```
 
-Guides the machine through readiness checks and role selection: Builder, Host, or Builder + Host. Confirm the result with `beaver server --list`.
+```bash With extra detail
+beaver connect --verbose
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+Connecting this machine to Beaver
+
+Beaver will prepare Docker and Git, sign you in, inspect this machine,
+connect it to your workspace, and verify the background agent.
+Existing working components will not be reinstalled or replaced.
+
+Press Enter to continue...
+...
+────────────────────────────────────────────
+
+Machine ready.
+
+Machine       srv_web01
+Machine ID    mch_abc123
+Workspace     paperclip-prod
+Role          Builder + Host
+Connection    Verified online
+
+This machine can:
+  • Build and deploy your applications
+  • Run your deployed containers
+
+Beaver verified Docker, Git, authentication, workspace, registration, and the live Beaver Agent connection.
+
+If anything stops working later, run:
+
+  beaver doctor
+
+Next:
+
+  beaver git --auth
+  beaver docker --auth
+  beaver deploy
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | "Machine ready." with role and connection status | The machine can be deployed to. |
+| Interrupted mid-wizard | Progress saved automatically | Run `beaver connect` again to resume. |
+| A prerequisite check fails | The specific failing check, with guidance | Fix the reported issue (or run `beaver doctor`) and re-run. |
+| Signed in as an admin account | `admin accounts cannot register builder or host nodes; use beaver admin connect-edge-node` | Use a regular workspace account, or the admin-specific command. |
+
+## Used in
+
+- [Choose your setup](/choose-your-setup) — decides which role to pick before running this.
+- [Machine roles](/machine-roles) — explains what each role can do once connected.

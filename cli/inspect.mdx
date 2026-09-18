@@ -1,13 +1,67 @@
 ---
 title: "beaver inspect"
-description: "Show the current release, health, route, and target."
+sidebarTitle: "inspect"
+description: "Show a quick summary of what's running for the current project."
+icon: "magnifying-glass"
 ---
+
+## Purpose
+
+Run `beaver inspect` from a project directory for a short summary of what's currently
+deployed — current release, commit, health, route, and target machine — without opening the
+dashboard.
+
+## Syntax
+
+```bash
+beaver inspect [service] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name — required to disambiguate a multi-service (Compose) project; omit in a single-service project. |
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the result as JSON. See [shared flags](/cli/shared-flags#json).
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
-beaver inspect [service]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Single-service project
+beaver inspect
+```
+
+```bash Multi-service project
+beaver inspect api
+```
+
+```bash Scripted
 beaver inspect --json
 ```
 
-Shows the most useful current state for the project in this directory. Name a service when the project has more than one.
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Current release, commit, health, route, and target machine | Nothing further. |
+| Multi-service project, no `[service]` given | An error asking you to name one | Pass the service name. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — check the result of a deploy with this.
+- The daily observe/recover loop, alongside [`observe`](/cli/observe) and
+  [`status`](/cli/status).

@@ -1,0 +1,80 @@
+---
+title: "How Beaver fits together"
+description: "The relationship between workspaces, projects, environments, machines, clouds, deployments, containers, and services — read this first."
+sidebarTitle: "How it fits together"
+icon: "diagram-project"
+---
+
+Most confusion about Beaver's terms — "wait, is that the same as a deployment?" — comes down
+to not having the whole picture at once. This page is that picture. Read it before any other
+concept page; everything else assumes you've seen this.
+
+## The shape of it
+
+```
+Workspace
+  └─ Project                         e.g. "paperclip"
+       ├─ Environment                e.g. "production", "staging"
+       │    └─ Deployment            one service, deployed to one environment
+       │         └─ Container(s)     the running instance(s) — one per replica
+       └─ Service                    e.g. a managed Postgres or Redis
+            └─ attached to one or more deployments
+
+Machine (or a group of them, a Cloud)
+  └─ hosts deployments and services — a separate axis from the tree above
+```
+
+## The terms, disambiguated
+
+| Term | What it is | How many? |
+| --- | --- | --- |
+| **Workspace** | Your account's top-level scope. Everything below lives inside one. | Usually one per account. |
+| **Project** | Groups one application's environments, deployments, and services. | One per app — `paperclip`. |
+| **Environment** | A named deploy target inside a project: `staging`, `production`, or any label. | Several per project. |
+| **Deployment** | One service running in one environment. Deploying creates or updates this. | One per service per environment. |
+| **Container** | One running instance of a deployment. 3 replicas = 3 containers. | Many per deployment. |
+| **Service** | A managed backing component (database, cache) attached to a deployment. | Zero or more per project. |
+| **Machine** | A piece of infrastructure you've connected. | As many as you connect. |
+| **Cloud** | A named group of machines, used as one pool. | Required for application deployment; can contain one or more machines. |
+
+The two rows most people mix up: a **deployment** is the definition of what should run; a
+**container** is one running copy of it. If you scale a deployment to 3 replicas, you still
+have one deployment and three containers.
+
+## When you'd reach for this page
+
+You're reading `beaver deploy`'s output and it mentions a "deployment," a "container," and a
+"replica" in the same sentence and you want to know which one you'd restart versus redeploy.
+Or you're deciding whether a setting belongs in `.beaver/config.yml` (project/deployment
+level) or an environment variable override (environment level) — and the answer depends on
+which layer of this tree you're actually changing.
+
+## What's fixed, and what moves
+
+Every entity above has a stable ID — `beaver project list`, `beaver environment list`,
+`beaver container <name> inspect`, `beaver service list` all show you exactly where you are
+in the tree. An environment always belongs to exactly one project; a deployment to exactly
+one environment; a container to exactly one deployment. None of that is implicit or
+inferred — it's always one clear parent.
+
+**Machines and clouds are not part of this tree.** They're a separate axis — where things
+*run*, not what they *are*. The same machine can host deployments from several different
+projects at once. Which project a deployment belongs to and which machine it runs on are two
+independent questions; see [Beaver Cloud](/concepts/beaver-cloud) for the second one.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Choose your setup" href="/choose-your-setup">
+    Decide on machines and roles next.
+  </Card>
+  <Card title="Projects" href="/concepts/projects">
+    Start at the top of the tree.
+  </Card>
+  <Card title="Deployments" href="/concepts/deployments">
+    What actually happens when you ship code.
+  </Card>
+  <Card title="Deploy workflow" href="/guides/deploy-workflow">
+    Walk the whole tree end to end, hands-on.
+  </Card>
+</CardGroup>

@@ -1,0 +1,56 @@
+---
+title: "PostgreSQL"
+sidebarTitle: "PostgreSQL"
+description: "Provision a managed PostgreSQL database and attach it to your application."
+icon: "elephant"
+---
+
+PostgreSQL is the default relational database for most Beaver projects — a general-purpose
+SQL database with strong support for structured data, transactions, and extensions.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    14, 15, 16 (default), 17 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Logical databases" icon="table">
+    One service can host multiple isolated databases, one per attached application.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-db --type postgres
+```
+
+Omit `--version` to use the default, or pin one explicitly:
+
+```bash
+beaver service create paperclip-db --type postgres --version 17
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-db --env-prefix DATABASE
+```
+
+Your application receives a connection string as an environment variable using the prefix
+you choose (`DATABASE_URL` above). It's usable once the attachment takes effect — for most
+services, that's your next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-db
+beaver service backup paperclip-db
+beaver service resize paperclip-db --cpu 2 --memory 2048
+```
+
+See [Service databases and credentials](/concepts/service-databases-and-credentials) for
+reveal/rotate/detach behavior, and [Backups and restoration](/concepts/backups-and-restoration)
+for scheduling and restoring.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

@@ -1,0 +1,107 @@
+# Era 8 — Observability & Diagnostics (V27–V29)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+Unlike most other eras, this family is mostly *already* documented — just under the wrong
+names. `logs`, `metrics`, `traffic`, `latency`, `active`, `live` are all `observability`
+subcommands (per Era 1's audit) but each has its own standalone page today, with no
+`observability` parent page at all. This era decides the shape, not just fills gaps.
+
+Commands: `observability` (logs/metrics/traffic/latency/active/live), `observe`, `history`,
+`status`, `inspect`, `diff`.
+
+---
+
+## V27 — `observability` family shape decision + consolidation
+
+### Goal
+A deliberate decision — consolidate `logs`/`metrics`/`traffic` (etc.) under one
+`observability.mdx` family, or keep them standalone with a new parent overview linking
+them — verified against actual CLI invocation, then executed.
+
+### Reuses
+Existing `logs.mdx`, `metrics.mdx`, `traffic.mdx`; Era 1 V2's mapping; Era 2 V6's split rule
+(6 subcommands is borderline — small enough to consolidate, large enough that standalone
+pages aren't unreasonable either).
+
+### Implement
+- Confirm actual invocation: is it `beaver logs` (top-level alias) or `beaver observability
+  logs` (nested only)? This determines the answer directly — if top-level aliases exist,
+  keep them standalone (matches how users actually type it) with a light `observability.mdx`
+  index; if only nested, consolidate into one page with sections.
+- Whichever shape wins, full flag diff against the V1 inventory for all 6 subcommands
+  (`logs`, `metrics`, `traffic`, `latency`, `active`, `live`) — the existing 3 pages likely
+  don't cover `latency`/`active`/`live` at all (not in the original doc-page list).
+- `traffic`/`latency`/`live` consequences framed as read-only/observational (no state
+  change) — the simplest Consequences sections in the roadmap, worth calling out as such so
+  readers don't hunt for a "what changes" answer that doesn't exist.
+
+### Validate
+- The shape decision is recorded with its reasoning (not left implicit).
+- All 6 subcommands present somewhere, none silently dropped in whichever consolidation
+  happens.
+
+### Done when
+The `observability` family reads as one coherent thing regardless of page count, and the 3
+previously-undocumented subcommands (`latency`, `active`, `live`) are covered.
+
+---
+
+## V28 — `observe`, `history`, `status`
+
+### Goal
+Verify/extend three existing pages.
+
+### Reuses
+Existing `cli/observe.mdx`, `cli/history.mdx`, `cli/status.mdx`; V1 inventory rows.
+
+### Implement
+- `observe`: single command, `Use: "observe [service]"` — verify it's not itself a
+  near-duplicate of the `observability` family (Era 1 naming audit should resolve which is
+  which; if they overlap, note it plainly and cross-link).
+- `history`: flag diff; document what history is retained and for how long, as an observable
+  fact users plan around, without describing storage/retention internals.
+- `status`: flag diff; likely the most frequently run diagnostic command in the whole CLI —
+  give its output format(s) real attention (what each field means), since this is the page
+  most users will actually open.
+
+### Validate
+- `observe` vs. `observability` relationship is explicitly stated, not left for the reader
+  to guess.
+- `status`'s output-field documentation is checked against real command output where
+  possible (flagged for live verification in Era 13 if not confirmable from source alone).
+
+### Done when
+All three rows `documented`; the `observe`/`observability` naming overlap (if real) is
+resolved and explained.
+
+---
+
+## V29 — `inspect` and `diff`
+
+### Goal
+Verify/extend both existing pages.
+
+### Reuses
+Existing `cli/inspect.mdx`, `cli/diff.mdx`; V1 inventory rows.
+
+### Implement
+- `inspect`: flag diff; document what level of detail is shown and for which resource types
+  (container? deployment? both?) — verify scope against source rather than the page's
+  current framing, since a generically-named command like this is an easy place for scope
+  drift to go unnoticed.
+- `diff`: flag diff; document what's being diffed (config vs. desired-state vs. running
+  state) carefully — this command sits right at the edge of the Era 9 disclosure boundary
+  (diffing implies "diffed against what," which edges toward desired-state/reconcile
+  language) — apply the Era 2 disclosure checklist here even though this era isn't the
+  designated high-risk one, since the command itself is diff-shaped regardless of which
+  family it's filed under.
+
+### Validate
+- `diff`'s description passes the disclosure checklist explicitly, flagged and checked
+  rather than assumed safe because it's outside Era 9.
+
+### Done when
+Both rows `documented`; family (V27–V29) has zero remaining gaps.

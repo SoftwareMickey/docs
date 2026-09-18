@@ -1,12 +1,83 @@
 ---
 title: "beaver plan"
-description: "Preview a deployment without changing production state."
+sidebarTitle: "plan"
+description: "Preview what deploying a container would do, without doing it."
+icon: "clipboard-list"
 ---
+
+<Info>
+  New here? [Preflight and planning](/concepts/preflight-and-planning) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  Distinct from [`beaver plans`](/cli/plans), which lists billing plans. `beaver plan`
+  (singular) previews a deployment; the two are unrelated despite the similar name.
+</Note>
+
+## Purpose
+
+Run `beaver plan <container>` before deploying to see exactly what a real deploy of that
+container would do — without doing it.
+
+## Syntax
+
+```bash
+beaver plan <container> [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<container>` | Yes | A container name or ID within the current project. |
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the result as JSON. See [shared flags](/cli/shared-flags#json).
+</ParamField>
+
+## Consequences
+
+Entirely read-only: no new revision is created, nothing is deployed, and no local file is
+written or changed.
 
 ## Examples
 
-```bash
-beaver plan [--env <environment>] [--json]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver plan api
 ```
 
-Resolves the current project and selected environment, then previews the deployment. Use `--env` for an environment override and `--json` for automation.
+```bash Scripted
+beaver plan worker --json
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+PLAN
+container      api
+project        paperclip
+revision       rev_abc123
+content_hash   9f2a1c8
+replicas       2
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | The resolved revision and what a deploy would apply | Run `beaver deploy` (or [`container <name> redeploy`](/cli/container)) once it looks right. |
+| Unknown container | An error naming the container as not found | Check `beaver containers` for the correct name. |
+
+## Used in
+
+- [`validate`](/cli/validate) — check config validity first, then `plan` to preview the
+  deploy.
+- [`deploy`](/cli/deploy)

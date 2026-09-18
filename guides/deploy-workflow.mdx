@@ -1,0 +1,86 @@
+---
+title: "Deploy workflow"
+sidebarTitle: "Deploy"
+description: "Connect a machine, deploy your app, verify it landed, and promote it to another environment."
+icon: "rocket"
+---
+
+The end-to-end path from an empty machine to a running application across environments.
+
+<Note>
+  New to Beaver's deploy model? [Deployments](/concepts/deployments) covers what a
+  deployment, container, and replica are before you walk this guide.
+</Note>
+
+<Steps>
+  <Step title="Connect a machine">
+    Bring your own infrastructure into Beaver with [`beaver connect`](/cli/connect). Not sure
+    what role to pick? See [Choose your setup](/choose-your-setup) first.
+
+    ```bash
+    beaver connect
+    ```
+  </Step>
+
+  <Step title="Create a Beaver Cloud">
+    Every deployment requires a [Beaver Cloud](/concepts/beaver-cloud). Create one and
+    select your enrolled machines, or use an existing cloud.
+
+    ```bash
+    beaver cloud create production
+    ```
+  </Step>
+
+  <Step title="Deploy">
+    From a directory with a Dockerfile, deploy directly — see [Dockerfile
+    requirements](/deploying/dockerfile-requirements) if you don't have one yet, and
+    [Deployment configuration](/deploying/deployment-configuration) for what goes in
+    `.beaver/config.yml`.
+
+    ```bash
+    cd paperclip/
+    beaver deploy --cloud production
+    ```
+
+    Full flag reference, including the non-interactive/CI path: [`beaver
+    deploy`](/cli/deploy).
+  </Step>
+
+  <Step title="Verify it landed">
+    Check the result before moving on.
+
+    ```bash
+    beaver inspect
+    beaver status
+    ```
+
+    [`beaver inspect`](/cli/inspect) gives a quick summary; [`beaver status`](/cli/status)
+    compares your declared config against what's actually running. For logs and traffic
+    together, use [`beaver observe`](/cli/observe).
+  </Step>
+
+  <Step title="Promote to another environment (optional)">
+    Once you've verified a build in one environment (e.g. staging), move the same,
+    already-built image to another (e.g. production) without rebuilding:
+
+    ```bash
+    beaver promote production
+    ```
+
+    See [`beaver promote`](/cli/promote) — each environment keeps its own [environment
+    variables](/deploying/environment-variables).
+  </Step>
+</Steps>
+
+## If something goes wrong
+
+See the [Rollback and recovery](/guides/rollback-and-recovery) guide.
+
+## Reference pages used in this guide
+
+- [`connect`](/cli/connect)
+- [`deploy`](/cli/deploy)
+- [`inspect`](/cli/inspect)
+- [`status`](/cli/status)
+- [`observe`](/cli/observe)
+- [`promote`](/cli/promote)

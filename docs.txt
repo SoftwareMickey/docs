@@ -1,0 +1,98 @@
+when writing the docs the first thing I'm always wary about is the competitor, I do not want to expose internals and things that copycats can use against me
+
+
+• Understood. I’ll write public docs around what users can do, how to do it, and what to expect.
+
+  I’ll keep internal architecture, orchestration logic, routing decisions, database schemas, private APIs, and implementation strategies out of Mintlify. Those belong in
+  private engineering docs.
+
+  For effort, public docs can explain the available choices, how to select them, and their effect on response time and reasoning. Adapter mappings and capability
+  discovery stay private.
+
+  I’ll still include the behavior and limitations users need to use the feature reliably. Public docs can reduce unnecessary disclosure, though anything observable
+  through the product remains discoverable.
+
+
+› right now there is a huge gap between the docs and the cli commands as I added many cli commands, flags etc and are yet to be implemented, and I want each command and
+  a flag to be explained thoroughly, let's discuss
+
+
+• We should audit the current CLI against Mintlify, then document the commands that users can actually run. That will show both missing documentation and anything the
+  docs describe that the CLI doesn’t yet support.
+
+  For each command, I’d cover:
+
+  - Purpose: what it does and when to use it.
+  - Syntax and arguments: required inputs, accepted identifiers, and defaults.
+  - Every flag: meaning, accepted values, default behavior, interactions, and a practical example where useful.
+  - Consequences: what changes locally or remotely, whether a restart or redeploy is needed, and whether the action can be reversed.
+  - Examples: common usage, advanced combinations, and automation where supported.
+  - Results and failures: how to interpret output and resolve common errors.
+
+  Thorough documentation can stay within your disclosure boundary. We can explain exactly what --wait waits for and what happens on timeout without describing the
+  internal job system.
+
+  I recommend a command reference alongside task guides. The reference gives every command and flag a searchable home; guides explain workflows such as deploying,
+  connecting services, scaling, and configuring a harness.
+
+  Before writing, we should produce an inventory comparing:
+
+   CLI status                           Documentation treatment
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Implemented and usable               Document fully
+  ───────────────────────────────────  ──────────────────────────────────────
+   Available but limited                Explain the actual limitations
+  ───────────────────────────────────  ──────────────────────────────────────
+   Placeholder or unfinished            Keep out of supported usage docs
+  ───────────────────────────────────  ──────────────────────────────────────
+   Documented but removed or changed    Correct or remove stale instructions
+
+  That inventory should come from registered commands and their implementation, rather than help text alone—help can promise behavior the code hasn’t completed.
+
+  When you say “yet to be implemented,” do you mean the documentation hasn’t been written, or that some CLI commands and flags themselves are unfinished?
+
+
+› documentation hasn't been written
+
+
+• Got it—the commands and flags exist; the gap is documentation.
+
+  I’d start with a read-only audit of the CLI and Mintlify, producing a coverage list of missing commands, undocumented flags, and stale examples. Then we can organize
+  the reference and write it by command family.
+
+  Each command page should explain its purpose, syntax, arguments, every flag’s defaults and interactions, realistic examples, expected results, and common errors.
+  Shared flags can have one thorough explanation linked from each command, with any command-specific behavior explained locally.
+
+  I’ll verify behavior against the implementation while keeping the public text focused on users’ actions and outcomes. Architecture, private APIs, storage details, and
+  orchestration logic stay out.
+
+  We should also make documentation review part of future command and flag changes so this gap doesn’t keep growing.
+
+
+› what should be the guide when implementing the documentation writing??
+
+
+• The guide should be: document the complete user-facing contract of the CLI, while keeping implementation details private.
+
+  Use these rules when writing:
+
+  1. Verify before describing. Check registered commands, flags, and their implementation. Help text is a starting point; examples and claimed behavior must match the
+     code.
+
+  2. Cover every command and flag. Maintain a coverage inventory so nothing disappears between the CLI and docs. Include flag aliases, accepted values, defaults,
+     requirements, conflicts, and interactions.
+
+  3. Explain purpose before syntax. Start with the problem the command solves and when someone should use it, then show the simplest useful example.
+  4. Make consequences explicit. Explain what changes, whether it affects a running application, whether a redeploy is required, and what happens on failure or timeout.
+  5. Write examples users can adapt. Use consistent fictional projects and services. Show common workflows and meaningful flag combinations. Keep credentials and real
+     infrastructure identifiers out.
+
+  6. Describe observable behavior. Explain inputs, outputs, limitations, and recovery steps. Keep database schemas, private endpoints, routing algorithms, orchestration
+     mechanisms, and internal design decisions in private engineering docs.
+
+  7. Separate reference from workflows. Command reference pages explain every option. Task guides connect commands into a complete outcome. Link between them.
+  8. Explain shared flags once, with local context. Give global flags a central reference, but explain special behavior on each affected command page.
+  9. Validate the finished docs. Check navigation, links, syntax, examples, and coverage. Distinguish verified command execution from examples reviewed against code.
+  10. Keep docs part of future changes. Adding or changing a command, flag, default, or output should trigger a documentation review.
+
+  For every page, the final review should ask: Can a user complete the task and understand its consequences—and does every technical detail included help them do that?

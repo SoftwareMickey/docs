@@ -1,0 +1,70 @@
+---
+title: "[[Concept name]]"
+description: "[[One sentence, specific — not generic. State the shape of the concept or its key tradeoff, not just its category.]]"
+sidebarTitle: "[[Short nav label]]"
+icon: "[[lucide-icon-name]]"
+---
+
+{/* Revised 2026-09-17 after user feedback that the original rigid
+Purpose/Prerequisites/How-it-relates/What-you-can-see-and-control/Limitations/Next-steps
+skeleton read as flat and reference-like rather than genuinely explanatory. Restyled after
+studying how Vercel (vercel.com/docs) and Conductor (conductor.build/docs) write concept
+pages. What changed, concretely:
+- Lead with ONE bolded-term definition sentence, immediately followed by why it matters —
+  not a separate "Purpose" heading holding a fragment.
+- A short, VERIFIED-against-source command block near the top where natural (Vercel's
+  "show, then tell") — never invent a plausible-looking command; check the real cli/*.mdx
+  page first. Skip it for topics with no natural single command (e.g. a pure mental-model
+  page).
+- Section headers are specific to what the page is actually explaining ("The one rule that
+  matters," "Two things both called rollback") rather than a repeated generic skeleton — but
+  every page still ends up covering the same ground: what it is, why, what you control, its
+  limits, where to go next.
+- A comparison table ONLY where two or three terms are genuinely confusable (Conductor's
+  approach) — not a mandatory section on every page.
+- Limitations stated as direct prose or a <Warning>, positioned where they're earned in the
+  narrative, not shoved into a trailing catch-all section.
+- Closing section renamed "Where to go next" (warmer than "Next steps"), same <CardGroup>
+  mechanism.
+Placeholder convention unchanged: square brackets, never bare curly braces — MDX parses a
+bare `{...}` outside a code fence as a JS expression and fails to build if the contents
+aren't valid JS. */}
+
+[[One bolded-term definition sentence. What it is, in one breath — then, same paragraph or
+the next, why a reader would care. This replaces the old separate "Purpose" fragment.]]
+
+```bash
+[[2-3 lines, MAX. Real, verified commands only — check the actual cli/<family>.mdx page for
+exact syntax before writing this. Cut this block entirely if there's no natural single
+command (e.g. "How Beaver fits together").]]
+```
+
+## [[A specific heading for the concept's central idea or point of confusion]]
+
+[[The "why this matters" or "here's the one thing to know" paragraph — this is where the
+page earns its place over just reading the CLI reference. Concrete, not abstract.]]
+
+[[Optional: a comparison table, ONLY if 2-3 terms are genuinely confusable — see
+`concepts/how-beaver-fits-together.mdx` or `concepts/beaver-cloud.mdx` for the pattern.]]
+
+## What you can see and control
+
+[[Observable behavior only — Invariant 6 / DISCLOSURE.md / DISCLOSURE-ADDENDUM.md. What
+persists, what requires a redeploy, what connectivity looks like. Never the mechanism. Keep
+this narrative, not a bullet dump.]]
+
+## [[A specific heading for the limitation/caveat, or "What it doesn't do"]]
+
+[[Stated plainly. If an action is irreversible or destroys data, use a Warning component
+here — positioned right where the reader needs it, not a generic trailing section.]]
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="[[Related concept or guide]]" href="/concepts/related-concept-slug">
+    [[One line: why this is the next thing to read, not just what it's called.]]
+  </Card>
+  <Card title="[[Command reference]]" href="/cli/command-slug">
+    Exact syntax, flags, and examples.
+  </Card>
+</CardGroup>

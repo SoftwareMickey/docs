@@ -1,0 +1,48 @@
+---
+title: "Persistent storage"
+description: "By default, anything a container writes is lost when it's replaced. Volumes and bind mounts are the two ways to make specific paths survive that."
+sidebarTitle: "Persistent storage"
+icon: "hard-drive"
+---
+
+By default, anything a container writes to its own filesystem is lost the moment that
+container is replaced. **Volumes** and **bind mounts** are the two ways to make specific
+paths survive that.
+
+## Volume or bind mount — which one
+
+A **volume** is a named, Beaver-managed storage location — declare it, mount it at a path,
+and its contents survive restarts and redeploys. A **bind mount** instead maps a specific
+path on the host machine into your container — useful when you need the data accessible
+from the host itself, but it ties that data to that specific machine. If a workload using a
+bind mount moves to a different machine, that data isn't there unless you've set up shared
+storage yourself.
+
+Declaring a bind mount to a sensitive host path requires an explicit second acknowledgment
+beyond your normal confirmation — easy to mount something you didn't mean to otherwise.
+
+## What actually gets destroyed, and when
+
+<Warning>
+  Deleting a volume permanently destroys its contents. Deleting a container or deployment
+  does **not** delete its volumes automatically — they remain until you explicitly remove
+  them. This is by design, so a redeploy doesn't silently wipe data, but it means orphaned
+  volumes can accumulate if you never clean them up.
+</Warning>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Containers and replicas" href="/concepts/containers-and-replicas">
+    What does and doesn't survive a container being replaced.
+  </Card>
+  <Card title="Services" href="/concepts/services">
+    A managed service's data uses this same persistence layer underneath.
+  </Card>
+  <Card title="Config command reference" href="/cli/config">
+    `volume`/`bind` authoring commands, exact syntax.
+  </Card>
+  <Card title="Backups and restoration" href="/concepts/backups-and-restoration">
+    Protecting data beyond just keeping it mounted.
+  </Card>
+</CardGroup>

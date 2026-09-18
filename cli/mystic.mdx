@@ -1,0 +1,63 @@
+---
+title: "beaver mystic"
+sidebarTitle: "mystic"
+description: "Inspect Mystic, Beaver's build acceleration engine, on this machine."
+icon: "hammer"
+---
+
+## Purpose
+
+Use `beaver mystic` to check whether a machine is set up to build efficiently, and to see how
+much its builds have benefited from acceleration since the local agent last started.
+
+## Syntax
+
+```bash
+beaver mystic <subcommand>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `doctor` | Probe whether Docker Buildx/BuildKit is usable on this machine, which driver is active, and whether a dedicated builder is recommended. |
+| `stats` | Show this machine's recorded build counters/durations. |
+
+## Consequences
+
+Both subcommands are pure reads — no state changes on any run.
+
+<Note>
+  `stats` is process-local: it resets when the background agent (`beaverd`) restarts. It's
+  a quick local check, not the durable, cross-restart build history — that's visible in your
+  Beaver dashboard instead.
+</Note>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Check build setup
+beaver mystic doctor
+```
+
+```bash See recent build stats
+beaver mystic stats
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `doctor` — accelerated builds available | Active driver and readiness confirmed | Nothing further. |
+| `doctor` — a dedicated builder is recommended | A note suggesting one | Consider a dedicated builder machine if build times matter to you. |
+| `stats` right after an agent restart | Near-zero counters | Expected — this resets on restart; not an error. |
+
+## Used in
+
+- [`doctor`](/cli/doctor) — general machine diagnostics; `mystic doctor` is the
+  build-acceleration-specific counterpart.

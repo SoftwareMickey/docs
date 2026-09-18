@@ -1,14 +1,80 @@
 ---
 title: "beaver integrations"
-description: "Inspect and remove connected integrations."
+sidebarTitle: "integrations"
+description: "List, check, and disconnect the accounts connected to your Beaver workspace."
+icon: "plug"
 ---
+
+<Info>
+  New here? [Integrations](/concepts/integrations) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  The command is `beaver integrations` (plural) — there's no separate singular `integration`
+  command; this page is the complete, correct name for this family.
+</Note>
+
+## Purpose
+
+Use `beaver integrations` to see which external accounts (GitHub, AWS, VPS providers, and
+others) are connected to your Beaver workspace, check each one's connection health, and
+disconnect one you no longer need. For connecting or managing GitHub specifically, see
+[`beaver github`](/cli/github) — that's the dedicated command for the most common integration.
+
+## Syntax
+
+```bash
+beaver integrations [subcommand] [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)* | List every account you've connected to Beaver. |
+| `status` | Show connection status per provider. |
+| `remove <integration-id>` | Disconnect an integration. |
+
+## Flags
+
+<ParamField query="--yes" type="boolean" default="false">
+  On `remove`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+Disconnecting an integration removes **your** link to it. If you're the last Beaver user
+linked to that same GitHub App installation, it's uninstalled on GitHub's side too — other
+users still linked to it are unaffected otherwise.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List connected accounts
 beaver integrations
-beaver integrations status
-beaver integrations remove <integration-id>
 ```
 
-Use `status` to see connected providers. Removal disconnects the selected integration after confirmation.
+```bash Check connection health
+beaver integrations status
+```
+
+```bash Disconnect one
+beaver integrations remove int_abc123 --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `status` shows a broken connection | Provider marked unhealthy/expired | Reconnect via the relevant provider flow, e.g. `beaver github install`. |
+| `remove` declined | Command exits without change | Nothing disconnected. |
+
+## Used in
+
+- [`github`](/cli/github) — the dedicated command for connecting and managing GitHub
+  specifically.

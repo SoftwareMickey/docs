@@ -1,17 +1,277 @@
 ---
 title: "beaver alie"
-description: "Use Alie, Beaver's infrastructure assistant."
+sidebarTitle: "alie"
+description: "Chat with Alie, Beaver's infrastructure AI, and manage sessions, approvals, and workspace-wide AI settings."
+icon: "wand-magic-sparkles"
 ---
+
+<Info>
+  New here? [AI connections and Alie](/concepts/ai-connections-and-alie) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  This page covers the full `beaver alie` command surface. It documents what you can ask
+  Alie to do, how to configure it, and how approvals work from the user's side. It does not
+  describe which specific tools Alie has wired up internally, how it decides to use one, or
+  how approval/scope resolution executes server-side — those are internal to the platform,
+  consistent with how the same boundary is kept on the dashboard side.
+</Note>
+
+## Purpose
+
+Run `beaver alie` to start a chat with Alie about your infrastructure — it can explain
+findings and propose actions, which then run through the same approval and policy controls
+covered below. Everything past a chat also has a direct command, so you can inspect and
+manage sessions, approvals, and workspace-wide AI settings without starting a conversation.
+
+## Chat & sessions
+
+| Command | Purpose |
+| --- | --- |
+| *(none)* | Start a new chat. |
+| `--resume [session]` | Resume an existing session (interactive picker if no name given). |
+| `sessions` | List your sessions. |
+| `audit` | Show Alie's tool and action audit trail. |
+| `session [session]` | Show one session's detail. |
+| `rename <session> <new-name>` | Rename a session. |
+| `delete <session>` | Delete a session. |
+| `archive <session>` | Archive a session — hidden from the default list, never deleted. |
+| `fork <session>` | Fork a session into a new one, seeded from its current state. |
+| `compact [session]` | Force-compact a session into a structured summary. |
+| `model [session]` | Show or change a session's model. |
+| `usage [session]` | Show token usage for a session. |
+| `status` | Show connected AI providers and their available models. |
+
+<ParamField query="--resume" type="string" default="">
+  Resume a session. Pass with no value for an interactive picker, or a session name/ID
+  directly.
+</ParamField>
+<ParamField query="--model" type="string" default="">
+  On `model`: model to switch this session to.
+</ParamField>
+<ParamField query="--effort" type="string" default="">
+  On `model`: reasoning effort level, where the model supports it.
+</ParamField>
+<ParamField query="--all" type="boolean" default="false">
+  On `sessions`: include archived/inactive sessions in the list.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `delete <session>`: skip the confirmation prompt. See [shared
+  flags](/cli/shared-flags#yes) — same behavior, this command's own flag name.
+</ParamField>
+<ParamField query="--event-type" type="string" default="">
+  On `audit`: filter the trail to one event type.
+</ParamField>
+<ParamField query="--limit" type="integer" default="50">
+  On `audit`: maximum events to show (1–500).
+</ParamField>
+
+### Consequences
+
+`delete` permanently removes a session; `archive` only hides it from the default list — use
+`archive` if you might want the history back later. `fork` doesn't affect the original
+session; it starts a new one seeded from where the original left off.
+
+## Approvals
+
+Alie proposes actions with real infrastructure effects (like a redeploy or a scaling change)
+and, depending on policy, waits for your explicit confirmation before running them.
+
+| Command | Purpose |
+| --- | --- |
+| `approvals` | List every action Alie is waiting on human confirmation for, across the workspace. |
+| `approve <approval-id>` | Approve a pending action. |
+| `reject <approval-id>` | Reject a pending action. |
+| `approval-policies` | List per-tool approval mode overrides. |
+| `approval-policy set` | Set one tool's approval mode. |
+
+<ParamField query="--tool" type="string" default="" required>
+  On `approval-policy set`: tool name. Required.
+</ParamField>
+<ParamField query="--mode" type="string" default="" required>
+  On `approval-policy set`: `auto` or `approval`. Required.
+</ParamField>
+
+Without an explicit override, a tool falls back to its own risk-derived default approval
+mode. `approval-policies` with no overrides set says so explicitly rather than showing an
+empty, ambiguous list.
+
+## Autopilot
+
+<Warning>
+  Autopilot controls how far Alie can act **with no human confirmation at all**. Setting it
+  above "off" is a genuinely consequential, workspace-wide change — confirm you mean it.
+</Warning>
+
+| Command | Purpose |
+| --- | --- |
+| `autopilot` | Show the workspace's current autopilot level. |
+| `autopilot set` | Change it. |
+
+<ParamField query="--level" type="string" default="" required>
+  On `autopilot set`: `off`, `safe`, `diagnostic`, `action`, or `destructive` — each level
+  permits everything the one before it does, plus more. Required.
+</ParamField>
+
+## Workspace AI settings
+
+| Command | Purpose |
+| --- | --- |
+| `model-profile` | Show the workspace's default AI provider/model. |
+| `model-profile set` | Change it. |
+| `spend-cap` | Show the workspace's daily/session AI spend limits and today's spend. |
+| `spend-cap set` | Change the limits. |
+| `api-keys` | List keys for the external Alie API (for scripts/integrations calling Alie tools directly, outside a chat). |
+| `create` | Create a new API key. **Top-level** — `beaver alie create`, not `alie api-keys create`. |
+| `revoke <id>` | Revoke an API key. **Top-level** — `beaver alie revoke <id>`. |
+
+<ParamField query="--provider" type="string" default="" required>
+  On `model-profile set`: provider name. Required.
+</ParamField>
+<ParamField query="--model" type="string" default="" required>
+  On `model-profile set`: model ID. Required.
+</ParamField>
+<ParamField query="--latency" type="string" default="">
+  On `model-profile set`: `fast`, `balanced`, or `quality`.
+</ParamField>
+<ParamField query="--daily" type="number" default="0" required>
+  On `spend-cap set`: daily spend limit in USD. Required.
+</ParamField>
+<ParamField query="--session" type="number" default="0" required>
+  On `spend-cap set`: per-conversation spend limit in USD. Required.
+</ParamField>
+<ParamField query="--name" type="string" default="">
+  On `create`: a label for the new key.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `revoke`: skip the confirmation prompt.
+</ParamField>
+
+<Warning>
+  An Alie API key's plaintext value is printed exactly once, at creation. Beaver never
+  stores or shows it again — losing it means revoking and creating a new one.
+</Warning>
+
+`spend-cap set` applies once saved — a conversation already over the new, lower limit isn't
+retroactively affected until its next usage check.
+
+## Knowledge, runbooks, goals & policies
+
+Workspace-wide context Alie applies across conversations.
+
+| Command | Purpose |
+| --- | --- |
+| `knowledge` | List team knowledge rules Alie applies to every relevant conversation. |
+| `knowledge add` | Add a rule. |
+| `knowledge delete <id>` | Delete a rule. |
+| `runbooks` | List reusable remediation runbooks. |
+| `runbooks add` | Add one, triggered by an error-rate condition. |
+| `goals` | List standing infrastructure goals Alie evaluates on an ongoing basis. |
+| `goals add` | Add a goal. |
+| `policies` | List infrastructure policies. |
+| `policies add` | Add one. |
+| `review <policy-id>` | Mark a policy reviewed. **Top-level** — `beaver alie review <policy-id>`, not `alie policies review`. |
+
+<ParamField query="--rule" type="string" default="" required>
+  On `knowledge add`: the knowledge statement. Required.
+</ParamField>
+<ParamField query="--scope" type="string" default="">
+  On `knowledge add`: scope, if not workspace-wide.
+</ParamField>
+<ParamField query="--name" type="string" default="" required>
+  On `runbooks add`: runbook name. Required.
+</ParamField>
+<ParamField query="--description" type="string" default="">
+  On `runbooks add`: what triggers this runbook, in your own words.
+</ParamField>
+<ParamField query="--error-rate-threshold" type="number" default="0" required>
+  On `runbooks add`: error-rate percentage that triggers this runbook. Required.
+</ParamField>
+<ParamField query="--container-id" type="string" default="">
+  On `runbooks add`/`goals add`/`policies add`: scope to one container. Optional.
+</ParamField>
+<ParamField query="--metric" type="string" default="" required>
+  On `goals add`/`policies add`: `latency_p95`, `availability`, `monthly_cost`, or
+  `security_posture`. Required.
+</ParamField>
+<ParamField query="--operator" type="string" default="" required>
+  On `goals add`: `below` or `above`. Required.
+</ParamField>
+<ParamField query="--target" type="number" default="0" required>
+  On `goals add`: threshold value. Required.
+</ParamField>
+<ParamField query="--statement" type="string" default="" required>
+  On `policies add`: a human-readable policy statement. Required.
+</ParamField>
+<ParamField query="--direction" type="string" default="" required>
+  On `policies add`: `below` or `above`. Required.
+</ParamField>
+<ParamField query="--threshold" type="number" default="0">
+  On `policies add`: threshold value.
+</ParamField>
+
+## Feedback on a task
+
+If Alie (or a harness task it ran) got something wrong, report it directly:
+
+```bash
+beaver alie report <task-id>
+beaver alie task <task-id>
+```
+
+<ParamField query="--category" type="string" default="">
+  On `report`: what was wrong — see the command's own `--help` for the current category
+  list.
+</ParamField>
+<ParamField query="--note" type="string" default="">
+  On `report`: optional detail. Secrets are removed before it's stored.
+</ParamField>
+
+`task <task-id>` shows a harness task's timeline, including any runbooks it was offered
+during the run.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Start or resume a chat
 beaver alie
-beaver alie --resume [session]
-beaver alie sessions
-beaver alie session <session>
-beaver alie approvals
-beaver alie approve <approval-id>
+beaver alie --resume
 ```
 
-Alie can explain findings and propose actions. Approval prompts and workspace policy control whether a proposed action can proceed.
+```bash Handle a pending approval
+beaver alie approvals
+beaver alie approve appr_abc123
+```
+
+```bash Set a spend cap
+beaver alie spend-cap set --daily 50 --session 10
+```
+
+```bash Turn on limited autopilot
+beaver alie autopilot set --level safe
+```
+
+```bash Add team knowledge
+beaver alie knowledge add --rule "Always confirm with the on-call engineer before scaling production down."
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `autopilot set` above `off` | A confirmation naming the risk tier and that no approval turn will occur | Confirm only if you mean it. |
+| `approval-policy set` missing flags | `--tool and --mode are required` | Pass both. |
+| `create` success | The plaintext key, shown once | Save it immediately — it can't be retrieved again. |
+| No approvals pending | An empty `approvals` list | Nothing waiting on you. |
+
+## Used in
+
+- [`ai`](/cli/ai) — manages the underlying provider connections Alie uses.
+- [`skills`](/cli/skills) — local skill packages Alie can discover and use in a project.

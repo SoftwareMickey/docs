@@ -1,0 +1,135 @@
+# Era 13 — Verification & Sustaining Process (V44–V47)
+
+_Phase 4 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+The roadmap's final era closes two different things: whether what got written is actually
+correct (a one-time audit), and whether the gap stays closed after this roadmap ends (a
+standing process). `docs.txt`'s rule 10 — "keep docs part of future changes" — is what this
+era turns from an intention into a mechanism.
+
+---
+
+## V44 — Verified-vs-reviewed audit of every example
+
+### Goal
+Every code example across `cli/*.mdx` (post Eras 3–12) is marked either "verified: executed
+against a live `beaver`" or "reviewed against source" — per Invariant 9's explicit
+distinction — with none left unmarked.
+
+### Reuses
+Access to a live `beaver-cli` build and a real (or realistic test) workspace, where
+available — for commands where live execution isn't practical (destructive, billing-
+affecting, or requiring infrastructure this session doesn't have), "reviewed against
+source" is the honest fallback, stated as such rather than implied as tested.
+
+### Implement
+- Pass over every example block added or verified in Eras 3–11; for each, either run it (if
+  safe and feasible) and mark it "verified," or confirm it against the current `beaver-cli`
+  source one more time and mark it "reviewed against source."
+- The "needs live smoke-test" punch-list items flagged in Era 1 V3 and individual family
+  eras (e.g. Era 7 V25's `service cluster upgrade`/`replace-member` consequences) are
+  resolved here first, since they're the highest-value items to actually execute.
+- A short marker convention (e.g. an MDX comment or a small inline note) distinguishes the
+  two states consistently across every page — decided once, applied everywhere, not
+  reinvented per page.
+
+### Validate
+- Zero examples left unmarked.
+- Every Era-flagged "needs live smoke-test" item is either resolved (verified) or explicitly
+  still marked as source-reviewed-only with a reason.
+
+### Done when
+The marking convention is applied consistently and the acceptance gate's criterion 5 is
+satisfied.
+
+---
+
+## V45 — Disclosure boundary final sweep
+
+### Goal
+One last full-repo pass with the Era 2 checklist's named-term list (both the Era 9
+infrastructure terms and the Era 11 AI terms) against every `cli/*.mdx` page — not just the
+high-risk eras' pages, since a leak could plausibly land anywhere.
+
+### Reuses
+The Era 2 V5 checklist and term list; Era 9 V30's redaction-log format as the pattern for
+recording any findings.
+
+### Implement
+- Grep (or equivalent search) the full `cli/` tree for the named terms and near-synonyms;
+  every hit gets a manual read, not an automatic flag — the earlier eras already established
+  that these words aren't automatically disqualifying (e.g. "drift" used correctly is fine).
+- Any genuine leak found gets the same redact-or-relocate treatment as Era 9 V30.
+
+### Validate
+- The sweep's findings (if any) are logged with resolution, mirroring V30's artifact.
+- A second reviewer (or a second, later pass by the same reviewer, fresh) confirms the
+  all-clear.
+
+### Done when
+The acceptance gate's criterion 6 is met: no orchestration/routing/schema/internal-API
+language findable anywhere in the published CLI reference.
+
+---
+
+## V46 — The CLI-change → docs-review gate
+
+### Goal
+A concrete, discoverable process so that a future command/flag/default/output change in
+`beaver-cli` triggers a documentation review — closing the loop `docs.txt` rule 10 names.
+
+### Reuses
+Whatever review/PR process `beaver-cli` already uses (checked, not assumed) as the
+attachment point — this roadmap doesn't invent a new process, it adds a step to the
+existing one.
+
+### Implement
+- A short, concrete checklist (not a heavyweight policy document) added somewhere a
+  `beaver-cli` contributor would actually see it when changing a command: a note in
+  `beaver-cli`'s own `CLAUDE.md`, a PR template checkbox, or equivalent — the specific
+  mechanism is chosen based on what that repo already has, verified before proposing
+  something new.
+- The checklist itself: "Does this change a command's syntax, flags, defaults, or observable
+  output? If yes, does `mintlify/cli/<page>.mdx` still match? If the command is new, does it
+  have a page (see `/features/docs/inventory/` for the family it belongs to)?"
+
+### Validate
+- The gate is actually reachable from within `beaver-cli`'s own workflow, not just
+  documented in this roadmap where a CLI contributor would never see it — verified by
+  checking where it was actually placed, not assuming placement equals visibility.
+
+### Done when
+The acceptance gate's criterion 8 is met.
+
+---
+
+## V47 — Recurring inventory refresh
+
+### Goal
+A defined cadence (not necessarily automated — a written recurrence is enough for V1) for
+re-running Era 1's extraction against `beaver-cli` to catch drift the per-change gate (V46)
+misses — commands changed without triggering the gate, or accumulated small drifts.
+
+### Reuses
+Era 1 V1–V4's extraction method, re-run rather than redesigned.
+
+### Implement
+- A short note (in `/features/docs/00-architecture.docs` or a dedicated process note)
+  stating the intended cadence (e.g. "re-run the Era 1 extraction each time a `beaver-cli`
+  minor version ships, or quarterly, whichever comes first") and who/what re-runs it.
+- Explicitly out of scope for V1: building tooling to automate this extraction on a
+  schedule — the manual, periodic re-run is sufficient to start; automation is a natural
+  post-V1 candidate if the manual cadence proves to lag in practice.
+
+### Validate
+- The cadence is written down somewhere a future session (human or Claude) would find it
+  when asked to continue this roadmap — cross-checked against where V46's gate was placed,
+  so the two reinforcing mechanisms are actually discoverable together.
+
+### Done when
+The roadmap's acceptance gate is fully met (all 8 criteria in `00-architecture.docs`), and
+this era's two sustaining mechanisms (V46's per-change gate, V47's periodic refresh) are
+both in place — the gap `docs.txt` identified is closed, and the roadmap exists to notice if
+it reopens.

@@ -1,0 +1,72 @@
+---
+title: "Connect and machine roles"
+sidebarTitle: "Connect & roles"
+description: "Connect one or more machines, pick their roles, and group them into a Beaver Cloud."
+icon: "server"
+---
+
+This guide picks up after [Choose your setup](/choose-your-setup) and [Machine
+roles](/machine-roles) — start there for what Builder/Host/Builder + Host mean. This page
+covers the command-line side of connecting machines and, once you have more than one,
+grouping them.
+
+<Note>
+  For what happens after a machine is connected, see [Machine and agent
+  operation](/concepts/machine-and-agent-operation). For grouping machines into a shared
+  pool, see [Beaver Cloud](/concepts/beaver-cloud).
+</Note>
+
+<Steps>
+  <Step title="Connect your first machine">
+    ```bash
+    beaver connect
+    ```
+
+    Walks through readiness checks, sign-in, and role selection. See
+    [`connect`](/cli/connect) for the full command reference, and run
+    [`beaver doctor`](/cli/doctor) first (or after, if anything fails) to check prerequisites.
+  </Step>
+
+  <Step title="Connect additional machines">
+    Repeat `beaver connect` on each additional machine — a dedicated builder, a separate
+    host, or both. Check what's enrolled so far:
+
+    ```bash
+    beaver machine list
+    ```
+
+    See [`machine`](/cli/machine) for fleet-wide visibility once you have more than one.
+  </Step>
+
+  <Step title="Group machines into a cloud (optional)">
+    If you have multiple machines you want to treat as one pool — shared private networking,
+    combined capacity, and workload placement across them — group them into a
+    [Beaver Cloud](/cli/cloud):
+
+    ```bash
+    beaver cloud create paperclip-prod --machines srv_web01,srv_web02,srv_db01
+    beaver cloud capacity paperclip-prod
+    ```
+
+    Deploy into the pool instead of one machine with `beaver deploy --cloud
+    paperclip-prod`.
+  </Step>
+
+  <Step title="Check machine health anytime">
+    ```bash
+    beaver doctor
+    beaver machine fleet-overview
+    ```
+
+    Run these any time a machine or the fleet as a whole seems off.
+  </Step>
+</Steps>
+
+## Reference pages used in this guide
+
+- [Choose your setup](/choose-your-setup)
+- [Machine roles](/machine-roles)
+- [`connect`](/cli/connect)
+- [`machine`](/cli/machine)
+- [`cloud`](/cli/cloud)
+- [`doctor`](/cli/doctor)

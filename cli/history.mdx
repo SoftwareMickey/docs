@@ -1,14 +1,61 @@
 ---
 title: "beaver history"
-description: "Review commands run from this machine."
+sidebarTitle: "history"
+description: "Review commands you've run recently from this machine."
+icon: "clock-rotate-left"
 ---
+
+## Purpose
+
+Use `beaver history` to recall what you ran recently, without a dashboard round trip. This is
+a **local, personal** record kept on this machine — distinct from any workspace-wide audit
+trail your team can see.
+
+## Syntax
+
+```bash
+beaver history [flags]
+```
+
+## Flags
+
+<ParamField query="--project" type="string" default="">
+  Only show entries for this project.
+</ParamField>
+<ParamField query="--since" type="string" default="">
+  Only show entries newer than this, e.g. `1h`, `24h`, `1d`.
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run. History is kept per machine; running commands
+from a different machine (or a fresh install) starts a new, separate history.
 
 ## Examples
 
-```bash
+<Info>
+  **Verified**: the commands on this page were executed against a live `beaver` build during this review; example output reflects what was actually returned (with real account/workspace values replaced by the fictional vocabulary).
+</Info>
+
+<CodeGroup>
+
+```bash Recent commands
 beaver history
-beaver history --since 1d
-beaver history --project <project>
 ```
 
-Shows a local, personal command history. It is not a workspace-wide audit log.
+```bash Last day, one project
+beaver history --since 1d --project checkout-api
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | A list of recently run commands | Nothing further. |
+| Invalid `--since` | An error naming the invalid duration | Use a Go-style duration, e.g. `1h`, `24h`, `168h`. |
+
+## Used in
+
+- General troubleshooting — recalling exactly what was run before an issue appeared.

@@ -1,0 +1,57 @@
+---
+title: "Accounts and workspaces"
+description: "Your account is one login used everywhere; a workspace is the top-level scope everything else lives inside."
+sidebarTitle: "Accounts & workspaces"
+icon: "user"
+---
+
+Your **account** is your identity — one login, used everywhere. Your **workspace** is the
+top-level scope everything else (projects, machines, services) lives inside. For most
+people these feel like the same thing, because logging in creates a workspace automatically
+and you never have more than one.
+
+```bash
+beaver login
+beaver whoami
+```
+
+## Why this matters
+
+You rarely think about workspaces day to day — until you're onboarding a teammate, deciding
+what they can see, or you hit a wall where something you created isn't visible from a
+different login. Knowing the difference between "my account" and "my workspace" is what
+makes that make sense instead of feeling arbitrary.
+
+## What you can see and control
+
+`beaver login` authenticates your account; `beaver whoami` shows who you're currently signed
+in as, and which workspace you're in. Everything you create — projects, connected machines,
+services — belongs to your workspace. Teammates you invite see the same workspace's
+resources, scoped by their own access level.
+
+## What deleting a workspace actually means
+
+<Warning>
+  Deleting a workspace is not the same as logging out. It removes every project, deployment,
+  and connected-machine registration inside it. The machines themselves keep running —
+  Beaver doesn't reach out and stop anything on your infrastructure — but Beaver stops
+  managing them until they're reconnected to a workspace again. Recreating a workspace
+  starts empty; it doesn't restore what a deleted one had.
+</Warning>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="How Beaver fits together" href="/concepts/how-beaver-fits-together">
+    See where a workspace sits above everything else.
+  </Card>
+  <Card title="Account command reference" href="/cli/account">
+    Profile, MFA, and feedback commands.
+  </Card>
+  <Card title="Workspace command reference" href="/cli/workspace">
+    Exact syntax for workspace operations.
+  </Card>
+  <Card title="Choose your setup" href="/choose-your-setup">
+    What to do right after logging in.
+  </Card>
+</CardGroup>

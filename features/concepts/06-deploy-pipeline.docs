@@ -1,0 +1,119 @@
+# Era 6 — Deploy Pipeline (V18–V21)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all four pages written new — `concepts/preflight-and-planning.mdx`
+(V18), `concepts/deployments.mdx` (V19, paired with the existing `guides/deploy-workflow.mdx`),
+`concepts/containers-and-replicas.mdx` (V20), `concepts/compose-applications.mdx` (V21).
+`plan.mdx`/`validate.mdx` reference links confirmed against the now-resolved
+`/features/docs/` `projectcontract` mapping (no placeholder notes needed — both pages are
+real and accurate). `mint broken-links` clean.
+
+Covers T13–T16: Preflight and planning, Deployments, Containers and replicas, Compose
+applications.
+
+---
+
+## V18 — Preflight and planning (T13)
+
+### Goal
+New concept page: what validation, planning, inspection, rehearsal, build checks, and
+security checks each establish; warnings vs. blockers; fixes and overrides.
+
+### Reuses
+`cli/preflight.mdx`, `cli/inspect.mdx`, `cli/plan.mdx`/`cli/plans.mdx` (pending the sibling
+roadmap's own resolution of the `plan`/`plans` staleness question, Era 1 there) as reference
+targets — link only to whichever survives that resolution.
+
+### Implement
+`concepts/preflight-and-planning.mdx`: frames this whole family as "checks you run before a
+deployment commits," distinguishes a warning (deploy proceeds) from a blocker (it doesn't)
+at the observable level, states what "fixes and overrides" a user can apply without
+describing the validation engine itself (checkpoint terms: `validation engine` internals,
+any scoring/rule-evaluation mechanism).
+
+### Validate
+Disclosure pass — especially around "security checks," which invites "how is this scored"
+questions; answer stays at "here's what it flags and what you do about it."
+
+### Done when
+Page exists; warning-vs-blocker distinction is unambiguous.
+
+---
+
+## V19 — Deployments (T14)
+
+### Goal
+New concept page: the full deploy workflow at concept level, selecting a destination, ports,
+health checks, restart policies, deployment strategies, progress states, failed deployments,
+verifying readiness.
+
+### Reuses
+`cli/deploy.mdx`, `cli/deployment.mdx`, `guides/deploy-workflow.mdx` (the existing task
+guide) heavily — this concept page is the "why/what" layer the task guide currently has to
+assume; link bidirectionally per Invariant 7 rather than re-explaining the guide's steps.
+
+### Implement
+`concepts/deployments.mdx`: deployment strategies explained as user-visible tradeoffs
+(e.g., "zero-downtime" as an observable property — old version stays reachable until the new
+one is healthy — not the mechanism achieving it), progress states as what a user sees in
+output/observability, failed-deployment recovery pointing to Rollback (T29, Era 10).
+
+### Validate
+Confirms `guides/deploy-workflow.mdx` gains a link back to this new page (Invariant 7,
+executed fully in Era 12 but noted here as the expected pairing).
+
+### Done when
+Page exists; bidirectional link with `guides/deploy-workflow.mdx` confirmed at Era 12.
+
+---
+
+## V20 — Containers and replicas (T15)
+
+### Goal
+New concept page: how containers/replicas differ from deployments, lifecycle actions,
+replica health, opening applications, executing commands, what survives a restart or
+replacement.
+
+### Reuses
+`cli/container.mdx`/`cli/containers.mdx` as reference targets.
+
+### Implement
+`concepts/containers-and-replicas.mdx`: deployment-vs-container-vs-replica as a clear
+three-term distinction (a common source of confusion per the topic's own phrasing —
+"how they differ from deployments" is explicitly called out), what persists across a
+restart/replacement stated plainly (ties into Persistent Storage, T22, Era 9).
+
+### Validate
+Terminology check against `how-beaver-fits-together.mdx` (V6) — this page must use the same
+three terms consistently with the master diagram, not introduce synonyms.
+
+### Done when
+Page exists; terminology matches V6 exactly.
+
+---
+
+## V21 — Compose applications (T16)
+
+### Goal
+New concept page: supported Compose behavior, configuring multiple applications,
+environment files, dependencies, differences users should expect from vanilla Docker
+Compose.
+
+### Reuses
+`cli/compose.mdx` as reference target.
+
+### Implement
+`concepts/compose-applications.mdx`: frames Compose support as "multiple services from one
+project," relationship to Projects (V14) and Services (Era 8), explicit list of behavioral
+differences from plain `docker compose` (this is exactly the kind of "what to expect"
+content a user needs and is fully disclosure-safe — differences are observable behavior).
+
+### Validate
+Every stated difference from vanilla Compose is checked against actual current behavior
+(Invariant 1's "verify before describing," applied here) rather than assumed.
+
+### Done when
+Page exists; every behavioral claim is source/behavior-verified.

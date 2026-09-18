@@ -1,0 +1,91 @@
+---
+title: "beaver health"
+sidebarTitle: "health"
+description: "Set the HTTP path Beaver probes to decide a service replica is healthy."
+icon: "heart-pulse"
+---
+
+## Purpose
+
+Use `beaver health` to declare and apply a service's HTTP health-check path — the endpoint
+Beaver requests to decide whether a running replica is healthy and should keep receiving
+traffic. Setting it here updates your project's config file and applies it to the live
+deployment in one step, so the file and the running check never disagree.
+
+## Syntax
+
+```bash
+beaver health [service] --path <path> [flags]
+beaver health [service] --clear
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name within the current project. Omit for the project's default service. |
+
+## Flags
+
+<ParamField query="--path" type="string" default="">
+  The HTTP health-check path, e.g. `/healthz`.
+</ParamField>
+<ParamField query="--probe-timeout" type="duration" default="">
+  Per-probe timeout, e.g. `3s`. Leave unset to use the default.
+</ParamField>
+<ParamField query="--clear" type="boolean" default="false">
+  Remove the health check entirely instead of setting one.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  Record the change even if your local config file is out of sync with the last-recorded
+  desired state.
+</ParamField>
+<ParamField query="--commit" type="boolean" default="false">
+  Git-commit the `.beaver/config.yml` change. Never pushes — the commit stays local until you
+  push it yourself.
+</ParamField>
+
+## Consequences
+
+Setting a path updates `.beaver/config.yml`'s `health` block, applies it to the running
+deployment's health-aware routing, and verifies the two match. If the applied check starts
+failing (the path returns errors or times out), Beaver treats that replica as unhealthy for
+routing purposes going forward — make sure the path you set actually reflects your
+application's real health before applying it to a live deployment.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Set a health path
+beaver health --path /healthz
+```
+
+```bash On a named service, with a custom timeout
+beaver health api --path /health --probe-timeout 3s
+```
+
+```bash Remove the health check
+beaver health --clear
+```
+
+```bash Commit the config change locally
+beaver health --path /healthz --commit
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Confirmation that the path was set and applied | The live check now uses the new path. |
+| Local config out of sync | An error asking you to reconcile first, or pass `--force` | Review the drift, then retry (with `--force` if intentional). |
+| `--clear` with no existing check | No-op confirmation | Nothing to remove. |
+
+## Used in
+
+- [Deployment configuration](/deploying/deployment-configuration) — health checks are part of
+  a service's deployment config.

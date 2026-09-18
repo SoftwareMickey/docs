@@ -1,18 +1,175 @@
 ---
 title: "beaver compose"
-description: "Detect, deploy, and operate Docker Compose stacks."
+sidebarTitle: "compose"
+description: "Detect, deploy, and operate multi-service Docker Compose stacks."
+icon: "layer-group"
 ---
+
+<Info>
+  New here? [Compose applications](/concepts/compose-applications) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver compose` for a multi-service application described by a Compose file
+(`compose.yml`/`compose.yaml`/`docker-compose.yml`/`docker-compose.yaml`). This is the
+deliberately-explicit counterpart to [`beaver deploy`](/cli/deploy) — Beaver never infers
+that a Compose file beside a Dockerfile means you wanted a multi-service release, so use this
+command directly when that's what you want.
+
+Every Compose deployment requires a [Beaver Cloud](/concepts/beaver-cloud). The wizard
+selects a cloud; for CI, pass `--cloud production` or save `cloud: production` in
+`.beaver/config.yml`. Beaver chooses the builder and the host for the stack from that cloud.
+If you have no cloud, run `beaver cloud create production` and add your machines first.
+
+## Syntax
+
+```bash
+beaver compose detect [flags]
+beaver compose deploy [flags]
+beaver compose stacks
+beaver compose stack <subcommand> <stack-id>
+beaver compose release <subcommand> <release-id>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `detect` | Preview the services and resources a compose file would deploy, without deploying. |
+| `deploy` | Deploy the compose project. |
+| `status [stack-id]` | Show a stack's status. |
+| `logs <stack-id>` | Stack logs. |
+| `destroy <stack-id>` | Tear down a stack. |
+| `stacks` | List deployed stacks. |
+| `stack show <stack-id>` | A stack's latest release and services. |
+| `stack release <stack-id>` | A stack's current (latest) release only. |
+| `stack delete <stack-id>` | Delete a stack. |
+| `stack networks <stack-id>` / `stack volumes <stack-id>` | Inspect a stack's networks/volumes. |
+| `release show <release-id>` / `release watch <release-id>` | Inspect or follow a release. |
+| `release rollback <release-id>` | Roll a release back. |
+| `release retry <release-id>` / `release cancel <release-id>` | Retry or cancel a release. |
+
+## Flags
+
+<ParamField query="--cloud" type="string" default="">
+  Required Beaver Cloud name or slug. Defaults to `cloud:` in `.beaver/config.yml`;
+  the interactive wizard asks if it is not set.
+</ParamField>
+
+### `detect` / `deploy`
+
+<ParamField query="--file" type="string" default="">
+  Path to the compose file. Defaults to searching
+  `compose.yml`/`compose.yaml`/`docker-compose.yml`/`docker-compose.yaml` in the current
+  directory (on `deploy`, prompts if several are present).
+</ParamField>
+<ParamField query="--profile" type="string" default="">
+  Activate one or more compose profiles (repeatable, or comma-separated). A service with no
+  profiles always deploys.
+</ParamField>
+
+### `deploy`
+
+<ParamField query="--project-id" type="string" default="" required>
+  Target project ID. Required.
+</ParamField>
+<ParamField query="--url" type="string" default="">
+  Repo URL, if any buildable service needs one cloned. Defaults to the current directory's
+  git remote.
+</ParamField>
+<ParamField query="--branch" type="string" default="">
+  Git branch to build from. Defaults to the current directory's checked-out branch, else
+  `main`.
+</ParamField>
+<ParamField query="--docker-user" type="string" default="">
+  Docker Hub username for image tags. Defaults to your saved session's username,
+  else your logged-in username.
+</ParamField>
+<ParamField query="--name" type="string" default="">
+  Name a buildable service's container/image as `service=name` (repeatable). The image
+  becomes `<docker-user>/<name>`. You're prompted for these interactively if not passed.
+</ParamField>
+<ParamField query="--env-file" type="string" default="">
+  Path to a dotenv file applied to every compose service — a service's own environment
+  entries take precedence over this file.
+</ParamField>
+<ParamField query="--environment-id" type="string" default="">
+  [Environment](/cli/environment) this release binds to. Defaults to the project+branch's
+  existing mapping if any.
+</ParamField>
+<ParamField query="--logs" type="boolean" default="false">
+  Stream the formatted, labeled build and host logs for every service instead of the live
+  summary board.
+</ParamField>
+<ParamField query="--skip-preflight" type="boolean" default="false">
+  Proceed even if preflight reports a blocking finding. Recorded as a server-side audit row.
+</ParamField>
+
+### Destructive actions
+
+<ParamField query="--yes" type="boolean" default="false">
+  On `destroy`, `stack delete`, `release rollback`, `release cancel`: skip the confirmation
+  prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--target-release" type="string" default="" required>
+  On `release rollback`: the release ID to roll back to. Required.
+</ParamField>
+<ParamField query="--logs" type="boolean" default="false">
+  On `release watch`: stream each service's raw build/host logs instead of the live summary
+  board.
+</ParamField>
+
+## Consequences
+
+`deploy` builds and starts every buildable/runnable service defined by the compose file
+(subject to `--profile` filtering) as one coordinated release. `destroy`/`stack delete` tear
+down every service in the stack together — not one at a time — since they were deployed as
+one unit.
+
+<Warning>
+  `destroy` and `stack delete` stop and remove every service in the stack. If you only want
+  to affect one service within a multi-service stack, check whether that's supported before
+  running a stack-wide command — these operate on the whole stack.
+</Warning>
+
+`release rollback` affects every service in that release's stack, not a single service in
+isolation, since a compose release is deployed as one coordinated unit.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Preview before deploying
 beaver compose detect
-beaver compose deploy
-beaver compose stacks
-beaver compose stack show <stack-id>
-beaver compose stack networks <stack-id>
-beaver compose release watch <release-id>
-beaver compose release rollback <release-id>
 ```
 
-Run `detect` before deployment to preview the discovered services and resources. Use stack and release commands to inspect or control an existing Compose deployment.
+```bash Deploy
+beaver compose deploy --project-id proj_abc --cloud production
+```
+
+```bash Inspect a running stack
+beaver compose stacks
+beaver compose stack show stk_abc123
+```
+
+```bash Roll back a release
+beaver compose release rollback rel_xyz789 --target-release rel_prev456
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `deploy` success | Live summary board, or streamed logs with `--logs` | Check `beaver compose stacks`. |
+| No Beaver Cloud | Cloud required error with creation guidance | Run `beaver cloud create production`, add machines, then use `--cloud production`. |
+| `destroy`/`stack delete` declined | Command exits without change | Nothing removed. |
+
+## Used in
+
+- [Deployment configuration](/deploying/deployment-configuration) — compose services follow
+  the same configuration model as a single-service deploy.

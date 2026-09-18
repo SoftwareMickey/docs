@@ -1,0 +1,138 @@
+# Era 7 — Networking & Scaling (V22–V25)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all four pages written new — `concepts/domains-and-routing.mdx`
+(V22), `concepts/scaling-and-resources.mdx` (V23, two-pass disclosure, paired with
+`guides/scaling.mdx`), `concepts/firewall.mdx` (V24, two-pass disclosure), and (named
+`edge-and-performance-controls.mdx`, not `edge-and-performance.mdx` as originally sketched —
+matches the topic's full title, corrected here for the record) V25. `firewall.mdx` explicitly
+distinguishes Beaver's own firewall feature from `infrastructure-setup/firewall-requirements.mdx`
+(a different, unrelated concept despite the name) — the collision Era 1 flagged. Disclosure
+re-check: "the first matching rule in your priority order applies" (rule ordering) and "Beaver
+places the workload on a member with room" (scaling capacity) both state outcome only, no
+mechanism — compliant with the transcript's own worked instruction for this pair of topics.
+
+Covers T17, T25, T18, T26 — grouped by theme rather than checklist order: Domains and
+routing, Scaling and resources, Firewall, Edge and performance controls. These four share
+the highest density of disclosure-sensitive vocabulary outside Era 5's Configuration page,
+per `concepts-explained.txt`'s own second message (lines 26–44), which names Scaling and
+Firewall by name as needing the disclosure discipline applied carefully.
+
+---
+
+## V22 — Domains and routing (T17)
+
+### Goal
+New concept page: custom domains, DNS setup, HTTPS, route matching, backend selection,
+public/private access, diagnosing an unreachable application.
+
+### Reuses
+`cli/domain.mdx` as reference target.
+
+### Implement
+`concepts/domains-and-routing.mdx`: HTTPS/certificate behavior stated as outcome
+(a certificate is issued and renewed automatically; user doesn't need to act) not mechanism
+(checkpoint term: `TLS issuance mechanism`, from `DISCLOSURE-ADDENDUM.md`). "Route matching"
+and "backend selection" stated as what the user configures (a domain points at a
+deployment/service) not how requests are matched internally (checkpoint term: `routing`,
+already on the sibling roadmap's own list).
+
+### Validate
+Disclosure pass specifically on route matching / backend selection language.
+
+### Done when
+Page exists; passes disclosure pass.
+
+---
+
+## V23 — Scaling and resources (T18)
+
+### Goal
+New concept page: replica scaling vs. CPU/memory resizing, requests vs. limits, fixed vs.
+automatic scaling, thresholds, capacity constraints, policies, verifying resulting state.
+
+### Reuses
+`cli/scaling.mdx`, `cli/autoscale.mdx`, `guides/scaling.mdx` (existing task guide). Per
+`concepts-explained.txt`'s explicit worked guidance: "explain replica counts, available
+modes, user-configurable thresholds, and operational consequences. Keep scheduling
+algorithms and internal coordination private" — this version follows that instruction
+directly, not a reinterpretation of it.
+
+### Implement
+`concepts/scaling-and-resources.mdx`: requests-vs-limits as a user-configured pair with
+observable consequences (a container hitting its memory limit gets restarted — stated as
+outcome), fixed-vs-automatic scaling as two modes with user-set thresholds, capacity
+constraints stated as "what happens when there isn't room" without describing the placement
+algorithm that decides where a new replica would go (checkpoint terms: `scheduling
+algorithms`, `internal coordination` — the transcript's own words, kept as literal
+checkpoint terms here).
+
+### Validate
+Two-read disclosure pass; bidirectional link with `guides/scaling.mdx` confirmed at Era 12.
+
+### Done when
+Page exists; matches the transcript's own disclosure instruction for this specific topic.
+
+---
+
+## V24 — Firewall (T25)
+
+### Goal
+New concept page: what traffic it protects, policies, rules and their ordering, presets, IP
+bans, login protection, WAF controls, visibility, lockdown, events, undoing an accidental
+block.
+
+### Reuses
+`cli/firewall.mdx`, `infrastructure-setup/firewall-requirements.mdx` (existing, infra-setup
+scoped — this page is the product-concept layer above it, not a replacement). Per
+`concepts-explained.txt`'s explicit instruction: "explain rule behavior, supported controls,
+and how users verify protection. Keep internal detection logic and enforcement architecture
+private."
+
+### Implement
+`concepts/firewall.mdx`: rule ordering explained as user-visible precedence (which rule
+"wins" when two could apply — stated as an observable outcome a user can test, e.g. "the
+first matching rule in your list applies"), WAF controls as on/off + preset choices a user
+makes, "how users verify protection" as its own subsection (test methods, event logs) since
+the transcript calls this out explicitly, "undoing an accidental block" as a first-class
+recovery procedure (this is exactly the kind of operational content the transcript's
+checklist flags as valuable and safe). Checkpoint terms kept out entirely per the addendum:
+`detection logic`, `enforcement architecture`.
+
+### Validate
+Two-read disclosure pass, same discipline as Configuration (V15) and Scaling (V23) given
+this is one of the two topics the user named directly as needing care.
+
+### Done when
+Page exists; passes two-read disclosure; "verify protection" and "undo a block" procedures
+are both present and correct.
+
+---
+
+## V25 — Edge and performance controls (T26)
+
+### Goal
+New concept page: when to use Edge, connecting applications and backends, available
+performance settings, interaction with routes/firewall, logs, traffic measurements.
+
+### Reuses
+`cli/edge.mdx` as reference target; links to V22 (Domains and routing) and V24 (Firewall)
+for the stated interactions rather than re-explaining those pages' content.
+
+### Implement
+`concepts/edge-and-performance.mdx`: frames Edge as an optional layer in front of an
+application, available settings as a user-facing list (caching toggles, compression, etc. —
+whatever is actually user-configurable, verified against source per Invariant 1, not
+assumed), explicit "how this interacts with routes and firewall" cross-link section since
+the topic names that interaction directly.
+
+### Validate
+Every "available performance setting" claim checked against actual `cli/edge.mdx`/source
+before publishing (Invariant 1) — this is a topic where overclaiming settings that don't
+exist is an easy mistake.
+
+### Done when
+Page exists; settings list matches verified current behavior; closes Era 7.

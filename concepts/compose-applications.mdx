@@ -1,0 +1,44 @@
+---
+title: "Compose applications"
+description: "Deploy a multi-service Compose stack as-is, without restructuring it into separate single-container projects."
+sidebarTitle: "Compose applications"
+icon: "layer-group"
+---
+
+If your application is defined as multiple services in a `docker-compose.yml` — an API, a
+worker, a database — Beaver can deploy the whole stack from that file, rather than requiring
+one Dockerfile per service.
+
+```bash
+beaver compose detect
+beaver compose deploy
+```
+
+## What you can see and control
+
+Each service in your Compose file becomes its own deployable container under the project,
+sharing the project's environments. Compose-level environment files and inter-service
+dependencies (`depends_on`) are read and respected the way you'd expect.
+
+## Where Compose support has edges
+
+Not every Compose feature has a Beaver equivalent — check the [Compose command
+reference](/cli/compose) for exactly what's supported before assuming full parity with
+`docker compose` locally. And a database defined as a Compose service runs as an ordinary
+container: it doesn't get the backup and credential-management features a Beaver-managed
+[service](/concepts/services) gets. If you want those, attach a managed service instead of
+defining the database in Compose.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Projects" href="/concepts/projects">
+    A Compose stack's services become the containers inside one project.
+  </Card>
+  <Card title="Services" href="/concepts/services">
+    The managed alternative to a Compose-defined database.
+  </Card>
+  <Card title="Compose command reference" href="/cli/compose">
+    Exact supported behavior and flags.
+  </Card>
+</CardGroup>

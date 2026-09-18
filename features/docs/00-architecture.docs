@@ -1,0 +1,290 @@
+# CLI Documentation Closure — Architecture & Roadmap
+
+## What this is
+
+A roadmap to close the gap between `beaver-cli` (the shipped command surface) and this
+repo's `cli/*.mdx` reference — the gap the user named directly in `docs.txt`: *"there is a
+huge gap between the docs and the cli commands as I added many cli commands, flags etc and
+are yet to be implemented [documented]."* This is a **documentation engineering roadmap**,
+not a product feature — it produces `.mdx` pages, an internal coverage inventory, and a
+sustaining process. It ships no code.
+
+The thesis, stated as a single testable claim:
+
+> Every `beaver` command and flag that is implemented and usable has a reference page that
+> is verified against the source, explains purpose/syntax/consequences/examples/failures,
+> and links to the task guide that uses it — while every internal mechanism (orchestration,
+> routing, schemas, storage, the deployment-contract format) stays out of Mintlify entirely.
+
+Formally, **V1 is: a coverage inventory with zero unresolved rows, a command reference page
+for every implemented, usable command family, a shared-flags reference, task guides linking
+reference pages into workflows, `mint broken-links` clean, and a documented review step
+wired into how commands/flags change going forward.**
+
+## Why this, why now
+
+`docs.txt` establishes two things the user wants held simultaneously, in tension:
+1. **Disclosure discipline** — "I do not want to expose internals and things that copycats
+   can use against me." Reinforced by this repo's own `CLAUDE.md`: matching logic,
+   infrastructure-provisioning mechanics, and anything resembling the internal
+   deployment-contract schema are trade secrets and must never appear in public docs.
+2. **Completeness** — every command and flag the user shipped should be "explained
+   thoroughly": purpose, syntax, every flag's defaults/interactions, consequences, examples,
+   results and failures.
+
+These are not actually in conflict. Rule 6 of the writing guide (`docs.txt`, echoed as
+Invariant 6 below) is the hinge: document **observable behavior** — what a user can do, see,
+and expect — never the mechanism that produces it. `--wait`'s timeout behavior is public;
+the job system behind it is not. This roadmap treats that line as a first-class design
+constraint, not an afterthought applied at review time.
+
+---
+
+## Current state — the actual inventory (audited against `beaver-cli` source, 2026-09-17)
+
+`beaver-cli/commands/` has **~65 top-level command groups** across 458 Go files. This repo's
+`cli/` has **46 `.mdx` pages**. The overlap is smaller than 46 suggests: several existing
+pages are stale (`plan.mdx`/`plans.mdx` predate the current model per `CLAUDE.md`'s note on
+historical drift) or map to a *subcommand* of a still-undocumented group rather than a group
+of their own (`logs.mdx`/`metrics.mdx`/`traffic.mdx` are `observability` subcommands;
+`login.mdx`/`logout.mdx`/`whoami.mdx` are `auth` subcommands; `contract.mdx`/`validate.mdx`
+map to `projectcontract`/`config validate`).
+
+**Zero-coverage groups, sized by flag-definition call sites (a proxy for documentation
+effort) and subcommand count:**
+
+| Group | Subcommands | Flag sites | Notes |
+| --- | --- | --- | --- |
+| `service` | 46 (incl. `database`, `cluster`, `backup-destination` nested groups) | 37 | **Largest undocumented surface.** No `cli/service.mdx` exists at all. |
+| `cloud` | 31 | 34 | **Second largest.** No `cli/cloud.mdx` exists at all. |
+| `config` | 27 (incl. `bind`, `network`, `volume`, `builder`, `schema`) | 55 | Highest flag density of any group. |
+| `statecmd` | 7 (`apply`/`drift`/`history`/`pull`/`rollback`/`status`) | 8 | **High disclosure risk** — see Invariant 6 note below. |
+| `projectcontract` | 9 (`plan`/`diff`/`push`/`pull`/`rollback`/`status`/`validate`/…) | 4 | **High disclosure risk.** |
+| `autoscale` | — | 8 | No page. |
+| `preflight` | — | 13 | No page. |
+| `admin` | 3 | 3 | Operator-facing; classification question (Era 10). |
+| `mystic`, `internal`, `mcpcmd`, `skillscmd`, `envbanner`, `initcmd`, `route`, `reconcilecmd`, `promote`, `projectconfig`, `projectcontext`, `integration`, `health`, `coupon`, `ui` | small | small | Long tail; several may not belong in public docs at all (Era 10). |
+
+**`alie`** has 56 files / 41 `Use:` sites / 22 flag sites — the single largest raw command
+tree — and an existing `alie.mdx`, but at that scale the page is almost certainly thin
+relative to the surface. Audited separately in Era 11 alongside `ai`/`mcpcmd`/`skillscmd`
+because the AI surface carries its own disclosure question (agent tool wiring, MCP
+transport) distinct from infrastructure commands.
+
+This table is the *headline*, not the full inventory — Era 1 (V1–V4) produces the complete,
+row-per-command-and-flag inventory this roadmap actually executes against. The table above
+is enough to sequence the work: **service and cloud first** (biggest, zero coverage, core to
+the product), **config/state/contract families last among "normal" work** (highest
+disclosure risk, needs the templates and rules settled first), **AI surface and admin/
+internal long tail get their own risk-classification pass** rather than blanket "document
+everything."
+
+---
+
+## Layering — who owns what
+
+| Layer | Owns | Changes here |
+| --- | --- | --- |
+| `beaver-cli` (source of truth) | the actual command tree, flags, defaults, help text | **Nothing.** This roadmap is read-only against the CLI. If a command's behavior looks unfinished or contradicts its help text, that is a CLI bug, filed separately — not silently documented as-is. |
+| Internal engineering docs (outside this repo — `beaver-cli/CLAUDE.md`, `vhb-server` internal docs) | orchestration, routing, schemas, the deployment-contract format, job-system internals | **Nothing new required.** If a command's *why* needs explaining and the honest answer is internal, that explanation goes there, not in Mintlify — Mintlify explains the observable contract only. |
+| This repo (`mintlify`) | `cli/*.mdx` reference pages, task guides, `docs.json` nav | Everything this roadmap produces. |
+| `/features/docs/` (this roadmap, planning-only) | the coverage inventory, the family grouping, the version plan, the gap log | Not published, not linked from `docs.json`, not part of the site build — an internal planning artifact, same role as `beaver-desktop/features/*`. |
+
+---
+
+## Invariants
+
+Ten, taken directly from the ten writing rules the user and assistant agreed on in
+`docs.txt` — restated as constraints every version below must satisfy, not just the
+writing eras:
+
+1. **Verify before describing.** Every claim in a page is checked against registered
+   commands/flags/implementation in `beaver-cli`, not against help text or memory of what a
+   command "probably" does.
+2. **Cover every command and flag.** The coverage inventory (Era 1) is the single source of
+   truth for what remains; nothing is marked done until every flag — including aliases,
+   accepted values, defaults, requirements, conflicts, interactions — is on the page.
+3. **Purpose before syntax.** Every command page opens with the problem it solves and when
+   to reach for it, before the syntax block.
+4. **Consequences are explicit.** What changes locally vs. remotely, whether a restart or
+   redeploy follows, whether the action reverses, what happens on failure or timeout — stated
+   for every mutating command.
+5. **Examples are adaptable, never real.** One consistent set of fictional
+   projects/services/domains across all pages (defined in Era 2). No real credentials,
+   machine IDs, or infrastructure identifiers, ever.
+6. **Observable behavior only — this is the disclosure boundary.** Inputs, outputs,
+   limitations, recovery steps: yes. Database schemas, private endpoints, routing/placement
+   algorithms, the reconcile/contract engine, orchestration internals: never, regardless of
+   how directly a command like `beaver state drift` or `beaver projectcontract plan` invites
+   the question "how does it decide?" The page answers "what will I see," not "how is it
+   computed."
+7. **Reference and guides are separate, linked.** Command reference pages (per-family,
+   Eras 3–11) exhaustively cover options. Task guides (Era 12) connect commands into an
+   outcome. Every reference page links to the guide(s) that use it; every guide links to the
+   reference pages it exercises.
+8. **Shared flags, one home.** Global/repeated flags (`--wait`, `--yes`, `--json`,
+   `--machine`, `--quiet`, etc. — enumerated in Era 2) get one canonical explanation; each
+   affected command page links there and states only its local deltas.
+9. **Validate the finished page, not just the draft.** Navigation entry, links,
+   `mint broken-links`, syntax highlighting, and — critically — whether each example was
+   actually executed against a running `beaver` or only reviewed against source. The two are
+   marked differently (Era 13).
+10. **Docs are part of the change, going forward.** A command/flag/default/output change in
+    `beaver-cli` triggers a documentation review before or alongside merge, not as a
+    periodically-rediscovered backlog. Era 13 is where this becomes a standing process
+    instead of a one-time cleanup.
+
+---
+
+## The mental model this roadmap teaches (page structure)
+
+Every command reference page (any family, Eras 3–11) follows the same shape, so the
+inventory in Era 1 doubles as a page checklist:
+
+```
+Frontmatter (title, description, sidebarTitle, icon)
+      │
+Purpose            ← what problem, when to reach for it (Invariant 3)
+      │
+Syntax & arguments ← required inputs, accepted identifiers, defaults
+      │
+Flags              ← every flag: meaning, values, default, conflicts, example
+      │              (shared flags link out — Invariant 8)
+      ▼
+Consequences        ← local/remote effect, redeploy?, reversible? (Invariant 4)
+      │
+Examples             ← common usage, realistic combinations (Invariant 5)
+      │
+Results & failures  ← reading output, common errors, recovery
+      │
+      ▼
+Linked task guide(s) ← where this command is used in a workflow (Invariant 7)
+```
+
+---
+
+## Data model
+
+**None.** This roadmap produces `.mdx` files, a `docs.json` nav diff, and planning artifacts
+under `/features/docs/`. No schema, no database, no new component. The one piece of
+"state" is the coverage inventory itself (Era 1 V4) — a checked-in artifact under
+`/features/docs/inventory/`, not part of the published site.
+
+---
+
+## Phase / Era / Version index
+
+~47 versions, 13 eras, 4 phases.
+
+### Phase 1 — Ground truth
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 1 | `01-command-inventory-and-audit.docs` | V1–V4 | Extract the full command/flag tree, cross-reference against existing `cli/*.mdx`, classify maturity, publish the inventory |
+| 2 | `02-disclosure-boundary-and-templates.docs` | V5–V7 | Codify the disclosure checklist, the page template, the shared-flags reference, the fictional-example vocabulary |
+
+### Phase 2 — Reference build-out, by family, ordered by size and risk
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 3 | `03-identity-session-and-account.docs` | V8–V10 | `auth` (login/logout/whoami), `account`, `billing`, `coupon` |
+| 4 | `04-connect-machine-and-health.docs` | V11–V14 | `connect`, `machine`, `doctor`, `agent`, `health`, `recover` — the onboarding spine |
+| 5 | `05-deploy-and-containers.docs` | V15–V18 | `deploy`, `compose`, `container`/`containers`, `docker`, `deployment`, `deployui`, `promote` |
+| 6 | `06-infrastructure-pools.docs` | V19–V22 | `cloud`, `scaling`, `autoscale`, `edge`, `domain`, `firewall` |
+| 7 | `07-services-and-data.docs` | V23–V26 | `service` (+ `database`, `cluster`, `backup-destination`), `integration`, `github` |
+| 8 | `08-observability-and-diagnostics.docs` | V27–V29 | `observability` family (logs/metrics/traffic/latency/active/live), `observe`, `history`, `status`, `inspect`, `diff` |
+| 9 | `09-config-state-and-contracts.docs` | V30–V33 | `config`, `state`/`statecmd`, `projectconfig`, `projectcontext`, `projectcontract`, `route`, `reconcilecmd` — **highest disclosure risk era** |
+| 10 | `10-admin-preflight-and-platform-ops.docs` | V34–V36 | `admin`, `preflight`, `mystic`, `envbanner`, `initcmd`, `internal` — classify public vs. internal-only before writing anything |
+| 11 | `11-ai-surface.docs` | V37–V39 | `ai`, `alie`, `skillscmd`, `mcpcmd` — disclosure pass on agent/tool/MCP wiring |
+
+### Phase 3 — Guides and integration
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 12 | `12-workflow-guides-and-navigation.docs` | V40–V43 | Task guides (deploy, connect+machine-roles, scaling, rollback/recover), `docs.json` nav wiring, cross-linking, reconciling the naming mismatches found in Era 1 (`plan`/`plans`, `logs`/`metrics`/`traffic` vs. `observability`, `login`/`logout`/`whoami` vs. `auth`) |
+
+### Phase 4 — Verify and sustain
+
+| Era | File | Versions | Theme |
+| --- | --- | --- | --- |
+| 13 | `13-verification-and-sustaining-process.docs` | V44–V47 | `mint broken-links`, verified-vs-reviewed example audit, the CLI-change → docs-review gate, the recurring inventory refresh |
+
+**The gating era is Era 1.** Nothing in Phase 2 starts family-by-family writing until the
+inventory (V1–V4) exists and the templates/rules (V5–V7) are fixed — otherwise each family
+reinvents the disclosure line and the page shape independently, which is exactly the
+drift `docs.txt` is trying to stop.
+
+---
+
+## Explicitly not in this roadmap
+
+- **No internal architecture, orchestration, routing, or schema docs, anywhere, ever** —
+  not even in a "for internal reference" section of a public page. That content's home is
+  `beaver-cli`/`vhb-server`'s own internal docs, outside this repo.
+- **No rewriting `blog/` or `changelog/`.** `CLAUDE.md` marks those as intentionally-left
+  historical records of the prior product model.
+- **No CLI code changes.** If the audit (Era 1) finds a command that is genuinely
+  unfinished (stub, hidden, error-on-call), it is excluded from "supported usage" docs and
+  logged as a gap — this roadmap does not fix the CLI.
+- **No new Mintlify components.** Every page uses the existing catalog (`components.txt`).
+- **No screenshots or recordings of the product's internal dashboards** unless the task
+  guide is specifically about the Web/GUI surface, which is out of scope here (CLI only).
+
+---
+
+## Acceptance gate (V47)
+
+This roadmap is done when:
+
+1. The coverage inventory (Era 1) has zero rows in "unresolved" status — every command and
+   flag is one of: documented-fully, documented-with-stated-limitations, or
+   excluded-with-a-logged-reason (placeholder/internal-only/removed).
+2. Every family in the Phase 2 table has a published `cli/*.mdx` page (or page set, for
+   `service`/`config` where one page would be unreasonably long) matching the Era 2 template,
+   with every flag covered per Invariant 2.
+3. Every shared flag is documented once and linked from every page that uses it — no flag's
+   behavior is explained twice with a risk of drifting.
+4. `mint broken-links` is clean across `cli/` and the new task guides.
+5. Every code example is marked either "verified: executed against a live `beaver`" or
+   "reviewed against source" — none are unmarked.
+6. A reviewer can grep any published `cli/*.mdx` page for orchestration/routing/schema/
+   internal-API language and find none — spot-checked against the Invariant 6 checklist for
+   every family, with the Era 9 and Era 11 families getting a second, explicit pass.
+7. `docs.json`'s `cli` nav group reflects every published page; no page exists that isn't
+   reachable from navigation, and no nav entry points at a stale or removed command.
+8. The Era 13 process doc exists and is referenced somewhere a future command/flag change
+   would actually be seen (e.g. linked from `beaver-cli`'s own `CLAUDE.md` or CONTRIBUTING
+   equivalent) — so the gap this roadmap closes does not reopen.
+
+---
+
+## Sustaining process (Era 13 V46–V47)
+
+Two mechanisms keep this roadmap's result from silently decaying, reinforcing each other:
+
+**Per-change gate (V46).** `beaver-cli/CLAUDE.md` has a "Keeping the public CLI reference in
+sync" section (added 2026-09-17, right before its `## Architecture` section) with the
+concrete checklist: does this change a command's syntax/flags/defaults/output, does the
+matching `mintlify/cli/<page>.mdx` still match, does a new command have a page, and a
+pointer back to `DISCLOSURE.md` for the disclosure-sensitive families. This is the thing a
+human or an AI assistant changing a command actually reads, since it's that repo's own
+`CLAUDE.md` — not a rule living only here where a `beaver-cli` contributor would never see
+it.
+
+**Periodic refresh (V47).** The per-change gate catches drift *when someone remembers to
+apply it*; it won't catch a flag renamed in a large refactor that didn't think to touch docs,
+or slow accumulated drift across many small changes. Cadence: **re-run the Era 1 extraction
+(`features/docs/inventory/extract_commands.py` → `cross_reference.py` → `build_summary.py`)
+against the then-current `beaver-cli` every time it ships a minor version, or quarterly,
+whichever comes first.** Diff the regenerated `commands.csv`/`doc_status.csv` against the
+checked-in versions; any new command, removed command, or changed flag set is the punch list
+for that refresh's doc updates. No automation is built for this in V1 — a manual, periodic
+re-run is sufficient to start (see `inventory/00-summary.docs`'s note on why re-deriving
+statistically would be worse than direct source reads for the trickier cases). Automating the
+extraction's execution (not its judgment calls) is the natural next step if the manual
+cadence proves to lag — tracked as a future improvement, not built here.
+
+Both mechanisms are recorded in two places on purpose: this file (so a future session picking
+up this roadmap finds the whole sustaining story in one place) and `beaver-cli/CLAUDE.md`
+(so a `beaver-cli` contributor sees the actionable half without needing to know this repo
+exists).

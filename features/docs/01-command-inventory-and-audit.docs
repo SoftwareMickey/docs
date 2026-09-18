@@ -1,0 +1,165 @@
+# Era 1 — Command Inventory & Audit (V1–V4)
+
+_Phase 1 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17 · re-verified 2026-09-17 · GATING**
+
+**Re-verification note (2026-09-17):** this status header was out of sync with reality —
+the V1–V4 artifacts (`inventory/commands.csv`, `doc_status.csv`, `00-summary.docs`, the
+three extraction scripts) already existed and were substantively complete, but this file's
+own header still read "not started." A full re-run of V1's Validate step (fresh manual grep
+against `service`/`cloud`/`config`/`machine`/`alie`, plus a full-repo sweep) found and fixed
+three real extraction bugs the original pass missed — see `gaps/00-index.docs` entry 011 for
+the complete account. Net effect: 439 → **443** distinct commands (4 previously invisible:
+`config init`, `config sync`, `beaver shell`, `beaver destroy`), source line numbers
+corrected across the board (were citing the line *before* the actual command in most cases),
+and three more `documented-under-different-name` mappings resolved
+(`reconcilecmd`/`skillscmd`/`statecmd`/`root` ↔ their actual pages). The pipeline
+(`extract_commands.py` → `cross_reference.py` → `build_summary.py`) was re-run end to end
+after each fix; `00-summary.docs` reflects the current, corrected state.
+
+Nothing in Phase 2 (per-family writing) starts until this era produces one artifact: a
+checked-in, row-per-command-and-flag inventory that classifies every `beaver-cli` command by
+maturity and cross-references it against existing `cli/*.mdx` coverage. Without this, each
+family era re-derives its own scope and the "documentation hasn't been written" gap
+(`docs.txt`) reopens piecemeal instead of closing once.
+
+---
+
+## V1 — Full command/flag extraction
+
+### Goal
+A machine-readable dump of every registered `beaver` command, its full flag set (name,
+type, default, aliases, required/optional), pulled from `beaver-cli/commands/` source —
+not from `--help` text, per Invariant 1.
+
+### Reuses
+The pre-work census already run during roadmap scoping: `Use:` extraction across all 458
+`.go` files (415 command definitions), per-group flag-definition-site counts. This version
+formalizes and completes it — the census found subcommand *names*; V1 adds every flag's
+full signature.
+
+### Implement
+- Walk `beaver-cli/commands/**/*.go`, extracting for each `cobra.Command`: full `Use:`
+  string, parent chain (to reconstruct the invocation path, e.g. `service database create`),
+  every `Flags()`/`PersistentFlags()` call (name, type, default, shorthand), and any
+  `Hidden: true` / `Deprecated:` markers.
+- Output as a structured table (CSV or a `.docs`-style table), one row per
+  command-or-flag, saved to `/features/docs/inventory/commands.csv` (or equivalent) —
+  this file is the working artifact, not published to the site.
+- Record source location (`file:line`) per row so later verification (Invariant 1, Era 13)
+  can jump straight to the implementation.
+
+### Validate
+- Row count roughly matches the pre-work census (415 command definitions found) plus every
+  flag — spot-check 5 groups (`service`, `cloud`, `config`, `machine`, `alie`) against a
+  fresh manual grep to confirm nothing was missed by the extraction method.
+- Every row has a non-empty source location.
+
+### Done when
+The inventory file exists, covers every command directory under `beaver-cli/commands/`, and
+every row is traceable to a source line.
+
+---
+
+## V2 — Cross-reference against existing `cli/*.mdx`
+
+### Goal
+Every inventory row tagged with its documentation status: documented / undocumented /
+partially-documented (page exists but doesn't cover this specific flag) / stale
+(documented but the command or flag no longer exists or behaves differently).
+
+### Reuses
+The pre-work diff (28 command groups with no matching doc page; 15 doc pages with no
+matching command directory) as the starting point — V2 goes from group-level to
+flag-level granularity and resolves the ambiguous cases the pre-work flagged (subcommands
+documented under a different top-level name, e.g. `observability logs` vs. `logs.mdx`).
+
+### Implement
+- For each of the 15 "orphaned" doc pages (`containers`, `contract`, `init`, `integrations`,
+  `login`, `logout`, `logs`, `metrics`, `plan`, `plans`, `shell`, `traffic`, `validate`,
+  `version`, `whoami`), resolve whether it: (a) correctly documents a subcommand of a
+  differently-named parent group — record the mapping; (b) documents a command that has
+  since moved or been removed — flag stale; or (c) is genuinely standalone (e.g. `version`,
+  `shell` may be true top-level commands not under a `commands/` subdirectory — verify
+  against `beaver-cli`'s root command registration).
+- For each documented command, check every flag currently on the page against the V1
+  extraction — flag added in code but missing from the page, flag on the page but removed
+  from code, or default/behavior mismatch.
+- Tag every inventory row: `documented` / `undocumented` / `partial` / `stale`.
+
+### Validate
+- Every one of the 15 orphaned-page cases has a recorded resolution (mapping, stale, or
+  standalone) — none left ambiguous.
+- Spot-check 3 "documented" rows against the live page text to confirm the tag is accurate,
+  not just presence-based.
+
+### Done when
+Every inventory row has a documentation-status tag, and the 15 pre-work ambiguities are
+resolved into concrete dispositions feeding Era 12's reconciliation pass.
+
+---
+
+## V3 — Maturity classification
+
+### Goal
+Every command classified as **implemented-usable** / **available-but-limited** /
+**placeholder-unfinished**, per the docs.txt coverage table, so Phase 2 writing never
+documents something that isn't real.
+
+### Reuses
+The docs.txt CLI-status/documentation-treatment table directly: implemented-and-usable →
+document fully; available-but-limited → explain the actual limitation; placeholder-or-
+unfinished → keep out of supported-usage docs.
+
+### Implement
+- For every command flagged `undocumented` or `partial` in V2, a source-level check (not
+  help-text trust, per Invariant 1): does the command's implementation actually perform the
+  action, or does it return a stub/"not implemented"/TODO error? Is it `Hidden: true`
+  (deliberately kept out of `--help`, likely not meant for public docs at all)?
+- Where the implementation is ambiguous (e.g. calls a backend endpoint whose behavior can't
+  be confirmed from `beaver-cli` alone), a note is added: "needs a live smoke-test against
+  `vhb-server`" rather than guessing — this becomes a small punch-list for whoever has a
+  live workspace, resolved before that command's family era writes its page.
+- Classification recorded per-command (flags inherit their command's classification unless a
+  specific flag is itself gated behind a feature flag or separately unfinished).
+
+### Validate
+- No command is marked `implemented-usable` without a source check confirming it isn't a
+  stub.
+- Every `Hidden: true` command has an explicit decision recorded (excluded from public docs,
+  or intentionally still documented with a reason) rather than being silently skipped.
+
+### Done when
+Every row has a maturity tag, and the "needs live smoke-test" punch-list (if any) is a
+finite, named list handed to the relevant family era.
+
+---
+
+## V4 — Publish the inventory as the working source of truth
+
+### Goal
+One artifact, checked into `/features/docs/inventory/`, that every later era's "Done when"
+criterion references — closing the loop so no family era can silently skip a command.
+
+### Reuses
+V1–V3's outputs, merged.
+
+### Implement
+- Consolidate into the final inventory: command path, flags, doc-status, maturity, source
+  location, and (where V2 found one) the doc-page mapping.
+- A short top-of-file summary: total commands, total flags, counts per doc-status and
+  maturity tag — this is the number the acceptance gate (criterion 1) checks against zero
+  `unresolved`.
+- Not published to the Mintlify site or linked from `docs.json` — internal planning
+  artifact only, same treatment as `beaver-desktop/features/*`.
+
+### Validate
+- Summary counts are internally consistent (every row has exactly one doc-status and one
+  maturity tag; percentages sum correctly).
+- A reviewer can open the file and immediately see, per family (Eras 3–11's groupings),
+  how many commands remain to document.
+
+### Done when
+The inventory file is the thing every subsequent era's version opens by filtering — "my
+family's rows" — rather than re-deriving scope from scratch.

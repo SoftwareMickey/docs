@@ -1,12 +1,73 @@
 ---
 title: "beaver logs"
-description: "View application logs for a deployed container."
+sidebarTitle: "logs"
+description: "Show HTTP request logs Beaver's edge proxy recorded for a deployed container."
+icon: "file-lines"
 ---
+
+<Info>
+  New here? [Observability](/concepts/observability) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  `beaver logs`, [`beaver metrics`](/cli/metrics), and [`beaver traffic`](/cli/traffic) are
+  three separate top-level commands — not subcommands of a single `observability` parent
+  command (no such command exists). They're grouped here in the sidebar because they answer
+  related questions about a deployed container.
+</Note>
+
+## Purpose
+
+Use `beaver logs` for the HTTP request/access logs Beaver's edge proxy recorded for a
+container — not application-level stdout/stderr logs (see [`beaver container
+<name> logs`](/cli/container) for that), and not machine-level logs (see [`beaver machine
+logs`](/cli/machine#monitoring--diagnostics)).
+
+## Syntax
+
+```bash
+beaver logs <container> [flags]
+```
+
+## Flags
+
+<ParamField query="--limit" type="integer" default="100">
+  Results per page (max 500).
+</ParamField>
+<ParamField query="--page" type="integer" default="1">
+  Page number.
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
-beaver logs <container>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver logs api
 ```
 
-Use [`beaver observe`](/cli/observe) when you need live following, traffic context, or a project-aware workflow.
+```bash Paged
+beaver logs api --limit 500 --page 2
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | A page of request log entries | Use `--page` to see more. |
+| No traffic yet | An empty page | Nothing to see until the container receives requests. |
+
+## Used in
+
+- [`observe`](/cli/observe) — a project-aware view covering logs, traffic, and metrics
+  together for the current project's default service.

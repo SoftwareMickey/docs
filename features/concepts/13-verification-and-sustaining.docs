@@ -1,0 +1,99 @@
+# Era 13 — Verification & Sustaining (V43–V45)
+
+_Phase 4 · Concept Layer V1_
+
+**Status: ⬜ not started**
+
+Closes the roadmap: link integrity, a final disclosure sweep, and folding the sustaining
+process into the same place a future contributor will actually see it.
+
+---
+
+## V43 — `mint broken-links` clean pass
+
+### Goal
+Every internal link touching the new `concepts/` directory, and everything Era 12 linked
+into, resolves.
+
+### Reuses
+`mint broken-links`, the documented validation command from `CLAUDE.md`, run the same way
+the sibling roadmap's own Era 13 V43 already established as the standard check.
+
+### Implement
+- Run `mint broken-links` across the full site after Era 12's changes.
+- Fix every broken link found; re-run until clean.
+
+### Validate
+Clean output.
+
+### Done when
+Zero broken links across `concepts/`, `guides/`, and every touched `cli/*.mdx` page.
+
+---
+
+## V44 — Final disclosure sweep
+
+### Goal
+A dedicated, full-repo read-through of every new concept page against both
+`/features/docs/DISCLOSURE.md` and this roadmap's `DISCLOSURE-ADDENDUM.md`, independent of
+the per-page passes already done in Phase 2.
+
+### Reuses
+Both disclosure documents' checkpoint-term lists combined into one grep pass, mirroring the
+sibling roadmap's own acceptance-gate item 6 (grep every published page for
+orchestration/routing/schema/internal-API language) — applied here to the concept-level
+term list instead.
+
+### Implement
+- Grep every file under `concepts/` for every checkpoint term across both documents.
+- For every hit, apply the test from `DISCLOSURE.md` ("would a competitor learn our
+  mechanism from this sentence, or only what the product does?") fresh — a term appearing is
+  a prompt to check, not an automatic failure, since some checkpoint terms (`reconcile`,
+  `drift`) are also public CLI command/flag names that must still be nameable.
+- Mandatory second read specifically for `concepts/ai-connections-and-alie.mdx` and
+  `concepts/administrative-commands.mdx` (if it exists per V39), matching the two-pass
+  discipline both roadmaps already apply to this territory.
+
+### Validate
+Zero unresolved hits — every checkpoint-term occurrence is either fine (naming a public
+command) or fixed (describing mechanism, now rewritten to outcome).
+
+### Done when
+The sweep is complete and its result (clean, or fixes applied) is recorded here.
+
+---
+
+## V45 — Fold into the sustaining process
+
+### Goal
+A future new feature gets a concept-page checklist item alongside the sibling roadmap's
+existing command-reference checklist item, in the same place, not a second competing
+process.
+
+### Reuses
+The sibling roadmap's own Era 13 V46 — the "Keeping the public CLI reference in sync"
+section already added to `beaver-cli/CLAUDE.md` (2026-09-17). This version extends that
+section rather than creating a new one, per Invariant 10.
+
+### Implement
+- Add one line to that same `beaver-cli/CLAUDE.md` section: when a change adds a genuinely
+  new *feature area* (not just a new flag on an existing command), the checklist also asks
+  "does this need a new concept page, or does an existing one need a new paragraph" — kept
+  to one line since most changes are flag/behavior-level and don't reach this bar.
+- Add a short note to this repo's own `CLAUDE.md`, alongside its existing Guides-nav
+  description, that a "Concepts" group exists in the Guides tab, its role (what/why/when,
+  above task guides, below no other layer), and that `/features/concepts/00-architecture.docs`
+  is where its own planning artifact lives — mirroring exactly how `/features/docs/` and
+  `beaver-desktop/features/*` are treated as prior art, so a future session finds this
+  roadmap's context without re-deriving it.
+- Update `eras_implementation.docs` in this directory to reflect final status (all eras
+  ✅) once Phase 2–4 actually ship, per the same rollup convention
+  `beaver-desktop/features/gui/infra/eras_implementation.docs` uses.
+
+### Validate
+Both `CLAUDE.md` files (repo-root here, and `beaver-cli`'s) contain the pointer; no
+duplicate or contradictory sustaining process exists between the two roadmaps.
+
+### Done when
+The sustaining note exists in both places; this roadmap's acceptance gate (in
+`00-architecture.docs`) is fully satisfied.

@@ -1,0 +1,132 @@
+# Era 4 — Connect, Machine & Health (V11–V14)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+The onboarding spine: how a user's own infrastructure becomes usable by `beaver`. All six
+commands already have pages except `health` — this era is mostly deep verification, not
+greenfield writing, because `machine` (60 flag sites — the single densest group in the
+audit) and `connect` (a 23-file wizard) are large enough that existing coverage is likely
+shallow relative to the real surface.
+
+Commands: `connect`, `machine`, `doctor`, `agent`, `health`, `recover`.
+
+---
+
+## V11 — `connect` deep verification
+
+### Goal
+`cli/connect.mdx` covers every flag and every branch of the connect wizard, verified
+against the 23-file implementation, not just its top-level `Use: "connect"` help text.
+
+### Reuses
+Existing `cli/connect.mdx`; `machine-roles.mdx` and `choose-your-setup.mdx` (already
+document the onboarding *flow* per `CLAUDE.md` — this version documents the *command*, and
+should link to, not duplicate, those).
+
+### Implement
+- Full flag diff against the V1 inventory (`connect` has 1 flag-definition site by the crude
+  count, but the command is a multi-step wizard — verify whether most "flags" are
+  interactive prompts rather than CLI flags, and document the non-interactive path
+  explicitly if one exists, since automation users need it).
+- Consequences: what `connect` provisions/registers on first run vs. re-run on an
+  already-connected machine — observable outcome only (Invariant 6): "this machine becomes
+  visible to `beaver machine ls`," never how registration is implemented.
+- Cross-link to `machine-roles.mdx` for the role-selection step rather than re-documenting
+  it.
+
+### Validate
+- The non-interactive/CI path (if one exists) is explicitly covered — a common gap in wizard
+  docs.
+- No duplication of `machine-roles.mdx`/`choose-your-setup.mdx` content; links used instead.
+
+### Done when
+`connect`'s inventory row is `documented` and cross-linked, not just present.
+
+---
+
+## V12 — `machine` deep verification
+
+### Goal
+`cli/machine.mdx` covers the full flag surface (60 flag-definition sites — the densest
+group audited) with every subcommand's consequences explicit.
+
+### Reuses
+Existing `cli/machine.mdx`; the V1 inventory's `machine` rows.
+
+### Implement
+- Full flag/subcommand diff — given the size, apply the Era 2 V6 split rule if the page
+  already exceeds a readable length: consider splitting lifecycle commands (add/remove/
+  drain/reboot) from read commands (show/ls/metrics) if the inventory shows a clean seam.
+  Only split if the seam is real, not preemptively.
+- Every mutating subcommand (drain, reboot, maintenance windows) gets explicit
+  reversibility and blast-radius framing (Invariant 4): does it affect running workloads,
+  is a confirmation required, what does failure look like.
+- Cross-reference `beaver-desktop/features/gui/infra/02-machines-section.docs` for the same
+  underlying endpoints' behavior — the GUI roadmap already enumerates machine actions
+  (`reboot`, `drain`, `maintenance/windows`) with their consequences at the API level; reuse
+  that framing for the CLI page's Consequences section rather than re-deriving it, keeping
+  the two products' documented behavior consistent.
+
+### Validate
+- Every mutating subcommand states redeploy/restart implications and reversibility.
+- Consistent with the machine-action consequences already described in the `beaver-desktop`
+  GUI roadmap (cross-product consistency check, not a dependency).
+
+### Done when
+`machine`'s inventory rows are all `documented`, and mutating actions read the same way a
+cautious operator would need them to.
+
+---
+
+## V13 — `doctor` and `agent`
+
+### Goal
+Verify/extend `doctor.mdx`; write/verify `agent.mdx` against its 7 source files.
+
+### Reuses
+Existing pages; V1 inventory rows.
+
+### Implement
+- `doctor`: diagnostic output categories documented (what each check reports, what "fail"
+  vs. "warn" means, suggested remediation) — this is exactly the kind of command where
+  Invariant 6 matters: document *what checks exist and what their results mean*, never the
+  detection heuristics behind a given check.
+- `agent`: subcommands are `install`/`start`/`stop`/`restart`/`status`/`logs` (per the audit)
+  — document the local agent lifecycle and its relationship to machine connectivity
+  (observable: "the agent must be running for `beaver machine` commands to reach this host,"
+  not how the agent communicates internally).
+
+### Validate
+- `doctor`'s check list matches the actual checks in source, not a stale/partial list.
+- `agent logs` documents what's shown without describing the transport.
+
+### Done when
+Both inventory rows are `documented`; no diagnostic-heuristic internals leaked.
+
+---
+
+## V14 — `health` (new) and `recover`
+
+### Goal
+Write the missing `health.mdx`; verify/extend `recover.mdx`.
+
+### Reuses
+V1 inventory rows for both (small: `health` untagged with a page, `recover` has one file).
+
+### Implement
+- `health`: new page from the Era 2 template — likely a small, focused reference given the
+  5-file source size.
+- `recover`: verify against source; this command name suggests disaster-recovery framing —
+  consequences section is especially important here (Invariant 4): what state recover
+  restores, what it does NOT restore, whether it's safe to run against a healthy target.
+
+### Validate
+- `health`'s inventory row moves from `undocumented` to `documented`.
+- `recover`'s failure-mode section is explicit about partial-recovery scenarios, if the
+  source supports partial recovery — verified, not assumed.
+
+### Done when
+Both rows `documented`; the family (V11–V14) closes with zero remaining `undocumented`/
+`partial` rows for `connect`/`machine`/`doctor`/`agent`/`health`/`recover`.

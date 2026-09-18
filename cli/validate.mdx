@@ -1,12 +1,62 @@
 ---
 title: "beaver validate"
-description: "Validate project configuration without deploying."
+sidebarTitle: "validate"
+description: "Check .beaver/config.yml for errors, locally, without deploying anything."
+icon: "circle-check"
 ---
 
-## Examples
+<Info>
+  New here? [Preflight and planning](/concepts/preflight-and-planning) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Run `beaver validate` before [`beaver plan`](/cli/plan) or [`beaver deploy`](/cli/deploy) to
+catch configuration mistakes early. It parses and checks the current directory's
+`.beaver/config.yml` — schema version, required fields, unknown keys, duplicate keys, and
+YAML anchors/aliases (never allowed) — entirely on your machine.
+
+## Syntax
 
 ```bash
 beaver validate
 ```
 
-Checks the current directory's Beaver configuration and reports the first issue to fix. It never changes a deployment. Run it before [`beaver plan`](/cli/plan) or [`beaver deploy`](/cli/deploy).
+Takes no arguments or flags.
+
+## Consequences
+
+Read-only: this never contacts the server and never touches the file. This is a fast, local
+first check — an actual deploy still validates again server-side, so passing `validate`
+locally doesn't guarantee a deploy will succeed, but it catches the common mistakes early.
+
+## Examples
+
+<Info>
+  **Verified**: the commands on this page were executed against a live `beaver` build during this review; example output reflects what was actually returned (with real account/workspace values replaced by the fictional vocabulary).
+</Info>
+
+```bash
+cd paperclip/
+beaver validate
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Valid | No issues reported | Proceed to `beaver plan` or `beaver deploy`. |
+| No config file | "No `.beaver/config.yml` in this directory." | Run `beaver config init` to create one. |
+| Invalid | "Invalid `.beaver/config.yml`" with the specific problem | Fix the reported issue and re-run. |
+
+<Note>
+  `beaver config validate` is a separate command with the same purpose — checking your local
+  `.beaver/config.yml` without deploying — reachable from the [`config`](/cli/config) family.
+  The two aren't guaranteed to report identical diagnostics for every case; either is a
+  reasonable first check.
+</Note>
+
+## Used in
+
+- [`plan`](/cli/plan) and [`deploy`](/cli/deploy) — run `validate` first to catch mistakes
+  locally.

@@ -1,0 +1,59 @@
+---
+title: "Scaling and resources"
+description: "Two separate levers control capacity: how many copies run, and how much each one gets. Fixed mode holds a count; automatic mode holds a range."
+sidebarTitle: "Scaling & resources"
+icon: "gauge"
+---
+
+Two separate levers affect how much capacity a deployment has: how many **replicas**
+(copies) run, and how much **CPU/memory** each one gets. Scaling changes the first; resizing
+changes the second — and they solve different problems.
+
+```bash
+beaver scale api 3
+beaver scaling policy api
+```
+
+## Requests versus limits
+
+A **request** is what you reserve for a container day to day. A **limit** is the ceiling it's
+never allowed to exceed. Exceed the memory limit and the container is restarted — a visible,
+observable event you'll see in its history, not a silent failure.
+
+## Fixed versus automatic
+
+Fixed mode holds an exact replica count until you change it — simple, predictable. Automatic
+mode lets Beaver add or remove replicas within a range you set, based on thresholds you
+configure (target CPU usage, for example). Either way, **you** set the thresholds and the
+bounds; automatic scaling never operates outside the min/max you gave it, no matter how load
+changes.
+
+## When capacity runs out
+
+If there isn't room for a new replica on your connected infrastructure, the scale-up doesn't
+fail silently — you'll see that capacity was the limiting factor, and can add machines or
+free up room to proceed. See [Beaver Cloud](/concepts/beaver-cloud) for how capacity works
+across a group of machines.
+
+<Tip>
+  Verify the resulting state with `beaver scaling replicas <container>` rather than assuming
+  a scale action completed instantly — a scale-up still has to start new containers, which
+  takes a moment.
+</Tip>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Scaling workflow" href="/guides/scaling">
+    When to choose fixed versus automatic, hands-on.
+  </Card>
+  <Card title="Containers and replicas" href="/concepts/containers-and-replicas">
+    What replicas actually are.
+  </Card>
+  <Card title="Scaling command reference" href="/cli/scaling">
+    Exact syntax for replica and resize operations.
+  </Card>
+  <Card title="Autoscale command reference" href="/cli/autoscale">
+    Threshold and bound configuration.
+  </Card>
+</CardGroup>

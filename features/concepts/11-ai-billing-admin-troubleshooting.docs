@@ -1,0 +1,147 @@
+# Era 11 — AI, Billing, Admin & Troubleshooting (V36–V39)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all four topics resolved. `concepts/ai-connections-and-alie.mdx`
+(V36, two-pass disclosure — checked against every checkpoint term in
+`DISCLOSURE-ADDENDUM.md`'s AI-surface list, none found) and `concepts/plans-and-billing.mdx`
+(V37) written new. `concepts/troubleshooting.mdx` (V38) written as the symptom-index hub,
+deliberately off-template as specified — every row's link target verified to actually
+contain the recovery content it points to. `concepts/administrative-commands.mdx` (V39)
+resolved as a short page (option (a)), matching `/features/docs/`'s own gap 010 resolution
+for `admin` (operator-only-but-mentionable, `documented-minimal` tier) — the two roadmaps'
+answers for who `admin` is for now agree, per `gaps/00-index.docs` entry 2's own logged
+default.
+
+**Reversed 2026-09-17:** explicit user instruction to remove all admin documentation.
+`concepts/administrative-commands.mdx` deleted, removed from `docs.json`'s Concepts group.
+T34 is now option (b), omission — see `gaps/00-index.docs` entry 2 and the sibling
+roadmap's `gaps/013` for the full account. 29 concept pages published, not 30.
+
+Covers T30, T31, T33, T34: AI connections and Alie, Plans and billing, Troubleshooting,
+Administrative commands. Grouped as the roadmap's final Phase 2 era because three of its
+four topics require a classification or disclosure decision *before* writing, mirroring the
+sibling roadmap's own Era 10–11 treatment of the same territory (admin/internal long tail,
+AI surface) as a distinct risk pass rather than routine family writing.
+
+---
+
+## V36 — AI connections and Alie (T30)
+
+### Goal
+New concept page: supported connection types, prerequisites, model selection, sessions,
+tools, approvals, workspace context, skills, usage controls, troubleshooting.
+
+### Reuses
+`cli/alie.mdx`, `cli/ai.mdx`; the sibling roadmap's own Era 11 (`11-ai-surface.docs`) note
+that this family "carries its own disclosure question (agent tool wiring, MCP transport)
+distinct from infrastructure commands" — same caution applies here, one layer up, and this
+version does not proceed until that framing is applied.
+
+### Implement
+`concepts/ai-connections-and-alie.mdx`: "approvals" explained as the user-facing gate
+(what the user sees and confirms before an action runs) without describing the approval
+gate's internal routing (checkpoint terms from `DISCLOSURE-ADDENDUM.md`: `tool definition`,
+`system prompt`, `context injection`, `tool-use loop`, `agent harness`, `model routing` —
+all inherited directly from the sibling roadmap's own list, unchanged). "Workspace context"
+and "skills" explained as what the user configures/sees available, not how context is
+assembled or injected.
+
+### Validate
+**Two-read disclosure pass, mandatory** — this is the single highest-risk page in the
+roadmap by topic, per both roadmaps' independent flagging of AI/agent surfaces.
+
+### Done when
+Page exists; passes two independent disclosure read-throughs.
+
+---
+
+## V37 — Plans and billing (T31)
+
+### Goal
+New concept page: plan limits, usage measurements, infrastructure costs vs. Beaver charges,
+billing management, coupons, what happens when limits are reached.
+
+### Reuses
+`cli/plan.mdx`/`cli/plans.mdx` (pending the sibling roadmap's staleness resolution, same
+caveat as V18/V32), `cli/billing.mdx`, `cli/coupon.mdx`.
+
+### Implement
+`concepts/plans-and-billing.mdx`: the infrastructure-costs-vs-Beaver-charges distinction
+stated plainly since it's a common source of billing confusion, "what happens when limits
+are reached" as an explicit, non-hedged consequence list (a user needs to know if a
+deployment will be blocked or just flagged) — no disclosure risk here at all, this topic is
+entirely business/product-facing, not mechanism-facing.
+
+### Validate
+Accuracy check against current plan structure (Invariant 1) rather than a disclosure check —
+this topic's risk is being wrong or stale, not leaking mechanism.
+
+### Done when
+Page exists; plan/limit claims verified current.
+
+---
+
+## V38 — Troubleshooting (T33)
+
+### Goal
+New concept page — actually a **symptom-based index**, not a standard concept page shape —
+covering: deployment stuck, machine offline, service unreachable, capacity exhausted,
+firewall blocking traffic, configuration conflict, authentication failure.
+
+### Reuses
+Every concept page's own "Limitations" and recovery-adjacent sections written so far
+(V18–V37) as link targets — this page is explicitly a hub, not new explanatory content of
+its own, per Invariant 1's altitude rule (a troubleshooting index that re-explains each
+feature would duplicate every page above it).
+
+### Implement
+`concepts/troubleshooting.mdx`: one row per symptom, each linking to the concept page whose
+"Limitations"/recovery section actually answers it (deployment stuck → Deployments V19 +
+Rollback V34; machine offline → Machine and agent operation V12; service unreachable →
+Domains and routing V22 + Firewall V24; capacity exhausted → Scaling V23 + Beaver Cloud V13;
+firewall blocking traffic → Firewall V24's "undo a block" section directly; configuration
+conflict → Configuration V15 + State and drift V33; authentication failure → Accounts and
+workspaces V9). Deviates from the standard template (noted explicitly, per the template
+being a default shape, not a rigid constraint the roadmap enforces for content that
+genuinely doesn't fit it).
+
+### Validate
+Every row's link target actually contains the recovery content it points to — a link-only
+page with a dead-end link is worse than no page.
+
+### Done when
+Every one of the seven named symptoms resolves to a real, populated destination.
+
+---
+
+## V39 — Administrative commands (T34)
+
+### Goal
+Resolve the classification question Era 1 explicitly deferred: are `admin` commands public
+concept-page material at all, and if so, at what disclosure level.
+
+### Reuses
+The sibling roadmap's own Era 10 (`10-admin-preflight-and-platform-ops.docs`) note: "operator-
+facing; classification question." This version does not proceed independently of that
+resolution — it either confirms the same answer for the concept layer or explicitly states
+why the concept layer's answer differs (e.g., a one-line "these commands are for platform
+operators, not typical users" note might be appropriate here even if the reference layer
+documents them, since a concept page's job is user orientation).
+
+### Implement
+Either: (a) a short `concepts/administrative-commands.mdx` stating who this is for and
+pointing elsewhere (most likely outcome, given the audience mismatch with every other
+concept page's target reader), or (b) an explicit decision to omit T34 from the Concepts
+group entirely, logged here with reasoning, satisfying Invariant 2's "never silently
+dropped" without forcing a page that doesn't serve a real reader.
+
+### Validate
+Decision is consistent with whatever the sibling roadmap's Era 10 lands on for the same
+commands — no contradiction between the two roadmaps about who `admin` commands are for.
+
+### Done when
+T34 has a recorded, reasoned resolution (page or explicit omission) — closes Era 11 and
+Phase 2.

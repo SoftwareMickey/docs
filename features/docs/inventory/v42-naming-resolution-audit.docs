@@ -1,0 +1,37 @@
+# Era 12 V42 — Naming ambiguity resolution audit
+
+Checklist pass confirming every naming mismatch Era 1 V2 logged actually got resolved by its
+assigned family era — not just planned. No new writing in this version; each item traces to
+where the resolution actually happened.
+
+| # | Ambiguity | Assigned to | Resolution | Where |
+| --- | --- | --- | --- | --- |
+| 1 | `plan`/`plans` staleness (gap 003) | Era 12 V42 | **Not stale.** Both real, distinct top-level commands confirmed directly in `beaver-cli/main.go`: `plan <container>` (`projectcontract.PlanCmd` — deployment preview) and `plans` (`billingcmd.PlansCmd` — billing plan list). `cli/plan.mdx` rewritten (it had factual errors — a nonexistent `--env` flag, a missing required `<container>` arg — unrelated to staleness); `cli/plans.mdx` already accurate, untouched. | `cli/plan.mdx`, `cli/plans.mdx`, gap 003 in `gaps/00-index.docs` (superseded by this finding — see note below) |
+| 2 | `logs`/`metrics`/`traffic` vs. `observability` (gap 002-adjacent) | Era 8 V27 | **No `observability` parent command exists at all** — confirmed via `main.go`: `logs`/`metrics`/`traffic` are three independent top-level commands. `latency`/`active`/`live` are `traffic` subcommands, not siblings. Kept as three standalone pages with an explicit `<Note>` on each stating the real relationship, rather than inventing a nonexistent parent page. | `cli/logs.mdx`, `cli/metrics.mdx`, `cli/traffic.mdx` |
+| 3 | `login`/`logout`/`whoami` vs. `auth` | Era 3 V8 | Confirmed via `main.go`: all three are genuine top-level commands (`auth.LoginCmd`/`LogoutCmd`/`WhoamiCmd` registered directly on `root.RootCmd`, not nested under an `auth` parent — no `auth` command exists). Kept as three focused, cross-linked pages (option (a) from the V8 goal). | `cli/login.mdx`, `cli/logout.mdx`, `cli/whoami.mdx` |
+| 4 | `integrations` vs. `integration` | Era 7 V26 | The command is `integrations` (plural) — `integration` is only the Go package name, never a CLI-facing name. No actual ambiguity for users; documented with an explicit `<Note>` so the page itself states this. | `cli/integrations.mdx` |
+| 5 | `init` vs. `initcmd` | Era 10 V35 | Same shape as #4 — `initcmd` is the package name, `init` is the command. `cli/init.mdx` was already accurate; verified, not rewritten. | `cli/init.mdx` |
+| 6 | `contract`/`validate` vs. `projectcontract` | Era 9 V30 | **`cli/contract.mdx` documented a command (`beaver contract show`) that was never shipped** — deleted (see `v30-redaction-log.docs`). `projectcontract`'s real commands are split across three real invocation points: `beaver validate` (top-level), `beaver plan <container>` (top-level), and `beaver config push`/`pull`/`diff`/`status`/`rollback`/`delete`/`containers` (mounted under `beaver config`, not a standalone `projectcontract` command). All covered in `cli/validate.mdx`, `cli/plan.mdx`, and `cli/config.mdx`'s "Saved configuration" section. | `cli/validate.mdx`, `cli/plan.mdx`, `cli/config.mdx`, `v30-redaction-log.docs` |
+
+## Note on gap 003
+
+`gaps/00-index.docs` entry 003 predicted `plan`/`plans` might be a removal candidate from the
+prior product model. Direct source verification (`main.go`) found the opposite: both are
+live, distinct, unrelated commands with no staleness at all. No page removal was needed for
+this pair — gap 003 should be read as resolved-by-finding-it-was-never-stale, not resolved by
+the redirect/removal path it anticipated.
+
+## Redirects
+
+No Mintlify redirect was needed for any of the six items — every resolution kept the existing
+URL for every page that stayed (all six ambiguities resolved to "both names are real, keep
+both / one name was a package name, not a CLI name"), except `cli/contract.mdx`, which was a
+straight deletion of a page documenting a command that never existed, not a rename — a
+redirect would send readers to a replacement page for a real, renamed command, which doesn't
+apply here. `mint broken-links` (V43) confirms nothing on the live site still points at
+`/cli/contract`.
+
+## Done when
+
+Zero open naming questions remain from the Era 1 V2 audit list — confirmed: all six items
+above have a traceable resolution page and reasoning, not an open question.

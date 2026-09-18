@@ -1,0 +1,102 @@
+# Era 2 — Template & Disclosure (V4–V5)
+
+_Phase 1 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** `templates/concept-page-template.mdx`, `templates/concept-page-example.mdx`
+(V4), and `DISCLOSURE-ADDENDUM.md` (V5) were drafted during roadmap planning and re-verified
+this pass. Re-verification found and fixed one real bug: the template's `{{placeholder}}`
+convention is invalid MDX (a bare `{...}` outside a code fence is parsed as a JS expression),
+which broke `mint broken-links` for the *entire site*, not just this file — caught during the
+`/features/docs` Phase 1 pass and fixed by switching to `[[placeholder]]`. `mint broken-links`
+now clean (only the template's own intentionally-fake placeholder hrefs flagged, expected and
+harmless — this file is never published). The disclosure addendum's "two-pass topics" list
+cross-checked against the final `inventory/01-cross-reference.docs` classification: complete,
+no additions needed.
+
+Fixes the page shape and the disclosure checklist once, so every family era in Phase 2
+applies the same rules instead of improvising them independently — the exact failure mode
+`concepts-explained.txt` and the sibling roadmap both exist to prevent.
+
+---
+
+## V4 — Concept page template
+
+### Goal
+A checked-in `.mdx` template implementing the shape fixed in `00-architecture.docs`
+("The mental model this roadmap teaches").
+
+### Reuses
+The sibling roadmap's `features/docs/templates/command-page-template.mdx` and
+`example-machine-reboot.mdx` as the pattern for *how* a template file should look in this
+repo (frontmatter shape, placeholder conventions) — not its content, which is command-level.
+
+### Implement
+- `templates/concept-page-template.mdx`: frontmatter (`title`, `description`,
+  `sidebarTitle`, `icon`) + the eight sections from the architecture doc's diagram, each
+  with a one-line instruction comment and a placeholder using the fictional vocabulary the
+  sibling roadmap's Era 2 (V7) already defined — reused here, not redefined, so a reader
+  moving between a concept page and a command reference page sees the same fictional
+  project/service/domain names throughout the site.
+- The "How it relates to other concepts" section templated as a `<CardGroup>` of `<Card>`
+  links (per `components.txt`), since this is the one section unique to this layer.
+- `templates/concept-page-example.mdx`: one filled-in example (Services, since it's the
+  concept `concepts-explained.txt` itself uses as its worked example) demonstrating the
+  template with real prose, for family eras to pattern-match against.
+
+### Validate
+- Template produces a page whose section order matches the architecture doc's diagram
+  exactly; the filled example passes the V5 disclosure checklist below on its own content.
+
+### Done when
+Both files exist and Era 3 can start writing pages directly from the template without
+inventing structure.
+
+---
+
+## V5 — Disclosure addendum
+
+### Goal
+Extend the sibling roadmap's `DISCLOSURE.md` with the checkpoint terms and worked examples
+specific to concept-level writing, per Invariant 6.
+
+### Reuses
+`/features/docs/DISCLOSURE.md` wholesale — its test ("would a competitor learn our
+mechanism from this sentence, or only what the product does?") and its checkpoint-term list
+apply unchanged. This version adds to it, it does not replace it.
+
+### Implement
+- `DISCLOSURE-ADDENDUM.md` in this directory:
+  - **Why concept pages carry more risk than command pages**: a command page can stay
+    compliant by only stating flag behavior; a concept page is explicitly answering "how
+    does this work" and "how does it relate to X," which is the exact question the
+    disclosure rule exists to deflect. State this plainly at the top of the addendum so
+    every family era's writer internalizes it before drafting.
+  - **Additional checkpoint terms** surfaced by the topic list itself: `scheduling` ·
+    `bin-packing` · `capacity planning logic` · `credential provisioning` ·
+    `attachment mechanism` · `matching` · `auto-detection heuristics` · `health-check
+    algorithm` · `load-balancing strategy` · `TLS issuance mechanism` · `WAF rule engine` ·
+    `backup encoding/format internals`.
+  - **The system diagram rule** (feeds Era 3 V6 directly): "How Beaver fits together" may
+    show *entities and relationships* (workspace → project → environment → machine/cloud →
+    deployment → container → service) as boxes and arrows; it must never show *how a
+    decision between entities is made* (e.g., which machine a deployment lands on) — that
+    arrow doesn't exist in the diagram at all, only the resulting relationship does.
+  - Two worked examples in the concept register (mirroring `DISCLOSURE.md`'s two): a
+    compliant Services relationship paragraph, and a non-compliant version that names the
+    attachment/credential-provisioning mechanism, side by side.
+  - Restate the sibling roadmap's rule that Era 11's AI/admin topics here (T30 AI & Alie,
+    T34 administrative commands) get a **second full read-through**, not one pass — same
+    discipline, same reason (agent/tool wiring and operator-only surfaces are the highest-
+    risk content in both roadmaps).
+
+### Validate
+- The addendum is reviewed against the full 34-topic list once, confirming every topic that
+  *could* invite a mechanism explanation (Scaling, State & drift, Firewall, Services, AI &
+  Alie, Backups) has at least one named checkpoint term or worked example addressing it.
+
+### Done when
+`DISCLOSURE-ADDENDUM.md` exists, is specific to concept-level risk, and does not duplicate
+`DISCLOSURE.md`'s own content verbatim — every family era from Era 3 onward applies both
+documents together as one checklist.

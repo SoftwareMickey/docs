@@ -1,0 +1,52 @@
+---
+title: "Containers and replicas"
+description: "A deployment is the definition; a container is one running copy of it. Replica count is how many copies exist."
+sidebarTitle: "Containers & replicas"
+icon: "cube"
+---
+
+A **deployment** is the definition of what should run in an environment. A **container** is
+one *running instance* of it. If a deployment has 3 **replicas**, it has 3 containers — all
+running the same release, all counted as one deployment.
+
+```bash
+beaver container <name> inspect
+beaver container <name> logs --follow
+```
+
+## Why the distinction matters
+
+"Restart the container" and "redeploy the deployment" are different actions with different
+blast radius — restarting one container doesn't touch the others; redeploying replaces every
+container in the deployment with a new release. Knowing which one you actually want to do is
+the whole reason these are separate concepts and not one word.
+
+## What you can see and control
+
+Per container, you can inspect current state, stream or tail logs, open a shell or run a
+one-off command inside it, and open the running application directly in your browser if it
+has a public route. Restarting a container brings it back up in place; replacing it (via a
+redeploy or rollback) creates a new one with a new identity.
+
+## What doesn't survive a restart
+
+Anything written to a container's own filesystem outside a declared volume is gone the
+moment it's replaced. Only volumes persist — see [Persistent
+storage](/concepts/persistent-storage) for what to use for data that needs to survive.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="How Beaver fits together" href="/concepts/how-beaver-fits-together">
+    The full entity relationship, deployment down to container.
+  </Card>
+  <Card title="Scaling and resources" href="/concepts/scaling-and-resources">
+    Replica count is what scaling changes.
+  </Card>
+  <Card title="Container command reference" href="/cli/container">
+    Operate on one named container.
+  </Card>
+  <Card title="Containers command reference" href="/cli/containers">
+    List and inspect across your whole workspace.
+  </Card>
+</CardGroup>

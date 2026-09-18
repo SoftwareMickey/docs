@@ -1,0 +1,111 @@
+# Era 10 — Admin, Preflight & Platform Ops (V34–V36)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+Unlike every other Phase 2 era, this one's first job is a **classification decision, not
+writing**: several of these command groups (`internal` especially) may not belong in public
+docs at all. Treating "undocumented" as automatically "needs a page" would be the wrong
+default here — Rule 6/Invariant 6 applies at the whole-command level, not just sentence by
+sentence.
+
+Commands: `admin`, `preflight`, `mystic`, `envbanner`, `initcmd`, `internal`.
+
+---
+
+## V34 — Public-vs-internal classification pass
+
+### Goal
+Every command in this era tagged with one of: **public** (document normally), **operator-
+only-but-mentionable** (document minimally — exists, who it's for, no deep detail), or
+**excluded** (not published at all, logged as a gap with reason).
+
+### Reuses
+The V1 inventory's maturity tags (a `Hidden: true` command is a strong signal here) and
+Era 1 V3's classification method (source-level check, not name-based guessing).
+
+### Implement
+- `internal` (9 files): the name itself is a strong prior — check whether these are
+  `Hidden: true`, whether they're reachable outside a debug/dev build, and whether they call
+  anything resembling the platform's own tooling rather than user-facing functionality.
+  Default expectation going in: **excluded**, confirmed or overridden by the source check,
+  not assumed without looking.
+- `admin` (3 files), `mystic` (3 files), `envbanner` (2 files): same check — likely
+  operator/workspace-owner-scoped commands (an "admin" command group is plausibly meant for
+  workspace admins, not end users) rather than internal-only. Classify individually; don't
+  batch-assume.
+- `preflight` (13 flag sites) and `initcmd` (`init.mdx` already exists, per Era 1's naming
+  audit): these read as genuinely user-facing (pre-deploy checks, project initialization) —
+  likely **public**, verify and proceed to V35/V36 rather than re-litigating here.
+- Record the classification per command in the V1 inventory (adds a column) so the
+  acceptance gate's "zero unresolved" check has a real answer for every row in this era,
+  including the excluded ones.
+
+### Validate
+- Every classification traces to a specific source observation (a `Hidden` flag, a naming
+  convention, a call pattern), not a guess from the directory name alone.
+
+### Done when
+Every command in this era has a recorded, justified classification — this is the
+deliverable, independent of how much gets written next.
+
+---
+
+## V35 — Write the `public` and `operator-only-but-mentionable` commands
+
+### Goal
+Pages (full or minimal, per V34's classification) for everything not excluded.
+
+### Reuses
+The Era 2 template for full pages; a lighter variant (Purpose + "who this is for" + a
+pointer to run `--help` for full flag detail, rather than exhaustive flag-by-flag coverage)
+for operator-only-but-mentionable commands — these don't need the same depth as a command
+every user runs daily.
+
+### Implement
+- `preflight`: full page — pre-deploy check categories and what each result means,
+  consistent with `doctor`'s framing (Era 4 V13) since both are diagnostic-output commands;
+  reuse that section structure rather than inventing a new one.
+- `initcmd`: verify/extend the existing `init.mdx` against the source, resolving whatever
+  the Era 1 naming note left open.
+- Whichever of `admin`/`mystic`/`envbanner` land as public or mentionable in V34: minimal
+  pages per the lighter template.
+
+### Validate
+- `preflight`'s check-category structure is checked against `doctor.mdx` for consistency,
+  not independently invented.
+- Every page matches its V34 classification's expected depth (a mentionable command with a
+  full exhaustive page is scope creep; a public command with only a stub is under-coverage).
+
+### Done when
+Every non-excluded command in this era has a page matching its classified depth.
+
+---
+
+## V36 — Log the excluded commands as a formal gap
+
+### Goal
+Every command classified `excluded` in V34 is recorded in `gaps/00-index.docs` with its
+reason — an omission that's visible and intentional, not a silent hole in the inventory.
+
+### Reuses
+The `beaver-desktop/features/*/gaps/00-index.docs` convention directly: "recorded so it is
+a decision, not an omission."
+
+### Implement
+- One gap entry per excluded command (or one entry covering the whole `internal` group if
+  every command in it is excluded for the same reason) — what it is, why it's excluded,
+  and what would need to change for that decision to be revisited (e.g. "if `internal`
+  commands become reachable outside debug builds, reclassify").
+- The V1 inventory's excluded rows point at the relevant gap entry rather than being marked
+  simply "won't document" with no trace.
+
+### Validate
+- Every `excluded` row in the inventory has a corresponding gap entry — no orphaned
+  exclusions.
+
+### Done when
+The acceptance gate's "zero unresolved" criterion is satisfiable for this era: every row is
+`documented`, `documented-minimal`, or `excluded-with-a-logged-reason` — nothing left
+ambiguous.

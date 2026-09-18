@@ -1,0 +1,259 @@
+---
+title: "beaver cloud"
+sidebarTitle: "cloud"
+description: "Group enrolled machines into a Beaver Cloud and manage its network, capacity, and workload placement."
+icon: "cloud"
+---
+
+<Info>
+  New here? [Beaver Cloud](/concepts/beaver-cloud) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+A **Beaver Cloud** is a named pool of your own enrolled machines (see
+[Infrastructure setup](/infrastructure-setup) for connecting individual machines). Once
+machines are enrolled, `beaver cloud` is what you use to group them, give them a shared
+private network, set capacity reservations, and decide how applications spread across the
+pool — `beaver deploy --cloud <name>` then targets the pool instead of one machine.
+
+## Lifecycle
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | List every cloud in your workspace. |
+| `create <name>` | Create a cloud from a set of machines. |
+| `status [cloud]` | Capacity, applications, and health at a glance. |
+| `inspect [cloud]` | Per-node breakdown. |
+| `rename <cloud> <new-name>` | Rename a cloud. |
+| `rm [cloud]` | Delete a cloud (must have no machines). |
+| `events [cloud]` | Event history: membership, network, capacity, placement, recovery. |
+
+<ParamField query="--machines" type="string" default="">
+  On `create`: comma-separated machine names or IDs to add.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `rm`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--limit" type="integer" default="30">
+  On `events`: maximum events to show.
+</ParamField>
+<ParamField query="--category" type="string" default="">
+  On `events`: filter by category — `membership`, `network`, `capacity`, `placement`, or
+  `recovery`.
+</ParamField>
+
+`status` and `inspect`'s network reachability is a **separate, observable axis** from the
+cloud's own `status` field — a cloud can be up while one node's network connectivity is
+degraded, or vice versa. Check both when diagnosing an issue rather than assuming they always
+move together.
+
+## Machines & membership
+
+| Subcommand | Purpose |
+| --- | --- |
+| `machines [cloud]` | List a cloud's member machines. |
+| `machines add [machine...]` | Add machines to a cloud. |
+| `machines rm [machine]` | Remove a machine from a cloud. |
+| `preflight <machine>...` | Check machines for cloud-membership readiness before adding them. |
+
+<ParamField query="--cloud" type="string" default="">
+  Cloud slug or name for `machines` subcommands. Interactive picker if omitted.
+</ParamField>
+<ParamField query="--override" type="string" default="">
+  On `machines add`: preflight finding IDs to admit past, for findings you've reviewed and
+  intentionally want to proceed despite.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `machines rm`: skip the confirmation prompt.
+</ParamField>
+<ParamField query="--cloud" type="string" default="">
+  On `preflight`: re-check the members of this existing cloud instead of a fresh set.
+</ParamField>
+<ParamField query="--cidr" type="string" default="">
+  On `preflight`: check a specific overlay network address range for collisions instead of
+  letting Beaver propose one.
+</ParamField>
+<ParamField query="--fix" type="boolean" default="false">
+  On `preflight`: install missing prerequisites on the machines, then re-check.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `preflight`: skip the `--fix` confirmation prompt.
+</ParamField>
+
+## Network
+
+| Subcommand | Purpose |
+| --- | --- |
+| `network [cloud]` | Show a cloud's private network. |
+| `network enable <cloud>` | Turn on the private network for a cloud. |
+| `network allows [cloud]` | List cross-project network allow rules. |
+| `network allows add [cloud]` | Allow two projects to reach each other over the private network. |
+| `network allows rm [cloud] <allow-id>` | Remove an allow rule. |
+| `gateway [cloud]` | Show which members are public entry points, and designate new ones. |
+| `gateway add [cloud] [machine...]` | Designate a machine as a gateway. |
+| `gateway rm [cloud] <machine>` | Remove a machine's gateway role. |
+
+<ParamField query="--matrix" type="boolean" default="false">
+  On `network`: include the full node-to-node connectivity matrix.
+</ParamField>
+<ParamField query="--debug" type="boolean" default="false">
+  On `network`: include low-level private-networking detail (keys, endpoints, handshakes).
+  Advanced/troubleshooting use — not needed for routine checks.
+</ParamField>
+<ParamField query="--cidr" type="string" default="">
+  On `network enable`: overlay address range to use. Proposed automatically if omitted.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `network enable`/`network allows add`/`gateway add`: skip the confirmation prompt.
+</ParamField>
+<ParamField query="--project-a" type="string" default="" required>
+  On `network allows add`: first project ID. Required.
+</ParamField>
+<ParamField query="--project-b" type="string" default="" required>
+  On `network allows add`: second project ID. Required.
+</ParamField>
+<ParamField query="--cloud" type="string" default="">
+  On `gateway add`: cloud slug or name. Interactive if omitted.
+</ParamField>
+
+A cloud's private network lets its member machines reach each other directly; `network
+allows` controls which **projects** (not just machines) may cross that network to reach each
+other. A **gateway** is a member machine that also accepts public inbound traffic on behalf
+of the cloud — `gateway`/`gateway add`/`gateway rm` manage which machines have that role.
+
+## Capacity & reservations
+
+| Subcommand | Purpose |
+| --- | --- |
+| `capacity [cloud]` | Cloud-wide capacity: schedulable vs. in-use vs. reserved. |
+| `capacity node [cloud]` | Per-node capacity breakdown. |
+| `capacity trend [cloud]` | Capacity usage trend over time. |
+| `reserve [cloud]` | Show current capacity reservations. |
+| `reserve set [cloud]` | Reserve capacity (cloud-wide or per-node). |
+| `reserve clear [cloud]` | Clear a reservation. |
+
+<ParamField query="--node" type="string" default="">
+  On `reserve set`/`reserve clear`: apply to (or clear) a single machine's reservation instead
+  of the cloud-wide one.
+</ParamField>
+<ParamField query="--cpu" type="number" default="0">
+  On `reserve set`: CPU cores to reserve.
+</ParamField>
+<ParamField query="--memory" type="integer" default="0">
+  On `reserve set`: memory in MB to reserve.
+</ParamField>
+<ParamField query="--disk" type="number" default="0">
+  On `reserve set`: disk in GB to reserve.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `reserve set`/`reserve clear`: skip the confirmation prompt.
+</ParamField>
+
+Reserved capacity is held back from scheduling — it lowers what's available for new
+deployments without affecting what's already running.
+
+## Workload placement
+
+| Subcommand | Purpose |
+| --- | --- |
+| `workload [cloud]` | How each application is spread across the cloud's nodes. |
+| `workload set [cloud] <container>` | Set an application's placement policy. |
+| `placements [cloud]` | The cloud's placement decision log — which node each replica landed on, and when. |
+
+<ParamField query="--policy" type="string" default="">
+  On `workload set`: placement policy — `spread` (default: one replica per node where
+  possible), `pack` (consolidate onto the fewest nodes), or `pinned` (every replica on one
+  named node).
+</ParamField>
+<ParamField query="--pin" type="string" default="">
+  On `workload set`: machine ID to pin to. Required when `--policy pinned`.
+</ParamField>
+<ParamField query="--lb" type="string" default="">
+  On `workload set`: internal load balancing mode — `dns` (multi-record round-robin) or
+  `proxy` (through the node's local proxy).
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `workload set`: skip the confirmation prompt.
+</ParamField>
+
+`workload` describes **intent** — what the cloud is asked to do — distinct from `placements`,
+which is the **history** of what actually happened (deploy-host picks and scaling decisions
+already made). Replica *count* is governed by [`beaver scaling`](/cli/scaling); `workload set`
+only decides where those replicas land, not how many there are.
+
+## Services & containers
+
+| Subcommand | Purpose |
+| --- | --- |
+| `services [cloud]` | Service discovery: every app in the cloud and the addresses it resolves to. |
+| `containers [cloud]` | Every container deployed to the cloud, with the node and subnet each replica runs in. |
+
+Service discovery is a property of the cloud, not of any one host: each app resolves
+cloud-wide by its short name (`api`) and by a full name (`api.<slug>.beaver.internal`) to
+every healthy replica's address on the cloud's private network — this is what your other
+services should use to reach it, rather than a specific machine's address. `containers`
+gives you the reverse view: where each replica actually landed.
+
+Distinct from [`beaver service`](/cli/service) (provisioning and operating managed stateful
+dependencies like databases) and [`beaver containers`](/cli/containers) (every deployed
+container across your whole workspace, not scoped to one cloud).
+
+## Consequences
+
+<Warning>
+  `rm` only succeeds on an empty cloud (no member machines) — remove machines with `machines
+  rm` first if you need to delete a cloud that still has members.
+</Warning>
+
+Adding or removing a machine (`machines add`/`machines rm`) changes what's schedulable across
+the cloud going forward; it does not itself move or restart anything already running on
+another member. `network enable` and gateway changes can briefly interrupt cross-node
+connectivity while they take effect.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Create a cloud
+beaver cloud create paperclip-prod --machines srv_web01,srv_web02,srv_db01
+```
+
+```bash Check capacity before deploying
+beaver cloud capacity paperclip-prod
+```
+
+```bash Deploy into the cloud
+beaver deploy --cloud paperclip-prod
+```
+
+```bash Spread an app, then pin the database
+beaver cloud workload set paperclip-prod paperclip-web --policy spread
+beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin srv_db01
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `create` success | The new cloud with its member machines | Deploy with `--cloud <name>`. |
+| `rm` on a non-empty cloud | An error requiring an empty cloud first | Remove all members with `machines rm`, then retry. |
+| `machines add` blocked by preflight | Findings listed, with their IDs | Fix the issues, or pass `--override` with the reviewed finding IDs. |
+| `workload set --policy pinned` with no `--pin` | `--pin` required error | Pass a target machine ID. |
+
+## Used in
+
+- [Connect and machine roles](/guides/connect-and-machine-roles) — grouping connected
+  machines into a cloud.
+- [Scaling: manual vs. automatic](/guides/scaling) — workload placement within a cloud.
+- [Infrastructure setup](/infrastructure-setup) — connecting the individual machines a cloud
+  groups together.
+- [`deploy`](/cli/deploy) — `--cloud` targets a cloud instead of a single machine.
+- [`scaling`](/cli/scaling) — governs replica count; `workload` governs where those replicas
+  land within a cloud.

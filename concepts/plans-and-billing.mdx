@@ -1,0 +1,39 @@
+---
+title: "Plans and billing"
+description: "Your Beaver plan limits usage; billing covers Beaver itself — your infrastructure provider charges you separately for the machines."
+sidebarTitle: "Plans & billing"
+icon: "credit-card"
+---
+
+Your Beaver plan sets usage limits. Billing covers what you're charged for **Beaver
+itself** — separate from whatever your infrastructure provider (AWS, a VPS host, your own
+hardware) charges you for the machines.
+
+```bash
+beaver plans
+beaver billing
+```
+
+## Two bills, not one
+
+Connecting your own machines means you pay your provider directly for them — Beaver's charge
+is only for the platform. If your bill looks off, check which side of that split it's
+actually on before assuming Beaver over- or under-charged you.
+
+## What happens when a limit is reached
+
+What happens depends on the limit — some are hard stops (an action is blocked until you
+upgrade or free up room), others are soft (you're flagged but not blocked immediately).
+Check `beaver billing` for your account's current usage against its limits rather than
+assuming either behavior.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Billing command reference" href="/cli/billing">
+    Subscription, payment, and invoice management.
+  </Card>
+  <Card title="Plans command reference" href="/cli/plans">
+    What's available at each tier.
+  </Card>
+</CardGroup>

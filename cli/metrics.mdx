@@ -1,12 +1,85 @@
 ---
 title: "beaver metrics"
-description: "View deployment metrics."
+sidebarTitle: "metrics"
+description: "Show historical CPU, storage, data-transfer, and request metrics for one deployed container."
+icon: "chart-line"
 ---
+
+<Info>
+  New here? [Observability](/concepts/observability) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  `beaver metrics`, [`beaver logs`](/cli/logs), and [`beaver traffic`](/cli/traffic) are
+  three separate top-level commands, not subcommands of a single `observability` parent —
+  see the note on the [`logs`](/cli/logs) page.
+</Note>
+
+## Purpose
+
+Use `beaver metrics` for a container's historical resource and request metrics: CPU, disk
+usage, incoming/outgoing data transfer, and request volume. For machine-level metrics
+instead, see [`beaver machine metrics`](/cli/machine#monitoring--diagnostics); for a live,
+point-in-time snapshot, see [`beaver traffic live`](/cli/traffic#live-diagnostics).
+
+## Syntax
+
+```bash
+beaver metrics <subcommand> <container>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `cpu` | CPU usage history. |
+| `storage` | Disk usage history. |
+| `data-transfer` | Incoming/outgoing data transfer history. |
+| `requests` | Request volume history. |
+
+<Note>
+  Each view is bucketed into a handful of fixed time windows by the server — there is no
+  `--range` flag here, unlike [`beaver traffic`](/cli/traffic), which does support one.
+  These are two different underlying endpoints with different capabilities, not an
+  inconsistency to work around.
+</Note>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
-beaver metrics <container>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash CPU history
+beaver metrics cpu api
 ```
 
-Use [`beaver observe`](/cli/observe) for the current project's CPU, storage, requests, or data-transfer view.
+```bash Disk usage
+beaver metrics storage api
+```
+
+```bash Data transfer
+beaver metrics data-transfer api
+```
+
+```bash Request volume
+beaver metrics requests api
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | The requested metric's history, in the server's fixed windows | Nothing further. |
+| No data yet | An empty or sparse result | The container may be too new to have history. |
+
+## Used in
+
+- [`observe`](/cli/observe) — a project-aware view covering metrics, traffic, and logs
+  together for the current project's default service.

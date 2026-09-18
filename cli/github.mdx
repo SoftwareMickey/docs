@@ -1,14 +1,81 @@
 ---
 title: "beaver github"
-description: "Manage connected GitHub accounts and repository branches."
+sidebarTitle: "github"
+description: "Connect GitHub accounts and browse repository branches for deployment."
+icon: "github"
 ---
+
+<Info>
+  New here? [Integrations](/concepts/integrations) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver github` to connect a GitHub account (via the Beaver GitHub App) so `beaver
+deploy --git` and `beaver compose deploy` can see your repositories, and to list a
+repository's branches when scripting a deploy. For managing integrations generally (not just
+GitHub), see [`beaver integrations`](/cli/integrations).
+
+## Syntax
+
+```bash
+beaver github [subcommand] [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)*, or `accounts` | List your connected GitHub accounts. |
+| `install` | Connect a new GitHub account. |
+| `branches` | List a repository's branches. |
+
+## Flags
+
+<ParamField query="--return-to" type="string" default="">
+  On `install`: URL to return to after the install flow completes. Optional.
+</ParamField>
+<ParamField query="--repo" type="string" default="" required>
+  On `branches`: repository clone URL — the same value `beaver deploy --repo` accepts.
+  Required.
+</ParamField>
+
+## Consequences
+
+`install` opens the Beaver GitHub App's install page in your browser — connecting an account
+is a GitHub-side authorization, not something that happens without your explicit approval
+there.
 
 ## Examples
 
-```bash
-beaver github accounts
-beaver github install
-beaver github branches
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List connected accounts
+beaver github
 ```
 
-List connected accounts, connect a new one, or select repository branches during a deployment workflow.
+```bash Connect a new account
+beaver github install
+```
+
+```bash List a repo's branches (for scripted deploys)
+beaver github branches --repo https://github.com/ada/paperclip
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| No accounts connected | An empty list | Run `beaver github install`. |
+| `branches` with an inaccessible repo | An error naming the access issue | Confirm your connected account can see that repository. |
+
+## Used in
+
+- [`deploy`](/cli/deploy) — `--git` and non-interactive `--repo`/`--branch` use a connected
+  GitHub account.
+- [`integrations`](/cli/integrations) — the general integration-management command this
+  fits under.

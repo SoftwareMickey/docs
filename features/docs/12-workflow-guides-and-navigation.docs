@@ -1,0 +1,122 @@
+# Era 12 — Workflow Guides & Navigation (V40–V43)
+
+_Phase 3 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+Phase 2 (Eras 3–11) produces exhaustive reference pages, per Invariant 7 deliberately
+separated from workflow content. This era builds the guides that connect them, wires
+everything into `docs.json` nav, and closes out every naming ambiguity Era 1 logged instead
+of leaving family eras to improvise individually-inconsistent fixes.
+
+---
+
+## V40 — Task guides: core workflows
+
+### Goal
+A small set of task guides, each walking a complete outcome across multiple commands, per
+Invariant 7.
+
+### Reuses
+Every reference page from Eras 3–11 as link targets; `CLAUDE.md`'s described nav groups
+(Getting Started, Infrastructure Setup, Deploying with Docker) as the existing guide
+pattern to extend rather than replace.
+
+### Implement
+- **Deploy workflow**: `connect` → `deploy` → verify → `promote` (if applicable), linking
+  `connect.mdx`, `deploy.mdx`, `status.mdx`/`observability`, `promote.mdx`.
+- **Connect + machine roles workflow**: extends existing `choose-your-setup.mdx`/
+  `machine-roles.mdx`, linking `connect.mdx`, `machine.mdx`, `cloud.mdx` (new from Era 6).
+- **Scaling workflow**: `scaling.mdx` + `autoscale.mdx` (new from Era 6) walked together —
+  manual vs. automatic, when to use which.
+- **Rollback / recovery workflow**: `recover.mdx`, `state rollback`/`projectcontract
+  rollback` (Era 9) walked together — what a user does when a deploy goes wrong, framed
+  entirely at the observable/recovery level established in Era 9.
+- Each guide follows the existing task-guide voice already in `infrastructure-setup.mdx`
+  etc. — Steps-based, not reference-exhaustive.
+
+### Validate
+- Every guide links to every reference page it exercises; every exercised reference page
+  links back (bidirectional per Invariant 7).
+
+### Done when
+The four core outcomes are walkable start to finish via guides, with reference depth one
+click away rather than inlined.
+
+---
+
+## V41 — `docs.json` navigation wiring
+
+### Goal
+Every new/changed page from Eras 3–11 reflected in `docs.json`'s `cli` nav group; no
+orphaned pages, no stale nav entries.
+
+### Reuses
+`CLAUDE.md`'s explicit rule: navigation is centrally defined in `docs.json`, pages are not
+auto-discovered.
+
+### Implement
+- Diff the final `cli/` directory listing (post Eras 3–11, including any split pages from
+  the Era 2 V6 rule — `service`, `config`, `cloud`, `alie` most likely to have split) against
+  `docs.json`'s current `cli` group.
+- Add every new page; remove/redirect every page Era 1 flagged stale (`plan.mdx`/
+  `plans.mdx` if confirmed obsolete per `CLAUDE.md`'s historical-drift note).
+- Preserve existing nav ordering conventions (grouped by family, matching the Phase 2 era
+  groupings where sensible, so the nav itself teaches the same command taxonomy this
+  roadmap organized work around).
+
+### Validate
+- Every file in `cli/` is reachable from `docs.json` nav.
+- No `docs.json` entry points at a removed or renamed file.
+
+### Done when
+Navigation and the file tree are in lockstep.
+
+---
+
+## V42 — Resolve every Era 1 naming ambiguity
+
+### Goal
+Every mismatch Era 1's audit logged gets a final, executed resolution — not left as an
+open question in the inventory.
+
+### Reuses
+Era 1 V2's list directly: `plan`/`plans` staleness, `logs`/`metrics`/`traffic` vs.
+`observability` (resolved in Era 8 V27 — confirm it's carried through here), `login`/
+`logout`/`whoami` vs. `auth` (Era 3 V8), `integrations` vs. `integration` (Era 7 V26),
+`init` vs. `initcmd` (Era 10 V35), `contract`/`validate` vs. `projectcontract` (Era 9).
+
+### Implement
+- A single pass confirming every one of these was actually resolved by its assigned family
+  era (not just planned) — this version is a checklist/audit, not new writing, catching any
+  resolution that got deferred or missed during Phase 2.
+- Any redirect needed (old URL → new page) added per Mintlify's redirect mechanism if the
+  URL structure changed.
+
+### Validate
+- Every item on Era 1's ambiguity list has a traceable resolution commit/page.
+
+### Done when
+Zero open naming questions remain from the original audit.
+
+---
+
+## V43 — `mint broken-links` clean pass
+
+### Goal
+Every internal link across `cli/`, the new guides, and any pages that now cross-link into
+`cli/` (e.g. `deploying/*.mdx`, `infrastructure-setup.mdx`) resolves.
+
+### Reuses
+`mint broken-links` (already the documented validation command in `CLAUDE.md`).
+
+### Implement
+- Run `mint broken-links` across the full site after Eras 3–12's changes.
+- Fix every broken link found; re-run until clean.
+
+### Validate
+- Clean `mint broken-links` output, checked in immediately before Era 13's broader
+  verification pass (which covers content accuracy, not just link integrity).
+
+### Done when
+Zero broken links — the acceptance gate's criterion 4 is met.

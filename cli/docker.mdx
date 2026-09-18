@@ -1,12 +1,60 @@
 ---
 title: "beaver docker"
-description: "Check Docker availability and registry authentication."
+sidebarTitle: "docker"
+description: "Check this machine's Docker installation and registry authentication."
+icon: "docker"
 ---
+
+## Purpose
+
+`beaver docker` checks whether Docker is installed, running, and accessible on the current
+machine, and whether it's authenticated to a Docker registry — it's a status check, not a
+wrapper around the Docker CLI itself. Use plain `docker` for anything beyond what's
+documented here.
+
+## Syntax
+
+```bash
+beaver docker [flags]
+```
+
+## Flags
+
+<ParamField query="--auth" type="boolean" default="false">
+  Also check Docker Hub authentication status, not just Docker availability.
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
 
 ## Examples
 
-```bash
+<Info>
+  **Verified**: the commands on this page were executed against a live `beaver` build during this review; example output reflects what was actually returned (with real account/workspace values replaced by the fictional vocabulary).
+</Info>
+
+<CodeGroup>
+
+```bash Basic availability check
+beaver docker
+```
+
+```bash Include registry auth
 beaver docker --auth
 ```
 
-Reports Docker availability, access, and registry authentication for the current machine.
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Docker available and authenticated | Passing status for each check | Nothing further. |
+| Docker not installed/running | A failing status naming the issue | Run `beaver doctor` for guided repair. |
+| Not authenticated (`--auth`) | A failing auth status | Sign in to Docker Hub on this machine. |
+
+## Used in
+
+- [`doctor`](/cli/doctor) — runs the same Docker checks as part of its full diagnosis.
+- [`connect`](/cli/connect) — prepares Docker as part of the connect wizard.

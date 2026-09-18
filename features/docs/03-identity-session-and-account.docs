@@ -1,0 +1,96 @@
+# Era 3 — Identity, Session & Account (V8–V10)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+Smallest family era — deliberately first in Phase 2 so the Era 2 template gets proven
+against real, low-risk content before the larger, riskier families (6, 7, 9, 11) use it.
+
+Commands: `auth` (`login`, `logout`, `whoami`), `account`, `billing`, `coupon`.
+
+---
+
+## V8 — `auth` family consolidation
+
+### Goal
+One coherent `auth`/session story instead of three orphaned pages (`login.mdx`,
+`logout.mdx`, `whoami.mdx`) with no parent.
+
+### Reuses
+Era 1's V2 finding that these three pages map to `auth/` subcommands; Era 2's template.
+
+### Implement
+- Resolve (per Era 1 V2) whether `beaver login`/`beaver logout`/`beaver whoami` are true
+  top-level aliases or only reachable as `beaver auth login` etc. — check root command
+  registration in `beaver-cli`, not assumption.
+- Either: (a) keep three focused pages if they're genuinely top-level commands, tightened
+  against the template and cross-linked as a family, or (b) consolidate into one
+  `cli/auth.mdx` with subsections if they're properly `auth <verb>` — whichever matches the
+  actual invocation.
+- Cover session consequences explicitly (Invariant 4): what `logout` invalidates, whether
+  `login` supports non-interactive/CI flags (token-based auth is a common gap in existing
+  login docs — check the inventory for a `--token`/`--ci` style flag).
+
+### Validate
+- Every documented invocation matches what `beaver <cmd> --help` actually prints.
+- No stale content carried over from the three existing pages without a source check.
+
+### Done when
+A new user's first three commands (login, whoami, logout) are documented as one connected
+story, not three disconnected stubs.
+
+---
+
+## V9 — `account`
+
+### Goal
+Verify and extend the existing `account.mdx` against the full V1 flag inventory for that
+group.
+
+### Reuses
+Existing `cli/account.mdx` as a starting draft; V1 inventory rows tagged `account`.
+
+### Implement
+- Diff every `account` flag/subcommand in the inventory against the current page; fill gaps.
+- Consequences section: what account-level changes propagate where (e.g. does changing a
+  default region/workspace affect already-running deployments) — stated at the observable
+  level only (Invariant 6): "this changes the default for future commands," not any detail
+  of how the default is stored or resolved server-side.
+
+### Validate
+- Page passes the Era 2 checklist (no internal-mechanism language).
+- Coverage inventory row for `account` flips to fully `documented`.
+
+### Done when
+Every `account` flag from the inventory appears on the page with a source-verified
+description.
+
+---
+
+## V10 — `billing` and `coupon`
+
+### Goal
+Verify/extend `billing.mdx`; write the missing `coupon` page (small — 2 source files).
+
+### Reuses
+Existing `cli/billing.mdx`; V1 inventory rows for `billing`/`coupon`.
+
+### Implement
+- `billing`: diff against inventory, fill gaps, cover consequences of plan-affecting
+  commands (what changes, whether it's immediate or takes effect next cycle — observable
+  only, no pricing-engine internals).
+- `coupon`: new page from the template — likely short given the 2-file source size; still
+  full Purpose/Syntax/Flags/Consequences/Examples/Failures per Invariant 2 (small doesn't
+  mean skippable).
+- Both commands touch money — extra care that example values are obviously fictional
+  (Invariant 5) and that no real pricing/plan-tier internals leak beyond what's already
+  public on the pricing page (if one exists — check before asserting numbers).
+
+### Validate
+- `coupon` inventory row moves from `undocumented` to `documented`.
+- No example uses a real-looking price, plan name, or coupon code.
+
+### Done when
+Both pages exist, pass the Era 2 checklist, and the family's inventory rows are all
+`documented`.

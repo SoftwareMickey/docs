@@ -1,0 +1,158 @@
+# Era 9 — Config, State & Contracts (V30–V33)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17 · HIGHEST DISCLOSURE RISK**
+
+This era's vocabulary — `state`, `drift`, `contract`, `plan`, `reconcile` — sits closest to
+exactly what `CLAUDE.md` names as a trade secret: "matching logic, infrastructure-
+provisioning mechanics, or anything resembling an internal 'deployment contract' schema."
+Every version here runs the Era 2 disclosure checklist as a mandatory step, not an
+afterthought, and two commands (`config validate`/`projectcontract validate`) already have
+published pages (`contract.mdx`, `validate.mdx`) that must be **audited for existing leaks
+before anything else is added to them** — this era can start by *redacting*, not just
+extending.
+
+Commands: `config`, `state`/`statecmd`, `projectconfig`, `projectcontext`,
+`projectcontract`, `route`, `reconcilecmd`.
+
+---
+
+## V30 — Audit existing `contract.mdx`/`validate.mdx` for leaks
+
+### Goal
+Before writing anything new, confirm the two pages already published in this vocabulary
+zone don't already violate Invariant 6 — this is a correctness check on prior work, not new
+coverage.
+
+### Reuses
+The Era 2 V5 disclosure checklist and its named-term list (*reconcile, drift, desired
+state, contract, placement, routing, schema, orchestration, job, dispatch, queue*).
+
+### Implement
+- Line-by-line read of `contract.mdx` and `validate.mdx` against the checklist. Any sentence
+  explaining *how* validation/contract-matching decides something (vs. *what* the user sees
+  as a result) is flagged.
+- Flagged sentences are rewritten to observable-outcome framing or removed and, if the
+  removed content genuinely belongs somewhere, noted for the internal engineering docs
+  (outside this repo) — never left in Mintlify "just in case it's useful."
+- This version's output is a short redaction log (what changed and why) kept in
+  `/features/docs/inventory/` alongside the V4 inventory, so the decision is traceable.
+
+### Validate
+- Zero flagged sentences remain unresolved.
+- A second read-through (ideally by re-reading fresh, not from memory of the first pass)
+  confirms no leaked mechanism language survives.
+
+### Done when
+Both existing pages are confirmed clean against the checklist, with a recorded log — this
+gate must pass before V31–V33 add net-new content in the same vocabulary zone.
+
+---
+
+## V31 — `config` (new, highest flag density in the CLI)
+
+### Goal
+A `cli/config.mdx` (or split set, per Era 2 V6) covering all subcommands: `add`, `bind`,
+`builder`, `disable`, `health`, `host`, `init`, `inspect`, `list`, `network`, `remove`,
+`replicas`, `resources`, `schema`, `set`, `show`, `sync`, `unset`, `validate`, `volume` — 55
+flag sites, the densest group in the entire audit.
+
+### Reuses
+V30's cleared checklist as the working discipline for this version; `deploying/
+deployment-configuration.mdx` and `deploying/environment-variables.mdx` (already the
+canonical *concept* guides — this page is the *command* reference, cross-linked not
+duplicated).
+
+### Implement
+- Split per Era 2 V6: given 19+ distinct subcommands and the size, group into a config
+  overview + lifecycle (add/remove/list/show/inspect) + tuning (`resources`, `replicas`,
+  `health`, `network`, `volume`, `bind`, `host`) + advanced (`schema`, `sync`, `builder`,
+  `validate`) — split seams confirmed against the actual inventory rows, not guessed.
+- `schema` is the single highest-risk subcommand name in this whole family — verify exactly
+  what it prints before writing a word (a JSON-schema-for-validation output is fine to
+  document; anything resembling the internal deployment-contract schema itself is not,
+  per `CLAUDE.md` directly). This determination gates whether `schema` gets a full page
+  section or a minimal "advanced/internal use" note.
+- `sync` and `validate`: document observable outcomes (what changed, what passed/failed)
+  without describing the reconciliation/matching logic behind either.
+
+### Validate
+- `schema`'s treatment is the result of an explicit source check, documented in the
+  redaction-log-style artifact from V30, not assumed safe by category.
+- Every other subcommand passes the standard checklist.
+
+### Done when
+`config`'s inventory rows are `documented` (or explicitly, narrowly restricted where the
+disclosure check requires it), with the `schema` decision specifically recorded.
+
+---
+
+## V32 — `state`/`statecmd` (new)
+
+### Goal
+Document `apply`, `drift`, `history`, `pull`, `rollback`, `status` — the family whose name
+alone (`state`) is the most disclosure-sensitive in the roadmap.
+
+### Reuses
+V30/V31's discipline; the docs.txt worked example directly ("we can explain exactly what
+`--wait` waits for and what happens on timeout without describing the internal job system")
+as the literal template for this family: explain what `drift` *shows the user* (a list of
+differences), never how it's computed (a diff against an internal desired-state
+representation).
+
+### Implement
+- `drift`: document as "shows what has changed since your last deploy/apply, one row per
+  difference" — stop there. No mention of a reconciler, an internal state store, or a
+  contract format.
+- `apply`/`rollback`: consequences are the most important section here (Invariant 4) —
+  what changes, whether it's reversible, what a partial-failure looks like — all stated at
+  the observable level.
+- `history`/`pull`/`status`: straightforward read commands, lower risk, still checked.
+
+### Validate
+- Every sentence in `drift`'s description specifically re-checked against the docs.txt
+  `--wait` example as the calibration standard.
+- `apply`/`rollback` consequences source-verified, not assumed.
+
+### Done when
+`state`/`statecmd` fully `documented`, with `drift` as the era's clearest demonstration that
+thorough and safe are compatible when the checklist is applied deliberately.
+
+---
+
+## V33 — `projectconfig`, `projectcontext`, `projectcontract` (remaining), `route`, `reconcilecmd`
+
+### Goal
+Close the remaining Era 9 groups, applying the same discipline established in V30–V32.
+
+### Reuses
+The V30 redaction-log pattern; V31/V32's split and framing decisions as precedent for
+similarly-named commands.
+
+### Implement
+- `projectconfig`/`projectcontext`: likely project-scoped variants of `config` (13 and 2
+  files respectively) — verify the actual relationship to top-level `config` (V31) before
+  writing, to avoid duplicating or contradicting it.
+- `projectcontract` remaining subcommands not already covered by `contract.mdx`
+  (`containers`, `delete`, `diff`, `plan`, `pull`, `push`, `rollback`, `status`) — same
+  observable-outcome-only framing as `state`/`statecmd`; `plan` in particular (a term that
+  usually implies "show what would happen") is documented as exactly that from the user's
+  view, not as an internals preview.
+- `route`: `Use: "route"` with `inspect <domain>` — small, verify scope (routing-table
+  inspection is disclosure-adjacent per the `edge`/`cloud` precedent in Era 6 — same
+  discipline applies).
+- `reconcilecmd`: the name is the most direct trade-secret-adjacent term in the roadmap —
+  verify first whether this command even belongs in public docs at all (candidate for
+  "internal/operator-only, excluded" rather than documented, pending the same kind of
+  classification Era 10 applies elsewhere) before drafting anything.
+
+### Validate
+- `reconcilecmd`'s public-vs-excluded decision is explicit and justified, not defaulted to
+  "document everything."
+- Every remaining group in this era passes the disclosure checklist.
+
+### Done when
+Era 9 closes with the highest-risk vocabulary in the entire CLI fully resolved — either
+documented at the observable level only, or explicitly and justifiably excluded — and zero
+`unresolved` rows remain for this family in the V1 inventory.

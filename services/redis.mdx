@@ -1,0 +1,58 @@
+---
+title: "Redis"
+sidebarTitle: "Redis"
+description: "Provision a managed Redis cache or data store, including cluster and sentinel modes."
+icon: "layer-group"
+---
+
+Redis is an in-memory cache and data store — commonly used for caching, session storage,
+queues, and rate limiting.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    6, 7 (default) — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Modes" icon="circle-nodes">
+    Single instance, cluster, or sentinel — see [Higher availability](#higher-availability)
+    below.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-cache --type redis
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-cache --env-prefix REDIS
+```
+
+Your application receives a connection string as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-cache
+beaver service resize paperclip-cache --cpu 1 --memory 512
+```
+
+## Higher availability
+
+For workloads that need more than a single instance, Redis is also available as a
+**cluster** or **sentinel** deployment, provisioned the same way as any other cluster:
+
+```bash
+beaver service cluster create paperclip-cache --type redis-cluster --replicas 3
+```
+
+See [Service clusters](/concepts/service-clusters) for when a cluster is worth the extra
+members, and member health/resizing/replacement once you have one.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

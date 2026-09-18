@@ -1,0 +1,109 @@
+# Era 8 — Services Core (V26–V28)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all three pages written new — `concepts/services.mdx` (V26, adapted
+directly from the Era 2 V4 filled example, switched from the template's "acme-api" example
+to the shared `paperclip`/`paperclip-db` vocabulary for consistency with every other page),
+`concepts/service-databases-and-credentials.mdx` (V27), `concepts/service-clusters.mdx`
+(V28). No `guides/services-workflow.mdx` exists yet (the example template's placeholder
+link) — `services.mdx`'s own "Next steps" links to the CLI reference directly instead of a
+non-existent guide, rather than leaving a broken link.
+
+Covers T19–T21: Services, Service databases and credentials, Service clusters. This is the
+exact worked example `concepts-explained.txt` itself uses ("For Services, users need to
+understand what connecting PostgreSQL to their application accomplishes and when the
+application can use it. They don't need the internal attachment schema, credential
+provisioning mechanism, or network implementation.") — the Era 2 V4 template's filled
+example is this topic, so this era should read closest to that reference example.
+
+---
+
+## V26 — Services (T19)
+
+### Goal
+New concept page: supported service types and versions, choosing a service, provisioning,
+attaching applications, injected variables, prefixes, redeploy requirements, resizing,
+upgrades, lifecycle actions.
+
+### Reuses
+`cli/service.mdx` (or its Era 7 split pages, per the sibling roadmap's own note that
+`service`'s 46 subcommands will likely need more than one reference page) as the reference
+target; `templates/concept-page-example.mdx` (Era 2 V4) as the direct pattern for this page,
+since that template's worked example *is* Services.
+
+### Implement
+`concepts/services.mdx`: "what connecting PostgreSQL accomplishes" framed exactly as the
+transcript's own example — injected variables as what the user's application receives (a
+connection string appears as an environment variable), when the application can actually
+use it (after a redeploy, if the attachment requires one — stated as a redeploy requirement,
+not why), resizing/upgrades as user-triggered actions with stated consequences. Explicitly
+excludes: attachment schema, credential provisioning mechanism, network implementation —
+named directly in the transcript as the boundary for this exact topic.
+
+### Validate
+Direct comparison against the transcript's own worked instruction (lines 16–17) — this page
+is graded against the user's own stated bar for it, not just the general disclosure test.
+
+### Done when
+Page exists and specifically satisfies the transcript's own worked example for this topic.
+
+---
+
+## V27 — Service databases and credentials (T20)
+
+### Goal
+New concept page: logical databases, application isolation, connection details, credential
+reveal and rotation, detachment vs. access revocation, safe reassignment.
+
+### Reuses
+`cli/service.mdx`'s `database` subcommand family as reference target.
+
+### Implement
+`concepts/service-databases-and-credentials.mdx`: "logical database" explained as a
+user-facing partition inside a service (isolation as an observable property: one
+application's data isn't visible to another's), credential reveal/rotation as user actions
+with stated consequences (rotating invalidates the old value — old connections may need to
+reconnect), detachment vs. revocation as two distinct, clearly named user actions with
+different blast radius (a natural fit for a `<Warning>` per `components.txt` on the
+irreversible one). Checkpoint term kept out: `credential provisioning mechanism` (same one
+named in the transcript for V26, applies here even more directly).
+
+### Validate
+Disclosure pass on credential handling specifically — confirm no mention of how credentials
+are generated, stored, or transmitted internally, only what the user can see/do
+(reveal/rotate/detach).
+
+### Done when
+Page exists; passes disclosure pass.
+
+---
+
+## V28 — Service clusters (T21)
+
+### Goal
+New concept page: when a cluster is useful, supported configurations, member health,
+availability limitations, resizing, upgrades, replacing lost members, recovering partial
+operations.
+
+### Reuses
+`cli/service.mdx`'s `cluster` subcommand family as reference target.
+
+### Implement
+`concepts/service-clusters.mdx`: "when a cluster is useful" as the opening problem/when
+section (Invariant 3) rather than assuming the reader already wants one, member health as
+observable per-member states, "replacing lost members" and "recovering partial operations"
+as user-facing recovery procedures stated at outcome level (what the user runs/sees), not
+the replication/consensus mechanism behind cluster health (an implicit checkpoint concern
+even though not separately named in the addendum — flag it there if drafting surfaces
+language needing it).
+
+### Validate
+Disclosure pass; if drafting finds cluster-health language needs a named checkpoint term not
+yet in `DISCLOSURE-ADDENDUM.md`, add it there (Era 2's addendum is not assumed exhaustive —
+this is the mechanism for extending it as real topics surface real risk).
+
+### Done when
+Page exists; addendum updated if a new checkpoint term was needed; closes Era 8.

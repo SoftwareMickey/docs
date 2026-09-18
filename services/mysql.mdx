@@ -1,0 +1,50 @@
+---
+title: "MySQL"
+sidebarTitle: "MySQL"
+description: "Provision a managed MySQL database and attach it to your application."
+icon: "database"
+---
+
+MySQL is a widely-used relational database — a common choice for applications already built
+around the MySQL ecosystem or its tooling.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    8.0 (default), 8.4 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Logical databases" icon="table">
+    One service can host multiple isolated databases, one per attached application.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-db --type mysql
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-db --env-prefix DATABASE
+```
+
+Your application receives a connection string as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-db
+beaver service backup paperclip-db
+beaver service resize paperclip-db --cpu 2 --memory 2048
+```
+
+See [Service databases and credentials](/concepts/service-databases-and-credentials) for
+reveal/rotate/detach behavior, and [Backups and restoration](/concepts/backups-and-restoration)
+for scheduling and restoring.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

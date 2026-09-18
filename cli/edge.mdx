@@ -1,19 +1,249 @@
 ---
 title: "beaver edge"
-description: "Manage Connected Apps for external services."
+sidebarTitle: "edge"
+description: "Front an external service with a Connected App: domain, firewall, traffic, and logs."
+icon: "globe"
 ---
+
+<Info>
+  New here? [Edge and performance controls](/concepts/edge-and-performance-controls) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+A **Connected App** fronts an existing external service (one not necessarily deployed by
+Beaver) behind a domain, giving it Beaver's edge firewall, traffic visibility, and logs.
+`beaver edge` manages Connected Apps end to end — from adding one to configuring its
+app-level firewall.
+
+## Connected Apps
+
+| Subcommand | Purpose |
+| --- | --- |
+| `apps` | List Connected Apps. |
+| `app add` | Connect a new app. |
+| `app show <connected-app-id>` | Show one app's detail. |
+| `app update <connected-app-id>` | Update an app's settings. |
+| `app remove <connected-app-id>` | Disconnect an app. |
+| `app verify <connected-app-id>` | Re-check domain and origin verification. |
+| `app rotate-secret <connected-app-id>` | Rotate the app's shared secret. |
+| `app origin-protection <connected-app-id>` | Show origin-protection status. |
+| `app origin-protection-recheck <connected-app-id>` | Re-check origin protection. |
+
+<ParamField query="--domain" type="string" default="" required>
+  On `app add`: domain to connect. Required.
+</ParamField>
+<ParamField query="--origin" type="string" default="" required>
+  On `app add`: your origin server's URL. Required.
+</ParamField>
+<ParamField query="--allow-insecure-origin" type="boolean" default="false">
+  On `app add`: acknowledge an `http://` origin — traffic between Beaver's edge and your
+  origin won't be encrypted.
+</ParamField>
+<ParamField query="--preserve-host-header" type="boolean" default="false">
+  On `app add`/`app update`: forward the original `Host` header to your origin instead of
+  rewriting it.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `app remove`/`app rotate-secret`: skip the confirmation prompt.
+</ParamField>
+
+<Warning>
+  `--allow-insecure-origin` sends traffic between Beaver's edge and your origin server
+  unencrypted. Only use it if your origin genuinely can't serve HTTPS.
+</Warning>
+
+## Backends
+
+A Connected App can front more than one backend origin (for load balancing or failover).
+
+| Subcommand | Purpose |
+| --- | --- |
+| `backends <connected-app-id>` | List an app's backends. |
+| `backend add <connected-app-id>` | Add a backend. |
+| `backend remove <connected-app-id> <backend-id>` | Remove a backend. |
+| `backend import <connected-app-id>` | Import auto-detected services on a machine as backends. |
+| `detected-services <machine-id>` | List services detected on a machine that could be imported. |
+
+<ParamField query="--address" type="string" default="" required>
+  On `backend add`: `host:port`. Required.
+</ParamField>
+<ParamField query="--weight" type="integer" default="1">
+  On `backend add`: load-balancing weight.
+</ParamField>
+<ParamField query="--enabled" type="string" default="true">
+  On `backend add`: `true` or `false`.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `backend remove`: skip the confirmation prompt.
+</ParamField>
+<ParamField query="--detected-service-id" type="string" default="">
+  On `backend import`: a detected service ID to import. Repeatable.
+</ParamField>
+
+## Traffic, logs & speed
+
+| Subcommand | Purpose |
+| --- | --- |
+| `traffic <connected-app-id>` | Traffic summary. |
+| `logs <connected-app-id>` | Request logs. |
+| `speed <connected-app-id>` | Show performance/acceleration settings. |
+| `speed set <connected-app-id>` | Change performance/acceleration settings. |
+
+<ParamField query="--range" type="string" default="24h">
+  On `traffic`: time range — `1h`, `6h`, `24h`, `7d`, or `30d`.
+</ParamField>
+<ParamField query="--limit" type="integer" default="100">
+  On `logs`: results per page (max 500).
+</ParamField>
+<ParamField query="--page" type="integer" default="1">
+  On `logs`: page number.
+</ParamField>
+<ParamField query="--enabled" type="string" default="" required>
+  On `speed set`: `true` or `false`. Required.
+</ParamField>
+
+## Edge firewall
+
+`beaver edge firewall` is the **app-scoped mirror of [`beaver firewall`](/cli/firewall)** —
+same rule/policy model, applied to one Connected App's public traffic instead of a machine.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `firewall` | Show a Connected App's firewall overview, policy, intel, and active bans. |
+| `firewall set <connected-app-id>` | Change the app's firewall policy. |
+| `firewall rule add/update/delete <connected-app-id>` | Manage individual rules. |
+| `firewall revisions <connected-app-id>` | Firewall change history. |
+| `firewall rollback <connected-app-id> <revision-id>` | Roll back to a previous revision. |
+| `firewall preset apply <connected-app-id>` | Apply a security-level preset or app template. |
+| `firewall ban <connected-app-id>` / `unban <connected-app-id> <ip>` | Ban or unban an IP. |
+| `firewall login-protect <connected-app-id>` | Configure brute-force protection on a login path. |
+| `firewall lockdown <connected-app-id>` / `unlock <connected-app-id>` | Block, or restore, all traffic to the app. |
+
+<ParamField query="--enabled" type="string" default="">
+  On `firewall set`: `true` or `false`.
+</ParamField>
+<ParamField query="--level" type="string" default="">
+  On `firewall set`: `off`, `basic`, `standard`, or `strict`.
+</ParamField>
+<ParamField query="--security-headers" type="string" default="">
+  On `firewall set`: `true` or `false`.
+</ParamField>
+<ParamField query="--concurrency" type="integer" default="0">
+  On `firewall set`: max concurrent requests.
+</ParamField>
+<ParamField query="--type" type="string" default="" required>
+  On `firewall rule add`: condition type — `ip`, `path`, `method`, `query`, or `header`.
+  Required.
+</ParamField>
+<ParamField query="--action" type="string" default="" required>
+  On `firewall rule add`: `allow`, `block`, `rate-limit`, or `challenge`. Required.
+</ParamField>
+<ParamField query="--value" type="string" default="">
+  On `firewall rule add`: condition value.
+</ParamField>
+<ParamField query="--priority" type="integer" default="0">
+  On `firewall rule add`: rule priority — **lower runs first**.
+</ParamField>
+<ParamField query="--name" type="string" default="">
+  On `firewall rule add`: rule name.
+</ParamField>
+<ParamField query="--method" type="string" default="">
+  On `firewall rule add`: HTTP method to match — only used when `--type method`.
+</ParamField>
+<ParamField query="--conditions" type="string" default="">
+  On `firewall rule update`: replacement conditions, as raw JSON.
+</ParamField>
+<ParamField query="--preset" type="string" default="">
+  On `firewall preset apply`: `off`, `basic`, `standard`, or `strict`.
+</ParamField>
+<ParamField query="--template" type="string" default="">
+  On `firewall preset apply`: `static-website`, `rest-api`, `admin-dashboard`,
+  `auth-service`, or `webhook-endpoint`.
+</ParamField>
+<ParamField query="--ip" type="string" default="" required>
+  On `firewall ban`: IP address to ban. Required.
+</ParamField>
+<ParamField query="--duration" type="integer" default="">
+  On `firewall ban`: ban duration in minutes. Defaults to the server default.
+</ParamField>
+<ParamField query="--reason" type="string" default="">
+  On `firewall ban`: reason for the ban, recorded alongside it.
+</ParamField>
+<ParamField query="--path" type="string" default="" required>
+  On `firewall login-protect`: login path to protect. Required.
+</ParamField>
+<ParamField query="--rate-limit" type="integer" default="">
+  On `firewall login-protect`: requests per minute before rate-limiting.
+</ParamField>
+<ParamField query="--threshold" type="integer" default="">
+  On `firewall login-protect`: failed attempts before banning.
+</ParamField>
+<ParamField query="--ban-minutes" type="integer" default="">
+  On `firewall login-protect`: ban duration in minutes.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `firewall rule delete`/`firewall unban`/`firewall lockdown`: skip the confirmation
+  prompt.
+</ParamField>
+
+More specific rules take precedence via `--priority` (lower runs first); beyond that, rule
+ordering and evaluation is not otherwise exposed here.
+
+<Warning>
+  `firewall lockdown` blocks **all** traffic to the Connected App, not just traffic matching a
+  rule. Use it for an active incident; run `firewall unlock` to restore normal traffic.
+</Warning>
+
+## Consequences
+
+`app remove` disconnects the app and stops Beaver's edge from fronting it — your origin
+server itself is untouched. `app rotate-secret` invalidates the previous shared secret
+immediately; anything still using the old one stops authenticating. `firewall rollback`
+reverts the app's firewall configuration to a prior revision, replacing whatever is currently
+set.
 
 ## Examples
 
-```bash
-beaver edge apps
-beaver edge app add
-beaver edge app show <connected-app-id>
-beaver edge app verify <connected-app-id>
-beaver edge backends <connected-app-id>
-beaver edge logs <connected-app-id>
-beaver edge traffic <connected-app-id>
-beaver edge firewall --help
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Connect an app
+beaver edge app add --domain paperclip.example --origin https://origin.internal:8080
 ```
 
-Connected Apps front an existing external service. Verify its domain and origin before making it public.
+```bash Verify and check traffic
+beaver edge app verify app_abc123
+beaver edge traffic app_abc123 --range 7d
+```
+
+```bash Apply a firewall preset
+beaver edge firewall preset apply app_abc123 --preset standard
+```
+
+```bash Add a rate-limit rule
+beaver edge firewall rule add app_abc123 --type path --value /api --action rate-limit --priority 10
+```
+
+```bash Emergency lockdown
+beaver edge firewall lockdown app_abc123 --yes
+beaver edge firewall unlock app_abc123
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `app add` success | The new Connected App, pending verification | Run `app verify` once DNS/origin are ready. |
+| `app verify` fails | The specific unmet requirement (DNS, origin reachability) | Fix it and re-run `app verify`. |
+| `firewall rule add` missing `--type`/`--action` | Required-flag error | Pass both. |
+| `firewall lockdown` declined | Command exits without change | App traffic continues normally. |
+
+## Used in
+
+- [`firewall`](/cli/firewall) — the machine-level counterpart this mirrors at the app level.

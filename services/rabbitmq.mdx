@@ -1,0 +1,45 @@
+---
+title: "RabbitMQ"
+sidebarTitle: "RabbitMQ"
+description: "Provision a managed RabbitMQ message broker and attach it to your application."
+icon: "right-left"
+---
+
+RabbitMQ is a message broker — used for task queues, work distribution, and decoupling
+services via publish/subscribe or point-to-point messaging.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    3.13 (default), 4.0 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance by default; check `beaver service cluster create` for clustered setups.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-queue --type rabbitmq
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-queue --env-prefix RABBITMQ
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-queue
+beaver service resize paperclip-queue --cpu 1 --memory 512
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>

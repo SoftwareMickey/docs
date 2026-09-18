@@ -1,0 +1,124 @@
+# Era 5 — Projects & Configuration (V14–V17)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** `concepts/projects.mdx` (V14), `concepts/configuration.mdx` (V15,
+two-pass disclosure applied), and `concepts/building-applications.mdx` (V17) written new. V16
+(Environments and variables) resolved per Era 1's classification: `deploying/environment-variables.mdx`
+already covers this topic adequately (redeploy triggers, secrets handling) — no content
+change needed at Phase 2 altitude; promoting it into the Concepts nav group is Era 12's job,
+not this era's. Every page's "Projects"/"Configuration" cross-link verified to resolve.
+
+Covers T9–T12: Projects, Configuration, Environments and variables, Building applications.
+
+---
+
+## V14 — Projects (T9)
+
+### Goal
+New concept page: creating/selecting projects, linking a local repository, accepted names
+and IDs, multiple applications in one project, deletion consequences.
+
+### Reuses
+`cli/project.mdx` as reference target; links back to `how-beaver-fits-together.mdx` (V6)
+and forward to Integrations (V10) for the repo-linking sub-topic rather than re-explaining it.
+
+### Implement
+`concepts/projects.mdx` per template. Deletion consequences stated plainly (what's
+irreversible) — this page is a natural candidate for a `<Warning>` component per
+`components.txt`.
+
+### Validate
+No duplication with V10's repo-linking content — one explanation, cross-linked.
+
+### Done when
+Page exists.
+
+---
+
+## V15 — Configuration (T10)
+
+### Goal
+New concept page: what belongs in `.beaver/`, the supported YAML fields at a conceptual
+level, local vs. stored configuration, push/pull/status, revisions, conflicts, backups, and
+how operational commands (deploy, scale, etc.) affect configuration.
+
+### Reuses
+`cli/config.mdx` as reference target. This is flagged in the sibling roadmap's own inventory
+as the **highest flag-density family** (55 flag sites) — this concept page must stay at
+"what a config revision is and why you'd care," never drift into field-by-field syntax,
+which is exactly what `cli/config.mdx` (or its Era 9 split pages) already owns.
+
+### Implement
+`concepts/configuration.mdx`: local-vs-stored as the core mental model, what a "conflict"
+means to a user (two sides differ; here's how you see that) without describing the
+diff/reconcile mechanism (checkpoint terms: `reconcile`, `drift`, `desired state` — same
+list as the sibling roadmap's `DISCLOSURE.md`, directly relevant here since `config` and
+`statecmd`/`projectcontract` share this vocabulary).
+
+### Validate
+Two-read disclosure pass — this page sits directly adjacent to the sibling roadmap's
+highest-disclosure-risk families (`statecmd`, `projectcontract`, Era 9 there).
+
+### Done when
+Page exists, stays at concept altitude (Invariant 1), passes two-read disclosure.
+
+---
+
+## V16 — Environments and variables (T11)
+
+### Goal
+New concept page: separating dev/staging/production, override precedence, `.env` files,
+remote variables, handling secrets, when changes require a redeploy.
+
+### Reuses
+`deploying/environment-variables.mdx` (already exists under "Deploying with Docker") as the
+closest existing content — check whether it's task-guide-shaped or already concept-shaped;
+if the latter, this may be a **merge target promoted into the new Concepts group** rather
+than a net-new page (a live classification refinement to confirm at write time, logged here
+either way).
+
+### Implement
+Either extend `deploying/environment-variables.mdx` in place and link it from the new
+Concepts group's index, or write `concepts/environments-and-variables.mdx` and have
+`deploying/environment-variables.mdx` link up to it for the conceptual framing while keeping
+its own Docker-build-specific detail. Decide based on the actual gap found, not guessed here.
+
+### Validate
+No duplicate "what is an environment variable override" explanation across two pages.
+
+### Done when
+The precedence rules and redeploy-trigger conditions are explained once, at concept level,
+and linked from wherever a user would land looking for either page.
+
+---
+
+## V17 — Building applications (T12)
+
+### Goal
+New concept page: supported runtimes/frameworks (Docker-required, bring-your-own-Dockerfile
+model per `CLAUDE.md`'s current positioning), build context and paths, image naming,
+private images, builder selection, diagnosing build failures — at concept level.
+
+### Reuses
+`deploying/dockerfile-requirements.mdx`, `languages/*.mdx`, `runtimes/*.mdx`,
+`frameworks/*.mdx` — all already reflect the current "Dockerfile required" model per
+`CLAUDE.md`. This page is the connective "why Dockerfile-first, what that means for you"
+explanation those pages individually assume the reader already has.
+
+### Implement
+`concepts/building-applications.mdx`: states the bring-your-own-Dockerfile model plainly
+(this is product positioning, already public, not a disclosure risk), links to
+`deploying/dockerfile-requirements.mdx` for the exact requirements and to the relevant
+`languages/*.mdx` page per stack. Diagnosing build failures section stays at the observable
+level (what error classes look like to a user) and links to Troubleshooting (T33, Era 11)
+rather than duplicating recovery steps.
+
+### Validate
+Confirms no auto-detection/auto-dockerization language leaks in (the CLAUDE.md-flagged
+previous-model language) — a straightforward correctness check, not a disclosure check.
+
+### Done when
+Page exists and correctly reflects current (not historical) product positioning.

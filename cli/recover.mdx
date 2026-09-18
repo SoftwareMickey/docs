@@ -1,14 +1,99 @@
 ---
 title: "beaver recover"
-description: "Diagnose a service and optionally apply a safe recovery action."
+sidebarTitle: "recover"
+description: "Diagnose a service and, if safe, roll back or restart it."
+icon: "life-ring"
 ---
+
+<Info>
+  New here? [Rollback, promotion, and recovery](/concepts/rollback-promotion-and-recovery) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver recover` when a deployed service is behaving badly and you want a diagnosis
+before deciding what to do. It always starts with a read-only diagnosis — a Finding,
+Evidence, Impact, and a suggested safe next step — then, only if you ask for it, offers to
+roll back to the last healthy release or restart the running container.
+
+## Syntax
+
+```bash
+beaver recover [service] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name within the current project. Omit to resolve the project's default service. |
+
+## Flags
+
+<ParamField query="--explain" type="boolean" default="true">
+  Diagnose only — the default behavior with no flags. This flag exists for explicitness in
+  scripts; it never mutates anything.
+</ParamField>
+<ParamField query="--rollback" type="boolean" default="false">
+  After diagnosing, if a safe target release can be identified, ask to confirm rolling back
+  to it.
+</ParamField>
+<ParamField query="--restart" type="boolean" default="false">
+  After diagnosing, ask to confirm restarting the running container. Only applies to
+  agent-hosted services.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt on `--rollback`/`--restart`. See [shared
+  flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+`recover` with no action flag (or `--explain`) never changes anything — it's always safe to
+run. `--rollback` and `--restart` both print the diagnosis first, then require confirmation
+(unless `--yes`) before making any change; neither reports success until the action has
+actually reached a real terminal result — a rollback that's still in progress is not reported
+as done early.
+
+<Warning>
+  `--rollback` only proceeds if a safe target release is identifiable from your deployment
+  history. It restores the previous release's running state — it does not restore data or
+  anything outside the deployed container itself.
+</Warning>
+
+`--restart` restarts the running container in place; it does not roll back to a different
+release, and only works for agent-hosted services.
 
 ## Examples
 
-```bash
-beaver recover [service] --explain
-beaver recover [service] --restart [--yes]
-beaver recover [service] --rollback
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Diagnose only (default)
+beaver recover
+beaver recover api --explain
 ```
 
-Diagnosis is read-only by default. `--restart` and `--rollback` request a recovery action and may prompt for confirmation.
+```bash Roll back after diagnosis
+beaver recover api --rollback
+```
+
+```bash Restart without prompting
+beaver recover api --restart --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Diagnosis only | Finding / Evidence / Impact / Safe next step | Decide whether `--rollback` or `--restart` applies. |
+| `--rollback` with no safe target | Diagnosis with no rollback offer | No safe previous release exists to roll back to. |
+| `--restart` on a non-agent-hosted service | An error explaining restart isn't available | Use whichever recovery path applies to that hosting type. |
+| Action declined | Command exits without change | Nothing changed. |
+
+## Used in
+
+- [Rollback and recovery](/guides/rollback-and-recovery) — the full recovery decision guide.

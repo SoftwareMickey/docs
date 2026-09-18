@@ -1,0 +1,54 @@
+---
+title: "Projects"
+description: "A project groups one application's environments, deployments, and services — the unit almost everything else nests inside."
+sidebarTitle: "Projects"
+icon: "folder"
+---
+
+A **project** groups everything for one application: its environments, deployments, and any
+services attached to it. It's the unit most other concepts nest inside — see [How Beaver
+fits together](/concepts/how-beaver-fits-together) for the full tree.
+
+```bash
+beaver project list
+beaver project show <project-id>
+```
+
+## Why this matters
+
+Once you have more than one application, keeping their environments and services from
+bleeding into each other matters — a `staging` environment in one project has nothing to do
+with a `staging` environment in another. The project boundary is what keeps that clean, and
+it's usually the first thing you create.
+
+## What you can see and control
+
+A project can hold multiple deployable applications (containers) under one shared set of
+environments. You can link it to a local directory or a connected GitHub repository — either
+way, `beaver project show` gives you the ID you'll reference everywhere else.
+
+## Deleting a project is permanent
+
+<Warning>
+  This is a hard delete, not an archive. Every container and deployment inside the project
+  is removed along with their Docker networks, and none of it can be recovered afterward.
+  Containers keep running on their host machines until Beaver's own cleanup catches up — the
+  delete itself doesn't stop them first.
+</Warning>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="How Beaver fits together" href="/concepts/how-beaver-fits-together">
+    Where a project sits in the overall structure.
+  </Card>
+  <Card title="Environments and variables" href="/deploying/environment-variables">
+    What lives inside a project's environments.
+  </Card>
+  <Card title="Integrations" href="/concepts/integrations">
+    Linking a project to a GitHub repository.
+  </Card>
+  <Card title="Project command reference" href="/cli/project">
+    Exact syntax for list, show, create, and delete.
+  </Card>
+</CardGroup>

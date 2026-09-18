@@ -1,0 +1,54 @@
+---
+title: "Deployments"
+description: "A deployment is one service running in one environment — deploying is shipping a new build to it, with your choice of how the switch happens."
+sidebarTitle: "Deployments"
+icon: "rocket"
+---
+
+A **deployment** is one service running in one environment. Deploying is the act of shipping
+a new build — or the same build again — to that environment.
+
+```bash
+beaver deploy
+```
+
+## What happens when you run `beaver deploy`
+
+Every deployment runs in a Beaver Cloud. If you do not name a destination, Beaver uses
+your project's saved cloud or asks you to select one. If you have no cloud, create one with
+`beaver cloud create production` and add your machines before deploying. Ports, health checks, and restart policy come from your
+`.beaver/config.yml` (see [Configuration](/concepts/configuration)) unless you override them
+at deploy time. You can watch the deployment progress through visible states, or let the
+command return immediately and check later — your choice, via flags (see
+[Automation](/concepts/automation)).
+
+## The strategy tradeoff, made visible
+
+A **rolling** strategy keeps the previous version reachable until the new one passes its
+health check — there's never a gap where nothing is serving traffic. A **recreate** strategy
+stops the old version first, then starts the new one. Which one applies is something you
+set, not something decided for you.
+
+## If it fails
+
+A failed deployment doesn't roll back automatically. Under rolling, the previous version
+keeps running; under recreate, it stays down — either way, nothing changes further until you
+take an explicit recovery action. See [Rollback, promotion, and
+recovery](/concepts/rollback-promotion-and-recovery).
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Deploy workflow" href="/guides/deploy-workflow">
+    Walk the full outcome, start to finish.
+  </Card>
+  <Card title="Containers and replicas" href="/concepts/containers-and-replicas">
+    What a deployment actually runs as once live.
+  </Card>
+  <Card title="Preflight and planning" href="/concepts/preflight-and-planning">
+    Checks you can run before deploying.
+  </Card>
+  <Card title="Deploy command reference" href="/cli/deploy">
+    Exact syntax and flags.
+  </Card>
+</CardGroup>

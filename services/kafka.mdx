@@ -1,0 +1,59 @@
+---
+title: "Kafka"
+sidebarTitle: "Kafka"
+description: "Provision a managed Kafka cluster for event streaming."
+icon: "right-left"
+---
+
+Kafka is a distributed event-streaming platform — used for high-throughput messaging,
+event pipelines, and decoupling services that need to publish and subscribe to streams of
+events.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    Run `beaver service catalog` for the current supported version.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Provisioned as a multi-member cluster — see below.
+  </Card>
+</CardGroup>
+
+## Add it
+
+```bash
+beaver service create paperclip-queue --type kafka
+```
+
+For a multi-broker setup, provision it as a cluster instead:
+
+```bash
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+```
+
+Replica count must be odd and at least 3.
+
+## Attach it
+
+```bash
+beaver service attach paperclip-web --database paperclip-queue --env-prefix KAFKA
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service cluster show paperclip-queue
+beaver service cluster resize paperclip-queue --replicas 5
+beaver service cluster upgrade paperclip-queue --version 3.8
+```
+
+`cluster upgrade` upgrades every member in index order, waiting for each to become healthy
+before moving to the next. See [Service clusters](/concepts/service-clusters) for member
+health, resizing, and replacing a lost member.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`/`beaver service cluster`, exact syntax.
+</Card>

@@ -1,0 +1,99 @@
+# Era 9 — Data Persistence (V29–V31)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all three pages written new — `concepts/persistent-storage.mdx`
+(V29, highest-stakes accuracy requirement — the destructive-action warning matches
+`cli/config.mdx`'s own verified volume/bind behavior exactly), `concepts/backups-and-restoration.mdx`
+(V30), `concepts/connecting-to-services-locally.mdx` (V31). The reference-target question
+Era 1 left open (gap 001, now gap 001 in this file's own log) is resolved: `beaver service
+connect` (source-verified against `commands/service/connect.go` via `cli/service.mdx`'s
+already-accurate coverage) is the correct target.
+
+Covers T22–T24: Persistent storage, Backups and restoration, Connecting to services locally.
+
+---
+
+## V29 — Persistent storage (T22)
+
+### Goal
+New concept page: volumes vs. bind mounts, external storage requirements, placement
+restrictions, what survives deletion, which actions permanently destroy data.
+
+### Reuses
+Whichever `cli/*.mdx` page(s) cover volumes (likely under `config` per the sibling
+roadmap's inventory noting `config` includes a `volume` subgroup) as reference target.
+Links to Containers and replicas (V20) for "what survives a restart or replacement," which
+that page already states — cross-link, don't repeat.
+
+### Implement
+`concepts/persistent-storage.mdx`: volume-vs-bind-mount as a clear either/or with when to
+use each, "placement restrictions" stated as user-facing constraints (e.g., a volume may tie
+a workload to a specific machine — stated as a consequence, not why the constraint exists),
+"which actions permanently destroy data" as an explicit, prominent list — a strong
+`<Warning>` candidate per `components.txt`, since this is exactly the kind of irreversible
+consequence Invariant 4 (of the master architecture doc) requires stating plainly.
+
+### Validate
+Every "permanently destroys data" claim verified against actual behavior (Invariant 1) —
+this is the single highest-stakes accuracy requirement in the whole roadmap; an
+under-stated destructive action is a support/trust incident, not just a doc gap.
+
+### Done when
+Page exists; destructive-action list independently verified, not assumed from memory of how
+similar systems work.
+
+---
+
+## V30 — Backups and restoration (T23)
+
+### Goal
+New concept page: manual/scheduled backups, retention, destinations, backup status,
+restoring into a new service, restore compatibility, verifying recovered data.
+
+### Reuses
+`cli/service.mdx`'s `backup-destination` subgroup as reference target.
+
+### Implement
+`concepts/backups-and-restoration.mdx`: retention and scheduling as user-configured settings
+with stated defaults, "restore compatibility" as an explicit constraint list (what you can
+and can't restore into), "verifying recovered data" as a stated post-restore step users
+should take — this closes the loop the topic itself names (a restore isn't done until
+verified). Checkpoint term kept out: `backup encoding/format internals` (from
+`DISCLOSURE-ADDENDUM.md`).
+
+### Validate
+Disclosure pass on encoding/format language; cross-check restore-compatibility claims
+against actual supported paths (Invariant 1).
+
+### Done when
+Page exists; passes disclosure pass.
+
+---
+
+## V31 — Connecting to services locally (T24)
+
+### Goal
+New concept page: supported connection/tunnel workflows, prerequisites, connection
+lifetime, local client examples, troubleshooting connectivity.
+
+### Reuses
+Whichever `cli/*.mdx` covers local service connections/tunneling (check the sibling
+roadmap's inventory for the exact command family at write time — not yet fixed here) as
+reference target.
+
+### Implement
+`concepts/connecting-to-services-locally.mdx`: connection lifetime stated as an observable
+property (how long a tunnel stays open, what ends it), local client examples using the
+shared fictional vocabulary (Era 2 V4) so this page's examples match every other page's,
+troubleshooting section linking to Troubleshooting (T33, Era 11) for the general
+symptom-based flow rather than duplicating it here.
+
+### Validate
+Confirms the reference-target command family exists and is named correctly (a small
+verification step given this target wasn't fixed in Era 1's cross-reference).
+
+### Done when
+Page exists; reference link resolves to a real, correctly-named target; closes Era 9.

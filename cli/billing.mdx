@@ -1,15 +1,115 @@
 ---
 title: "beaver billing and plans"
-description: "Manage workspace plans, checkout, subscriptions, and payments."
+sidebarTitle: "billing"
+description: "Manage this workspace's plan, checkout, subscription, and payment history."
+icon: "credit-card"
 ---
+
+<Info>
+  New here? [Plans and billing](/concepts/plans-and-billing) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver billing` manages your workspace's paid plan — checking out to upgrade, cancelling a
+subscription, downgrading back to Hobby, and reviewing payment history.
+[`beaver plans`](/cli/plans) is the standalone command for listing what plans are available;
+`beaver billing` is everything that follows once you've picked one.
+
+## Syntax
+
+```bash
+beaver plans [flags]
+beaver billing <subcommand> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `subscription` | Show this workspace's current subscription. |
+| `checkout` | Start a hosted checkout to upgrade to Developer. |
+| `cancel` | Cancel the subscription's renewal. |
+| `downgrade-hobby` | Move the workspace back to the free Hobby plan. |
+| `payments` | List this workspace's payment history. |
+
+## Flags
+
+### `checkout`
+
+<ParamField query="--cycle" type="string" default="" required>
+  Billing cycle: `monthly` or `yearly`. Required.
+</ParamField>
+<ParamField query="--gateway" type="string" default="" required>
+  Payment gateway: `paystack` or `paypal`. Required.
+</ParamField>
+
+Price and plan are always resolved on the server — these two flags only choose how and how
+often you pay.
+
+### `cancel` / `downgrade-hobby`
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+- **`checkout`** opens a hosted payment page in your browser. The upgrade only takes effect
+  once the payment gateway confirms it — `beaver billing subscription` may take a few seconds
+  to reflect the change after you complete payment.
+- **`cancel`** stops future renewal charges but does **not** immediately revoke Developer
+  access — you keep it until the current billing period ends. This is not a refund.
+- **`downgrade-hobby`** moves the workspace to Hobby (the plan every workspace falls back to
+  with no active paid subscription) immediately.
+
+<Warning>
+  `downgrade-hobby` takes effect immediately, unlike `cancel`, which waits until the current
+  period ends. Confirm which one you mean before running either.
+</Warning>
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List plans
 beaver plans
+```
+
+```bash Check current subscription
 beaver billing subscription
-beaver billing checkout
+```
+
+```bash Upgrade
+beaver billing checkout --cycle monthly --gateway paystack
+```
+
+```bash Cancel renewal
+beaver billing cancel --yes
+```
+
+```bash Payment history
 beaver billing payments
 ```
 
-Checkout opens a hosted payment flow. Billing changes apply to the workspace.
+</CodeGroup>
+
+**Expected output** (`checkout`, reviewed against source):
+
+```text
+Opening: https://checkout.example/session/cs_example
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `checkout` missing flags | `--cycle and --gateway are required` | Pass both flags. |
+| `cancel` success | `✓ <message>` plus `Access until: <date>` | Renewal is off; access continues until that date. |
+| `downgrade-hobby` success | `✓ Now on Hobby` | Workspace is on the free plan immediately. |
+
+## Used in
+
+- [`plans`](/cli/plans) — list plans before upgrading.

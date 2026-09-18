@@ -1,12 +1,74 @@
 ---
 title: "beaver status"
-description: "Compare the declared project configuration with live state."
+sidebarTitle: "status"
+description: "Compare the current project's declared configuration against what's actually running."
+icon: "check-double"
 ---
+
+## Purpose
+
+Run `beaver status` from a project directory to see whether `.beaver/config.yml` (and, with
+`--env`, a named environment's override) matches the real, live state of the deployed
+service — replica count, health check path, and primary domain. This is likely the most
+frequently run diagnostic command in the CLI, so its output fields matter: each row is one
+declared-vs-actual comparison.
+
+## Syntax
+
+```bash
+beaver status [flags]
+```
+
+Takes no arguments — always resolves the current directory to a project.
+
+## Flags
+
+<ParamField query="--env" type="string" default="">
+  Compare against a named environment's override. Falls back to the base config if that
+  environment has never declared one.
+</ParamField>
+<ParamField query="--explain" type="boolean" default="false">
+  Attach a suggested next command to each mismatch found.
+</ParamField>
+
+## Consequences
+
+Read-only — `status` never mutates anything, with or without `--explain`. `--explain`'s
+suggestions point at existing remediation paths (`beaver deploy --env`, `beaver init
+--from-existing`, `beaver recover --explain`) rather than inventing a new command.
 
 ## Examples
 
-```bash
-beaver status [--env <environment>] [--explain]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver status
 ```
 
-Shows configuration drift for the current project. Use `--env` to select an environment and `--explain` to include a suggested next command.
+```bash Against a named environment
+beaver status --env production
+```
+
+```bash With suggested fixes
+beaver status --env production --explain
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| No mismatches | Config and live state agree | Nothing to do. |
+| A mismatch found | The specific field that differs (replicas, health check path, domain) | With `--explain`, follow the suggested command. Otherwise, decide whether to `deploy` (make live match config) or update the config to match live. |
+| Not linked to a project | An error pointing at `beaver deploy` first | Deploy or link the directory to a project. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — verify a deploy landed as declared.
+- The daily observe/recover loop, alongside [`observe`](/cli/observe) and
+  [`recover`](/cli/recover).

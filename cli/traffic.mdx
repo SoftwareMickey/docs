@@ -1,12 +1,100 @@
 ---
 title: "beaver traffic"
-description: "View traffic and request activity for a deployed container."
+sidebarTitle: "traffic"
+description: "Show a deployed container's traffic dashboard: volume, success/error split, latency, and live diagnostics."
+icon: "chart-bar"
 ---
+
+<Info>
+  New here? [Observability](/concepts/observability) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+<Note>
+  `beaver traffic`, [`beaver logs`](/cli/logs), and [`beaver metrics`](/cli/metrics) are
+  three separate top-level commands, not subcommands of a single `observability` parent — no
+  such command exists in the CLI. `latency`, `active`, `live`, and the
+  `requests-per-*`/`*-endpoints` views below are subcommands of `traffic` specifically.
+</Note>
+
+## Purpose
+
+Use `beaver traffic` for a container's traffic dashboard — request volume, success/error
+split, and the detail subcommands below. All of these are read-only.
+
+## Syntax
+
+```bash
+beaver traffic <container> [flags]
+beaver traffic <subcommand> <container>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)* | Traffic dashboard: request volume, success/error rate, and P95 latency, each with its change versus the previous window. |
+| `requests-per-minute` | Requests per minute over the last hour. |
+| `requests-per-day` | Requests per day. |
+| `top-endpoints` | The 10 most-requested endpoints over the last 24h. |
+| `slow-endpoints` | The slowest endpoints over the last 24h (minimum 5 samples). |
+| `status-breakdown` | Status code breakdown over the last 24h. |
+| `bandwidth` | Inbound/outbound bandwidth over the last 14 days. |
+| `latency` | Average/P95/P99/max response latency over the last 24h. |
+| `active` | Current-users/concurrent-requests estimate. |
+| `live` | A live, point-in-time resource snapshot. |
+
+## Flags
+
+<ParamField query="--range" type="string" default="24h">
+  On the base `traffic` command: time range — `1h`, `6h`, `24h`, `7d`, or `30d`.
+</ParamField>
+
+## Live diagnostics
+
+`live` fetches a live CPU/memory/restart-count snapshot straight from the running container —
+unlike the other subcommands, it's not a historical rollup. `active` is an approximation of
+current active traffic derived from recent request logs, not an exact concurrent-connection
+count.
+
+## Consequences
+
+Every subcommand here is a pure read — none of them change anything, regardless of how often
+or in what order you run them.
 
 ## Examples
 
-```bash
-beaver traffic <container>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Dashboard
+beaver traffic api
+beaver traffic api --range 7d
 ```
 
-Use [`beaver observe`](/cli/observe) to view traffic from the current project context.
+```bash Latency and active users
+beaver traffic latency api
+beaver traffic active api
+```
+
+```bash Live snapshot
+beaver traffic live api
+```
+
+```bash Slowest endpoints
+beaver traffic slow-endpoints api
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | The requested traffic view | Nothing further — informational. |
+| `slow-endpoints` with too few samples | Fewer than 5 endpoints shown, or empty | Not enough traffic yet to have a reliable slow-endpoint sample. |
+
+## Used in
+
+- [`observe`](/cli/observe) — a project-aware view covering traffic, metrics, and logs
+  together for the current project's default service.

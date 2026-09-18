@@ -1,0 +1,92 @@
+---
+title: "beaver promote"
+sidebarTitle: "promote"
+description: "Promote the current environment's already-built image to another environment, without rebuilding."
+icon: "arrow-up-right"
+---
+
+<Info>
+  New here? [Rollback, promotion, and recovery](/concepts/rollback-promotion-and-recovery) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver promote` to move a **already-built image** from your current environment (for
+example, staging) to another environment (for example, production) — without triggering a
+new build. This is the reproducibility-preserving path between environments: what you tested
+is exactly what ships, because nothing is rebuilt in between.
+
+Each environment keeps its own [environment variables](/deploying/environment-variables) —
+promoting an image doesn't carry environment-specific configuration with it; the target
+environment's own variables apply.
+
+## Syntax
+
+```bash
+beaver promote <target-environment-name> [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<target-environment-name>` | Yes | An environment name that exists in this project, e.g. `production`. See `beaver environment list`. |
+
+Run from a directory linked to exactly one Beaver project, on a branch already assigned to a
+source environment (deploy it first, or assign one with `beaver environment`, if it isn't).
+
+## Flags
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+Promoting reuses the existing image and starts a new deployment of it in the target
+environment — no rebuild happens. If the target environment is production-like, a banner
+warns you before the confirmation prompt.
+
+<Warning>
+  Promoting to a production-like environment deploys immediately once confirmed — there's no
+  separate staging step for the promotion itself. Double-check the target environment name.
+</Warning>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Promote to production
+beaver promote production
+```
+
+```bash Without the confirmation prompt
+beaver promote production --yes
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+✓ Promotion queued: staging → production
+  Deployment: dep_abc123
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `✓ Promotion queued: <source> → <target>` with a deployment ID | Check `beaver deployment show <id>` for progress. |
+| Unknown target environment | An error listing the project's actual environment names | Use one of the listed names, or create the environment first. |
+| Current branch has no source environment | An error pointing at `beaver environment` or a first deploy | Assign or deploy an environment for this branch first. |
+| Declined | `promotion cancelled` | Nothing changed. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — promotion is the last step of this guide.
+- [Environment variables](/deploying/environment-variables) — each environment's own
+  variables apply after promotion.
+- [`environment`](/cli/environment) — manages which branch maps to which environment.

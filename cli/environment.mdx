@@ -1,15 +1,109 @@
 ---
 title: "beaver environment"
-description: "Manage project environments and container variables."
+sidebarTitle: "environment"
+description: "Create and manage named environments, and sync a container's environment variables with a local .env file."
+icon: "layer-group"
 ---
+
+## Purpose
+
+An environment is a named binding on a project — Development, Staging, Production, or any
+other label you choose — optionally paired with a git branch. `beaver environment` manages
+these bindings; `beaver environment vars` manages one container's actual `KEY=value`
+environment variables against a local `.env` file. Use the first when setting up how your
+project separates deploy targets; use the second day-to-day, to sync secrets and config into
+a running container.
+
+## Syntax
+
+```bash
+beaver environment [list|create|delete] [flags]
+beaver environment vars [list|pull|push|diff] [service] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` (vars subcommands) | No | A container name within the current project; omit when the project has only one. |
+| `<environment-id>` (delete) | Yes | An environment ID, as shown by `list`. |
+
+## Flags
+
+<ParamField query="--user-id" type="string" default="">
+  On `list`: list environments for a different user ID instead of your own account.
+</ParamField>
+<ParamField query="--name" type="string" default="">
+  On `create`: environment name — any lowercase slug, e.g. `testing`, `development`,
+  `staging`, `production`, or a custom one.
+</ParamField>
+<ParamField query="--project-id" type="string" default="">
+  On `create`: project this environment belongs to. Required.
+</ParamField>
+<ParamField query="--branch" type="string" default="">
+  On `create`: git branch to map to this environment. Optional.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `delete`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--file" type="string" default=".env">
+  On `vars pull`/`push`/`diff`: path to the local `.env` file.
+</ParamField>
+<ParamField query="--reveal" type="boolean" default="false">
+  On `vars diff`: print actual values instead of just key names — asks for a second,
+  separate confirmation before printing secrets to your terminal.
+</ParamField>
+
+## Consequences
+
+`environment delete` removes the environment and its branch mapping only — containers
+already deployed under it keep running and are not affected.
+
+Beaver never reads or uploads a local `.env` file implicitly as part of a deploy —
+`vars pull`/`push` are the only explicit, opt-in ways to move variables between your local
+file and a container. `vars push` re-confirms before importing (or requires `--yes` when
+stdin isn't a terminal, for scripts) and prints what it's about to import first; it doesn't
+redeploy for you — run `beaver deploy` or `container <name> redeploy` afterward to ship the
+new values. `vars diff` never prints a value unless `--reveal` is passed, and asks again
+before doing so even then.
+
+<Warning>
+  Values written by `vars pull` that contain spaces, quotes, `$`, or line breaks are quoted
+  in the `.env` file so Beaver reads them back correctly. Handing that same file straight to
+  `docker run --env-file` does **not** apply the same quoting rules — it would pass the
+  surrounding quotes into the container as part of the value. Use `beaver deploy --env-file`
+  for a file with quoted values, or unwrap them by hand first.
+</Warning>
 
 ## Examples
 
-```bash
-beaver environment list
-beaver environment create
-beaver environment vars pull api
-beaver environment vars diff api
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Create an environment
+beaver environment create --name staging --project-id proj_paperclip --branch staging
 ```
 
-Environments select deployment settings such as staging or production. Review variable changes before `push`; never commit secrets.
+```bash Sync variables
+cd paperclip/
+beaver environment vars pull api
+beaver environment vars diff api
+beaver environment vars push api --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `push` with an empty `.env` | An error: no `KEY=value` lines to import | Add variables to the file first. |
+| `push` without `--yes` and no TTY | Refusal, naming `--yes` as required | Add `--yes` for scripts/CI. |
+| `delete` on an environment with live containers | Succeeds — the environment mapping is removed; containers are untouched | Nothing further required; the containers keep their currently-deployed variables. |
+
+## Used in
+
+- [`config`](/cli/config) — `.beaver/config.yml`'s own environment-related fields are
+  separate from this page's `vars` subcommand, which manages what's actually running.
+- [`deploy`](/cli/deploy) — redeploy after `vars push` to ship new values.

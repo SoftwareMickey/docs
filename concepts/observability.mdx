@@ -1,0 +1,52 @@
+---
+title: "Observability"
+description: "Three distinct log types answer different questions — knowing which one you need is half the battle."
+sidebarTitle: "Observability"
+icon: "chart-line"
+---
+
+Beaver gives you several distinct views into what's happening — logs, metrics, and traffic —
+each answering a different question, plus live-watching for any of them.
+
+```bash
+beaver logs api
+beaver metrics cpu api
+```
+
+## Three log types, one common mix-up
+
+**Build logs** show what happened while your image was being built. **Application logs** are
+what your running container prints. **Machine logs** are the host machine's own activity,
+separate from any one container. Confusing these is the single most common source of "why
+can't I find this log line" — check you're looking at the right one before assuming the log
+line doesn't exist.
+
+## What you can see and control
+
+Metrics report resource usage over time (CPU, memory, in their natural units); traffic
+reports request volume and response patterns. Both support filtering and a time range, and
+can be watched live rather than only queried after the fact.
+
+## When data looks missing
+
+Missing or stale data usually means one of: the time range doesn't cover the period you
+expect, the target (container/machine) wasn't running yet, or — for live data — the
+connection needs re-establishing. It's rarely a sign the data was never collected; check the
+range and target before assuming that.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Deployments" href="/concepts/deployments">
+    What build and application logs are logs of.
+  </Card>
+  <Card title="Troubleshooting" href="/concepts/troubleshooting">
+    Where observability data feeds a symptom-based investigation.
+  </Card>
+  <Card title="Logs command reference" href="/cli/logs">
+    Application logs, exact syntax.
+  </Card>
+  <Card title="Metrics command reference" href="/cli/metrics">
+    Resource usage over time.
+  </Card>
+</CardGroup>

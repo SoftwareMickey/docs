@@ -1,0 +1,127 @@
+# Era 5 — Deploy & Containers (V15–V18)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+The core "make my app run" family. Most commands already have pages; the gap is `deployui`
+and `promote`, plus a deep-verification pass on `deploy` itself (32 flag sites — the second
+densest group after `machine`/`config`/`alie`).
+
+Commands: `deploy`, `compose`, `container`/`containers`, `docker`, `deployment`,
+`deployui`, `promote`.
+
+---
+
+## V15 — `deploy` deep verification
+
+### Goal
+`cli/deploy.mdx` covers all 32 flag sites; every flag's effect on build/deploy behavior is
+explicit and matches `CLAUDE.md`'s current product model (Dockerfile-required, no
+auto-detection).
+
+### Reuses
+Existing `cli/deploy.mdx`; `deploying/dockerfile-requirements.mdx`,
+`deploying/deployment-configuration.mdx`, `deploying/environment-variables.mdx` (already the
+canonical guides for the *concepts* — this version documents the *command*, cross-linking
+rather than duplicating).
+
+### Implement
+- Full flag diff against V1 inventory. Particular attention to any flag whose current or
+  historical behavior implied auto-detection or auto-dockerization — `CLAUDE.md` is explicit
+  that this is the *previous* model and should not be reintroduced into current pages, so a
+  stale flag description here is both a docs bug and a product-positioning bug.
+- Consequences: build vs. deploy vs. redeploy distinctions, what triggers a rebuild vs. a
+  restart, `--wait` semantics (named directly in `docs.txt` as the canonical example of
+  "explain the observable contract, not the job system") — document exactly what `--wait`
+  waits for and what happens on timeout, nothing about the underlying job execution.
+
+### Validate
+- No auto-detection/auto-dockerization language anywhere on the page (grep-checked against
+  `CLAUDE.md`'s banned-terms framing).
+- `--wait` and any other timeout/async flags are fully specified per the docs.txt example.
+
+### Done when
+`deploy`'s inventory row is `documented`, current-model-accurate, and cross-linked to the
+three `deploying/*.mdx` concept guides.
+
+---
+
+## V16 — `compose` and `container`/`containers`
+
+### Goal
+Verify/extend three existing pages against their inventory rows.
+
+### Reuses
+Existing `cli/compose.mdx`, `cli/container.mdx`, `cli/containers.mdx`.
+
+### Implement
+- Resolve the `container` vs. `containers` naming from Era 1 V2 (singular action command vs.
+  plural list/family command, per the audit: `container <name> <action>` and `containers` as
+  a distinct `Use:` — confirm both are real, not one stale).
+- `compose` flag diff (24 flag sites) — multi-service consequences get particular attention:
+  what happens to sibling services when one is redeployed/restarted via compose.
+
+### Validate
+- The `container`/`containers` naming resolution matches actual CLI invocation, documented
+  explicitly at the top of whichever page(s) remain so readers aren't confused by the near-
+  duplicate names.
+
+### Done when
+All three rows `documented`; the naming ambiguity is resolved and stated, not silently
+carried forward.
+
+---
+
+## V17 — `docker` and `deployment`
+
+### Goal
+Verify/extend both existing pages.
+
+### Reuses
+Existing `cli/docker.mdx`, `cli/deployment.mdx`.
+
+### Implement
+- `docker`: likely a thin pass-through/inspection command (1 file) — verify scope matches
+  the page, no scope creep into full Docker CLI documentation (this is `beaver`'s wrapper,
+  document only what it adds/changes vs. plain `docker`).
+- `deployment`: 8 flag sites, `deployment.go` registers a `deployment` parent — diff
+  subcommands, cover listing/inspecting past deployments and their relationship to `deploy`
+  (Invariant 7: this page should link to `deploy.mdx`, not re-explain deploying).
+
+### Validate
+- `docker` page doesn't duplicate general Docker documentation.
+- `deployment` clearly cross-links to `deploy` rather than overlapping it.
+
+### Done when
+Both rows `documented`, with a clean division of concerns from `deploy`.
+
+---
+
+## V18 — `deployui` and `promote` (new)
+
+### Goal
+Write both missing pages.
+
+### Reuses
+V1 inventory rows (`deployui`: 6 source files; `promote`: 1 file, `Use: "promote
+<target-environment-name>"`).
+
+### Implement
+- `deployui`: determine from source whether this launches a local UI/dashboard, a specific
+  deploy variant, or something else entirely before writing — the name alone
+  under-specifies it; verify against implementation per Invariant 1 rather than guessing
+  from the name.
+- `promote`: environment-promotion command — document what "promote" moves (the built
+  artifact/image, not source) and what stays environment-specific (env vars, per
+  `deploying/environment-variables.mdx` — cross-link). Consequences: whether promote
+  triggers a new build or reuses an existing one (directly relevant to reproducibility
+  claims — verify against source, don't assume).
+
+### Validate
+- Both new pages pass the Era 2 checklist.
+- `promote`'s build-reuse-vs-rebuild claim is source-verified, not assumed from the name.
+
+### Done when
+Both inventory rows move from `undocumented` to `documented`; family (V15–V18) has zero
+remaining gaps.

@@ -1,0 +1,92 @@
+---
+title: "Rollback and recovery"
+sidebarTitle: "Rollback & recovery"
+description: "What to do when a deploy goes wrong — diagnose first, then choose a recovery path."
+icon: "life-ring"
+---
+
+<Note>
+  [Rollback, promotion, and recovery](/concepts/rollback-promotion-and-recovery) covers
+  which actions restore a release versus configuration, and whether data is affected, before
+  you walk this guide.
+</Note>
+
+<Steps>
+  <Step title="Diagnose first">
+    Always start read-only — this never changes anything.
+
+    ```bash
+    beaver recover
+    ```
+
+    Prints a Finding, Evidence, Impact, and a suggested safe next step. See
+    [`recover`](/cli/recover).
+  </Step>
+
+  <Step title="Check for configuration drift">
+    If the diagnosis doesn't point at an obvious fix, check whether what's running still
+    matches what's saved:
+
+    ```bash
+    beaver state status
+    beaver state drift
+    ```
+
+    See [`state`](/cli/state) — `status` compares your local file, the saved configuration,
+    and what's live all at once; `drift` shows a timeline of what changed and when.
+  </Step>
+
+  <Step title="Pick a recovery action">
+    Once you know what's wrong, three paths, depending on the situation:
+
+    - **Restart the container in place** (no new build, no different release):
+
+      ```bash
+      beaver recover --restart --yes
+      ```
+
+    - **Roll back to the last healthy release**, if the current one is the problem:
+
+      ```bash
+      beaver recover --rollback
+      ```
+
+    - **Bring runtime back in line with the saved configuration**, if the issue is drift
+      rather than a bad release:
+
+      ```bash
+      beaver reconcile --plan
+      beaver reconcile
+      ```
+
+      See [`reconcile`](/cli/reconcile). `--plan` always previews first.
+  </Step>
+
+  <Step title="Rolling back a specific saved configuration change">
+    If the problem traces back to a specific configuration change rather than a deploy,
+    [`beaver state rollback`](/cli/state) restores an earlier saved revision (forward-only —
+    it never rewrites history):
+
+    ```bash
+    beaver state history
+    beaver state rollback --plan
+    beaver state rollback --to <revision-id>
+    ```
+  </Step>
+</Steps>
+
+## Which command for which situation
+
+| Situation | Use |
+| --- | --- |
+| Container is unhealthy, unsure why | `beaver recover` (diagnose) |
+| Container just needs a restart | `beaver recover --restart` |
+| The current release is bad | `beaver recover --rollback` |
+| Running state has drifted from saved config | `beaver reconcile` |
+| A specific config change caused it | `beaver state rollback` |
+
+## Reference pages used in this guide
+
+- [`recover`](/cli/recover)
+- [`state`](/cli/state)
+- [`reconcile`](/cli/reconcile)

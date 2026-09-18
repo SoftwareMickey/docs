@@ -1,0 +1,58 @@
+---
+title: "Rollback, promotion, and recovery"
+description: "Release rollback, configuration rollback, and promotion all restore or move something different — knowing which one you need is the first step."
+sidebarTitle: "Rollback, promotion & recovery"
+icon: "clock-rotate-left"
+---
+
+When a deploy goes wrong, or you want to move a build between environments, several
+different commands apply — and which one you reach for matters, since they restore
+different things.
+
+```bash
+beaver recover
+beaver promote production
+```
+
+## Start read-only
+
+`beaver recover` on its own diagnoses without changing anything — always start there. Add
+`--explain` for the reasoning, `--rollback` or `--restart` once you've decided what to do
+about it.
+
+## Two things both called "rollback"
+
+**Release rollback** restores a previous deployed build of your application. **Configuration
+rollback** (see [State and drift](/concepts/state-and-drift)) restores a previous saved
+configuration. These are different actions that happen to share a word — check which one a
+command acts on before running it.
+
+## What promotion actually moves
+
+**Promotion** moves a built artifact from one environment to another — staging to
+production, say — without rebuilding it. Only the artifact moves; environment-specific
+settings like variables stay environment-specific.
+
+## Whether data is affected
+
+That depends entirely on what you're rolling back or recovering. A release rollback doesn't
+touch attached services' data at all. A configuration rollback that changes a volume
+declaration can. Check the specific action's own documented consequences rather than
+assuming "rollback" is always purely code-level.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Rollback and recovery workflow" href="/guides/rollback-and-recovery">
+    The full diagnose-then-recover path, hands-on.
+  </Card>
+  <Card title="Deployments" href="/concepts/deployments">
+    What a rollback or promotion acts on.
+  </Card>
+  <Card title="Recover command reference" href="/cli/recover">
+    Exact syntax for recovery actions.
+  </Card>
+  <Card title="Promote command reference" href="/cli/promote">
+    Exact syntax for moving a build between environments.
+  </Card>
+</CardGroup>

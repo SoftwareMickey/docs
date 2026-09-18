@@ -1,0 +1,63 @@
+---
+title: "Firewall"
+description: "Write rules with a priority, and the first one that matches always wins — so you can always predict what happens to any given request."
+sidebarTitle: "Firewall"
+icon: "shield"
+---
+
+Beaver's firewall protects traffic reaching your deployments. It's unrelated to your
+infrastructure's own OS-level firewall (see [Infrastructure
+Setup](/infrastructure-setup/firewall-requirements) for that — a different concept despite
+the similar name).
+
+```bash
+beaver firewall overview dep_abc123
+beaver firewall rule add dep_abc123 --type path --value /login --action rate-limit
+```
+
+## Rules, and the one thing to know about them
+
+You write rules — conditions (IP, path, method, header) paired with an action (allow, block,
+rate-limit, challenge) — and give each a priority. **The first matching rule in your priority
+order applies.** That's the entire model: you control the order, so you can always predict
+which rule wins for any given request, without needing to know anything about how matching
+is evaluated internally.
+
+Presets (off, basic, standard, strict) give you a starting rule set instead of building one
+from scratch. Login protection specifically watches one path for repeated failed attempts and
+bans the source after a threshold you set.
+
+## Verifying protection actually works
+
+`beaver firewall overview` shows current policy; `beaver firewall events` shows recent
+activity — what's been blocked or allowed, and which rule matched. Don't assume a rule is
+working; check the events after adding it.
+
+## Undoing an accidental block
+
+This is a normal, expected recovery path, not a failure state. `beaver firewall rule delete`
+removes a rule and `unban` reverses an IP ban — both take effect immediately, the same way
+the original block did.
+
+<Warning>
+  `lockdown` blocks **all** traffic to the deployment, not just traffic matching a rule — use
+  it only when you mean to take the deployment fully offline. `unlock` reverses it
+  immediately.
+</Warning>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Domains and routing" href="/concepts/domains-and-routing">
+    Traffic reaching a domain passes through these rules.
+  </Card>
+  <Card title="Edge and performance controls" href="/concepts/edge-and-performance-controls">
+    A related but separate layer, also rule-based.
+  </Card>
+  <Card title="Firewall command reference" href="/cli/firewall">
+    Deployment-scoped firewall, exact syntax.
+  </Card>
+  <Card title="Edge command reference" href="/cli/edge">
+    Connected-App-scoped firewall, exact syntax.
+  </Card>
+</CardGroup>

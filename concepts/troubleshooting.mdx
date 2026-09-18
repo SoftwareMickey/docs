@@ -1,0 +1,29 @@
+---
+title: "Troubleshooting"
+description: "A symptom-based starting point — deployment stuck, machine offline, service unreachable, and more."
+sidebarTitle: "Troubleshooting"
+icon: "life-ring"
+---
+
+Start here by symptom, not by guessing which command to run. Each row links to the concept
+page that covers recovery for it in more detail — this page is a hub, not a repeat of that
+content.
+
+| Symptom | Start here |
+| --- | --- |
+| A deployment seems stuck | [Deployments](/concepts/deployments) and [Rollback, promotion, and recovery](/concepts/rollback-promotion-and-recovery) |
+| A machine shows offline | [Machine and agent operation](/concepts/machine-and-agent-operation) |
+| A service or application is unreachable | [Domains and routing](/concepts/domains-and-routing) and [Firewall](/concepts/firewall) |
+| Capacity exhausted / can't scale up | [Scaling and resources](/concepts/scaling-and-resources) and [Beaver Cloud](/concepts/beaver-cloud) |
+| Firewall is blocking traffic you expect through | [Firewall](/concepts/firewall) — see its Limitations section for undoing a block |
+| Local config doesn't match what's running | [Configuration](/concepts/configuration) and [State and drift](/concepts/state-and-drift) |
+| Login or authentication failure | [Accounts and workspaces](/concepts/accounts-and-workspaces) |
+
+Also worth checking first, regardless of symptom: `beaver doctor` for a general environment
+health check, and [Observability](/concepts/observability) for logs/metrics/traffic specific
+to what's failing.
+
+<Tip>
+  If nothing here matches, start with the command's own `--help` and the relevant [CLI
+  reference](/cli) page — every command reference page has its own Results & Failures table.
+</Tip>

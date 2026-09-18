@@ -1,0 +1,70 @@
+# Era 9 V30 — Disclosure audit of existing contract/state-adjacent pages
+
+Audited `cli/contract.mdx`, `cli/plan.mdx`, `cli/validate.mdx` against the Era 2 V5
+disclosure checklist and against `beaver-cli` source, before any Era 9 net-new content was
+added (per the gating rule in `09-config-state-and-contracts.docs` V30).
+
+## Findings
+
+1. **`cli/contract.mdx` documented a command that does not exist.** It described `beaver
+   contract show`. No such command is registered anywhere in `beaver-cli` (`main.go`,
+   `commands/projectcontract/*.go` — confirmed by direct grep for `Use:.*contract` and for a
+   `"contract"` command string). A source comment in
+   `commands/projectcontract/cmd_validate.go` shows `contract show` was part of an original
+   V1 plan ("Introduce only `.beaver/config.yml`, `schema_version`, `beaver init`, `beaver
+   validate`, `beaver contract show`") that was apparently never shipped as a standalone
+   command — its functionality is covered instead by `beaver config show`. **Action:
+   deleted** `cli/contract.mdx` and removed it from `docs.json` nav; not a disclosure leak,
+   but a correctness bug (Invariant 1) that also happened to live in this vocabulary zone.
+2. **`cli/plan.mdx` had two factual errors**, not disclosure leaks: it documented a
+   nonexistent `--env` flag and omitted the required `<container>` positional argument that
+   `beaver plan <container>` (`projectcontract.PlanCmd`, `Args: cobra.ExactArgs(1)`) actually
+   requires. **Action: rewrote** the page against source; no `--env` flag exists on this
+   command.
+3. **`cli/validate.mdx`** — no leak found. Its existing content ("Checks the current
+   directory's Beaver configuration... never changes a deployment") already matched the
+   observable-outcome framing the checklist requires. **Action:** expanded with full
+   Purpose/Syntax/Consequences/Results sections, no rewording needed for disclosure; added a
+   note distinguishing it from the separate `beaver config validate` command (same purpose,
+   different underlying check — see finding 4).
+4. **Not a leak, but a correctness note:** `beaver validate` (top-level,
+   `projectcontract.ValidateCmd`) and `beaver config validate` (`commands/config/validate.go`)
+   are two separate implementations with the same purpose (local config validation) but
+   different diagnostic code paths (`projectcontract.Parse` vs. `draft.Validate`). Both pages
+   now say so explicitly rather than implying they're identical.
+
+## New content written under the same discipline (not pre-existing, so not "redacted," but
+recorded here since it's the same vocabulary zone)
+
+- `cli/state.mdx` (new) — `statecmd`'s source Short/Long text uses "reconcile" and "desired
+  state" throughout. Rewrote to observable framing throughout, matching the `docs.txt`
+  `--wait` calibration example directly: `drift` is documented as "one row per field that
+  drifted, when detected, when cleared," never as "the background drift monitor periodically
+  compares...". `apply`'s Long text ("converge the running deployment to it") was reframed as
+  "updates the running deployment to match it."
+- `cli/reconcile.mdx` (new) — `reconcilecmd` is a real, non-hidden, root-registered command
+  with a full `--plan`/confirmation UX; determined **public**, not excluded, since it's
+  clearly user-facing (not internal/operator-only) — same reasoning as `state apply`. Content
+  describes plan steps as `field: from → to`, never the matching/diff algorithm behind them.
+- `cli/config.mdx`'s "Saved configuration (server sync)" section (`push`/`pull`/`diff`/
+  `status`/`rollback`/`delete`/`containers`, from `commands/projectcontract/*.go` mounted
+  under `beaver config`) — same observable-outcome framing applied throughout; `rollback`
+  documented explicitly as forward-only (a new revision copied from history, history itself
+  never rewritten).
+- `config schema`'s disclosure determination (gap 006, blocking): read
+  `commands/config/schema.go` directly. It prints a JSON Schema for the **local
+  `.beaver/config.yml` file's own shape** (field names, types, enums, bounds) — genuinely
+  useful for editor autocomplete/validation, not the internal deployment-contract schema
+  `CLAUDE.md` protects. **Determination: public, full page section written**, gap 006
+  resolved.
+- `reconcilecmd` classification (gap-005-adjacent question, not itself a listed gap but same
+  shape as one): confirmed via `main.go` it is **not** `Hidden: true` and is registered
+  exactly like any other root command — no basis to exclude it. Documented normally.
+
+## Second read-through (checklist requires two passes for Era 9/11)
+
+Re-read `state.mdx`, `reconcile.mdx`, and `config.mdx`'s server-sync section fresh after
+writing. No remaining instance of "reconciler," "desired-state graph," "matching logic," or
+similar internal-mechanism language found — all instances describe either the literal CLI
+subcommand/flag name (unavoidable — `--no-reconcile` is real syntax) or an observable
+before/after outcome.

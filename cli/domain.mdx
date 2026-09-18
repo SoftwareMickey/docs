@@ -1,15 +1,85 @@
 ---
 title: "beaver domain"
-description: "Attach, verify, and remove custom domains."
+sidebarTitle: "domain"
+description: "Attach, verify, and remove custom domains for a deployed container."
+icon: "at"
 ---
+
+<Info>
+  New here? [Domains and routing](/concepts/domains-and-routing) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver domain` to point your own domain at a deployed container, verify DNS is pointed
+correctly, and check its TLS certificate status.
+
+## Syntax
+
+```bash
+beaver domain <subcommand> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | List domains attached to a container. |
+| `add` | Attach a new domain. |
+| `verify <domain-id>` | Re-check DNS verification for a domain. |
+| `certificate <domain-id>` | Show a domain's TLS certificate status. |
+| `remove <domain-id>` | Detach a domain. |
+
+## Flags
+
+<ParamField query="--container" type="string" default="" required>
+  On `list`/`add`: container name or ID. Required.
+</ParamField>
+<ParamField query="--domain" type="string" default="" required>
+  On `add`: the hostname to attach, e.g. `app.example.com`. Required.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `remove`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+`add` doesn't make the domain live by itself — you still need to point DNS at Beaver as
+instructed, then run `verify`. DNS propagation can take time (this can take up to a few hours
+depending on your registrar and existing record TTLs); retry `verify` once records are
+publicly visible rather than assuming failure means misconfiguration. `remove` detaches the
+domain from the container; it does not delete or affect your DNS records themselves — you
+still control those at your registrar.
 
 ## Examples
 
-```bash
-beaver domain list
-beaver domain add
-beaver domain verify <domain-id>
-beaver domain certificate <domain-id>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Attach a domain
+beaver domain add --container paperclip-web --domain paperclip.example
 ```
 
-Point DNS as instructed before verification. DNS propagation can take time; retry verification once records are publicly visible.
+```bash Verify after pointing DNS
+beaver domain verify dom_abc123
+```
+
+```bash Check certificate status
+beaver domain certificate dom_abc123
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `verify` succeeds | Domain marked verified | TLS certificate issuance proceeds automatically. |
+| `verify` fails | The specific DNS record still missing or incorrect | Fix the record at your registrar, wait for propagation, retry. |
+| `certificate` pending | Status shown as pending/issuing | Certificates issue automatically once verification passes; check back shortly. |
+
+## Used in
+
+- [Deployment configuration](/deploying/deployment-configuration) — domains are part of a
+  service's public routing configuration.

@@ -1,0 +1,65 @@
+---
+title: "beaver coupon"
+sidebarTitle: "coupon"
+description: "Redeem an entitlement coupon code (e.g. extra machines) for this workspace."
+icon: "ticket"
+---
+
+## Purpose
+
+Use `beaver coupon redeem` for an **entitlement** coupon — a code that grants your workspace
+extra capacity or a feature (for example, additional machines), redeemed directly with no
+payment step. A pricing/discount coupon is different and is applied at [`beaver billing
+checkout`](/cli/billing#checkout) instead — if you paste a discount code here, the command
+rejects it with a pointer to `billing checkout`.
+
+## Syntax
+
+```bash
+beaver coupon redeem <code> [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<code>` | Yes | The coupon code you received, e.g. `BEAVER-DEV`. |
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the result as JSON. See [shared flags](/cli/shared-flags#json).
+</ParamField>
+
+## Consequences
+
+A successful redemption applies immediately — the granted resource (e.g. extra machine
+capacity) is available to the workspace right away. Redeeming the same code twice isn't
+meaningful for a coupon designed for one-time use; the server rejects an already-used code.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+```bash
+beaver coupon redeem BEAVER-DEV
+```
+
+**Expected output** (reviewed against source):
+
+```text
+✓ Coupon redeemed
+  +5 machines (expires 2027-01-01)
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `✓ <message>` plus one line per grant (e.g. `+5 machines (expires ...)`) | The grant is active immediately. |
+| Wrong coupon type | An error pointing you to `beaver billing checkout` | The code is a pricing/discount coupon, not an entitlement one — use checkout instead. |
+| Invalid or already-used code | `failed to redeem coupon: ...` naming the reason | Double-check the code; it may already be redeemed or expired. |
+
+## Used in
+
+- [`billing`](/cli/billing) — plan-affecting workspace changes generally.

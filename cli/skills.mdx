@@ -1,0 +1,97 @@
+---
+title: "beaver skills"
+sidebarTitle: "skills"
+description: "Inspect this project's local skill packages and publish them to your workspace."
+icon: "puzzle-piece"
+---
+
+## Purpose
+
+A **skill** is a packaged capability — a name, version, description, and workflow — that
+[`beaver alie`](/cli/alie) and other Beaver surfaces can use. `beaver skills` lists the
+`.beaver/skills/` packages in your current project and publishes them to your workspace so
+they're available beyond this one directory and machine.
+
+A local package is visible to `beaver alie` in this project immediately, without publishing.
+Publishing copies its manifest and workflow to the workspace registry — what your dashboard
+and other machines read.
+
+## Syntax
+
+```bash
+beaver skills [flags]
+beaver skills publish [name...] [flags]
+beaver skills published
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)* | List local skill packages in this directory. |
+| `publish [name...]` | Publish one or more local packages to the workspace registry. |
+| `published` | List the skills already published to this workspace. |
+
+## Flags
+
+<ParamField query="--all" type="boolean" default="false">
+  On `publish`: publish every local skill package instead of naming specific ones.
+</ParamField>
+<ParamField query="--platform" type="boolean" default="false">
+  On `publish`: publish platform-wide instead of to this workspace only.
+</ParamField>
+
+## Consequences
+
+Publishing makes a skill available beyond this one directory/machine — to your dashboard and
+other machines in the workspace (or, with `--platform`, more broadly). It doesn't affect
+whether the skill is usable locally; that's already true before publishing.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash List local packages
+beaver skills
+```
+
+```bash Publish one
+beaver skills publish safe-rollback
+```
+
+```bash Publish everything local
+beaver skills publish --all
+```
+
+```bash See what's already published
+beaver skills published
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+2 local skill package(s):
+
+  safe-rollback@1.0  340-byte workflow
+      Roll back a deployment safely with pre-checks.
+  db-migrate@2.1  no SKILL.md
+
+Publish one with `beaver skills publish <name>` to make it available beyond this directory.
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| No local packages | "No `.beaver/skills/` packages in this directory." | Nothing to publish yet. |
+| `publish` with no name and no `--all` | `name at least one skill to publish, or pass --all` | Name one, or pass `--all`. |
+| Not signed in | A prompt to run `beaver login` first | Sign in, then retry. |
+
+## Used in
+
+- [`alie`](/cli/alie) — discovers and uses local skill packages directly, without requiring
+  publication first.

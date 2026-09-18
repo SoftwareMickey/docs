@@ -1,0 +1,72 @@
+---
+title: "beaver route"
+sidebarTitle: "route"
+description: "Inspect a public route's live DNS, TLS, and backend health."
+icon: "route"
+---
+
+## Purpose
+
+Use `beaver route inspect` to check a domain's public-routing health in one place — DNS,
+TLS certificate status, and whether the backend is reachable — when troubleshooting why a
+domain isn't working as expected.
+
+## Syntax
+
+```bash
+beaver route inspect <domain> [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<domain>` | Yes | A domain attached via [`beaver domain`](/cli/domain). |
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the result as JSON. See [shared flags](/cli/shared-flags#json).
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Basic
+beaver route inspect app.example.com
+```
+
+```bash Scripted
+beaver route inspect app.example.com --json
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+Domain:   app.example.com
+Provider: letsencrypt
+Revision: 4
+State:    active
+Health:   healthy
+Public:   true
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Healthy | `State: active`, `Health: healthy`, `Public: true` | Nothing further. |
+| A failure detected | A `Failure:` line naming the stage and reason | Follow the accompanying `Next:` suggestion if one is shown. |
+
+## Used in
+
+- [`domain`](/cli/domain) — attaching and verifying the domain this command inspects.

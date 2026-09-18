@@ -1,0 +1,115 @@
+# Era 1 — Inventory & Placement (V1–V3)
+
+_Phase 1 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** `inventory/00-topics.docs` (V1) and `inventory/01-cross-reference.docs`
+(V2) written and checked against the actual current file tree and the (now accurate, post
+Phase 1+2 re-verification) `/features/docs/inventory/doc_status.csv` — not against memory of
+an earlier repo state. Result: 34/34 topics classified — 4 merge candidates (T2, T3, T6,
+T11) with named gaps, 28 new-page candidates, 1 classify-first (T34, deferred to Era 11 by
+design), 1 topic (T25, Firewall) with an explicit note distinguishing it from the
+similarly-named but unrelated `infrastructure-setup/firewall-requirements.mdx`. V3's nav
+placement decision was already recorded in this file's own text below at planning time;
+re-confirmed still the right call — no change.
+
+Fixes what this whole roadmap executes against: the full topic list, what already exists,
+and where each new page will live. Nothing gets written before this era closes — same
+gating role as the sibling CLI-reference roadmap's own Era 1.
+
+---
+
+## V1 — Transcribe and number the topic checklist
+
+### Goal
+A single, numbered, checked-in list of every concept topic the user wants explained,
+sourced from `concepts-explained.txt` rather than re-derived from scratch.
+
+### Reuses
+`concepts-explained.txt` lines 76–178 (the 34-row topic table) verbatim as the source list.
+
+### Implement
+- `inventory/00-topics.docs`: the 34 topics, numbered T1–T34, one line each, in the order
+  `concepts-explained.txt` gives them (roughly onboarding → operations → edge cases), plus
+  the eight cross-cutting questions listed at the end of that transcript (lines 179–188) —
+  logged as **required answers inside every page**, not a 35th topic.
+
+### Validate
+- Row count matches the source table exactly (34); no topic reworded away from its original
+  phrasing without a note explaining why.
+
+### Done when
+`00-topics.docs` exists and is the single reference every later era's version cites by `T#`.
+
+---
+
+## V2 — Cross-reference against existing pages
+
+### Goal
+For each T#, determine what already exists in this repo that covers it, wholly or partly.
+
+### Reuses
+The repo's current file tree (`documentation.mdx`, `installation.mdx`, `beaver-doctor.mdx`,
+`choose-your-setup.mdx`, `connect.mdx`, `machine-roles.mdx`, `quickstart.mdx`,
+`infrastructure-setup.mdx` and its subpages, `features.mdx`, `guides/*.mdx`) and the sibling
+roadmap's own inventory (`/features/docs/inventory/`) for which `cli/*.mdx` pages exist per
+family.
+
+### Implement
+- `inventory/01-cross-reference.docs`: one row per T#, columns:
+  - **Existing concept coverage** — page name(s), or "none."
+  - **Existing task-guide coverage** — `guides/*.mdx` page(s), or "none."
+  - **Existing reference coverage** — `cli/*.mdx` family, or "not yet built" (cross-checked
+    against `/features/docs/00-architecture.docs`'s Phase/Era table for that family).
+  - **Classification** (Invariant 2): `new-page` / `merge-into-<existing-file>` /
+    `deferred-<reason>`.
+- Expected classifications based on the file tree read for this roadmap: `choose-your-setup`
+  (T2), `connect` + `machine-roles` (T6), `installation` + `beaver-doctor` (T3) are
+  **merge-into-existing** candidates — they already carry concept-level narrative. Most of
+  T7–T34 are **new-page**. T34 (administrative commands) is a **classify-first** case,
+  resolved fully in Era 11 rather than assumed here.
+
+### Validate
+- Every T# has exactly one classification; no topic left blank.
+- Every `merge-into-<file>` cites the specific file and the specific gap it still has (so
+  Era 3+ knows what to add, not just "it exists").
+
+### Done when
+The cross-reference table is complete and reviewed against the actual current file
+listing (not memory of it) at the time this version is executed.
+
+---
+
+## V3 — Decide the nav home
+
+### Goal
+Fix where the new concept pages live in `docs.json`, satisfying the instruction that
+concepts must not fall under the CLI tab and must be easy to reach.
+
+### Reuses
+`docs.json`'s current Guides tab groups (`Getting started`, `Workflows`, `Infrastructure
+Setup`, `Deploying with Docker`, `Languages`, `Runtimes`, `Frameworks`) as the placement
+options to choose among, rather than inventing a new tab.
+
+### Implement
+- Decision (recorded here, executed in Era 12 V40): add a **new "Concepts" group inside the
+  existing Guides tab**, positioned second — immediately after `Getting started` and before
+  `Workflows` — so the reading order a new user meets in the sidebar is: get started →
+  understand the concepts → follow a workflow → go deep on infrastructure/build details →
+  (separately, CLI tab) look up exact command syntax. This mirrors the concept → task guide
+  → reference order from `concepts-explained.txt` directly in the sidebar's own ordering.
+- Rejected alternatives, logged so this isn't re-litigated: a new top-level tab (adds a
+  second navigation axis for one content type — unnecessary since Guides already exists and
+  is where users already look first); nesting under `Infrastructure Setup` (too narrow —
+  most topics, e.g. Services, Deployments, aren't infrastructure-setup-specific).
+- Each merge-into-existing topic from V2 stays in its current group (`Getting started`);
+  only new-page topics populate the new `Concepts` group.
+
+### Validate
+- The placement decision is written down with its rejected alternatives and reasoning
+  (this section), so Era 12 executes a decision rather than re-deciding.
+
+### Done when
+`docs.json`'s target nav shape for the `Concepts` group is fixed on paper, ready for Era 12
+to fill in as pages land through Phase 2.

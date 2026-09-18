@@ -1,0 +1,63 @@
+# Concept Layer — Cross-Reference (Era 1 V2)
+
+For each `T#` in `00-topics.docs`: what already exists in this repo (concept-level narrative,
+task guide, CLI reference), and the resulting classification. Checked against the actual
+current file tree and `/features/docs/inventory/doc_status.csv` (post Phase 1+2
+re-verification, 2026-09-17 — 53/54 CLI groups documented) at the time this version was
+executed, not against memory of an earlier state.
+
+Classification legend: **new-page** (nothing today explains this at concept level) ·
+**merge-into-`<file>`** (existing narrative already covers most of this, extend rather than
+fork) · **deferred-`<reason>`** (resolved later, not now).
+
+| T# | Topic | Existing concept coverage | Existing task-guide coverage | Existing CLI reference | Classification |
+| --- | --- | --- | --- | --- | --- |
+| T1 | How Beaver fits together | None — `features.mdx`/`documentation.mdx` list capabilities, don't relate entities | None | n/a (no single command) | **new-page** — canonical, gates Era 3 |
+| T2 | Choosing my setup | `choose-your-setup.mdx` (machine roles decision), `laptop-builder.mdx` (one specific setup) — both narrative, cover most of this topic already | `guides/connect-and-machine-roles.mdx` (adjacent, connecting once decided) | `cli/connect.mdx`, `cli/machine.mdx` | **merge-into-`choose-your-setup.mdx`** — gap: doesn't explicitly state "what infrastructure I supply and manage" as its own framing; add a short section, don't fork |
+| T3 | Installation and CLI basics | `installation.mdx`, `installation-windows.mdx` (platforms/install/verify), `cli.mdx` (CLI tab overview — interactive shell vs. terminal, help, completion) | None dedicated | `cli/completion.mdx`, `cli/history.mdx`, `cli/shell.mdx`, `cli/update.mdx`, `cli/version.mdx` | **merge-into-`installation.mdx`** — gap: version-compatibility and update cadence not covered; `cli.mdx` already carries the interactive-shell framing, cross-link rather than duplicate |
+| T4 | Accounts and workspaces | None dedicated — `installation.mdx` mentions "log in" in passing as a step, not explained | None | `cli/login.mdx`, `cli/logout.mdx`, `cli/whoami.mdx`, `cli/account.mdx`, `cli/workspace.mdx` (all exist, per Phase 2) | **new-page** |
+| T5 | Integrations | None | None | `cli/integrations.mdx`, `cli/github.mdx` (both exist) | **new-page** |
+| T6 | Connecting machines | `connect.mdx`, `machine-roles.mdx` — both substantial, cover requirements/roles/verifying enrollment already | `guides/connect-and-machine-roles.mdx` (full workflow) | `cli/connect.mdx`, `cli/machine.mdx` | **merge-into-`connect.mdx`+`machine-roles.mdx`** — gap: "removing a machine safely" isn't covered by either; add a short section |
+| T7 | Machine and agent operation | None dedicated — `beaver-doctor.mdx` covers pre-connection readiness only, not ongoing operation | None | `cli/machine.mdx` (58 commands, largest group), `cli/agent.mdx`, `cli/doctor.mdx`, `cli/recover.mdx` | **new-page** — distinct from T6 (getting connected vs. running day to day) |
+| T8 | Beaver Cloud | None | None | `cli/cloud.mdx` (255 lines, substantial) | **new-page** — two-pass disclosure per `DISCLOSURE-ADDENDUM.md` |
+| T9 | Projects | None | None | `cli/project.mdx` (rewritten to full template in Phase 2 re-verification) | **new-page** |
+| T10 | Configuration | `deploying/deployment-configuration.mdx` (port/health/resources — the build-time subset) | None | `cli/config.mdx` (highest flag density, 41 flags, substantial) | **new-page** — `deploying/deployment-configuration.mdx` is task-guide-shaped and narrower (build config only); link, don't merge, per Invariant 9's "fork only if the gap-check forces it" — here the existing page's scope is legitimately narrower than T10's, so a concept page is additive, not duplicative |
+| T11 | Environments and variables | `deploying/environment-variables.mdx` — already concept-shaped and fairly complete (precedence, secrets handling) | None | `cli/environment.mdx` (rewritten to full template in Phase 2 re-verification) | **merge-into-`deploying/environment-variables.mdx`**, promoted into the new Concepts group at Era 12 rather than forked — resolves Era 5 V16's "live decision" placeholder from `00-architecture.docs` |
+| T12 | Building applications | `deploying/dockerfile-requirements.mdx`, `languages/*.mdx`, `runtimes/*.mdx`, `frameworks/*.mdx` — extensive, but each is scoped narrowly (one stack or one requirement), none gives the "why Dockerfile-first" connective framing | None | n/a | **new-page** — the connective page above the existing narrow ones, per the original Era 5 V17 plan |
+| T13 | Preflight and planning | None | None | `cli/preflight.mdx`, `cli/inspect.mdx`, `cli/plan.mdx` (all exist, `plan.mdx` confirmed accurate in Phase 2 re-verification) | **new-page** |
+| T14 | Deployments | None dedicated | `guides/deploy-workflow.mdx` (full workflow, task-guide-shaped) | `cli/deploy.mdx`, `cli/deployment.mdx` | **new-page** — pairs with the existing task guide per Invariant 7, doesn't replace it |
+| T15 | Containers and replicas | None | None | `cli/container.mdx`, `cli/containers.mdx` (both substantial) | **new-page** |
+| T16 | Compose applications | None | None | `cli/compose.mdx` | **new-page** |
+| T17 | Domains and routing | None | None | `cli/domain.mdx` | **new-page** |
+| T18 | Scaling and resources | None | `guides/scaling.mdx` (full workflow, task-guide-shaped, already frames fixed-vs-automatic) | `cli/scaling.mdx`, `cli/autoscale.mdx` | **new-page** — the transcript's own worked disclosure example (Era 7 V23); pairs with existing guide |
+| T19 | Services | None | None | `cli/service.mdx` (330 lines, largest reference page) | **new-page** — the transcript's own canonical worked example (Era 8 V26) |
+| T20 | Service databases and credentials | None | None | `cli/service.mdx` (database subcommands, same page) | **new-page** |
+| T21 | Service clusters | None | None | `cli/service.mdx` (cluster subcommands, same page) | **new-page** |
+| T22 | Persistent storage | None | None | `cli/config.mdx` (volume/bind subcommands, extended in Phase 2 re-verification) | **new-page** — highest-stakes accuracy requirement (destructive-action list) |
+| T23 | Backups and restoration | None | None | `cli/service.mdx` (backup/backup-destination subcommands) | **new-page** |
+| T24 | Connecting to services locally | None | None | Not yet confirmed which family covers this (flagged in `gaps/00-index.docs` #4 originally; likely `cli/service.mdx` connect/reveal, needs a source check at Era 9 write time) | **new-page** — reference-link target to be confirmed at write time, not assumed here |
+| T25 | Firewall | `infrastructure-setup/firewall-requirements.mdx` exists but is a **different concept** — OS/cloud-provider port-opening on the user's own machine, not Beaver's own firewall product feature (rules/WAF/bans/lockdown) | None | `cli/firewall.mdx`, `cli/edge.mdx` (firewall subcommands, both extended in Phase 2 re-verification) | **new-page** — explicitly cross-link to (never merge with) `infrastructure-setup/firewall-requirements.mdx`, naming the distinction directly so readers don't conflate the two |
+| T26 | Edge and performance controls | None | None | `cli/edge.mdx` | **new-page** |
+| T27 | Observability | None | None | `cli/observe.mdx`, `cli/logs.mdx`, `cli/metrics.mdx`, `cli/traffic.mdx`, `cli/status.mdx`, `cli/inspect.mdx`, `cli/diff.mdx` | **new-page** |
+| T28 | State and drift | None | None | `cli/state.mdx`, `cli/reconcile.mdx`, `cli/validate.mdx` — highest-disclosure-risk family per the sibling roadmap's own Era 9 | **new-page** — two-pass disclosure, reuses `DISCLOSURE.md`'s own compliant worked example register directly |
+| T29 | Rollback, promotion, and recovery | None dedicated | `guides/rollback-and-recovery.mdx` (full workflow, task-guide-shaped) | `cli/recover.mdx`, `cli/promote.mdx`, `cli/state.mdx` (rollback subcommand) | **new-page** — pairs with existing guide |
+| T30 | AI connections and Alie | None | None | `cli/ai.mdx`, `cli/alie.mdx` (extended in Phase 2 re-verification), `cli/skills.mdx` | **new-page** — single highest-risk page in the roadmap, mandatory two-pass |
+| T31 | Plans and billing | None | None | `cli/billing.mdx`, `cli/coupon.mdx`, `cli/plans.mdx` (confirmed real and current in Phase 2 re-verification, not stale) | **new-page** |
+| T32 | Automation | None | None | `cli/shared-flags.mdx` (the direct link target — Era 2 V7's own deliverable) | **new-page** — concept-level framing above the shared-flags reference |
+| T33 | Troubleshooting | None | None | n/a (hub page, links into other concept pages' own Limitations sections) | **new-page**, non-standard shape (symptom index, not the usual template) |
+| T34 | Administrative commands | None | None | `cli/mystic.mdx`, `cli/preflight.mdx` — `cli/admin.mdx` removed 2026-09-17 by explicit user instruction (gap 013) | **omission**, resolved at Era 11 write time as a short page, then reversed to omission — see `gaps/00-index.docs` entry 2 |
+
+## Validate
+
+- Every T1–T34 has exactly one classification. None left blank.
+- Every `merge-into-<file>` row (T2, T3, T6, T11) names the specific existing file(s) and the
+  specific gap still open, not just "it exists."
+- Checked against the actual current file tree (`ls *.mdx`, `ls guides/*.mdx`,
+  `ls infrastructure-setup/*.mdx`, `ls deploying/*.mdx`) and the regenerated
+  `/features/docs/inventory/doc_status.csv`, both read fresh for this version — not recalled
+  from an earlier planning pass.
+
+## Done when
+
+Complete: 34/34 topics classified, 4 merge candidates identified with named gaps, 29 new-page
+candidates, 1 classify-first (T34) deferred to Era 11 by design.

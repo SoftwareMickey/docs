@@ -1,0 +1,128 @@
+# Era 4 — Connecting Infrastructure (V10–V13)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** `concepts/integrations.mdx` (V10), `concepts/machine-and-agent-operation.mdx`
+(V12), and `concepts/beaver-cloud.mdx` (V13, two-pass disclosure applied) written new. V11
+(Connecting machines) executed as a merge per Era 1's classification — `connect.mdx` gained a
+"Removing a machine safely" section (the one gap Era 1 named: safe removal wasn't covered by
+either `connect.mdx` or `machine-roles.mdx`), source-verified against `commands/machine/*.go`'s
+`remove` consequences. `mint broken-links` clean; disclosure re-check on `beaver-cloud.mdx`
+found no scheduling/bin-packing/capacity-planning-logic language — "Beaver places the
+workload on a member with room for it" states outcome only, no decision mechanism.
+
+Covers T5–T8: Integrations, Connecting machines, Machine and agent operation, Beaver Cloud.
+
+---
+
+## V10 — Integrations (T5)
+
+### Goal
+New concept page: what connecting GitHub (and other supported integrations) accomplishes,
+required permissions, repository selection, disconnecting, fixing expired access.
+
+### Reuses
+`cli/integration.mdx` / `cli/integrations.mdx` / `cli/github.mdx` as reference targets (the
+sibling roadmap's Era 1 flagged `integrations` vs. `integration` as a naming mismatch to
+resolve in its own Era 7 — this page links to whichever name survives that resolution,
+checked at write time, not assumed now).
+
+### Implement
+`concepts/integrations.mdx`: what problem repo-linked deploys solve, prerequisites (a
+workspace, a project), relationship to Projects (T9) and Deployments (T14), observable
+behavior (what a token grant looks like to the user, what disconnecting stops), limits.
+
+### Validate
+Disclosure pass — no OAuth flow internals or token-storage mechanics, only user-visible
+permission scopes and states.
+
+### Done when
+Page exists and links resolve to the correct (post-resolution) reference page name.
+
+---
+
+## V11 — Connecting machines (T6)
+
+### Goal
+Resolve the `merge-into-connect` / `merge-into-machine-roles` classification: these two
+existing pages already cover most of T6's scope (requirements, choosing roles, verifying
+enrollment, reconnecting, removing safely) — confirm completeness, don't fork a new page.
+
+### Reuses
+`connect.mdx`, `machine-roles.mdx` as-is.
+
+### Implement
+Gap-check against T6's five sub-points (requirements / choosing roles / checking readiness /
+verifying enrollment / reconnecting / removing safely); add only what's missing (readiness
+checking and safe removal are the two most likely gaps based on current page scope). Add a
+forward link into `how-beaver-fits-together.mdx` (V6) if not already present.
+
+### Validate
+No standalone page created unless the gap-check forces a structural split — log any
+deviation here.
+
+### Done when
+`connect.mdx` + `machine-roles.mdx` together answer T6 completely.
+
+---
+
+## V12 — Machine and agent operation (T7)
+
+### Goal
+New concept page: machine health, agent installation/updates, start/stop/restart, logs,
+maintenance, cleanup, policies, approval requests — the operational lifecycle *after*
+connection (V11 covers *getting* connected; this covers *running*).
+
+### Reuses
+`cli/machine.mdx`, `cli/agent.mdx`, `cli/doctor.mdx`, `cli/recover.mdx` as reference targets.
+
+### Implement
+`concepts/machine-and-agent-operation.mdx`: prerequisites (a connected machine, T6),
+relationship to Beaver Cloud (V13 — a machine can be standalone or part of a cloud),
+observable states (healthy/degraded/offline as the user sees them, not the health-check
+mechanism), what policies and approval requests mean for a user without describing the
+enforcement mechanism (checkpoint term: `policy engine` internals stay out).
+
+### Validate
+Disclosure pass on "policies" and "approval requests" specifically — describe what a user
+configures and sees, not how a request is evaluated.
+
+### Done when
+Page exists; the connect-vs-operate split (V11 vs. V12) is clean — no duplicated content.
+
+---
+
+## V13 — Beaver Cloud (T8)
+
+### Goal
+New concept page: what a cloud provides, when it helps over a single machine, adding/
+removing machines, capacity, reservations, placement choices, network health, gateways,
+consequences of a machine becoming unavailable.
+
+### Reuses
+`cli/cloud.mdx` (or the sibling roadmap's Era 6 `cloud` family page once written) as the
+reference target; `beaver-desktop/features/gui/infra/03-cloud-section.docs` read only as
+useful vocabulary confirmation (capacity/nodes/network/services/timeline are the same
+entities users already see in the GUI) — not copied wholesale, since that document is
+GUI-internal, not a disclosure-cleared public source.
+
+### Implement
+`concepts/beaver-cloud.mdx`: the single-machine-vs-cloud decision (linking back to
+`choose-your-setup.mdx`, V7), what "capacity" and "reservations" mean to a user (how much
+room is left, not how placement decides), what "placement choices" a user actually gets to
+make (if any are user-facing, name them; the rest stays unstated rather than explained
+vaguely — checkpoint terms: `bin-packing`, `scheduling`), network health and gateways at the
+observable level only (per `DISCLOSURE-ADDENDUM.md`'s WireGuard-adjacent caution — the GUI
+roadmap itself gates WireGuard detail behind an "Advanced" toggle even internally; public
+docs go further and omit protocol-level detail entirely), consequences of a machine going
+unavailable (what happens to its workloads, stated as outcome not mechanism).
+
+### Validate
+Two-read disclosure pass given this topic's proximity to the highest-risk checkpoint terms
+in the addendum (scheduling, bin-packing, capacity planning logic).
+
+### Done when
+Page exists, passes the two-read disclosure pass, and correctly scopes "placement choices"
+to only what's actually user-controllable.

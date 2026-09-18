@@ -1,0 +1,53 @@
+---
+title: "Backups and restoration"
+description: "A point-in-time copy of a service's data, on your schedule, restorable into a new service without touching the original."
+sidebarTitle: "Backups & restoration"
+icon: "clock-rotate-left"
+---
+
+A **backup** is a point-in-time copy of a service's data, taken manually or on a schedule you
+configure, that you can restore from later.
+
+```bash
+beaver service backup paperclip-db
+beaver service backup schedule paperclip-db --interval daily --retention 14
+```
+
+## When to actually take one
+
+Before a risky change to a service, on a recurring schedule for anything you can't afford to
+lose, or when you're actually recovering from data loss or corruption — not just after the
+fact.
+
+## What you can see and control
+
+You can trigger a backup manually or set a retention schedule so they happen automatically.
+Backup status shows whether the most recent one succeeded. Restoring creates a **new**
+service from a backup — it doesn't overwrite the original in place, so the source stays
+intact throughout.
+
+## Before you rely on a restore
+
+<Warning>
+  Restore compatibility isn't universal — check whether a backup can be restored into a
+  different service type or version before relying on that path. Restoring into an
+  incompatible target fails cleanly rather than partially restoring, but confirm
+  compatibility first rather than finding out during an actual incident.
+</Warning>
+
+A restore isn't confirmed complete just because the command succeeds — verify the recovered
+data looks right before treating it as done, especially for anything time-sensitive.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services" href="/concepts/services">
+    What's being backed up.
+  </Card>
+  <Card title="Persistent storage" href="/concepts/persistent-storage">
+    The layer a backup ultimately protects.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Backup, schedule, and restore commands, exact syntax.
+  </Card>
+</CardGroup>

@@ -1,0 +1,71 @@
+---
+title: "Scaling: manual vs. automatic"
+sidebarTitle: "Scaling"
+description: "When to set a fixed replica count and when to let Beaver scale automatically."
+icon: "gauge"
+---
+
+<Note>
+  New to scaling? [Scaling and resources](/concepts/scaling-and-resources) covers requests
+  vs. limits and fixed vs. automatic mode before you walk this guide.
+</Note>
+
+<Steps>
+  <Step title="Start with a fixed count, if you know your load">
+    Predictable traffic, or just getting started — set an exact replica count:
+
+    ```bash
+    beaver scale api 3
+    ```
+
+    Quick shorthand for [`beaver scaling policy set`](/cli/scaling#replica-policy) in fixed
+    mode.
+  </Step>
+
+  <Step title="Switch to automatic once load varies">
+    When traffic fluctuates enough that a fixed count means either over-provisioning
+    (wasted cost) or under-provisioning (degraded performance) at different times of day,
+    switch to automatic scaling based on a metric:
+
+    ```bash
+    beaver autoscale api --min 2 --max 8 --metric cpu --up 70 --down 25
+    ```
+
+    [`beaver autoscale`](/cli/autoscale) is the quick one-command form. For the fuller set
+    of tuning flags (cooldowns, sustained-window, plan/dry-run previews), use
+    [`beaver scaling policy set`](/cli/scaling#replica-policy) directly.
+  </Step>
+
+  <Step title="Check what's actually running">
+    ```bash
+    beaver scaling policy api
+    beaver scaling replicas api
+    ```
+
+    `policy` shows the configured policy; `replicas` shows the actual running slots right
+    now — useful to confirm automatic scaling is behaving as expected.
+  </Step>
+
+  <Step title="Stage a risky change with a canary or blue/green rollout">
+    For a change you want to verify under partial traffic before it reaches everyone:
+
+    ```bash
+    beaver scaling canary api --steps 5,25,75,100 --step-interval 10m --error-band 2
+    ```
+
+    See [`scaling`](/cli/scaling#staged-blue-green-rollouts) for the blue/green
+    (`deploy-set`/`cutover`/`discard`) alternative.
+  </Step>
+</Steps>
+
+## Where replicas land, not just how many
+
+Scaling controls **how many** replicas run. If you're using a [Beaver
+Cloud](/cli/cloud), [`cloud workload`](/cli/cloud#workload-placement) controls **where**
+those replicas land across the cloud's machines — a separate, complementary setting.
+
+## Reference pages used in this guide
+
+- [`scaling`](/cli/scaling)
+- [`autoscale`](/cli/autoscale)
+- [`cloud`](/cli/cloud)

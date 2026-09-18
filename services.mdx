@@ -1,0 +1,112 @@
+---
+title: "Services"
+description: "Managed databases, caches, and message brokers you attach to your application instead of running yourself."
+icon: "database"
+---
+
+## Managed, Stateful, Yours
+
+A Beaver Service is a stateful dependency — a database, cache, or message broker — provisioned
+onto your own connected infrastructure and operated as part of the platform. Attach one to
+your application and it receives connection details as an environment variable; Beaver
+handles day-to-day operation, backups, and version upgrades.
+
+<CardGroup cols={2}>
+  <Card title="PostgreSQL" icon="elephant" href="/services/postgresql">
+    Relational database, the most common default.
+  </Card>
+  <Card title="MySQL" icon="database" href="/services/mysql">
+    Relational database, MySQL-compatible workloads.
+  </Card>
+  <Card title="MariaDB" icon="database" href="/services/mariadb">
+    Relational database, MySQL-compatible fork.
+  </Card>
+  <Card title="MongoDB" icon="leaf" href="/services/mongodb">
+    Document database.
+  </Card>
+  <Card title="Redis" icon="layer-group" href="/services/redis">
+    In-memory cache and data store, including cluster and sentinel modes.
+  </Card>
+  <Card title="Kafka" icon="right-left" href="/services/kafka">
+    Distributed event streaming.
+  </Card>
+  <Card title="RabbitMQ" icon="right-left" href="/services/rabbitmq">
+    Message broker.
+  </Card>
+  <Card title="NATS" icon="right-left" href="/services/nats">
+    Lightweight messaging system.
+  </Card>
+  <Card title="Meilisearch" icon="magnifying-glass" href="/services/meilisearch">
+    Search engine.
+  </Card>
+  <Card title="MinIO" icon="box-archive" href="/services/minio">
+    S3-compatible object storage.
+  </Card>
+</CardGroup>
+
+Run `beaver service catalog` at any time for the definitive, current list of supported types
+and versions for your account — new types and versions are added over time.
+
+---
+
+## The Same Workflow, Every Type
+
+<Steps>
+  <Step title="Provision it">
+    ```bash
+    beaver service create paperclip-db --type postgres
+    ```
+    Omit `--type` for an interactive picker, or `--version` to pin a specific version — see
+    [`beaver service catalog`](/cli/service#catalog--provisioning) for what's available.
+  </Step>
+  <Step title="Attach it to your application">
+    ```bash
+    beaver service attach paperclip-web --database paperclip-db
+    ```
+    Your application receives a connection string as an environment variable. It can use it
+    once the attachment takes effect — for most services, that's your next deployment.
+  </Step>
+  <Step title="Manage it">
+    ```bash
+    beaver service show paperclip-db
+    beaver service backup paperclip-db
+    beaver service resize paperclip-db --cpu 2 --memory 2048
+    ```
+    Resize resources, schedule backups, reveal credentials, or upgrade the version, all
+    without re-provisioning from scratch.
+  </Step>
+</Steps>
+
+<Warning>
+  Deleting a service permanently removes its data. Detaching an application from a service
+  does not delete the service or its data — delete the service separately if that's what you
+  intend.
+</Warning>
+
+## Higher Availability
+
+For types that support it, `beaver service cluster` provisions a multi-member cluster
+instead of a single instance:
+
+```bash
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+```
+
+See [Service clusters](/concepts/service-clusters) for when this is worth the extra members.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services (concept)" href="/concepts/services">
+    What attaching a service actually does.
+  </Card>
+  <Card title="Service databases and credentials" href="/concepts/service-databases-and-credentials">
+    Logical databases, isolation, and credential rotation.
+  </Card>
+  <Card title="Backups and restoration" href="/concepts/backups-and-restoration">
+    Scheduling, restoring, and verifying recovered data.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Every subcommand and flag, exact syntax.
+  </Card>
+</CardGroup>

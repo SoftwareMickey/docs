@@ -1,0 +1,86 @@
+---
+title: "beaver spec"
+sidebarTitle: "spec"
+description: "Print Beaver's full command tree as machine-readable JSON."
+icon: "code"
+---
+
+## Purpose
+
+`beaver spec` prints the entire `beaver` command tree — every command, argument, and flag —
+as a single JSON document. It exists for tools that need to know what commands and flags a
+given `beaver` build supports without hand-maintaining their own list: editor integrations,
+Beaver Desktop, and similar. Most day-to-day CLI use never needs this command.
+
+## Syntax
+
+```bash
+beaver spec [flags]
+```
+
+Takes no arguments. Runs entirely offline and unauthenticated — it inspects the command tree
+built into this binary and nothing else, so its output only reflects your installed
+`beaver` version.
+
+## Flags
+
+<ParamField query="--slim" type="boolean" default="false">
+  Omit long descriptions and examples from the output — just the command/argument/flag
+  structure.
+</ParamField>
+<ParamField query="--path" type="string" default="">
+  Emit only the subtree at this command path, comma-separated, e.g.
+  `--path container,scale`.
+</ParamField>
+<ParamField query="--lint" type="boolean" default="false">
+  Check every command's `Use` string against its argument validator instead of printing the
+  spec. Exits non-zero if any command's declared usage and its actual argument requirements
+  have drifted apart.
+</ParamField>
+<ParamField query="--docs" type="string" default="">
+  Write the generated CLI reference (one Markdown page per command group) to this directory
+  instead of printing the spec to stdout.
+</ParamField>
+
+`--json` is also accepted (default `true`) — JSON is currently the only supported output
+format.
+
+## Consequences
+
+Read-only against the command tree; `--docs` is the one flag that writes anything, and what
+it writes is a fresh set of Markdown files in the directory you name — it doesn't touch
+anything else in your project or workspace.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Full spec
+beaver spec --json | jq .schema
+```
+
+```bash One subtree, trimmed
+beaver spec --slim --path container,scale
+```
+
+```bash Check for drift
+beaver spec --lint
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `--path` names a command that doesn't exist | An error naming the path as not found | Check the path segments against `beaver --help`. |
+| `--lint` finds drift | Non-zero exit, one line per affected command | File a `beaver-cli` issue — this indicates a bug in the CLI itself, not something a page or flag choice fixes. |
+
+## Used in
+
+Primarily consumed by tooling (Beaver Desktop, editor integrations) rather than a task
+guide — there's no interactive workflow built around this command.

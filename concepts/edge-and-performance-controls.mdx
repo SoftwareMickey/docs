@@ -1,0 +1,43 @@
+---
+title: "Edge and performance controls"
+description: "An optional layer in front of a Connected App — traffic, performance, and firewall managed as one unit instead of per-deployment."
+sidebarTitle: "Edge & performance"
+icon: "bolt"
+---
+
+**Edge** is an optional layer you put in front of a Connected App — a way to manage traffic,
+performance settings, and firewall rules for it as one unit, separate from any single
+deployment's own domain settings.
+
+```bash
+beaver edge app add --domain paperclip.example --origin https://origin.internal:8080
+beaver edge traffic app_abc123 --range 7d
+```
+
+## What you can see and control
+
+You connect one or more backends to a Connected App, then layer performance settings
+(caching, compression, and similar toggles — check the reference for the current set) on
+top. Edge's firewall works exactly like the deployment-scoped one — see
+[Firewall](/concepts/firewall) for the rule model, which is shared — just applied at this
+layer instead. Logs and traffic measurements are available per Connected App.
+
+## Two configurations that both apply
+
+Edge and a deployment's own domain/firewall settings are separate, and both take effect if
+both are in use. If traffic is behaving unexpectedly, check both rather than assuming only
+one is in play.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Firewall" href="/concepts/firewall">
+    The rule model Edge's firewall surface shares.
+  </Card>
+  <Card title="Observability" href="/concepts/observability">
+    Edge-level logs and traffic measurements.
+  </Card>
+  <Card title="Edge command reference" href="/cli/edge">
+    Exact settings and syntax.
+  </Card>
+</CardGroup>

@@ -1,0 +1,193 @@
+# Concept Layer — Era Implementation Status
+
+A per-era rollup across the 45-version roadmap (`00-architecture.docs`), in the same format
+as `beaver-desktop/features/gui/infra/eras_implementation.docs` (this roadmap's requested
+versioning reference). This is a summary/index, not a replacement for the per-era `.docs`
+files (each version carries its own Goal / Reuses / Implement / Validate / Done-when) or
+`gaps/00-index.docs`.
+
+Legend: ✅ done · 🟡 in progress · ⬜ not started · ⚠️ partial · ⛔ blocked on a missing
+dependency
+
+**Overall: ✅ All four phases done, verified 2026-09-17 · quality-revised 2026-09-17 ·
+admin removed 2026-09-17 (gap 2 in `gaps/00-index.docs`; sibling roadmap's `gaps/013`). **29**
+concept pages published under `/concepts/` (`concepts/administrative-commands.mdx` deleted by
+explicit user instruction — every "30 pages" mention below this line predates that removal
+and is a historical record, not current fact), reachable from a new "Concepts" group in the
+Guides tab (second position, after Getting started); 3 existing pages extended for the merge
+topics (`choose-your-setup.mdx`, `installation.mdx`, `connect.mdx`); 4 task guides and 36
+`cli/*.mdx` reference pages gained a link back to their paired concept page. **Post-launch
+quality pass (gap 010):** direct user feedback that the pages read as flat and reference-like
+led to studying Vercel's and Conductor's concept-page style (fetched live via `WebFetch`,
+not assumed) and rewriting all 30 pages to match — bolded-term lead definitions, verified
+real command snippets, targeted comparison tables, narrative section headings. Caught and
+fixed 4 inaccurate command examples in the process by verifying each against its source
+`cli/*.mdx` page before publishing. Template and worked example updated to match; the worked
+example is now a live copy of the real `concepts/services.mdx`. Full disclosure sweep and
+`mint broken-links` clean throughout, both before and after the rewrite.**
+
+Repo: `mintlify` (`main`). No backend or CLI changes required at any point — this roadmap
+produces documentation content only.
+
+---
+
+## Relationship to `/features/docs/` (CLI Documentation Closure)
+
+| Their era | Status (per their own `00-architecture.docs`) | Use here |
+| --- | --- | --- |
+| Era 1 — command inventory | not tracked as done here; check their file at execution time | Era 1 here cross-references existing pages, not their command inventory directly, but Eras 3–11 here link to whatever their Eras 3–11 eventually produce |
+| Era 2 — templates & disclosure | — | `DISCLOSURE.md` and the fictional vocabulary reused wholesale by this roadmap's Era 2 |
+| Eras 3–11 — family reference pages | — | Every concept page's "command reference" link target; not blocking, but a concept page linking to an unwritten reference page must say so honestly (per their own Invariant 9 pattern) |
+| Era 12 — task guides & CLI nav | — | The four existing task guides are this roadmap's direct link-back targets (Era 12 V41 here) |
+| Era 13 — verification & sustaining | — | This roadmap's Era 13 V45 extends their `CLAUDE.md` sustaining section rather than duplicating it |
+
+**Sequencing note.** This roadmap's Phase 1 (Eras 1–2) can start immediately — it does not
+wait on the sibling roadmap. Phase 2 family eras here can also start immediately per topic;
+only each page's final reference-link target may need a placeholder note until the sibling
+roadmap's matching family lands. Era 12 (nav + bidirectional linking) is easiest run once
+the sibling roadmap's Phase 2 is well underway, but is not formally gated on it finishing.
+
+---
+
+## Phase 1 — Foundation (reuse, don't rebuild)
+
+### Era 1 — Inventory & Placement (V1–V3) — ✅ done, verified 2026-09-17
+
+Topic checklist transcription, cross-reference against existing pages, nav-home decision.
+`inventory/00-topics.docs` (34/34 topics, verbatim from `concepts-explained.txt`) and
+`inventory/01-cross-reference.docs` (every topic classified against the actual current file
+tree and the now-accurate `/features/docs/inventory/doc_status.csv`) written and checked.
+Result: **4 merge-into-existing candidates** (T2 `choose-your-setup.mdx`, T3
+`installation.mdx`, T6 `connect.mdx`+`machine-roles.mdx`, T11
+`deploying/environment-variables.mdx`, each with a named gap, not a blanket "already done"),
+**28 new-page candidates**, **1 classify-first** (T34, deferred to Era 11 by design). One
+naming collision caught and resolved: T25 (Firewall, Beaver's own product feature) is
+explicitly distinguished from the similarly-named but unrelated
+`infrastructure-setup/firewall-requirements.mdx` (OS/cloud-provider port configuration) so
+Era 7 doesn't conflate or duplicate them.
+
+### Era 2 — Template & Disclosure (V4–V5) — ✅ done, verified 2026-09-17
+
+Concept page template + filled example (Services); `DISCLOSURE-ADDENDUM.md` extending the
+sibling roadmap's `DISCLOSURE.md`. Both drafted during planning, **re-verified this pass**:
+one real bug found and fixed — the template's original `{{placeholder}}` syntax is invalid
+MDX and was breaking `mint broken-links` for the entire site (not just this file), fixed by
+switching to `[[placeholder]]`. `mint broken-links` now clean site-wide. The addendum's
+two-pass-topics list cross-checked against Era 1's final classification: complete.
+
+---
+
+## Phase 2 — Write the concept pages, by product area
+
+### Era 3 — Mental Model & Setup (V6–V9) — ✅ done, verified 2026-09-17
+
+How Beaver fits together (net-new, fixes the one diagram/vocabulary every later page reuses
+— Invariant 8), Choosing my setup (merge), Installation and CLI basics (merge), Accounts and
+workspaces (net-new).
+
+### Era 4 — Connecting Infrastructure (V10–V13) — ✅ done, verified 2026-09-17
+
+Integrations (net-new), Connecting machines (merge), Machine and agent operation (net-new),
+Beaver Cloud (net-new, two-pass disclosure).
+
+### Era 5 — Projects & Configuration (V14–V17) — ✅ done, verified 2026-09-17
+
+Projects (net-new), Configuration (net-new, two-pass disclosure — highest flag-density
+family per the sibling roadmap), Environments and variables (merge-or-net-new, undecided —
+`gaps/00-index.docs` #5), Building applications (net-new).
+
+### Era 6 — Deploy Pipeline (V18–V21) — ✅ done, verified 2026-09-17
+
+Preflight and planning, Deployments, Containers and replicas, Compose applications — all
+net-new.
+
+### Era 7 — Networking & Scaling (V22–V25) — ✅ done, verified 2026-09-17
+
+Domains and routing, Scaling and resources (two-pass), Firewall (two-pass), Edge and
+performance controls — all net-new. The two topics the user named directly as needing
+disclosure care (`concepts-explained.txt` lines 26–44).
+
+### Era 8 — Services Core (V26–V28) — ✅ done, verified 2026-09-17
+
+Services (the transcript's own worked example — template's filled example *is* this page),
+Service databases and credentials, Service clusters — all net-new.
+
+### Era 9 — Data Persistence (V29–V31) — ✅ done, verified 2026-09-17
+
+Persistent storage (highest-stakes accuracy requirement in the roadmap — destructive-action
+list), Backups and restoration, Connecting to services locally (reference target
+unidentified — `gaps/00-index.docs` #4).
+
+### Era 10 — Observability & Operations (V32–V35) — ✅ done, verified 2026-09-17
+
+Observability, State and drift (two-pass, sibling roadmap's own highest-risk vocabulary
+reused one layer up), Rollback/promotion/recovery, Automation.
+
+### Era 11 — AI, Billing, Admin & Troubleshooting (V36–V39) — ✅ done, verified 2026-09-17
+
+AI connections and Alie (two-pass, single highest-risk page in the roadmap), Plans and
+billing, Troubleshooting (symptom-index hub, not standard template shape), Administrative
+commands (classification question — `gaps/00-index.docs` #6).
+
+---
+
+## Phase 3 — Integration
+
+### Era 12 — Navigation & Integration (V40–V42) — ✅ done, verified 2026-09-17
+
+New "Concepts" `docs.json` group added (Guides tab, second position — after Getting started,
+before Workflows), 30/30 pages, validated JSON, correct order. Bidirectional linking: 4 task
+guides gained pairing notes (one gap found and closed — `connect-and-machine-roles.mdx` was
+missing its link back from `machine-and-agent-operation.mdx`); 36 `cli/*.mdx` pages gained a
+generated "New here?" pointer to their concept page. Full V42 audit: script-verified all 34
+topics resolve to a real artifact — zero unresolved.
+
+---
+
+## Phase 4 — Verify and sustain
+
+### Era 13 — Verification & Sustaining (V43–V45) — ✅ done, verified 2026-09-17
+
+`mint broken-links` clean after every step (Eras 3–12 combined). Full-repo disclosure sweep:
+every checkpoint term from both `DISCLOSURE.md` and `DISCLOSURE-ADDENDUM.md` grepped across
+all 30 concept pages — every hit reviewed and found compliant (public page/command names,
+ordinary English, or the transcript's own explicitly-allowed rule-ordering language; zero
+mechanism descriptions, zero fixes needed). Mandatory second read on
+`ai-connections-and-alie.mdx` and `administrative-commands.mdx`: both re-read in full,
+confirmed clean. Sustaining process folded into both `CLAUDE.md` files: `beaver-cli/CLAUDE.md`'s
+existing "Keeping the public CLI reference in sync" checklist gained item 5 (new feature area
+→ check whether a concept page is needed); this repo's own `CLAUDE.md` gained a Concepts
+group description in its Guides-nav-groups line, pointing to `00-architecture.docs` and
+`inventory/00-topics.docs`.
+
+---
+
+## Cross-cutting risk register
+
+| Risk | Era | Mitigation designed in |
+| --- | --- | --- |
+| Concept pages drift into reference-page territory (flag tables, exhaustive syntax) | all Phase 2 | Invariant 1 (concept altitude); template has no flag-table section at all |
+| Two roadmaps' reference-page edits collide | 12 | V41 explicitly checks the sibling roadmap's own status before editing shared `cli/*.mdx` files |
+| Concept page links to a reference page that doesn't exist yet | 3–11 | Honest placeholder notes, resolved at Era 12 V41, same pattern the sibling roadmap already uses for its own cross-links |
+| Disclosure leak at concept altitude (higher risk than command altitude) | all Phase 2, esp. 5/7/10/11 | `DISCLOSURE-ADDENDUM.md`; two-pass topics named explicitly; Era 13 V44 full sweep |
+| Duplicated content between new Concepts group and existing Getting-Started pages | 3, 4, 5 | Invariant 9; Era 1 V2 classification is binding, deviations logged not silently made |
+| Destructive-action claims (Persistent storage, Rollback) stated incorrectly | 9, 10 | Invariant 1 applied with elevated stakes — explicitly called out as highest-accuracy requirement |
+| Nav position doesn't actually improve discoverability | 12 | Era 1 V3's placement reasoning recorded with rejected alternatives, so it's a decision, not a guess, and revisitable if wrong |
+
+---
+
+## Naming decisions
+
+- **The roadmap folder is `features/concepts/`** inside `mintlify`, restarting its own
+  V-line (V1–V45), exactly as `features/docs/` restarts its own and as
+  `beaver-desktop/features/gui/infra/` restarts its own relative to `features/gui/`.
+- **Published pages live under a new top-level `concepts/` directory**, mirroring the
+  existing `guides/` directory pattern — not nested under `cli/` (the explicit instruction
+  this roadmap exists to satisfy) and not merged into `guides/` (concepts and task guides
+  are different altitudes, kept as visibly different nav groups).
+- **"Concepts" is the nav group name**, matching the term `concepts-explained.txt` itself
+  uses throughout, so the sidebar label matches the vocabulary already established in the
+  planning conversation this roadmap is built from.
+- **This roadmap does not supersede or restructure `/features/docs/`** — the two are peers,
+  cross-referenced throughout, each owning a distinct layer (concept vs. reference) of the
+  same three-layer model.

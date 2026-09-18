@@ -1,0 +1,285 @@
+---
+title: "beaver config"
+sidebarTitle: "config"
+description: "Author and validate .beaver/config.yml, tune deployment settings, and manage your saved configuration on Beaver."
+icon: "gear"
+---
+
+<Info>
+  New here? [Configuration](/concepts/configuration) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver config` is the densest command group in the CLI — it covers writing
+`.beaver/config.yml` locally (from scratch or inferred from your Dockerfile/Compose file),
+tuning individual deployment settings, and syncing your project's saved configuration with
+Beaver. For the concepts behind what goes in this file, see [Deployment
+configuration](/deploying/deployment-configuration) and [Environment
+variables](/deploying/environment-variables) — this page is the command reference.
+
+## Authoring `.beaver/config.yml`
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)*, or `init` | Infer and write configuration from your Dockerfile/Compose file. |
+| `sync` | Re-run inference to bring the config file back in line with your current Dockerfile/Compose facts. |
+| `inspect` | Show what Beaver would infer, without writing anything. |
+| `show [container]` | Show this project's current configuration. |
+| `set <path> <value>` | Set one configuration value. |
+| `unset <path>` | Remove one configuration value. |
+| `schema` | Print the current `.beaver/config.yml` JSON Schema. |
+| `validate` | Check `.beaver/config.yml` for errors, locally, without deploying. |
+
+<Note>
+  There's also a separate top-level [`beaver validate`](/cli/validate) with the same
+  purpose — the two use different underlying checks and aren't guaranteed to report identical
+  diagnostics for every case. Either is a reasonable first check before deploying.
+</Note>
+
+`init`/`sync`/`inspect` read your existing Dockerfile and/or Compose file to suggest values
+for the config file — exposed ports, a declared healthcheck, volumes — as a **writing
+convenience for this file only**. This never changes how `beaver deploy` builds your
+application: the Dockerfile you provide is always the build source, with no auto-detection
+of framework or build steps at deploy time.
+
+<ParamField query="--file" type="string" default="">
+  Configuration file to operate on. Applies to every subcommand.
+</ParamField>
+<ParamField query="--json" type="boolean" default="false">
+  Print one machine-readable JSON envelope. Applies to every subcommand.
+</ParamField>
+<ParamField query="--dry-run" type="boolean" default="false">
+  Show the proposed write without changing files.
+</ParamField>
+<ParamField query="--diff" type="boolean" default="false">
+  Show a diff before writing.
+</ParamField>
+<ParamField query="--reset" type="boolean" default="false">
+  Replace configuration with detected defaults.
+</ParamField>
+<ParamField query="--no-backup" type="boolean" default="false">
+  Do not create a backup before writing.
+</ParamField>
+<ParamField query="--non-interactive" type="boolean" default="false">
+  Resolve configuration without prompts.
+</ParamField>
+<ParamField query="--defaults" type="boolean" default="false">
+  Allow detected/default values in non-interactive mode.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Confirm ordinary config writes without prompting.
+</ParamField>
+<ParamField query="--no-push" type="boolean" default="false">
+  Write `.beaver/config.yml` locally but don't save it to Beaver.
+</ParamField>
+<ParamField query="--verbose" type="boolean" default="false">
+  On `inspect`: include the matched Dockerfile lines that produced each inference.
+</ParamField>
+<ParamField query="--yaml" type="boolean" default="false">
+  On `show`: print the raw YAML instead of the formatted summary.
+</ParamField>
+<ParamField query="--revision" type="string" default="">
+  On `show`: show one specific saved revision by ID (or a unique ID prefix) instead of the
+  current one.
+</ParamField>
+
+`schema` prints a genuine JSON Schema describing valid `.beaver/config.yml` structure —
+field names, types, and constraints (for example, `strategy` is `rolling` or `recreate`;
+`replicas` is 1–50) — useful for editor autocomplete and validating your file before running
+`validate`. It is a schema for **your local YAML file's shape**, not a description of any
+internal processing behind it.
+
+### Non-interactive seed values
+
+These flags apply to every `config` subcommand (most useful on `init`/`sync`, to seed or
+override a value without the interactive prompt):
+
+<ParamField query="--strategy" type="string" default="">
+  Deployment strategy to write: `rolling` or `recreate`.
+</ParamField>
+<ParamField query="--domain" type="string" default="">
+  Primary domain to write.
+</ParamField>
+<ParamField query="--health-path" type="string" default="">
+  HTTP health-check path to write, e.g. `/healthz`.
+</ParamField>
+<ParamField query="--compose-file" type="string" default="">
+  Compose file to inspect when more than one is present in the directory.
+</ParamField>
+<ParamField query="--project-id" type="string" default="">
+  Beaver project ID to bind this configuration to.
+</ParamField>
+<ParamField query="--port" type="integer" default="0">
+  Detected application port. Currently informational only — the config schema doesn't yet
+  act on it, so setting it doesn't change deploy behavior.
+</ParamField>
+
+## Deployment tuning
+
+These subcommands edit one specific area of `.beaver/config.yml` without hand-editing the
+file.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `health [service]` | Configure a deployment's health check. |
+| `disable [service]` | Remove the health section — the platform default applies. |
+| `replicas [service] [count]` | Set how many replicas each service runs. |
+| `resources [service]` | Set the CPU and memory each container gets. |
+| `network` (`add`/`remove`/`list`) | Author required Docker networks. |
+| `bind` (`add`/`remove`/`list`) | Author host bind mounts. |
+| `volume` (`add`/`remove`/`list`) | Author required Docker volumes. |
+| `builder --clear` | Remove a legacy builder pin. New machine targets are refused; use a Beaver Cloud. |
+| `host --clear` | Remove a legacy host pin. New machine targets are refused; use a Beaver Cloud. |
+
+<ParamField query="--http" type="string" default="">
+  On `health`: HTTP health-check path, e.g. `/healthz`.
+</ParamField>
+<ParamField query="--interval" type="string" default="">
+  On `health`: time between checks, e.g. `10s`.
+</ParamField>
+<ParamField query="--timeout" type="string" default="">
+  On `health`: per-check timeout, e.g. `5s`.
+</ParamField>
+<ParamField query="--retries" type="integer" default="0">
+  On `health`: consecutive failures before marking unhealthy (minimum 1).
+</ParamField>
+<ParamField query="--clear" type="boolean" default="false">
+  On `replicas`/`resources`/`builder`/`host`: remove the section instead of setting it.
+</ParamField>
+<ParamField query="--cpu" type="number" default="0">
+  On `resources`: CPU cores to allocate — the enforced ceiling (`resources.limit`).
+</ParamField>
+<ParamField query="--memory" type="integer" default="0">
+  On `resources`: memory in MB to allocate — the enforced ceiling (`resources.limit`).
+</ParamField>
+<ParamField query="--request-cpu" type="number" default="0">
+  On `resources`: CPU cores to reserve day-to-day (`resources.request`). Optional; must not
+  exceed `--cpu`.
+</ParamField>
+<ParamField query="--request-memory" type="integer" default="0">
+  On `resources`: memory in MB to reserve day-to-day (`resources.request`). Optional; must
+  not exceed `--memory`.
+</ParamField>
+<ParamField query="--service" type="string" default="">
+  On `network`: deployment service to edit. Required when multiple deployments exist.
+</ParamField>
+<ParamField query="--alias" type="string" default="">
+  On `network add`: container DNS alias on the network.
+</ParamField>
+<ParamField query="--external" type="boolean" default="false">
+  On `network add`: the network already exists on the target host. On `volume add`: the
+  volume already exists on the target host — same meaning, different resource.
+</ParamField>
+<ParamField query="--source" type="string" default="">
+  On `bind add`: absolute host path to mount.
+</ParamField>
+<ParamField query="--target" type="string" default="">
+  On `bind add`/`volume add`: absolute mount path inside the container.
+</ParamField>
+<ParamField query="--read-only" type="boolean" default="false">
+  On `bind add`: mount the path read-only.
+</ParamField>
+<ParamField query="--yes-i-know" type="boolean" default="false">
+  On `bind add`: acknowledge a privileged bind source (a host path sensitive enough that
+  `--yes` alone doesn't skip this specific confirmation).
+</ParamField>
+
+## Saved configuration (server sync)
+
+Your project's configuration is also **saved to Beaver** as a revision history per
+container — separate from your local `.beaver/config.yml` file. These subcommands read and
+write that saved history; `beaver config push`/`pull` are what keep your local file and the
+saved copy in agreement.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `push` | Validate the local `.beaver/` bundle and save each container's configuration as a new revision. |
+| `pull [container]` | Rewrite local `.beaver/config.yml` entries to match the saved configuration — for example, after a change made from the dashboard. |
+| `diff [container]` | Show the saved configuration, the local one, and the difference between them. |
+| `status [container]` | Compare each container's saved configuration against its live, running state and the local file. |
+| `rollback <container> <revision-id>` | Restore a historical revision as a new, forward revision. |
+| `delete <container>` | Permanently delete a container's saved configuration. |
+| `containers` | List every container across your projects that has a saved configuration. |
+
+<ParamField query="--dry-run" type="boolean" default="false">
+  On `push`: validate and show what would be saved, without persisting anything.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `pull`: take the saved configuration even over local edits that were never pushed.
+</ParamField>
+<ParamField query="--dry-run" type="boolean" default="false">
+  On `pull`: show what pulling would change without writing `config.yml`.
+</ParamField>
+
+### Consequences
+
+`push` is the only one of these that changes the saved configuration — a `push` with no
+changes reuses the existing revision rather than minting a new one. `pull` rewrites every
+field the saved configuration declares (not just the one that changed); fields it doesn't
+track (like `deployment.path`) keep their current local value. `diff`/`status` are read-only.
+
+<Warning>
+  `rollback` is forward-only: the historical revision itself stays untouched, and rolling
+  back creates a **new** revision copied from it. There's no way to remove a revision from
+  history except `delete`, which removes the container's entire saved configuration (all
+  revisions), not just one.
+</Warning>
+
+`delete` refuses outright while the container is still live — delete the container itself
+first with [`beaver container <name> delete`](/cli/container), then its saved configuration
+here. `containers` is account-wide: unlike `push`/`pull`/`status`, it isn't scoped to the
+project bound to your current directory. It's also distinct from [`beaver
+containers`](/cli/containers), which lists deployed containers regardless of whether any of
+them has a saved configuration.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Author from an existing Dockerfile
+cd paperclip/
+beaver config init
+beaver config show
+```
+
+```bash Tune health and resources
+beaver config health --http /healthz --interval 10s --retries 3
+beaver config resources --cpu 1 --memory 1024
+```
+
+```bash Check and fix drift against the saved configuration
+beaver config status
+beaver config diff
+beaver config push
+```
+
+```bash Recover after a dashboard change
+beaver config pull
+```
+
+```bash Validate before deploying
+beaver config validate
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `push` with no changes | The existing revision reused, no new one minted | Nothing further. |
+| `pull` with unpushed local edits | Refusal, unless `--force` | Push your edits first, or `--force` to discard them in favor of the saved copy. |
+| `delete` on a live container | Refusal naming the still-running container | Delete the container first, then its saved configuration. |
+| `status` shows drift | The specific field(s) that differ | Decide whether to `push` (save local) or `pull` (adopt saved). |
+
+## Used in
+
+- [Deployment configuration](/deploying/deployment-configuration)
+- [Environment variables](/deploying/environment-variables)
+- [`validate`](/cli/validate) and [`plan`](/cli/plan) — read this same saved configuration
+  before a deploy.

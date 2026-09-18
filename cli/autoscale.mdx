@@ -1,0 +1,119 @@
+---
+title: "beaver autoscale"
+sidebarTitle: "autoscale"
+description: "Set a service's replica scaling policy in one step (declared, then applied)."
+icon: "arrows-up-down"
+---
+
+<Info>
+  New here? [Scaling and resources](/concepts/scaling-and-resources) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+`beaver autoscale` and [`beaver scaling policy set`](/cli/scaling#replica-policy) do the same
+underlying job — set a service's replica policy — through two different entry points.
+`autoscale` is the quicker, single-command form for the common case; `scaling policy set`
+exposes the full set of automatic-mode tuning flags (cooldowns, sustained window, `--plan`/
+`--dry-run` previews). Use whichever fits; they write the same `.beaver/config.yml` `scaling`
+block.
+
+## Purpose
+
+Declare how a service scales — either a fixed replica count, or automatic scaling based on a
+metric threshold — and apply it to the live deployment in one step, so the config file and
+the running policy never disagree.
+
+## Syntax
+
+```bash
+beaver autoscale [service] --min <n> --max <n> [flags]
+beaver autoscale [service] --clear
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name. Required if your project has more than one service. |
+
+## Flags
+
+<ParamField query="--min" type="integer" default="0">
+  Minimum replicas. For a fixed count, set this equal to `--max`.
+</ParamField>
+<ParamField query="--max" type="integer" default="0">
+  Maximum replicas.
+</ParamField>
+<ParamField query="--metric" type="string" default="">
+  Automatic-mode metric: `cpu`, `memory`, or `request_rate`. Passing this (or `--up`/`--down`)
+  switches the policy to automatic mode.
+</ParamField>
+<ParamField query="--up" type="number" default="0">
+  Scale-up threshold for `--metric`.
+</ParamField>
+<ParamField query="--down" type="number" default="0">
+  Scale-down threshold for `--metric`.
+</ParamField>
+<ParamField query="--clear" type="boolean" default="false">
+  Remove the scaling policy, returning to the platform default.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  Record the change even if your local config is out of sync with the recorded desired
+  state.
+</ParamField>
+<ParamField query="--commit" type="boolean" default="false">
+  Git-commit the `.beaver/config.yml` change. Never pushes.
+</ParamField>
+
+## Consequences
+
+A fixed policy (`--min`/`--max` equal, no `--metric`) sets an exact replica count. An
+automatic policy scales between `--min` and `--max` based on `--metric` crossing `--up`/
+`--down`. Either way, the change is written to `.beaver/config.yml` **and** applied to the
+live deployment — if writing the file succeeds but the file and the recorded desired state
+have diverged, you're told to reconcile with `beaver state pull` or pass `--force`.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Fixed replica count
+beaver autoscale --min 2 --max 2
+```
+
+```bash Automatic, CPU-based
+beaver autoscale api --min 2 --max 8 --metric cpu --up 70 --down 25
+```
+
+```bash Remove the policy
+beaver autoscale --clear
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+AUTOSCALE
+  service   api
+  policy    automatic 2–8 on cpu (up 70 / down 25)
+
+.beaver/config.yml — scaling policy recorded
+scaling policy applied
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Policy summary, then confirmation the config and live policy both updated | Nothing further. |
+| Neither `--min`/`--max` nor `--clear` given | `pass --min and --max (or --clear)` | Pass one or the other. |
+| Local config out of sync | `your local .beaver/config.yml differs from the recorded desired state` | Run `beaver state pull`, or `--force` if local is intentionally authoritative. |
+| No deployed container yet | An error pointing at `beaver deploy` | Deploy the service first. |
+
+## Used in
+
+- [Scaling: manual vs. automatic](/guides/scaling) — when to use this over a fixed count.
+- [`scaling`](/cli/scaling) — the fuller flag set (cooldowns, sustained window, plan/dry-run
+  previews) for the same underlying policy.

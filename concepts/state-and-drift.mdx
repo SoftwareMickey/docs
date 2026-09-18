@@ -1,0 +1,60 @@
+---
+title: "State and drift"
+description: "Local, saved, and running state can disagree — one command compares all three and tells you exactly where."
+sidebarTitle: "State & drift"
+icon: "list-tree"
+---
+
+Your project's configuration exists in three places that can disagree: your **local**
+`.beaver/config.yml`, what Beaver has **saved**, and what's actually **running**.
+`beaver state` shows you all three side by side.
+
+```bash
+beaver state status
+beaver state drift
+```
+
+## The command for each situation
+
+`status` compares all three views at once — the fastest way to answer "is everything in
+sync?" `drift` specifically shows the timeline of differences between the saved
+configuration and what's running. `pull` writes the saved configuration into your local
+file; `apply` does the reverse — saves your local file as the new saved configuration *and*
+updates the running deployment to match.
+
+## Why this exists
+
+Something was changed from the dashboard, or by a teammate, or directly on a machine — and
+now you're not sure your local file still reflects reality. Rather than guessing, `status`
+gives you one row per actual difference, so you know exactly what changed before you deploy
+on top of it.
+
+## Rolling back a configuration
+
+`rollback` restores an earlier saved revision as a **new**, forward revision — the
+historical revision itself stays untouched. There's no way to remove a revision from history
+except deleting the container's entire saved configuration (every revision at once);
+rollback only ever adds, it never edits or erases an old one.
+
+## If both sides have changed
+
+If your local file and the saved copy have both changed since they last agreed, `pull` takes
+the saved version over your local edits unless you choose otherwise. Check what a pull would
+change before running it if you're not sure your local edits are safe to lose.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Configuration" href="/concepts/configuration">
+    What's actually being compared.
+  </Card>
+  <Card title="Rollback, promotion, and recovery" href="/concepts/rollback-promotion-and-recovery">
+    What `rollback` restores, in the broader recovery picture.
+  </Card>
+  <Card title="State command reference" href="/cli/state">
+    Exact syntax for status, drift, pull, apply, rollback.
+  </Card>
+  <Card title="Reconcile command reference" href="/cli/reconcile">
+    Bringing a running deployment back in line without a full apply.
+  </Card>
+</CardGroup>

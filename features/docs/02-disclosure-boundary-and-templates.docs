@@ -1,0 +1,136 @@
+# Era 2 — Disclosure Boundary & Templates (V5–V7)
+
+_Phase 1 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17 · re-verified 2026-09-17**
+
+**Re-verification note (2026-09-17):** this status header was out of sync with reality —
+`DISCLOSURE.md` (V5), `templates/command-page-template.mdx` + `example-machine-reboot.mdx`
+(V6), and `cli/shared-flags.mdx` + `VOCABULARY.md` (V7) already existed and matched this
+era's spec. Re-checked against source during this pass: `cli/shared-flags.mdx`'s six flag
+descriptions and defaults verified word-for-word accurate against
+`beaver-cli/output/output.go`'s actual `RegisterFlags()`/`Wait()` implementation (no
+drift). The one correction: V7's "69 commands" figure (also repeated in
+`eras_implementation.docs`) was a stale hand-estimate — `build_summary.py` now computes it
+live from source every regeneration (currently 196; see `gaps/00-index.docs` entry 009).
+`mint broken-links` run clean against the full site after this pass (one unrelated MDX parse
+error found and fixed in an unrelated planning file, `features/concepts/templates/`, not
+part of this era's own output).
+
+Fixes the rules and the page shape once, so all nine Phase 2 family eras apply the same
+disclosure line and produce pages that read as one system rather than nine different
+authors' judgment calls. This is where the tension in `docs.txt` — thorough vs. safe — gets
+resolved into a checklist instead of re-litigated per page.
+
+---
+
+## V5 — The disclosure checklist
+
+### Goal
+A concrete, per-page checklist operationalizing Invariant 6 ("observable behavior only"),
+specific enough that two different writers reach the same publish/redact decision on the
+same command.
+
+### Reuses
+`docs.txt`'s rule 6 verbatim ("Keep database schemas, private endpoints, routing algorithms,
+orchestration mechanisms, and internal design decisions in private engineering docs") and
+this repo's `CLAUDE.md` ("Do not document how detection/build/deployment works internally
+… these are trade secrets").
+
+### Implement
+- A short internal checklist (`/features/docs/DISCLOSURE.md` or a `.docs` note — not
+  published): for every sentence describing *why* or *how* a command works, ask "would a
+  competitor learn our mechanism from this, or only what the product does?" — if the former,
+  cut it or move it to "internal engineering docs" (outside this repo).
+- A named list of terms that are a signal to stop and check, drawn from the Era 1 audit:
+  *reconcile, drift, desired state, contract, placement, routing, schema, orchestration,
+  job, dispatch, queue* — any of these appearing in draft prose is a checkpoint, not an
+  automatic redaction (the word "drift" is fine in "`beaver state drift` shows what changed
+  since your last deploy"; it is not fine in "drift is computed by diffing the reconciler's
+  desired-state graph against agent-reported container hashes").
+- Worked examples: one command from each risk tier (`beaver machine drain` — low risk,
+  wholly observable; `beaver state drift` — medium, needs the checklist; nothing from
+  `projectcontract`/`statecmd` published without an explicit pass, deferred to Era 9) shown
+  as before/after redaction, to calibrate every subsequent writer without a live review each
+  time.
+
+### Validate
+- The checklist, applied to the two worked "medium risk" examples, produces text that
+  describes only what the user sees and does — reviewed against `CLAUDE.md`'s trade-secret
+  list line by line.
+
+### Done when
+A writer unfamiliar with the internal architecture could draft a compliant page using only
+the checklist and the command's own `--help` + source-verified behavior — no tribal
+knowledge required.
+
+---
+
+## V6 — The command reference page template
+
+### Goal
+One `.mdx` template (frontmatter + section order) every family era fills in, matching
+`00-architecture.docs`'s page-structure diagram and this repo's existing component catalog.
+
+### Reuses
+`components.txt` for available components (`<ParamField>` for flags, `<CodeGroup>` for
+multi-shell examples, `<Warning>`/`<Note>` for consequences and gotchas, `<Accordion>` for
+less-common flag groups on very large pages like `service`/`config`); the frontmatter
+pattern already used across `infrastructure-setup/*.mdx` (`title`, `description`,
+`sidebarTitle`, `icon`) per `CLAUDE.md`.
+
+### Implement
+- A literal `.mdx` skeleton: frontmatter → Purpose paragraph → Syntax code block → a
+  `<ParamField>` per flag (grouped by required/optional, shared flags linked rather than
+  restated) → Consequences (`<Warning>` for irreversible actions, plain prose otherwise) →
+  Examples (`<CodeGroup>`) → Results & failures (table: error/output pattern → meaning →
+  recovery) → a closing "Used in" list linking task guides (Era 12).
+- A worked example filled from one already-documented, low-risk command (candidate:
+  `machine reboot` or `service start`) so family eras have a reference instance, not just an
+  abstract template.
+- A decision rule for when one family becomes multiple pages: if the flag count exceeds
+  roughly 20–25 or the subcommand tree has 3+ meaningfully distinct nested groups (`service`
+  → `database`, `cluster`, `backup-destination` is the clear case), split into a parent
+  overview page + one page per nested group, cross-linked — avoids the single unreadable
+  mega-page for `service` and `config`.
+
+### Validate
+- The filled worked example passes `mint dev` rendering with no MDX errors and matches the
+  visual pattern of existing well-formed pages (e.g. `infrastructure-setup/aws.mdx`).
+
+### Done when
+Every family era (3–11) can open the template, drop in its inventory rows, and produce a
+structurally consistent page without inventing section order or component choices.
+
+---
+
+## V7 — Shared flags reference and the fictional-example vocabulary
+
+### Goal
+One page for flags repeated across many commands (Invariant 8), and one fixed set of
+fictional projects/services/identifiers (Invariant 5) reused in every family's examples.
+
+### Reuses
+The V1 inventory, filtered for flags appearing on 3+ distinct commands (candidates from the
+pre-work census: `--wait`, `--yes`/`--force`, `--json`, `--machine`, `--quiet`, `--dry-run`
+— confirmed against the actual inventory, not assumed).
+
+### Implement
+- `cli/shared-flags.mdx` (or fold into an existing global-flags section if one already
+  exists — check before creating): one entry per shared flag — meaning, accepted values,
+  default, and *general* interaction notes; command-specific interaction notes stay on the
+  command's own page per Invariant 8 ("central reference, local context").
+- A short internal vocabulary note (not published) fixing example nouns: one fictional SaaS
+  project name, one fictional domain, 2–3 fictional service names (a web app, a Postgres
+  database, a Redis cache — mirrors the kind of stack `beaver-desktop`'s own examples use),
+  fictional machine names. Every family era's examples draw from this set so a reader
+  moving between pages sees one coherent mental example, not a new cast each time.
+
+### Validate
+- The shared-flags page covers every flag identified as shared in the inventory filter.
+- No two family pages invent conflicting fictional identifiers for the same concept (e.g.
+  two different "the example database name").
+
+### Done when
+A flag appearing on 10 different commands has one explanation, linked 10 times; the
+examples across the whole `cli/` tree read as one continuous, adaptable scenario.

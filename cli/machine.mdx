@@ -1,17 +1,294 @@
 ---
 title: "beaver machine"
-description: "Inspect fleet health and perform machine maintenance."
+sidebarTitle: "machine"
+description: "Inspect fleet health, manage maintenance, and configure monitoring for enrolled machines."
+icon: "server"
 ---
+
+<Info>
+  New here? [Machine and agent operation](/concepts/machine-and-agent-operation) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver machine` is where you check on and maintain the machines already connected via
+[`beaver connect`](/cli/connect) — the densest command group in the CLI. It covers everything
+from a quick `list`/`overview` to fleet-wide policy, maintenance windows, cleanup, and
+predictive advisories. To connect a new machine, use `beaver connect`; `beaver machine
+remove` (an alias for `beaver server remove`) disconnects one.
+
+## Inventory
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | List enrolled machines. |
+| `overview <machine-id>` | Show one machine's status, capabilities, and metrics summary. |
+| `show <machine-id>` | Alias for `overview <machine-id>`. |
+
+<ParamField query="--live" type="boolean" default="false">
+  On `overview`: round-trip the background agent for live monitoring-component status instead
+  of the last cached check.
+</ParamField>
+
+## Lifecycle & maintenance
+
+| Subcommand | Purpose |
+| --- | --- |
+| `reboot-impact <machine-id>` | Preview what a reboot would interrupt, without doing it. |
+| `reboot <machine-id>` | Reboot the machine. |
+| `package-update [machine-id]` | Apply OS package updates. |
+| `restart-service <machine-id>` | Restart one system service on the machine. |
+| `remove [machine-id]` | Disconnect and permanently remove the machine from your workspace. |
+| `maintenance-windows <machine-id>` | List/add/update scheduled maintenance windows. |
+| `maintenance-runs <machine-id>` | List past maintenance-window executions. |
+
+<ParamField query="--yes" type="boolean" default="false">
+  On `reboot`, `package-update`, `restart-service`, `remove`: skip the confirmation prompt.
+  See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--class" type="string" default="security">
+  On `package-update`: update class — `security`, `regular`, or `kernel`.
+</ParamField>
+<ParamField query="--verbose" type="boolean" default="false">
+  On `package-update`: stream package-manager output live instead of a progress line.
+</ParamField>
+<ParamField query="--service" type="string" default="" required>
+  On `restart-service`: the service name to restart. Required.
+</ParamField>
+<ParamField query="--day" type="string" default="" required>
+  On `maintenance-windows add`: UTC day of week, e.g. `sunday`. Required.
+</ParamField>
+<ParamField query="--hour" type="integer" default="0">
+  On `maintenance-windows add`/`update`: UTC hour of day (0–23).
+</ParamField>
+<ParamField query="--class" type="string" default="" required>
+  On `maintenance-windows add`: action class the window applies to, e.g. `package-update`.
+  Required on `add`.
+</ParamField>
+<ParamField query="--enabled" type="boolean" default="true">
+  On `maintenance-windows add`/`update`: whether the window is active.
+</ParamField>
+
+### Consequences
+
+<Warning>
+  `remove` is permanent and has no undo. The machine ID and hardware fingerprint are freed
+  up afterward, so the same physical machine can be reconnected later with `beaver connect`
+  if needed — but this run itself cannot be reversed. The physical machine is never touched;
+  Beaver only forgets about it, and its local credentials stop working immediately.
+</Warning>
+
+`reboot` takes down **every container running on the machine**, not just one application, for
+the duration of the reboot; run `reboot-impact` first to see exactly what will be interrupted.
+`package-update` and `restart-service` can briefly disrupt whatever runs on that machine —
+check `reboot-impact`-style expectations apply here too. Maintenance windows let you schedule
+when a given action class (e.g. `package-update`) is allowed to run automatically, rather than
+triggering it by hand each time.
+
+## Cleanup
+
+| Subcommand | Purpose |
+| --- | --- |
+| `cleanup-plan [machine-id]` | Preview what disk/Docker cleanup would remove. |
+| `cleanup apply <plan-id> [machine-id]` | Apply a cleanup plan. |
+| `cleanup plans [machine-id]` | List cleanup plans. |
+| `cleanup show <plan-id> [machine-id]` | Show one plan's detail. |
+| `cleanup retry <plan-id> [machine-id]` | Retry a failed cleanup plan. |
+| `cleanup cancel <plan-id> [machine-id]` | Cancel a pending cleanup plan. |
+
+<ParamField query="--prune-build-cache" type="boolean" default="false">
+  On `cleanup-plan`: also prune the Docker build cache when the plan is applied.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--review" type="boolean" default="false">
+  Interactively pick individual items from the review-required tier instead of accepting the
+  whole plan.
+</ParamField>
+
+Always run `cleanup-plan` before `cleanup apply` — the plan is exactly what will be removed,
+nothing more. Some items require the `--review` step because removing them isn't always safe
+to automate blindly (for example, a stopped container that hasn't been confirmed unneeded).
+
+## Approvals
+
+`beaver machine approvals <machine-id>` lists actions awaiting your approval on that machine
+(`approve`/`reject` subcommands). Used together with **policy** below — in `assisted` mode,
+actions Beaver would otherwise take automatically instead wait here for your decision.
+
+<ParamField query="--yes" type="boolean" default="false">
+  On `approve`/`reject`: skip the confirmation prompt.
+</ParamField>
+
+## Policy & fleet groups
+
+| Subcommand | Purpose |
+| --- | --- |
+| `policy <machine-id>` | Show a machine's current policy. |
+| `policy set <machine-id>` | Change a machine's policy. |
+| `group-policy <group-id> set` | Set policy for every machine in a group at once. |
+| `groups` | List machine groups. |
+| `groups create` / `update <group-id>` / `delete <group-id>` | Manage machine groups. |
+| `fleet-overview` | Fleet-wide status summary. |
+| `fleet-drift` | Machines whose configuration differs from their group's policy. |
+| `fleet-capacity` / `fleet-capacity search` | Fleet-wide capacity view and search. |
+
+<ParamField query="--mode" type="string" default="" required>
+  On `policy set` / `group-policy set`: `observe` (report only), `assisted` (ask before
+  acting — see Approvals above), or `autopilot` (act automatically). Required.
+</ParamField>
+<ParamField query="--firewall-enabled" type="boolean" default="false">
+  Desired state: firewall enabled.
+</ParamField>
+<ParamField query="--ssh-root-login-off" type="boolean" default="false">
+  Desired state: SSH root login disabled.
+</ParamField>
+<ParamField query="--auto-security-updates" type="boolean" default="false">
+  Desired state: security updates applied automatically.
+</ParamField>
+<ParamField query="--group" type="string" default="">
+  On `fleet-overview`/`fleet-drift`/`fleet-capacity`: filter to one machine group.
+</ParamField>
+<ParamField query="--name" type="string" default="" required>
+  On `groups create`: group name. Required on create; optional (rename) on `update`.
+</ParamField>
+<ParamField query="--machines" type="string" default="">
+  On `groups update`: comma-separated machine IDs — **replaces** the group's membership
+  entirely, not additive.
+</ParamField>
+
+### Consequences
+
+Policy controls how much Beaver does on its own for a machine: `observe` only reports issues,
+`assisted` asks you to approve each action first (via `machine approvals`), and `autopilot`
+takes the configured actions automatically without asking each time. Changing `--mode`
+changes this behavior going forward; it doesn't retroactively affect anything already done.
+
+<Warning>
+  `groups update --machines` replaces the entire group membership list — a machine left off
+  the new list is removed from the group, not just the ones you intended to add.
+</Warning>
+
+## Monitoring & diagnostics
+
+| Subcommand | Purpose |
+| --- | --- |
+| `metrics <machine-id>` | Current/peak machine metrics. |
+| `events [machine-id]` | Machine event history. |
+| `trends <machine-id>` | Project a metric's trend forward. |
+| `alerts [machine-id]` | List active alerts. |
+| `alert-rules [machine-id]` / `alert-rules set` | View/configure alert thresholds. |
+| `services [machine-id]` | List system services and their status. |
+| `docker [machine-id]` | Docker-level status on the machine. |
+| `live [machine-id]` | Live-updating view of the machine. |
+| `log-inventory <machine-id>` | Show what log sources exist on this machine — the source IDs `logs --source` accepts. |
+| `logs <machine-id>` | Read (or `--follow`) one log source's entries (not container logs — see [`logs`](/cli/logs) for that). |
+| `security <machine-id>` | Show a machine's security posture score. |
+| `exposure <machine-id>` | Show what's publicly reachable on this machine and whether it's protected. |
+| `monitoring enable <machine-id>` / `disable <machine-id>` | Turn Beaver-managed Prometheus monitoring on or off for a machine. |
+| `monitoring status <machine-id>` / `query <machine-id>` / `metrics <machine-id>` | Private Prometheus monitoring status and curated queries, once enabled. |
+| `anomalies <machine-id>` | Metrics that are unusual relative to this machine's own baseline. Advisory only. |
+| `rightsizing <machine-id>` | Advisory CPU/memory sizing recommendations. Advisory only — no action is ever taken automatically. |
+
+<ParamField query="--source" type="string" default="" required>
+  On `logs`: log source ID from `log-inventory`. Required.
+</ParamField>
+<ParamField query="--follow" type="boolean" default="false">
+  On `logs`: stream new entries live instead of one page of history.
+</ParamField>
+<ParamField query="--level" type="string" default="">
+  On `logs`: minimum severity — `debug`, `info`, `warning`, or `error`.
+</ParamField>
+<ParamField query="--query" type="string" default="">
+  On `logs`: case-insensitive text search.
+</ParamField>
+
+<ParamField query="--window" type="string" default="1h">
+  On `metrics`: time window — `1h`, `6h`, `24h`, `7d`, or `30d`.
+</ParamField>
+<ParamField query="--limit" type="integer" default="0">
+  On `events`/`maintenance-windows`: max results to return (0 = server default).
+</ParamField>
+<ParamField query="--category" type="string" default="">
+  On `events`: filter by category.
+</ParamField>
+<ParamField query="--severity" type="string" default="">
+  On `events`: filter by severity.
+</ParamField>
+<ParamField query="--metric" type="string" default="disk_used_gb">
+  On `trends`: which metric to project. On `alert-rules set`: metric name, e.g.
+  `disk_used_pct` (required there).
+</ParamField>
+<ParamField query="--window" type="string" default="30d">
+  On `trends`: history window to project from.
+</ParamField>
+<ParamField query="--operator" type="string" default="" required>
+  On `alert-rules set`: comparison operator — `gt`, `gte`, `lt`, `lte`. Required.
+</ParamField>
+<ParamField query="--threshold" type="number" default="0">
+  On `alert-rules set`: threshold value.
+</ParamField>
+<ParamField query="--for" type="integer" default="0">
+  On `alert-rules set`: seconds the condition must hold before the alert fires.
+</ParamField>
+<ParamField query="--source" type="string" default="" required>
+  On `logs`: log source ID from the machine's log inventory. Required.
+</ParamField>
+<ParamField query="--follow" type="boolean" default="false">
+  On `logs`: stream new entries live instead of returning one page of history.
+</ParamField>
+<ParamField query="--query" type="string" default="prometheus_up">
+  On `monitoring query`: curated query — `prometheus_up`, `prometheus_targets_up`, or
+  `prometheus_storage_bytes`.
+</ParamField>
+<ParamField query="--since" type="string" default="1h">
+  On `monitoring metrics`: lookback window, e.g. `1h`, `24h`, `7d`.
+</ParamField>
+
+`anomalies` is additive to fixed alert-rule thresholds — it flags a sample as unusual
+relative to the machine's own rolling baseline, not a fixed cutoff, and (like `rightsizing`)
+never takes action on its own; both are pure reads.
 
 ## Examples
 
-```bash
-beaver machine list
-beaver machine overview <machine-id>
-beaver machine metrics <machine-id> --window 24h
-beaver machine fleet-overview
-beaver machine reboot-impact <machine-id>
-beaver machine cleanup-plan <machine-id>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Check before rebooting
+beaver machine reboot-impact srv_web01
+beaver machine reboot srv_web01
 ```
 
-Use `reboot-impact` and `cleanup-plan` before their mutating counterparts. See `beaver machine --help` for alerts, policies, approvals, maintenance windows, monitoring, and security commands.
+```bash Clean up disk space
+beaver machine cleanup-plan srv_web01
+beaver machine cleanup apply plan_abc123 srv_web01 --yes
+```
+
+```bash Set a machine to autopilot
+beaver machine policy set srv_web01 --mode autopilot --auto-security-updates
+```
+
+```bash Fleet health at a glance
+beaver machine fleet-overview
+beaver machine fleet-drift
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `remove` success | Confirmation, then the machine disappears from `list` | No undo; reconnect with `beaver connect` if needed later. |
+| `reboot` declined | Command exits without rebooting | Re-run with `--yes` once you're sure. |
+| `cleanup apply` on a stale plan | An error naming the failure | Regenerate with `cleanup-plan` and retry. |
+| `policy set` missing `--mode` | `--mode` required error | Pass `observe`, `assisted`, or `autopilot`. |
+
+## Used in
+
+- [Connect and machine roles](/guides/connect-and-machine-roles) — connecting and grouping
+  machines this page manages.

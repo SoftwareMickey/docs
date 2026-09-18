@@ -1,0 +1,62 @@
+---
+title: "Machine and agent operation"
+description: "Once a machine is connected, the Beaver agent running on it is what keeps Beaver able to act on it day to day."
+sidebarTitle: "Machine & agent operation"
+icon: "server"
+---
+
+Once a machine is connected (see [Connecting machines](/connect) for getting there), the
+**agent** running on it is what keeps Beaver aware of its health and able to act on it —
+deploying, restarting, scaling. This page is about running a connected machine day to day,
+not the initial connection.
+
+```bash
+beaver machine list
+beaver machine overview <machine-id>
+```
+
+## Why this matters
+
+A deployment on a specific machine seems stuck, or a machine shows "degraded" instead of
+"healthy," or the agent needs an update — none of these are things you troubleshoot by
+guessing. The agent is the thing reporting all of it, and it can be operated independently
+of whatever's actually running on the machine.
+
+## What "offline" does and doesn't mean
+
+A machine reporting **offline** doesn't mean its containers stopped — they keep running
+independently of the agent's connection to Beaver. Offline means Beaver has lost visibility
+and control until the agent reconnects, not that your application went down. This trips
+people up constantly, so it's worth internalizing early.
+
+## What you can see and control
+
+Every connected machine reports a health state — healthy, degraded, or offline — visible via
+`beaver machine list`/`inspect`. The agent itself can be started, stopped, restarted, and
+updated independently of the machine's containers. Logs, maintenance windows, and cleanup of
+old build artifacts are all things you trigger explicitly.
+
+**Approvals**: some actions can be configured to require your explicit confirmation before
+they run — for example, something proposed by tooling rather than typed directly by you.
+`beaver machine approvals` lists anything waiting on your confirmation; nothing proceeds
+until you approve or reject it.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Machine command reference" href="/cli/machine">
+    The full operational command surface — the largest single command group in the CLI.
+  </Card>
+  <Card title="Agent command reference" href="/cli/agent">
+    Install, start, stop, and update the agent directly.
+  </Card>
+  <Card title="Doctor command reference" href="/cli/doctor">
+    Diagnose a machine before or after connecting.
+  </Card>
+  <Card title="Recover command reference" href="/cli/recover">
+    Recovery actions when a machine or deployment needs a nudge.
+  </Card>
+  <Card title="Connect and machine roles guide" href="/guides/connect-and-machine-roles">
+    Getting a machine connected in the first place.
+  </Card>
+</CardGroup>

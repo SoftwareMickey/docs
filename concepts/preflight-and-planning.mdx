@@ -1,0 +1,53 @@
+---
+title: "Preflight and planning"
+description: "Check what a deploy would do before it does it — and know the difference between a warning and a blocker."
+sidebarTitle: "Preflight & planning"
+icon: "clipboard-check"
+---
+
+Before a deployment actually runs, Beaver gives you three ways to check what it would do
+first — from a fast local check to a full readiness sweep.
+
+```bash
+beaver validate
+beaver plan <container>
+beaver preflight
+```
+
+## Three checks, three depths
+
+`beaver validate` checks your local `.beaver/config.yml` for errors — entirely offline,
+entirely read-only. `beaver plan <container>` goes further: it resolves what a real deploy
+of that container would do — the revision it would use, what would change — again without
+doing it. `beaver preflight` runs the broadest sweep, across build, security, and other
+check categories.
+
+## Warning versus blocker
+
+Every `preflight` finding is one of two things: a **warning** (the deploy can still proceed)
+or a **blocker** (it can't, until you fix it or explicitly override where an override
+exists). This distinction is the whole point of running preflight — it tells you which
+findings you can ship past and which you can't.
+
+## What none of this guarantees
+
+None of these commands guarantee a deploy will succeed — they catch what's checkable ahead
+of time. A deploy still validates again once it actually runs, since some conditions (like
+another change landing in between) can only be known at that moment.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Deployments" href="/concepts/deployments">
+    What `plan` is actually previewing.
+  </Card>
+  <Card title="Validate command reference" href="/cli/validate">
+    Local config validation, exact syntax.
+  </Card>
+  <Card title="Plan command reference" href="/cli/plan">
+    Preview a deploy, exact syntax.
+  </Card>
+  <Card title="Preflight command reference" href="/cli/preflight">
+    Every check category in detail.
+  </Card>
+</CardGroup>

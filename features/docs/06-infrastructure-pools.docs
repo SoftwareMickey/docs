@@ -1,0 +1,135 @@
+# Era 6 — Infrastructure Pools (V19–V22)
+
+_Phase 2 · CLI Documentation Closure V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+`cloud` is the second-largest zero-coverage group in the whole CLI (29 subcommands, 34 flag
+sites, **no page at all**) — this era's centerpiece. `edge` and `firewall` are the two
+densest already-documented groups after `machine`/`config`/`alie` and need real
+verification, not a skim.
+
+Commands: `cloud`, `scaling`, `autoscale`, `edge`, `domain`, `firewall`.
+
+---
+
+## V19 — `cloud` (new, largest zero-coverage group here)
+
+### Goal
+A full `cli/cloud.mdx` (or split page set, per the Era 2 V6 rule) covering all 29
+subcommands: `list`, `create`, `rm`, `rename`, `inspect`, `status`, `events`, `enable`,
+`set`, `clear`, `reserve`, `trend`, `capacity`, `machines`/`add`/`rm [machine]`, `network`,
+`allows`, `gateway`, `node`, `containers`, `services`, `placements`, `workload`, `preflight`.
+
+### Reuses
+`infrastructure-setup.mdx` and the `infrastructure-setup/*` provider pages (already
+document *how a machine gets connected*, per `CLAUDE.md`'s current bring-your-own-machine
+model) — `cloud.mdx` documents *what you do with a cloud once machines are enrolled in it*,
+cross-linking rather than duplicating. Also usable as a cross-product consistency check:
+`beaver-desktop/features/cloud/00-architecture.docs` and
+`beaver-desktop/features/gui/infra/03-cloud-section.docs` already describe this same
+resource's observable model (status vs. network_status as separate axes, capacity as a
+four-part rollup, WireGuard vocabulary gated behind "Advanced") from the GUI side — the CLI
+page should describe the same observable concepts consistently, without importing any
+internal detail those roadmaps also keep private.
+
+### Implement
+- Given 29 subcommands, apply the split rule: a `cloud.mdx` overview + lifecycle page
+  (list/create/rm/rename/inspect/status/enable) and likely a second page or grouped
+  `<Accordion>` sections for network (`network`/`allows`/`gateway`), capacity (`capacity`/
+  `reserve`/`trend`/`workload`/`placements`), and membership (`machines`/`add`/`rm`/`node`/
+  `preflight`) — decided by whichever seam the actual inventory rows show most cleanly.
+- **Explicit disclosure pass**: `status` vs. `network_status` are two separate, observable
+  axes (confirmed by the GUI roadmap's own Invariant framing) — document them as two things
+  a user checks, never *why* they're separate (that's the platform's internal cloud-model
+  reasoning). WireGuard-specific fields (if `gateway`/`network` subcommands surface public
+  keys/endpoints) get the same "Advanced" gating in prose that the GUI roadmap uses for the
+  UI — mentioned but not elaborated as protocol internals.
+- `capacity`/`reserve`/`trend`/`workload`/`placements`: document what the numbers mean to
+  the user (schedulable capacity, in-use vs. reserved) without describing the placement
+  algorithm that produces `placements` — Invariant 6's clearest test case in this era.
+
+### Validate
+- Against the Era 2 disclosure checklist specifically for `network`, `gateway`, `placements`,
+  `workload` — the four subcommands most likely to invite mechanism-explaining prose.
+- Cross-checked for consistency (not duplication) against the `beaver-desktop` cloud GUI
+  roadmap's observable-behavior descriptions.
+
+### Done when
+All 29 `cloud` subcommands are `documented`, the disclosure pass is explicitly recorded as
+done (not assumed), and the page(s) cross-link `infrastructure-setup.mdx`.
+
+---
+
+## V20 — `scaling` and `autoscale`
+
+### Goal
+Verify/extend `scaling.mdx`; write the missing `autoscale.mdx`.
+
+### Reuses
+Existing `cli/scaling.mdx`; V1 inventory for both (11 vs. 13 files, 24 vs. 8 flag sites).
+
+### Implement
+- `scaling`: full flag diff; consequences for manual scale operations (replica count changes,
+  whether zero-downtime is guaranteed or conditional).
+- `autoscale`: new page — document the user-facing contract (thresholds, min/max, what
+  triggers a scale event as observed by the user: "when CPU exceeds your configured
+  threshold for the configured window") without describing the autoscaler's internal
+  decision loop.
+- Cross-link `scaling` ↔ `autoscale` explicitly — a reader configuring one will likely need
+  the other.
+
+### Validate
+- `autoscale`'s trigger description is stated in terms of user-configured thresholds only,
+  checked against the disclosure checklist.
+
+### Done when
+Both rows `documented` and cross-linked.
+
+---
+
+## V21 — `edge` deep verification
+
+### Goal
+`cli/edge.mdx` covers all 42 flag sites (second-densest group in the whole audit).
+
+### Reuses
+Existing `cli/edge.mdx`; V1 inventory rows.
+
+### Implement
+- Full flag diff — given the density, expect this page needs the Accordion/split treatment
+  from Era 2 V6 as much as `cloud`/`config` do.
+- Consequences for edge/routing-adjacent commands framed as observable traffic behavior
+  (which requests go where, what a misconfiguration looks like to the user) without
+  describing routing/placement internals — same Invariant 6 discipline as `cloud`'s
+  `network`/`placements` subcommands.
+
+### Validate
+- Disclosure checklist applied given the routing-adjacent subject matter.
+
+### Done when
+`edge`'s inventory row is fully `documented`.
+
+---
+
+## V22 — `domain` and `firewall`
+
+### Goal
+Verify/extend both existing pages, with `firewall` (41 flag sites) getting the deeper pass.
+
+### Reuses
+Existing `cli/domain.mdx`, `cli/firewall.mdx`; V1 inventory rows.
+
+### Implement
+- `domain`: flag diff, consequences for DNS/certificate-affecting operations (propagation
+  delay framed as an observable "this can take up to X" rather than internal DNS mechanics).
+- `firewall`: full flag diff across 41 sites; rule-ordering and precedence documented as
+  user-observable behavior ("more specific rules take precedence" is fine; the underlying
+  rule-evaluation engine is not) — another clean Invariant 6 test case.
+
+### Validate
+- `firewall`'s precedence/ordering language checked against the disclosure checklist.
+
+### Done when
+Both rows `documented`; family (V19–V22) has zero remaining gaps, and `cloud` — the era's
+centerpiece — is the single largest inventory-row delta closed anywhere in this roadmap.

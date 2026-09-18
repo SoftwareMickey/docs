@@ -178,155 +178,77 @@ beaver connect
 
 ## Current command reference
 
-The command surface has expanded beyond the original setup-only workflow. The following reference reflects the current CLI. Run `beaver <command> --help` for the exact flags shipped in your version.
+The full, exhaustive reference for every command and flag lives on its own page, linked from
+the sidebar under **CLI**. This section is a map of what's where, not a restatement of it —
+run `beaver <command> --help` for the exact flags shipped in your version, or open a page
+below for the full walkthrough (purpose, every flag, consequences, and examples).
 
 ### Daily project workflow
 
-```bash
-beaver init [--guided|--propose]
-beaver validate
-beaver contract show
-beaver plan [--env <environment>] [--json]
-beaver deploy [--single|--git] [--dockerfile <path>]
-beaver inspect [service]
-beaver observe [service] [--logs|--traffic|--metrics <name>] [--follow]
-beaver status [--env <environment>] [--explain]
-beaver recover [service] [--explain|--restart|--rollback]
-beaver diff [service] [release-a] [release-b]
-```
-
-Use `init` to prepare the current directory, `validate` to check it without deploying, `contract show` to view normalized configuration, and `plan` to preview a deployment. `deploy` uses the current directory by default; its non-interactive flags include `--project-id`, `--repo`, `--branch`, `--commit`, `--builder-id`, `--host-id`, `--container-name`, `--container-port`, `--host-port`, `--docker-user`, `--image`, `--deployment-path`, `--env-file`, repeatable `--env-var KEY=value`, `--env`, `--framework`, `--dry-run`, `--logs`, `--wait`, `--timeout`, `--output`, `--json`, `--quiet`, and `--yes`.
-
-After a successful deploy, use `inspect` for a summary, `observe` for logs/traffic/metrics, `status` for declared-versus-live comparison, `diff` for release comparison, and `recover` for diagnosis or an explicitly requested restart/rollback. Deployment IDs can be inspected with `beaver deployment`.
+[`init`](/cli/init) prepares the current directory; [`validate`](/cli/validate) checks it
+without deploying; [`config`](/cli/config) authors and inspects `.beaver/config.yml` in
+depth; [`plan`](/cli/plan) previews what a deploy of one container would do.
+[`deploy`](/cli/deploy) builds and ships the current directory or a connected GitHub repo.
+After a deploy, use [`inspect`](/cli/inspect) for a quick summary,
+[`observe`](/cli/observe) for logs/traffic/metrics together,
+[`status`](/cli/status) for declared-vs-live comparison, [`diff`](/cli/diff) to compare two
+releases, and [`recover`](/cli/recover) to diagnose or explicitly restart/roll back.
+[`state`](/cli/state) and [`reconcile`](/cli/reconcile) cover the saved-vs-running
+comparison and catch-up story in more depth.
 
 ### Containers, deployments, and Compose
 
-```bash
-beaver containers
-beaver container <name> inspect|logs|history|redeploy|restart|rollback|delete
-beaver deployment list <container>
-beaver deployment show|status|logs|watch|retry|cancel <deployment-id>
-beaver compose detect
-beaver compose deploy
-beaver compose stacks
-beaver compose stack show|networks|volumes|delete <stack-id>
-beaver compose release show|watch|rollback|retry|cancel <release-id>
-```
-
-Container commands inspect, log, redeploy, restart, roll back, or delete one deployed container. Deployment commands provide history, status, request logs, live progress, retry, and cancellation by ID. Compose commands detect resources, deploy a stack, and operate its stacks and releases. Confirm destructive actions; use `--yes` where supported.
+[`containers`](/cli/containers) lists everything deployed; [`container`](/cli/container)
+inspects, logs, redeploys, restarts, rolls back, or deletes **one** container.
+[`deployment`](/cli/deployment) is the history/control surface for individual deployment
+attempts, by ID. [`compose`](/cli/compose) detects, deploys, and operates multi-service
+Compose stacks. [`promote`](/cli/promote) moves an already-built image to another
+environment without rebuilding.
 
 ### Projects, environments, and domains
 
-```bash
-beaver project list|show <project-id>|create|delete <project-id>
-beaver environment list|create|delete <environment-id>
-beaver environment vars list|pull|push|diff [service]
-beaver domain list|add|verify <domain-id>|certificate <domain-id>|remove <domain-id>
-```
+[`project`](/cli/project), [`environment`](/cli/environment), and [`domain`](/cli/domain)
+cover project grouping, environment/branch mapping, and custom domains.
+[`route`](/cli/route) inspects a domain's live DNS/TLS/backend health in one place.
 
-Projects group applications, containers, and environments. Use `--env` with `plan`, `deploy`, and `status`. Review environment-variable changes before pushing and never commit secrets. Domain verification requires DNS propagation; `certificate` provisions or reprovisions TLS.
+### Fleet and infrastructure
 
-### Fleet and local machine operations
+[`doctor`](/cli/doctor) checks local prerequisites; [`connect`](/cli/connect) enrolls a
+machine as Builder, Host, or Builder + Host; [`server`](/cli/server) manages enrolled
+machines without touching the physical machine; [`agent`](/cli/agent) manages the local
+background service. [`machine`](/cli/machine) is fleet-wide visibility and maintenance —
+metrics, events, alerts, security posture, cleanup, reboot, and autopilot policy.
+[`health`](/cli/health) sets a service's HTTP health-check path.
+[`mystic`](/cli/mystic) and [`preflight`](/cli/preflight) are build-acceleration and
+pre-deploy diagnostics.
 
-```bash
-beaver doctor [--verbose]
-beaver connect [--verbose]
-beaver server --list
-beaver server update [machine-id] [--name <name>] [--role builder|host|builder-host] [--labels key=value,...] [--yes]
-beaver server rename <machine-id> <new-name>
-beaver server remove [machine-id] [--yes]
-beaver agent install|start|stop|status|logs
-beaver git --auth
-beaver docker --auth
-```
+### Cloud, firewall, scaling, and Edge
 
-`doctor` checks local prerequisites and offers targeted repairs. `connect` enrolls the current Linux machine as a Builder, Host, or Builder + Host. `server` manages enrolled machines; it does not delete the physical machine. `agent` manages the local Beaver background service. Git and Docker are focused authentication checks.
-
-Fleet visibility and maintenance:
-
-```bash
-beaver machine list|overview|show|live|services|docker|events|metrics|trends|alerts|alert-rules|approvals|security|exposure|log-inventory <machine-id>
-beaver machine fleet-overview|fleet-drift|fleet-capacity|groups
-beaver machine group-policy <group-id>
-beaver machine policy <machine-id>
-beaver machine policy set <machine-id>
-beaver machine reboot-impact|reboot|package-update|cleanup-plan|cleanup|maintenance-windows|maintenance-runs <machine-id>
-beaver machine restart-service <machine-id> --service <service-name>
-beaver machine monitoring <machine-id>
-```
-
-Use `reboot-impact` and `cleanup-plan` before mutating actions. Metrics support the documented `--window`/`--metric` options; event views may support `--limit`, `--category`, and `--severity`.
-
-### Firewall, scaling, and Edge
-
-```bash
-beaver firewall overview|policy|rules|revisions|events|bans|waf|intel <deployment-id>
-beaver firewall rule add|update|delete <deployment-id> [rule-id]
-beaver firewall rollback <deployment-id> <revision-id>
-beaver firewall preset apply <deployment-id> --preset <name>
-beaver firewall ban <deployment-id> --ip <ip> --reason <reason>
-beaver firewall unban <deployment-id> <ip> [--yes]
-beaver firewall login-protect <deployment-id> --path <path>
-beaver firewall lockdown|unlock <deployment-id>
-beaver firewall visibility <deployment-id> --public|--private
-```
-
-Firewall rule types are `ip`, `path`, `method`, `query`, and `header`; actions are `allow`, `block`, `rate-limit`, and `challenge`. `lockdown` blocks all traffic until `unlock`. A visibility or WAF change may require redeployment. Use `--service` for one Compose service.
-
-```bash
-beaver scaling policy|set|replicas|events|rollouts|deploy-set <container>
-beaver scaling cutover|discard <container> <rollout-id>
-beaver scaling canary <container>
-beaver scaling canary-status <rollout-id>
-beaver edge apps
-beaver edge app add|show|update|remove|verify|rotate-secret|origin-protection|origin-protection-recheck [connected-app-id]
-beaver edge backends <connected-app-id>
-beaver edge backend add|remove|import <connected-app-id> [backend-id]
-beaver edge detected-services <machine-id>
-beaver edge logs|traffic|speed <connected-app-id>
-beaver edge firewall policy|rules|revisions <connected-app-id>
-beaver edge firewall rule add|update|delete <connected-app-id> [rule-id]
-beaver edge firewall rollback <connected-app-id> <revision-id>
-beaver edge firewall preset apply|ban|unban|lockdown|unlock <connected-app-id>
-```
-
-Scaling manages replica policies and staged or gradual traffic changes. Edge Connected Apps front existing external services; verify the domain and origin before making one public. Use each command's help for operation-specific fields.
+[`cloud`](/cli/cloud) groups enrolled machines into a pool with shared networking, capacity,
+and workload placement. [`firewall`](/cli/firewall) manages per-deployment WAF/rate-limit/IP
+policy; [`edge`](/cli/edge) fronts an external service behind a domain, with its own firewall
+mirror. [`scaling`](/cli/scaling) manages replica policy and staged/canary rollouts;
+[`autoscale`](/cli/autoscale) is the quick one-command form of the common case.
+[`service`](/cli/service) provisions and operates managed stateful dependencies (databases,
+caches) — including clusters and backup destinations — distinct from your own application
+containers.
 
 ### Account, billing, integrations, and AI
 
-```bash
-beaver account profile show|update
-beaver account mfa setup|verify|disable
-beaver account feedback
-beaver workspace show|recreate
-beaver plans
-beaver billing subscription|checkout|cancel|downgrade-hobby|payments
-beaver github accounts|install|branches
-beaver integrations status
-beaver integrations remove <integration-id>
-beaver ai connect [provider]
-beaver ai providers
-beaver ai models
-beaver ai provider add|test|update|remove [provider-id]
-```
+[`login`](/cli/login)/[`logout`](/cli/logout)/[`whoami`](/cli/whoami) manage your session.
+[`account`](/cli/account), [`workspace`](/cli/workspace), [`billing`](/cli/billing),
+[`plans`](/cli/plans), and [`coupon`](/cli/coupon) cover profile, workspace, and payment.
+[`github`](/cli/github) and [`integrations`](/cli/integrations) manage connected accounts.
+[`ai`](/cli/ai) connects AI provider API keys (machine-local via `ai connect`, or a
+Beaver-cloud-stored fallback via `ai provider add`) for use by [`alie`](/cli/alie), Beaver's
+infrastructure assistant — which also covers approvals, autopilot, spend caps, and
+workspace-wide knowledge/goals/policies. [`skills`](/cli/skills) publishes reusable skill
+packages Alie can use.
 
-These commands manage profile/MFA, workspace recovery, plans and hosted checkout, payments, GitHub/integrations, and AI provider credentials. Treat credentials like passwords.
-
-### Alie
-
-```bash
-beaver alie
-beaver alie --resume [session-name-or-id]
-beaver alie sessions|session|model|usage|compact|fork <session>
-beaver alie status|model-profile|knowledge|runbooks|goals|policies|autopilot
-beaver alie approvals|approve|reject|audit <approval-id>
-beaver alie approval-policies|approval-policy set
-beaver alie api-keys|create|revoke <key-id>
-beaver alie spend-cap|spend-cap set
-beaver alie add|review <policy-id>
-```
-
-Alie explains infrastructure findings and can propose actions. Approval prompts and workspace policies determine whether a proposed action may proceed; review pending approvals and the audit view.
+<Note>
+  Treat every credential here — API keys, tokens, the Alie API key shown once at
+  creation — like a password.
+</Note>
 
 ## Troubleshooting
 

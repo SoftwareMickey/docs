@@ -1,0 +1,334 @@
+---
+title: "beaver service"
+sidebarTitle: "service"
+description: "Provision and operate Beaver-managed stateful services (Postgres, Redis, and more)."
+icon: "database"
+---
+
+<Info>
+  New here? [Services](/concepts/services) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+A **Beaver Service** is a stateful dependency (Postgres, Redis, and others — see `beaver
+service catalog`) provisioned onto one of your own enrolled machines and operated as part of
+the platform — distinct from an application container you [deploy](/cli/deploy) from a repo.
+`beaver service` (alias `beaver services`) covers the whole lifecycle: provisioning,
+credentials, attaching to your apps, backups, and — for the service types that support
+it — multi-member clusters.
+
+## Catalog & provisioning
+
+| Subcommand | Purpose |
+| --- | --- |
+| `catalog` | Supported service types, versions, and defaults. |
+| `create <name>` | Provision a new service. |
+| `list` | Every service in your workspace. |
+| `show [name]` | Status, placement, config, and attached apps. |
+| `retry [name]` | Re-attempt provisioning an unhealthy service. |
+
+<ParamField query="--type" type="string" default="">
+  On `create`: service type. Omit for an interactive picker; see `beaver service catalog`.
+</ParamField>
+<ParamField query="--version" type="string" default="">
+  On `create`: service version. Defaults to the catalog's default for the type.
+</ParamField>
+<ParamField query="--no-persistence" type="boolean" default="false">
+  On `create`: provision without a data volume. Only for types whose catalog spec allows it.
+</ParamField>
+<ParamField query="--machine" type="string" default="">
+  On `create`: pin placement to a specific enrolled machine. Defaults to auto-selected by
+  capacity.
+</ParamField>
+<ParamField query="--restore-from" type="string" default="">
+  On `create`: restore this backup ID into the new service before it's marked healthy. See
+  `beaver service backup list`.
+</ParamField>
+
+`catalog` is genuinely public product information — the full list of supported types,
+versions, and their defaults — so check it whenever you need to know what's available before
+provisioning.
+
+## Lifecycle
+
+| Subcommand | Purpose |
+| --- | --- |
+| `start` / `stop` / `restart [name]` | Control the running container. |
+| `resize <name>` | Change allocated CPU/memory. |
+| `delete <name>` (alias `rm`) | Remove the container. **The data volume is kept.** |
+| `delete-volume <name>` | Permanently destroy a deleted service's data volume. |
+
+<ParamField query="--cpu" type="number" default="0">
+  On `resize`: new CPU allocation in cores, e.g. `0.5`, `2`.
+</ParamField>
+<ParamField query="--memory" type="integer" default="0">
+  On `resize`: new memory allocation in MB, e.g. `4096`.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `delete`/`delete-volume`: skip the confirmation prompt. See [shared
+  flags](/cli/shared-flags#yes).
+</ParamField>
+
+### Consequences
+
+`delete` removes the running container and marks the service deleted, **but deliberately
+keeps the data volume** — `delete-volume` is a separate, more heavily confirmed step for
+actually destroying data.
+
+<Warning>
+  `delete-volume` is only reachable once a service is already deleted, requires two separate
+  confirmations, and permanently destroys the data — there is no undo once it succeeds.
+</Warning>
+
+## Credentials & config
+
+| Subcommand | Purpose |
+| --- | --- |
+| `reveal [name]` | Print a service's live connection string. |
+| `config set <name> key=value...` | Update catalog-declared tunables. |
+
+<Warning>
+  `reveal` decrypts and prints a live credential. Every reveal is recorded as an audit event
+  on the service — treat it as a sensitive, deliberate action, not a routine check.
+</Warning>
+
+## Databases
+
+Each service can hold multiple isolated **logical databases**, each with its own credential.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `database list [service]` | Every logical database and its bound app. |
+| `database create <db> [service]` | Create an isolated logical database. |
+| `database reveal <db> [service]` | Print one database's connection string. |
+| `database rotate <db> [service]` | Rotate one database's credential independently of the service admin credential. |
+| `database delete <db> [service]` | Drop a logical database and its credential. |
+
+<Warning>
+  `database reveal` and `database rotate` are sensitive actions with the same audit-logging
+  treatment as `service reveal` — every reveal is recorded, and a rotation invalidates the
+  previous credential immediately.
+</Warning>
+
+<Warning>
+  `database delete` permanently drops the database and its dedicated credential. It's
+  refused while a container is still attached — detach it first.
+</Warning>
+
+## Networking & attachment
+
+| Subcommand | Purpose |
+| --- | --- |
+| `attach <name>` | Lock a database to an app, injecting its connection details as env vars. |
+| `detach <name>` | Remove that dependency. |
+| `attached <container>` | Services attached to one app. |
+| `connect [service]` | Open a local tunnel to a managed service's database. |
+
+<ParamField query="--container" type="string" default="">
+  On `attach`/`detach`: application container. Interactive picker if omitted.
+</ParamField>
+<ParamField query="--env-prefix" type="string" default="">
+  On `attach`: prefix for the injected environment variable names.
+</ParamField>
+<ParamField query="--database" type="string" default="">
+  On `attach`: logical database to lock to this app. Required for Postgres/Redis; picker if
+  omitted. On `connect`: database name or ID within the service; omit for a service-level
+  tunnel.
+</ParamField>
+<ParamField query="--clean" type="boolean" default="false">
+  On `detach`: also remove the previously-injected env vars from the application.
+</ParamField>
+<ParamField query="--secure" type="boolean" default="false">
+  On `detach`: also rotate the credential and end active sessions before freeing the database
+  for reassignment.
+</ParamField>
+<ParamField query="--local-port" type="integer" default="0">
+  On `connect`: local port to bind. `0` (default) picks any free port; an explicit port
+  already in use fails rather than silently picking another.
+</ParamField>
+<ParamField query="--ttl" type="integer" default="0">
+  On `connect`: lease lifetime in seconds. `0` uses the server default (which is itself
+  capped at a maximum).
+</ParamField>
+
+`connect` opens `127.0.0.1:<port>` on your machine, relayed through Beaver to the service's
+real container — the database is never exposed on a public port; every byte travels over an
+authenticated, encrypted tunnel.
+
+## Backups & recovery
+
+| Subcommand | Purpose |
+| --- | --- |
+| `backup <name>` | Take a manual backup. |
+| `backup list [service]` | List a service's backups. |
+| `backup delete <backup-id> [service]` | Permanently delete one backup. |
+| `backup schedule <name>` | Configure automatic backups. |
+| `restore <name>` | Restore a backup into this service. |
+| `service create <name> --restore-from <id>` | Restore into a brand-new service instead. |
+
+<ParamField query="--destination" type="string" default="">
+  On `backup`: off-node backup destination ID to ship this (and future) backups to.
+</ParamField>
+<ParamField query="--delete-from-destination" type="boolean" default="false">
+  On `backup delete`: also remove the backup's off-node copy, if it has one.
+</ParamField>
+<ParamField query="--interval" type="string" default="">
+  On `backup schedule`: `daily`, `weekly`, or `disabled`.
+</ParamField>
+<ParamField query="--retention" type="integer" default="7">
+  On `backup schedule`: how many scheduled backups to keep. Manual backups are exempt from
+  this limit.
+</ParamField>
+<ParamField query="--backup" type="string" default="">
+  On `restore`: the backup ID (or unique prefix) to restore.
+</ParamField>
+
+### Backup destinations
+
+Where off-node backup copies are stored, separate from the service's own local backups.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `backup-destination create` | Register a new off-node destination. |
+| `backup-destination list` | List destinations. |
+| `backup-destination delete <id-or-name>` | Delete a destination. |
+
+<ParamField query="--kind" type="string" default="">
+  On `create`: `s3` or `beaver_machine`.
+</ParamField>
+<ParamField query="--bucket" type="string" default="">
+  On `create` (`--kind s3`): S3 bucket name.
+</ParamField>
+<ParamField query="--region" type="string" default="">
+  On `create` (`--kind s3`): S3 region.
+</ParamField>
+<ParamField query="--endpoint" type="string" default="">
+  On `create` (`--kind s3`): S3-compatible custom endpoint, e.g. a self-hosted MinIO URL.
+</ParamField>
+<ParamField query="--access-key-id" type="string" default="">
+  On `create` (`--kind s3`): S3 access key ID.
+</ParamField>
+<ParamField query="--secret-access-key" type="string" default="">
+  On `create` (`--kind s3`): S3 secret access key.
+</ParamField>
+<ParamField query="--path-style" type="boolean" default="false">
+  On `create` (`--kind s3`): use S3 path-style addressing — required by most self-hosted
+  S3-compatible servers.
+</ParamField>
+<ParamField query="--prefix" type="string" default="">
+  On `create` (`--kind s3`): key prefix within the bucket.
+</ParamField>
+<ParamField query="--machine-id" type="string" default="">
+  On `create` (`--kind beaver_machine`): target machine ID.
+</ParamField>
+<ParamField query="--retention" type="integer" default="30">
+  On `create`: off-node retention count.
+</ParamField>
+
+Deleting a destination doesn't touch any service that still points at it — that service's
+next backup attempt against the now-dangling destination fails with a clear error rather
+than silently falling back to local-only.
+
+## Clusters
+
+For service types that support it, `beaver service cluster` provisions and operates a
+multi-member cluster instead of a single instance.
+
+| Subcommand | Purpose |
+| --- | --- |
+| `cluster create <name>` | Provision a new cluster. |
+| `cluster list` / `show [name]` | List or inspect clusters. |
+| `cluster delete <name>` | Remove the cluster's containers. Data volumes are kept. |
+| `cluster delete-volumes <name>` | Permanently destroy a deleted cluster's data. |
+| `cluster retry <name>` | Re-attempt provisioning an unhealthy cluster. |
+| `cluster upgrade <name>` | Roll out a version upgrade one member at a time. |
+| `cluster replace-member <name> <index>` | Replace a permanently lost member on a fresh machine/volume. |
+| `cluster resize <name>` | Grow or shrink the member count. |
+| `cluster backup <name>` | Take a manual cluster backup. |
+| `cluster events <name>` | Cluster event history. |
+
+<ParamField query="--type" type="string" default="">
+  On `cluster create`: service type. See `beaver service catalog`.
+</ParamField>
+<ParamField query="--version" type="string" default="">
+  On `cluster create`: version. On `cluster upgrade`: version every member is upgraded to.
+</ParamField>
+<ParamField query="--replicas" type="integer" default="3">
+  On `cluster create`: number of members — must be odd and at least 3. On `cluster resize`:
+  new replica count, same constraint.
+</ParamField>
+<ParamField query="--confirm-quorum-reduction" type="boolean" default="false">
+  On `cluster resize`: required in addition to the normal confirmation when shrinking a
+  cluster, since that lowers its quorum floor. A deliberately separate flag from `--yes`.
+</ParamField>
+
+### Consequences
+
+`cluster upgrade` upgrades every member to `--version` **in index order**, waiting for each
+member to report healthy and rejoin quorum before touching the next — a member that fails
+aborts the upgrade, and remaining members stay on the old version rather than the command
+reporting a false success. `cluster replace-member` replaces one lost member (after a disk
+failure or decommissioned node) on a fresh machine/volume without touching the surviving
+members' data, triggering a resync against the survivors.
+
+<Warning>
+  `cluster delete-volumes` is distinct from `cluster delete` — deleting a cluster keeps its
+  data volumes; `delete-volumes` permanently destroys them, with no undo. Confirm which one
+  you mean.
+</Warning>
+
+<Warning>
+  Shrinking a cluster (`cluster resize` to fewer replicas) lowers its quorum floor and
+  requires `--confirm-quorum-reduction` in addition to normal confirmation — this is
+  deliberately not reachable through a single reused `--yes`.
+</Warning>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Provision and attach
+beaver service create paperclip-db --type postgres
+beaver service attach paperclip-web --container paperclip-web --database paperclip
+```
+
+```bash Back up before a risky change
+beaver service backup paperclip-db
+beaver service backup schedule paperclip-db --interval daily --retention 14
+```
+
+```bash Reveal a connection string
+beaver service reveal paperclip-db
+```
+
+```bash Provision and operate a cluster
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+beaver service cluster upgrade paperclip-queue --version 3.8
+```
+
+```bash Local tunnel to a managed database
+beaver service connect paperclip-db --local-port 5433
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `create` success | New service, provisioning status | Check `service show <name>` until healthy. |
+| `delete` success | `<name> deleted — its data volume was retained` | Run `delete-volume` separately if you actually want the data gone. |
+| `database delete` while attached | Refusal naming the attached app | `detach` first, then retry. |
+| `cluster upgrade` member fails mid-rollout | Upgrade aborts; cluster stays on old version for remaining members | Investigate the failed member before retrying. |
+| `cluster resize` shrink without the extra flag | `--confirm-quorum-reduction` required error | Pass the flag once you've confirmed the quorum-floor change. |
+
+## Used in
+
+- [`cloud`](/cli/cloud) — services run on machines that may be grouped into a cloud.
+- [Environment variables](/deploying/environment-variables) — `attach` injects connection
+  details the same way.

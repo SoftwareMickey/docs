@@ -1,0 +1,104 @@
+---
+title: "Shared flags"
+sidebarTitle: "Shared flags"
+description: "Flags available on many beaver commands: --json, --output, --quiet, --yes, --wait, and --timeout."
+icon: "flag"
+---
+
+<Info>
+  New here? [Automation](/concepts/automation) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+These six flags behave the same way everywhere they appear, so they're documented once here
+instead of on every command page. A command's own page links back to this one and only adds
+a note if its use of one of these flags differs from the norm described below.
+
+Not every command has all six — a command only has the ones relevant to it (a pure-read
+command like `beaver machine list` has no `--yes`, since there's nothing to confirm). Check
+`beaver <command> --help` for the exact set on any given command.
+
+## `--yes`
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt on a destructive or state-changing command.
+</ParamField>
+
+Without `--yes`, a command that changes something prints exactly what it's about to affect
+and what will happen, then asks you to confirm:
+
+```text
+Target: srv_web01
+Effect: Reboots this machine now. Every container on it goes down until it finishes booting back up.
+Continue? [y/N]
+```
+
+With `--yes`, that confirmation is skipped and the action runs immediately — use it for
+scripts and automation, not as a default habit interactively. `--yes` only ever skips the
+prompt; it never changes what the command does.
+
+## `--wait`
+
+<ParamField query="--wait" type="boolean" default="false">
+  Block until the operation reaches a terminal state instead of returning immediately.
+</ParamField>
+
+Without `--wait`, a command that starts an asynchronous operation (a deployment, a
+redeploy, a long-running job) returns as soon as the operation is *accepted* — not once it's
+*finished*. With `--wait`, the command instead stays running, checking on the operation
+periodically, and only returns once it reaches a final state (success or failure).
+
+**On timeout:** if the operation hasn't finished within the time allowed (see `--timeout`
+below), the command exits with a timeout error. This does **not** cancel the operation
+itself — it only stops the CLI from waiting. The operation may still finish on its own; check
+its status afterward (for example `beaver deployment status <deployment-id>`) rather than
+assuming a timeout means failure.
+
+## `--timeout`
+
+<ParamField query="--timeout" type="duration" default="5m">
+  Maximum time to wait when `--wait` is set. Accepts a Go-style duration string, e.g. `30s`,
+  `2m`, `1h`.
+</ParamField>
+
+Has no effect unless `--wait` is also set. If omitted, the default is 5 minutes.
+
+## `--json`
+
+<ParamField query="--json" type="boolean" default="false">
+  Print output as JSON. Shorthand for `--output json`.
+</ParamField>
+
+Use this when piping `beaver` output into another program (`jq`, a script, CI log parsing).
+When `--json` is set, none of the human-readable status lines print — only the JSON
+document itself, so it's safe to pipe directly.
+
+## `--output`
+
+<ParamField query="--output" type="string" default="table">
+  Output format: `table`, `json`, or `yaml`.
+</ParamField>
+
+The general form of `--json` — use `--output json` or plain `--json` interchangeably;
+`--output yaml` is the only way to get YAML output. `table` (the default) is the
+human-readable format shown in a terminal.
+
+## `--quiet`
+
+<ParamField query="--quiet" type="boolean" default="false">
+  Suppress human-readable status lines; print only the requested data.
+</ParamField>
+
+Distinct from `--json`: `--quiet` can be combined with any `--output` mode. It removes
+progress/status narration ("Rebooting srv_web01...", "✓ Done") while still printing the
+actual result data in whichever format `--output` selected.
+
+## Example combining several
+
+```bash
+cd paperclip/
+beaver deploy --machine srv_web01 --wait --timeout 10m --json
+```
+
+Deploys the current directory (`paperclip`) to `srv_web01`, blocks until the deployment
+finishes or 10 minutes elapse (whichever comes first), and prints the final result as JSON
+rather than the interactive progress view.

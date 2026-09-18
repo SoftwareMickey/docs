@@ -1,15 +1,102 @@
 ---
 title: "beaver observe"
-description: "Follow a service's logs, traffic, metrics, and health."
+sidebarTitle: "observe"
+description: "Follow the current project's release, logs, traffic, and health in one place."
+icon: "eye"
 ---
+
+<Note>
+  `beaver observe` is project-aware — it resolves the current directory to a Beaver project
+  and shows its default (or named) service. [`beaver logs`](/cli/logs), [`beaver
+  metrics`](/cli/metrics), and [`beaver traffic`](/cli/traffic) are container-ID-addressed
+  standalone commands with no project resolution — related, but distinct: use `observe` from
+  inside a project directory for a combined view, or the standalone commands when you already
+  have a specific container ID.
+</Note>
+
+## Purpose
+
+Run `beaver observe` from inside a project directory to see its release status, logs,
+traffic, and health without looking up a container ID first — the daily-loop command for "is
+my app okay right now."
+
+## Syntax
+
+```bash
+beaver observe [service] [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name. Omit for the project's default service. |
+
+## Flags
+
+<ParamField query="--logs" type="boolean" default="false">
+  Show the container's application log tail.
+</ParamField>
+<ParamField query="--traffic" type="boolean" default="false">
+  Show the traffic dashboard summary.
+</ParamField>
+<ParamField query="--metrics" type="string" default="">
+  Show a metrics series: `cpu`, `storage`, `requests`, or `data-transfer`.
+</ParamField>
+<ParamField query="--follow" type="boolean" default="false">
+  With `--logs`: poll for new output. Alone (no `--logs`): watch for status/release changes
+  instead.
+</ParamField>
+<ParamField query="--tail" type="integer" default="0">
+  Number of log lines to fetch. Defaults to 200 with `--logs`, or 20 in the default summary
+  view.
+</ParamField>
+<ParamField query="--range" type="string" default="24h">
+  With `--traffic`: the dashboard window — `1h`, `6h`, `24h`, `7d`, or `30d`.
+</ParamField>
+<ParamField query="--desktop-notify" type="boolean" default="false">
+  With `--follow` (and no `--logs`): also fire a best-effort OS notification when something
+  changes.
+</ParamField>
+
+## Consequences
+
+Purely a read — no state changes on any run, regardless of flags.
 
 ## Examples
 
-```bash
-beaver observe [service]
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Quick check
+beaver observe
+```
+
+```bash Follow logs live
 beaver observe api --logs --follow
+```
+
+```bash Traffic over the last week
 beaver observe api --traffic --range 7d
+```
+
+```bash CPU metrics
 beaver observe api --metrics cpu
 ```
 
-Use `--logs`, `--traffic`, or `--metrics` to select evidence, and `--follow` to keep watching. `--tail`, `--range`, and `--desktop-notify` refine the view.
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Release status plus whichever evidence flags you passed | Nothing further. |
+| Not linked to a project | An error pointing at `beaver deploy` first | Deploy or link the directory to a project. |
+| Multiple flags combined | All requested evidence shown together | This is supported — combine freely. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — check logs/traffic/metrics after a deploy.
+- The daily observe/recover loop, alongside [`recover`](/cli/recover) and
+  [`status`](/cli/status).

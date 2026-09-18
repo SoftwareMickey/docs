@@ -1,0 +1,92 @@
+---
+title: "Beaver Cloud"
+description: "Group your connected machines into one pool, share capacity and a private network across them, and deploy without naming a specific machine."
+sidebarTitle: "Beaver Cloud"
+icon: "cloud"
+---
+
+A **Beaver Cloud** is a named group of machines you've already connected, used together as
+one pool instead of managed one by one. It's an organizing layer you create on top of your
+own infrastructure — Beaver doesn't provision, own, or bill you for anything underneath it.
+
+Beaver Cloud is the required target for every application deployment, including a single-node setup.
+If you have no cloud, create one and add your enrolled machines before deploying.
+
+```bash
+# See what's in your workspace
+beaver cloud list
+
+# Group machines into a cloud
+beaver cloud create paperclip-prod --machines srv_web01,srv_web02,srv_db01
+
+# Check how much room is left
+beaver cloud capacity paperclip-prod
+```
+
+## Why bother with a cloud
+
+A Beaver Cloud is the destination for every application deployment. It can contain one
+machine or several: deploy to `paperclip-prod` and Beaver selects a member with room for
+your application. Enable the cloud's private network when you need connectivity between
+members.
+
+For a single-machine setup, create a cloud with that machine as its member. See
+[Choosing my setup](/choose-your-setup) for machine roles.
+
+## Cloud, machine, and project — not the same axis
+
+These three get confused because they're all "where things live," but they answer different
+questions and none of them contains the others:
+
+| | Answers | Example |
+| --- | --- | --- |
+| **Machine** | Which physical server is this? | `srv_web01` |
+| **Cloud** | Which pool of machines can this deploy land on? | `paperclip-prod` (groups `srv_web01`, `srv_web02`, `srv_db01`) |
+| **Project** | Which application and environments does this belong to? | `paperclip` |
+
+A cloud can host deployments from several different projects. A project's deployments run
+in a Beaver Cloud, including a cloud with a single member. The cloud is independent of what
+the project is. See [How Beaver fits together](/concepts/how-beaver-fits-together) for the full picture.
+
+## What you can see and control
+
+Adding or removing a machine from a cloud is something you do explicitly — machines don't
+join or leave on their own. `beaver cloud machines paperclip-prod` lists members and each
+one's individual health; `beaver cloud capacity` shows cores and memory reserved versus
+free, so you know before you deploy whether there's room. The cloud's network status —
+whether members can currently reach each other — is checkable per machine with `beaver
+cloud network`.
+
+Deploy to the cloud by name instead of a specific machine, and Beaver places the workload on
+a member with room for it. You're not left guessing which one: `beaver container <name>
+inspect` always tells you exactly where something landed.
+
+## What a cloud doesn't do for you
+
+<Warning>
+  If a machine in the cloud goes offline, whatever was running on it stays associated with
+  that machine — it does not hop to another member on its own. A cloud gives you room to
+  place *new* work; it doesn't make existing workloads survive one machine going down. If
+  that machine won't come back soon, recover explicitly — see [Rollback, promotion, and
+  recovery](/concepts/rollback-promotion-and-recovery).
+</Warning>
+
+Gateway and cross-machine network diagnostics are available but are advanced territory —
+you're unlikely to need them unless you're actively debugging connectivity between members.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Cloud command reference" href="/cli/cloud">
+    Every subcommand — capacity, nodes, network, services.
+  </Card>
+  <Card title="Connect and machine roles guide" href="/guides/connect-and-machine-roles">
+    Connect machines and group them into a cloud, step by step.
+  </Card>
+  <Card title="Machine and agent operation" href="/concepts/machine-and-agent-operation">
+    Operating one machine, in or out of a cloud.
+  </Card>
+  <Card title="Scaling and resources" href="/concepts/scaling-and-resources">
+    How replica counts draw on the capacity a cloud has available.
+  </Card>
+</CardGroup>

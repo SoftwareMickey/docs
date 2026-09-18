@@ -1,16 +1,186 @@
 ---
 title: "beaver scaling"
-description: "Configure replicas and manage rollout traffic."
+sidebarTitle: "scaling"
+description: "Configure replica count and autoscaling, and manage staged/canary rollout traffic."
+icon: "gauge"
 ---
+
+<Info>
+  New here? [Scaling and resources](/concepts/scaling-and-resources) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver scaling` covers two related things: how many replicas of a container run (fixed or
+automatic), and how traffic shifts to a new replica set during a staged (blue/green) or
+canary rollout. For where those replicas land within a [cloud](/cli/cloud), see [`beaver
+cloud workload`](/cli/cloud#workload-placement) instead — that's a distinct concern.
+
+## Replica policy
+
+| Subcommand | Purpose |
+| --- | --- |
+| `policy <container>` | Show a container's current scaling policy. |
+| `policy set <service\|container>` | Set replica count or autoscaling policy. |
+| `replicas <container>` | List running replica slots. |
+| `scale <container> <count>` | Set a container's fixed replica count (shorthand). |
+| `resize <container>` | Change a container's CPU and memory in place. |
+| `events <container>` | Scaling audit log — scale up/down, reconcile, rollout, and self-heal events. |
+
+<ParamField query="--desired-replicas" type="integer" default="0">
+  On `policy set`: replica count to run. Required in fixed mode.
+</ParamField>
+<ParamField query="--min-replicas" type="integer" default="0">
+  On `policy set`: minimum allowed replicas. Required for automatic mode.
+</ParamField>
+<ParamField query="--max-replicas" type="integer" default="0">
+  On `policy set`: maximum allowed replicas. Required for automatic mode.
+</ParamField>
+<ParamField query="--mode" type="string" default="fixed">
+  On `policy set`: `fixed` or `automatic`.
+</ParamField>
+<ParamField query="--scaling-metric" type="string" default="">
+  On `policy set` (automatic mode): `cpu`, `memory`, or `request_rate`.
+</ParamField>
+<ParamField query="--scale-up-threshold" type="number" default="0">
+  On `policy set` (automatic mode): scale up when the metric is at or above this value.
+</ParamField>
+<ParamField query="--scale-down-threshold" type="number" default="0">
+  On `policy set` (automatic mode): scale down when the metric is at or below this value.
+</ParamField>
+<ParamField query="--scale-up-cooldown" type="integer" default="0">
+  On `policy set` (automatic mode): seconds to wait after a scale-up before scaling up again.
+</ParamField>
+<ParamField query="--scale-down-cooldown" type="integer" default="0">
+  On `policy set` (automatic mode): seconds to wait after a scale-down before scaling down
+  again.
+</ParamField>
+<ParamField query="--sustained-window" type="integer" default="0">
+  On `policy set` (automatic mode): seconds a threshold breach must persist before acting.
+</ParamField>
+<ParamField query="--plan" type="boolean" default="false">
+  On `policy set`: show the config change, runtime steps, and traffic impact without applying
+  anything.
+</ParamField>
+<ParamField query="--dry-run" type="boolean" default="false">
+  On `policy set`: like `--plan`, and also run the server-side preflight for this change.
+</ParamField>
+<ParamField query="--runtime-only" type="boolean" default="false">
+  On `policy set`: change the running deployment without editing `.beaver/config.yml` —
+  creates intentional, marked drift between the file and what's running.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `policy set`: record the change even if your local config is out of sync with the
+  recorded desired state (local wins).
+</ParamField>
+<ParamField query="--commit" type="boolean" default="false">
+  On `policy set`: git-commit the `.beaver/config.yml` change. Never pushes.
+</ParamField>
+<ParamField query="--limit" type="integer" default="0">
+  On `events`: max events to return.
+</ParamField>
+
+### The shorthand: `beaver scale` / `beaver resize`
+
+`beaver scale <container> <count>` is a quick, fixed-mode-only shorthand for `beaver scaling
+policy set <container> --mode fixed --desired-replicas <count>`. `beaver resize <container>`
+changes CPU/memory allocation in place — a different axis from replica count.
+
+## Staged (blue/green) rollouts
+
+| Subcommand | Purpose |
+| --- | --- |
+| `rollouts <container>` | Generation-based replacement rollout history. |
+| `deploy-set <container>` | Create a standby replica set (the "green" side) at 0% traffic weight. |
+| `cutover <container> <rollout-id>` | Set the standby set's traffic weight. |
+| `discard <container> <rollout-id>` | Tear down whichever side currently has 0% weight. |
+
+<ParamField query="--limit" type="integer" default="0">
+  On `rollouts`: max rollouts to return.
+</ParamField>
+<ParamField query="--image" type="string" default="">
+  On `deploy-set`/`canary`: candidate generation's image. Defaults to the currently-deployed
+  image.
+</ParamField>
+<ParamField query="--weight" type="integer" default="-1" required>
+  On `cutover`: traffic weight, 0–100, for the candidate generation. Required.
+</ParamField>
+
+## Canary rollouts
+
+| Subcommand | Purpose |
+| --- | --- |
+| `canary <container>` | Start a scheduled, weighted-traffic canary ramp. |
+| `canary-status <rollout-id>` | Show a canary ramp's current step and status. |
+
+<ParamField query="--steps" type="string" default="" required>
+  On `canary`: comma-separated ascending weight steps, e.g. `5,25,75,100`. Required.
+</ParamField>
+<ParamField query="--step-interval" type="duration" default="" required>
+  On `canary`: how long to wait between steps, e.g. `10m`. Required.
+</ParamField>
+<ParamField query="--error-band" type="number" default="0">
+  On `canary`: max error-rate percentage points above baseline before the ramp halts
+  automatically.
+</ParamField>
+
+## Consequences
+
+`policy set` in fixed mode sets an exact replica count; in automatic mode, it sets the bounds
+and thresholds Beaver scales within — actual replica count then varies with load, between
+`--min-replicas` and `--max-replicas`.
+
+`deploy-set` doesn't send any traffic to the new set by itself — `cutover` is what actually
+shifts weight to it. `discard` is irreversible for whichever side it tears down.
+
+<Warning>
+  `discard` permanently tears down the 0%-weight side of a rollout. There's no undo — if you
+  need to keep both sides available, don't discard until you're sure.
+</Warning>
+
+`canary` halts its own ramp automatically if the error rate exceeds `--error-band` above
+baseline during a step — it doesn't complete the ramp through an unhealthy step.
 
 ## Examples
 
-```bash
-beaver scaling policy api
-beaver scaling replicas api
-beaver scaling deploy-set api
-beaver scaling canary api
-beaver scaling cutover api <rollout-id>
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Quick fixed scale
+beaver scale api 3
 ```
 
-Inspect current capacity before changing scaling policy. Use rollout and canary commands for staged traffic changes.
+```bash Automatic (CPU-based) scaling
+beaver scaling policy set api --mode automatic --min-replicas 2 --max-replicas 8 \
+  --scaling-metric cpu --scale-up-threshold 70 --scale-down-threshold 25
+```
+
+```bash Blue/green cutover
+beaver scaling deploy-set api --image ada/paperclip-web:v2
+beaver scaling cutover api roll_abc123 --weight 100
+beaver scaling discard api roll_abc123
+```
+
+```bash Canary ramp
+beaver scaling canary api --steps 5,25,75,100 --step-interval 10m --error-band 2
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `policy set` fixed mode missing `--desired-replicas` | Required-flag error | Pass a replica count. |
+| Local config out of sync | An error pointing at `beaver state pull` or `--force` | Reconcile, or force if the local file is authoritative. |
+| `canary` halts on error-band breach | The ramp stops at its current step | Investigate the error rate before resuming or rolling back. |
+
+## Used in
+
+- [Scaling: manual vs. automatic](/guides/scaling) — the full guide this page is the
+  reference for.
+- [`cloud` workload placement](/cli/cloud#workload-placement) — governs *where* replicas
+  land; this page governs *how many* there are.

@@ -1,0 +1,149 @@
+---
+title: "beaver state"
+sidebarTitle: "state"
+description: "Compare your local config file, what Beaver has saved, and what's actually running — and bring them back in sync."
+icon: "list-tree"
+---
+
+<Info>
+  New here? [State and drift](/concepts/state-and-drift) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver state` shows three views of your project side by side, and gives you commands to
+bring them back in sync when they disagree:
+
+| View | What it is |
+| --- | --- |
+| **Local** | `.beaver/config.yml` in your working directory right now. |
+| **Saved** | The configuration Beaver currently has on record for this project. |
+| **Live** | What's actually running. |
+
+Run `beaver state` bare for the default view (the same as `state status`).
+
+## Syntax
+
+```bash
+beaver state <subcommand> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `status` | Compare all three views at once. |
+| `drift` | Show the timeline of differences between the saved configuration and what's running. |
+| `history` | Show the saved-configuration revision history. |
+| `pull` | Write the saved configuration into your local file. |
+| `apply` | Save your local file as the new saved configuration and update the running deployment to match. |
+| `rollback` | Restore an earlier saved revision. |
+
+## Flags
+
+<ParamField query="--env" type="string" default="">
+  On `status`: compare against a named environment's override.
+</ParamField>
+<ParamField query="--watch" type="boolean" default="false">
+  On `status`: re-check on an interval until interrupted.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `pull`: overwrite local edits even if they haven't been saved yet.
+</ParamField>
+<ParamField query="--dest" type="string" default="">
+  On `pull`: write to this directory instead of your working tree, without touching it.
+</ParamField>
+<ParamField query="--no-reconcile" type="boolean" default="false">
+  On `apply`/`rollback`: record the configuration change, but don't also update what's
+  currently running.
+</ParamField>
+<ParamField query="--to" type="string" default="">
+  On `rollback`: a specific revision ID to restore. Defaults to the revision immediately
+  before the current one. See `beaver state history`.
+</ParamField>
+<ParamField query="--plan" type="boolean" default="false">
+  On `rollback`: show the target revision and what would change, without applying it.
+</ParamField>
+
+## What each command shows
+
+`status` runs two comparisons in one place: whether your local file has changes not yet
+saved (or the saved configuration changed elsewhere — a dashboard edit, a teammate's push),
+and whether the running deployment actually matches what's saved. It's read-only and exits
+non-zero if anything is out of sync — useful as a CI gate.
+
+`drift` shows **what has changed** between the saved configuration and what's running: one
+row per field that drifted, when it was first detected, and when (if ever) it cleared. It
+doesn't change anything itself.
+
+`history` lists past saved-configuration revisions you can target with `rollback --to`.
+
+## Consequences
+
+`apply` makes your currently checked-out `.beaver/config.yml` the new saved configuration and
+updates the running deployment to match it. It's built for CI — run it on a push to your main
+branch so a merged config change takes effect automatically. It's idempotent (safe to run on
+every push) and tags the resulting revision with the current git commit.
+
+`pull` refuses to overwrite local edits that haven't been saved yet, unless `--force`; it
+writes a `.beaver/config.yml.bak` backup first.
+
+<Warning>
+  `rollback` never rewrites history — restoring an earlier revision creates a **new** current
+  revision copied from it. By default it also updates the running deployment to match; pass
+  `--no-reconcile` to only record the change without touching what's running, or `--plan`
+  first to preview exactly what would change.
+</Warning>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Check everything's in sync
+beaver state status
+```
+
+```bash See what's drifted and when
+beaver state drift
+```
+
+```bash Bring local in line with what's saved
+beaver state pull
+```
+
+```bash Save local as new, and update the running deployment (CI)
+beaver state apply
+```
+
+```bash Roll back, previewing first
+beaver state rollback --plan
+beaver state rollback --to 3f2a1b9
+```
+
+</CodeGroup>
+
+**Expected output** (`status`, reviewed against source):
+
+```text
+local vs recorded    up to date
+recorded vs live     drifted — replicas: recorded 3, live 2
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `status` — everything in sync | Exit code 0, "up to date" for both comparisons | Nothing to do. |
+| `status` — out of sync | The specific mismatch, non-zero exit | `pull` (adopt saved) or `apply`/push local changes, depending on which side should win. |
+| `pull` with unsaved local edits | Refusal, unless `--force` | Save your edits (`beaver config push`) first, or `--force` to discard them. |
+| `rollback` success | The restored revision's summary | Verify with `state status`. |
+
+## Used in
+
+- [Rollback and recovery](/guides/rollback-and-recovery) — checking drift and rolling back
+  as part of recovering from a bad change.
+- [`config`](/cli/config#saved-configuration-server-sync) — `config push`/`pull` are the
+  same saved-configuration model, scoped to authoring; `state` is the operator-facing
+  comparison and CI-apply surface for it.

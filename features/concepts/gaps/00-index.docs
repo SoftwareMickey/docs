@@ -1,0 +1,99 @@
+# Gap Log — Concept Layer
+
+Mirrors the role of `/features/docs/inventory/`'s gap tracking and
+`beaver-desktop/features/gui/infra/gaps/00-index.docs`: open questions and dependencies this
+roadmap cannot resolve on its own, logged here rather than silently assumed one way in a
+single era file. Not published, not part of the site build.
+
+## Open (as of Phase 2 completion, 2026-09-17)
+
+_(none — items 1–3 below, previously open, are now resolved)_
+
+## Resolved
+
+1. **Exact command family for "connecting to services locally" (T24)** — **RESOLVED**:
+   `beaver service connect` (source-verified against `commands/service/connect.go` via
+   `cli/service.mdx`'s existing coverage). `concepts/connecting-to-services-locally.mdx`
+   links there directly.
+2. **Administrative commands (T34): page vs. omission** — **RESOLVED, then REVERSED
+   (2026-09-17)**: wrote a short page (`concepts/administrative-commands.mdx`), matching
+   `/features/docs/`'s own `documented-minimal` tier for `admin` (gap 010 there). Explicit
+   user instruction to remove all admin documentation superseded this — the page is deleted
+   and removed from `docs.json`. T34 is now **omission**, matching `/features/docs/`'s own
+   gap 013. The two roadmaps still agree on who `admin` is for; the agreed answer changed
+   from "documented minimally" to "not published at all."
+3. **Cluster-health disclosure register (T21)** — **RESOLVED, no addendum change needed**:
+   `concepts/service-clusters.mdx` was written without needing replication/consensus
+   language — member health, resizing, and replacing a lost member are all describable at
+   the observable/outcome level without it.
+
+4. **`plan`/`plans` staleness (affects T13, T31)** — **RESOLVED**, via `/features/docs/`'s
+   own Phase 2 re-verification (`gaps/012` there): both are real, current commands
+   (`plan` = `projectcontract.PlanCmd`, root `beaver plan <container>`; `plans` = `billing`'s
+   own `Use: "plans"` subcommand). Neither concept page (T13 Preflight and planning, T31
+   Plans and billing) needs a placeholder note on this link target.
+5. **`integrations` vs. `integration` naming (affects T5)** — **RESOLVED** by
+   `/features/docs/`'s Era 7: `cli/integrations.mdx` is the published page for the
+   `integration` command group. T5's concept page links there directly.
+6. **`observability` subcommand structure (affects T27)** — **RESOLVED** by
+   `/features/docs/`'s Era 8: kept as standalone `logs`/`metrics`/`traffic` pages (plus
+   `observe`/`history`/`status`/`inspect`/`diff` as related but distinct commands), not
+   consolidated under one `observability` page. T27's concept page should link to all of
+   them from its "Next steps," matching this structure rather than assuming one page.
+7. **Environments and variables: merge vs. net-new (T11)** — **RESOLVED** at Era 1 V2:
+   `deploying/environment-variables.mdx` is already concept-shaped and substantially covers
+   this topic; classified `merge-into-deploying/environment-variables.mdx`, promoted into
+   the Concepts nav group at Era 12 rather than forked into a second page. See
+   `inventory/01-cross-reference.docs`, T11.
+
+8. **Phase 2 drafting bug: merge-topic pages linked to a non-existent concept-page slug** —
+   **RESOLVED (2026-09-17)**. Several Era 3–11 pages initially linked to
+   `/concepts/choosing-my-setup`, `/concepts/connecting-machines`, and
+   `/concepts/environments-and-variables` as if T2/T6/T11 had their own new pages — wrong,
+   since all three are merges with no page of their own (Era 1's own classification, which
+   the drafting pass momentarily forgot while writing). Caught by `mint broken-links`
+   (20 broken links across 10 files); fixed by repointing every such link at the real merge
+   target (`/choose-your-setup`, `/connect`, `/deploying/environment-variables`). Re-run
+   clean. Lesson for future eras: when a topic is `merge-into-<file>`, every *other* page's
+   cross-link to it must point at `<file>` directly, never at a `/concepts/<slug>` guess.
+9. **Naming drift: `edge-and-performance-controls.mdx` vs. the roadmap's own
+   `edge-and-performance.mdx`** — **RESOLVED (2026-09-17)**. Era 7's own `.docs` file names
+   the file `concepts/edge-and-performance.mdx`; the page actually written and linked
+   throughout Phase 2 is `concepts/edge-and-performance-controls.mdx` (matching the topic's
+   full title). Not a functional problem — every cross-link in the actual pages uses the
+   real filename consistently — but noted here so a future session doesn't go looking for a
+   file that was never created under the shorter name.
+
+10. **Quality bar: the original template read as flat and reference-like, not genuinely
+    explanatory** — **RESOLVED (2026-09-17), all 30 pages rewritten**. User feedback, quoting
+    the published `concepts/beaver-cloud.mdx`: "we've done a really terrible job at
+    explaining concepts," pointing at Vercel (vercel.com/docs) and Conductor
+    (conductor.build/docs) as the bar to match. Researched both directly (`WebFetch` against
+    a live Vercel deployments page and a Conductor workspaces-concepts page) before touching
+    any file. What their pages do that the original template didn't:
+    - Lead with one bolded-term definition sentence carrying the "why it matters" in the
+      same breath, not a separate fragment under a "Purpose" heading.
+    - Show a short, real command block near the top before explaining ("show, then tell") —
+      Vercel puts runnable commands above the prose entirely.
+    - Use a comparison table specifically where 2–3 terms are genuinely confusable
+      (Conductor's Project/Repository/Workspace/Branch table) — not as a mandatory section on
+      every page, only where it earns its place.
+    - Section headings specific to what that page is actually explaining ("The one rule that
+      matters," "Two things both called rollback"), not a repeated six-heading skeleton.
+    - State the limitation where it's earned in the narrative, not shoved into a trailing
+      catch-all.
+
+    **Execution:** all 30 published pages rewritten to this shape.
+    `templates/concept-page-template.mdx` and `templates/concept-page-example.mdx` updated to
+    match (the example is now a byte-for-byte copy of the real `concepts/services.mdx`, so it
+    can't drift from what the live page actually does). **Real bugs caught during the
+    rewrite, by verifying every command against its source `cli/*.mdx` page before writing
+    it** (the same discipline as Invariant 1, applied to quick-start snippets this time):
+    `beaver compose up` isn't real (real: `detect`/`deploy`); `beaver machine <id> inspect`
+    isn't real (real: `overview`/`show`); `beaver scaling status` isn't real (real:
+    `replicas`); `beaver logs api --follow` and `beaver metrics api` were both wrong shape
+    (`--follow` is `container <name> logs`'s flag, not `logs`'s; `metrics` requires a
+    subcommand like `cpu`). All four fixed before publishing, not after. Full disclosure
+    re-sweep (all checkpoint terms, both `DISCLOSURE.md` and `DISCLOSURE-ADDENDUM.md`) and
+    mandatory two-pass re-read on `ai-connections-and-alie.mdx` re-run post-rewrite: clean.
+    `mint broken-links` clean throughout.

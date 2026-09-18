@@ -1,0 +1,158 @@
+# Era 12 — Navigation & Integration (V40–V42)
+
+_Phase 3 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** V40 — the "Concepts" group added to `docs.json`'s Guides tab,
+positioned exactly per Era 1 V3's decision (after "Getting started," before "Workflows"),
+30/30 pages listed, none missing, none duplicated, `python3 -c "json.load(...)"` confirms
+valid JSON. V41 — bidirectional links added: 4 task guides gained an "Understand this
+first"/pairing `<Note>` linking to their paired concept page(s) (`deploy-workflow.mdx` ↔
+`deployments.mdx`, `scaling.mdx` ↔ `scaling-and-resources.mdx`,
+`rollback-and-recovery.mdx` ↔ `rollback-promotion-and-recovery.mdx`,
+`connect-and-machine-roles.mdx` ↔ `beaver-cloud.mdx`/`machine-and-agent-operation.mdx`, the
+last one found missing during review and added); 36 `cli/*.mdx` reference pages gained a
+one-line "New here?" pointer back to their concept page, generated from the concept pages'
+own "Next steps" links (not hand-typed, so the pairing can't drift from what each concept
+page actually claims to cover) and skipping any page that already had one (idempotent).
+V42 — full audit: all 34 topics traced to a real, existing artifact, zero unresolved (see
+script output logged in this era's implementation history). `mint broken-links` clean after
+every step.
+
+Executes the placement decision fixed in Era 1 V3 and closes every bidirectional-link
+obligation Phase 2 deferred to "confirmed at Era 12."
+
+---
+
+## V40 — `docs.json` nav: the new Concepts group
+
+### Goal
+Add the "Concepts" group to the Guides tab, positioned per Era 1 V3's decision, populated
+with every page Phase 2 produced.
+
+### Reuses
+`CLAUDE.md`'s rule that navigation is centrally defined in `docs.json` and pages are not
+auto-discovered — same mechanism the sibling roadmap's own Era 12 V41 uses for the CLI tab,
+applied here to the Guides tab instead.
+
+### Implement
+- Insert a new group object into `docs.json`'s `Guides` tab's `groups` array, positioned
+  immediately after `"Getting started"` and before `"Workflows"`:
+  ```
+  {
+    "group": "Concepts",
+    "pages": [
+      "concepts/how-beaver-fits-together",
+      "concepts/accounts-and-workspaces",
+      "concepts/integrations",
+      "concepts/machine-and-agent-operation",
+      "concepts/beaver-cloud",
+      "concepts/projects",
+      "concepts/configuration",
+      "concepts/environments-and-variables",   // only if V16 chose net-new over merge
+      "concepts/building-applications",
+      "concepts/preflight-and-planning",
+      "concepts/deployments",
+      "concepts/containers-and-replicas",
+      "concepts/compose-applications",
+      "concepts/domains-and-routing",
+      "concepts/scaling-and-resources",
+      "concepts/firewall",
+      "concepts/edge-and-performance",
+      "concepts/services",
+      "concepts/service-databases-and-credentials",
+      "concepts/service-clusters",
+      "concepts/persistent-storage",
+      "concepts/backups-and-restoration",
+      "concepts/connecting-to-services-locally",
+      "concepts/observability",
+      "concepts/state-and-drift",
+      "concepts/rollback-promotion-and-recovery",
+      "concepts/automation",
+      "concepts/troubleshooting",
+      "concepts/plans-and-billing"
+      // concepts/administrative-commands only if V39 chose (a) over (b)
+    ]
+  }
+  ```
+  (Merge-classified topics — Choosing my setup, Installation/CLI basics, Connecting
+  machines, Environments and variables if merged — stay in their existing group and are
+  **not** duplicated into this list, per Invariant 9.)
+- Page files live under a new top-level `concepts/` directory (mirroring `guides/`'s own
+  existing pattern), one `.mdx` per page, matching the paths above.
+
+### Validate
+Every path in the group array corresponds to a file that exists; no Phase 2 page is missing
+from the array; no merge-classified topic appears twice.
+
+### Done when
+`docs.json` reflects the final Concepts group and `mint dev` renders it in the correct
+sidebar position.
+
+---
+
+## V41 — Bidirectional linking
+
+### Goal
+Every "confirmed at Era 12" link obligation from Phase 2 is executed: task guides and
+reference pages get a link back to their concept page, not just the concept page linking
+forward.
+
+### Reuses
+The specific pairings named through Phase 2: `guides/deploy-workflow.mdx` ↔
+`concepts/deployments.mdx` (V19); `guides/scaling.mdx` ↔ `concepts/scaling-and-resources.mdx`
+(V23); `guides/rollback-and-recovery.mdx` ↔ `concepts/rollback-promotion-and-recovery.mdx`
+(V34); `guides/connect-and-machine-roles.mdx` ↔ `concepts/beaver-cloud.mdx` /
+`machine-and-agent-operation.mdx` (V12/V13); plus every concept page's own "Next steps" link
+into whichever `cli/*.mdx` reference page exists at execution time.
+
+### Implement
+- Add a short "Understand this first" or "See also" callout (using `<Card>`/`<Note>` per
+  `components.txt`) near the top of each named task guide, linking to its paired concept
+  page(s).
+- For reference pages: add a one-line pointer at the top of each `cli/*.mdx` family page
+  this roadmap touches, linking to its concept page — coordinate with `/features/docs/`'s
+  own in-progress work so this doesn't collide with that roadmap's own page edits (check
+  `eras_implementation.docs` there for what's already landed vs. still in draft before
+  editing a shared file).
+- Resolve every "reference page may be a placeholder" note logged in Phase 2 (e.g. V9,
+  V10) by re-checking whether the sibling roadmap has since published that family; update
+  the link or leave the honest placeholder note if not.
+
+### Validate
+Spot-check a sample of pairs in both directions; confirm no edit collided with concurrent
+work in `/features/docs/`'s reference pages (check git blame/diff before editing shared
+files, per this session's own git-safety practice).
+
+### Done when
+Every pairing named across Phase 2 is bidirectional; no Phase 2 "confirmed at Era 12" note
+remains unresolved.
+
+---
+
+## V42 — Close every Era 1 classification
+
+### Goal
+A single audit pass confirming every one of the 34 topics reached its Era 1-assigned
+resolution (new page written, merge executed, or deferral logged) — nothing fell through
+between eras.
+
+### Reuses
+`inventory/00-topics.docs` and `inventory/01-cross-reference.docs` (Era 1) as the checklist
+this version audits against — this is a checklist/audit version, not new writing, mirroring
+the sibling roadmap's own Era 12 V42 pattern exactly.
+
+### Implement
+- Walk T1–T34 in order; for each, confirm the classification from Era 1 V2 was actually
+  executed (page exists / merge landed / deferral is logged with reasoning) — not just
+  planned in the era files above.
+- Any topic that drifted from its Era 1 classification during Phase 2 (e.g., V16's
+  environments-and-variables live decision, V28's cluster-health checkpoint-term addition)
+  gets its final resolution recorded here as the source of truth.
+
+### Validate
+Zero topics without a traceable resolution.
+
+### Done when
+The audit confirms full closure — Phase 3 complete, ready for Era 13's verification pass.

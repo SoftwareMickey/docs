@@ -1,0 +1,137 @@
+# Era 10 — Observability & Operations (V32–V35)
+
+_Phase 2 · Concept Layer V1_
+
+**Status: ✅ done, verified 2026-09-17**
+
+**Implementation note:** all four pages written new — `concepts/observability.mdx` (V32,
+the build/application/machine log taxonomy front and center per the topic's own emphasis),
+`concepts/state-and-drift.mdx` (V33, two-pass disclosure, written directly in
+`DISCLOSURE.md`'s own compliant register — "shows what has changed... one row per
+difference"), `concepts/rollback-promotion-and-recovery.mdx` (V34, paired with
+`guides/rollback-and-recovery.mdx`, the release-vs-configuration rollback distinction as its
+opening frame), `concepts/automation.mdx` (V35, links to `cli/shared-flags.mdx` rather than
+restating flag semantics, per Invariant 1's altitude rule).
+
+Covers T27–T29, T32: Observability, State and drift, Rollback/promotion/recovery,
+Automation. Grouped together because all four are cross-cutting operational concerns rather
+than a single feature area, and T28 (State and drift) is flagged by the sibling roadmap as
+one of its own highest-disclosure-risk families (`statecmd`, `projectcontract`) — this era
+inherits that same caution one layer up.
+
+---
+
+## V32 — Observability (T27)
+
+### Goal
+New concept page: build vs. application vs. machine logs, metrics and units, traffic
+reports, live watching, filters, time ranges, interpreting missing or stale data.
+
+### Reuses
+`cli/logs.mdx`/`cli/metrics.mdx`/`cli/traffic.mdx`/`cli/observe.mdx`/`cli/history.mdx`,
+pending the sibling roadmap's own resolution of these as `observability` subcommands vs.
+standalone pages (its Era 1 naming-ambiguity note) — link to whichever structure survives.
+
+### Implement
+`concepts/observability.mdx`: the three log types as a clear taxonomy (build/application/
+machine) since users conflating them is a common confusion point named directly in the
+topic, "interpreting missing or stale data" as its own subsection (a genuinely useful,
+fully disclosure-safe topic — this is exactly the kind of "what you'll see and what it
+means" content the whole roadmap exists to provide).
+
+### Validate
+Terminology matches whatever the sibling roadmap's Era 8 (`observability` family) settles on
+by write time — checked, not assumed, since that era may not have landed first.
+
+### Done when
+Page exists; log-type taxonomy is unambiguous and matches reference-layer terminology.
+
+---
+
+## V33 — State and drift (T28)
+
+### Goal
+New concept page: local/saved/running state as three named states, detecting differences,
+what pull/apply/reconcile/rollback change, conflicts and safe recovery.
+
+### Reuses
+`cli/status.mdx`, `statecmd` family, `projectcontract` family — the sibling roadmap's own
+highest-disclosure-risk era (its Era 9). This version does not re-derive that era's
+disclosure work; it applies the same discipline one layer up, using the compliant/
+non-compliant worked example already given in `/features/docs/DISCLOSURE.md` ("drift shows
+what has changed... one row per difference" vs. "diffing the reconciler's desired-state
+graph...") as the literal register to write this page in.
+
+### Implement
+`concepts/state-and-drift.mdx`: local/saved/running as three plainly-named states, "drift"
+explained purely as the observable difference between what was last applied and what's
+running now (the compliant example's exact framing), "what pull/apply/reconcile/rollback
+change" stated as before/after outcomes for each command, "conflicts and safe recovery" as
+concrete user-facing steps. Checkpoint terms kept fully out: `reconcile` (as a *mechanism*
+word — the *command name* `reconcile` can still be named since it's public CLI surface, but
+never explained by describing its internal process), `drift` (same — nameable as a term,
+never explained mechanically), `desired state`, `contract`.
+
+### Validate
+Two-read disclosure pass — mandatory, not optional, given this is the sibling roadmap's own
+flagged highest-risk vocabulary reused here.
+
+### Done when
+Page exists; passes two-read disclosure; every sentence checked individually against the
+`DISCLOSURE.md` worked example's register.
+
+---
+
+## V34 — Rollback, promotion, and recovery (T29)
+
+### Goal
+New concept page: which actions restore application releases vs. configuration, moving
+between environments, recovering failed operations, whether application data is affected.
+
+### Reuses
+`cli/recover.mdx`, `guides/rollback-and-recovery.mdx` (existing task guide), `statecmd
+rollback` / `projectcontract rollback` (per V33's disclosure register, reused here).
+
+### Implement
+`concepts/rollback-promotion-and-recovery.mdx`: the release-vs-configuration rollback
+distinction as the opening framing (a common point of confusion — "did that roll back my
+code or my settings?"), promotion explained as moving a build between environments (an
+observable action), "whether application data is affected" stated explicitly for each
+action type — this is a direct data-safety question and must not be hedged or omitted.
+Bidirectional link with `guides/rollback-and-recovery.mdx` confirmed at Era 12.
+
+### Validate
+Disclosure pass consistent with V33's register (this page sits directly downstream of it,
+vocabulary-wise). Data-affected claims verified per Invariant 1 given the stakes (same
+seriousness as V29's destructive-action list).
+
+### Done when
+Page exists; data-affected claims verified; bidirectional link confirmed at Era 12.
+
+---
+
+## V35 — Automation (T32)
+
+### Goal
+New concept page: commands that work without prompts, required flags, output formats, exit
+codes, wait/timeout behavior, confirmations, examples suitable for scripts or CI.
+
+### Reuses
+Shared-flags reference from the sibling roadmap's Era 2 (V8 there — `--wait`, `--yes`,
+`--json`, `--quiet`, etc.) as the direct link target; this page is the concept-level "why and
+when to script Beaver" framing above that flag-by-flag reference.
+
+### Implement
+`concepts/automation.mdx`: frames scriptability as a first-class use case (CI/CD, cron,
+infra-as-code style workflows), exit-code conventions and output-format choices explained as
+what a script author needs to branch on, links to the shared-flags reference rather than
+re-listing every flag (Invariant 1 of this roadmap — concept altitude, not reference
+altitude).
+
+### Validate
+Confirms no flag behavior is restated in a way that could drift from the shared-flags
+reference's own wording — this page links, it does not paraphrase authoritative flag
+semantics.
+
+### Done when
+Page exists; closes Era 10.

@@ -1,0 +1,93 @@
+---
+title: "beaver reconcile"
+sidebarTitle: "reconcile"
+description: "Make the running deployment match your project's saved configuration."
+icon: "arrows-rotate"
+---
+
+<Info>
+  New here? [State and drift](/concepts/state-and-drift) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+Use `beaver reconcile` when you suspect what's running has drifted from your project's saved
+configuration (see [`beaver state`](/cli/state) to check first) and you want to bring it back
+in line — updating replica counts, the health-check path, and scaling policy to match what's
+saved, without deploying a new build.
+
+## Syntax
+
+```bash
+beaver reconcile [flags]
+```
+
+Takes no arguments — always resolves the current directory to a project.
+
+## Flags
+
+<ParamField query="--plan" type="boolean" default="false">
+  Show what would change without applying anything.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+## Consequences
+
+Idempotent: a deployment already matching the saved configuration is a no-op — safe to run
+repeatedly. `--plan` is entirely read-only.
+
+<Note>
+  `reconcile` brings runtime in line with the **saved** configuration — if your local
+  `.beaver/config.yml` has edits that haven't been saved yet (`beaver config push`,
+  `beaver state apply`), those edits are ignored here. You're warned if this is the case.
+</Note>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Preview first
+beaver reconcile --plan
+```
+
+```bash Apply, with confirmation
+beaver reconcile
+```
+
+```bash Apply without prompting (scripted)
+beaver reconcile --yes
+```
+
+</CodeGroup>
+
+**Expected output** (`--plan`, reviewed against source):
+
+```text
+RECONCILE PLAN
+  ~ web replicas: 1 → 3
+  · web domain.primary: x.example (dns not ready yet)
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Already in sync | `already in sync — nothing to reconcile` | Nothing to do. |
+| Changes applied | Each field's before/after, with a checkmark per successful step | Nothing further. |
+| A step fails | `N reconcile step(s) failed — re-run beaver reconcile once resolved` | Investigate the failed field, then re-run. |
+| Declined confirmation | `cancelled` | Nothing changed. |
+
+## Used in
+
+- [Rollback and recovery](/guides/rollback-and-recovery) — reconciling drift as one of the
+  recovery paths.
+- [`state`](/cli/state) — check `state status`/`drift` first to see whether reconciling is
+  needed.
+- [`config`](/cli/config#saved-configuration-server-sync) — `config push` is how you update
+  the saved configuration itself, before reconciling runtime to it.

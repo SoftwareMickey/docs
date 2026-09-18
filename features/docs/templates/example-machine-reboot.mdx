@@ -1,0 +1,92 @@
+---
+title: "beaver machine reboot"
+sidebarTitle: "reboot"
+description: "Reboot a machine, taking every container on it down until it comes back."
+icon: "terminal"
+---
+
+{/* Era 2 V6 worked example — filled from the template against beaver-cli
+commands/machine/maintenance.go (reboot, reboot-impact). Demonstrates the page
+shape; not itself a Phase 2 deliverable (machine.mdx is rewritten for real in
+Era 4 V12, which covers the full machine family, not just this one command). */}
+
+## Purpose
+
+Use `beaver machine reboot` when a machine needs a full restart — after a kernel update, to
+clear a wedged system service, or as a troubleshooting step your provider's support asked
+for. Every container running on the machine goes down for the duration of the reboot and
+comes back once the machine finishes booting.
+
+Before rebooting, run `beaver machine reboot-impact` to see exactly what would be
+interrupted — this is the safest way to confirm you're not about to take down something you
+didn't expect.
+
+## Syntax
+
+```bash
+beaver machine reboot <machine-id> [flags]
+```
+
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `<machine-id>` | Yes | A machine ID or name from `beaver machine list`. |
+
+## Flags
+
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt and reboot immediately. Without it, you'll be asked to
+  confirm before anything happens. See [shared flags](/cli/shared-flags#yes) — no
+  command-specific interaction here.
+</ParamField>
+
+## Consequences
+
+Rebooting a machine takes down **every container running on it** — not just one
+application — for the duration of the reboot. There is no partial or rolling reboot at the
+machine level. The command returns once the reboot request is accepted; it does not wait for
+the machine to finish coming back up.
+
+<Warning>
+  This affects every container on the machine, not just one project. Run `beaver machine
+  reboot-impact <machine-id>` first to see the full list of what will be interrupted.
+</Warning>
+
+The action itself isn't reversible (you can't "un-reboot"), but it's a normal, expected
+machine operation — the risk is scope (everything on the machine), not permanence.
+
+## Examples
+
+<CodeGroup>
+
+```bash Check impact first
+beaver machine reboot-impact srv_web01
+```
+
+```bash Reboot with confirmation
+beaver machine reboot srv_web01
+```
+
+```bash Reboot without prompting (e.g. in a script)
+beaver machine reboot srv_web01 --yes
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source, not executed against a live machine):
+
+```text
+✓ Done
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `✓ Done` | The reboot request was accepted; the machine is restarting. |
+| Confirmation declined | Command exits without rebooting | Re-run with confirmation, or add `--yes` once you're sure. |
+| `failed to reboot machine: ...` | An error naming the underlying failure | The machine may be unreachable or already mid-operation; check `beaver machine overview <machine-id>`. |
+
+## Used in
+
+- Machine maintenance workflows — link added when Era 12 (workflow guides) publishes the
+  relevant task guide.

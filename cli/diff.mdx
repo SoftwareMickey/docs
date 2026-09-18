@@ -1,12 +1,69 @@
 ---
 title: "beaver diff"
-description: "Compare two releases for a service."
+sidebarTitle: "diff"
+description: "Compare two releases of a service: code, config, and image."
+icon: "code-compare"
 ---
 
-## Examples
+## Purpose
+
+Use `beaver diff` to see exactly what changed between two releases — by default, the current
+release versus the previous one. Useful before promoting or rolling back, or when trying to
+understand what a recent deploy actually changed.
+
+## Syntax
 
 ```bash
 beaver diff [service] [release-a] [release-b]
 ```
 
-Without release IDs, compares the current release with the previous one. Name a service when needed.
+| Argument | Required | Accepted values |
+| --- | --- | --- |
+| `[service]` | No | Service name — pass first to disambiguate a multi-service project. |
+| `[release-a]` `[release-b]` | No | Two deployment IDs to compare. Omit both to compare the current release against the previous one. |
+
+## What's compared
+
+| Category | What it shows |
+| --- | --- |
+| `code` | Commits reachable in the new release but not the old one, read from your local git checkout. Beaver stores no source itself. |
+| `config` | Port, domain, deployment path, and host-provider changes. |
+| `image` | The built image tag, if it changed. |
+
+## Consequences
+
+Purely a read — no state changes on any run.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Current vs. previous
+beaver diff
+```
+
+```bash Multi-service project
+beaver diff api
+```
+
+```bash Two specific releases
+beaver diff api dep_82af1234 dep_83da5678
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | Code/config/image differences between the two releases | Nothing further. |
+| No prior release to compare against | A note that there's nothing to diff yet | Deploy a second release first. |
+
+## Used in
+
+- [`deployment`](/cli/deployment) — inspecting deployment history alongside what actually
+  changed between two of them.

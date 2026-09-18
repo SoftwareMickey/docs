@@ -1,14 +1,101 @@
 ---
 title: "beaver login"
-description: "Authenticate a Beaver account."
+sidebarTitle: "login"
+description: "Authenticate this CLI against your Beaver account."
+icon: "right-to-bracket"
 ---
+
+Part of the session family: **login** (this page) → [`whoami`](/cli/whoami) to check who
+you're signed in as → [`logout`](/cli/logout) to clear the session.
+
+## Purpose
+
+Run `beaver login` before any command that needs an authenticated account — most commands
+that talk to your workspace (`deploy`, `machine`, `service`, etc.) will prompt you to sign in
+automatically on first use if you haven't already. Signing in interactively opens a browser
+for approval by default; pass `--password` for an email/password prompt instead, or use
+`BEAVER_TOKEN` for a fully non-interactive session (CI, scripts, headless machines).
+
+## Syntax
+
+```bash
+beaver login [flags]
+```
+
+Takes no arguments — credentials are gathered interactively (browser or prompt) or from the
+environment, never as a command-line argument.
+
+## Flags
+
+<ParamField query="--password" type="boolean" default="false">
+  Use an email/password prompt instead of browser-based login. Without this flag, `beaver
+  login` opens a browser for you to approve the sign-in and polls for approval (10-minute
+  window before the login expires and needs to be re-run).
+</ParamField>
+
+### Non-interactive: `BEAVER_TOKEN`
+
+```bash
+BEAVER_TOKEN=eyJ... beaver login
+```
+
+Set the `BEAVER_TOKEN` environment variable to skip both the browser flow and the password
+prompt entirely. The token is validated against your account and saved to the local session
+exactly as an interactive login would — this is the supported path for CI and scripted use.
+The same token is what a normal `beaver login` itself saves locally, so one already-signed-in
+machine can hand its session to another via this variable.
+
+## Consequences
+
+A successful login writes a local session file (on this machine only) and prints the signed-in
+account and workspace. It doesn't change anything about your workspace, projects, or
+deployments — it only establishes which account subsequent commands run as. Running `beaver
+login` again while already signed in starts a fresh sign-in and replaces the local session.
 
 ## Examples
 
-```bash
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Browser login (default)
 beaver login
-beaver login --password
-BEAVER_TOKEN=<token> beaver login
 ```
 
-The default flow opens browser authentication. Use `--password` for email/password or `BEAVER_TOKEN` in a headless environment.
+```bash Email/password
+beaver login --password
+```
+
+```bash Non-interactive (CI)
+BEAVER_TOKEN=eyJ... beaver login
+```
+
+</CodeGroup>
+
+**Expected output** (reviewed against source):
+
+```text
+Open this URL to approve Beaver:
+  https://app.example/device?code=...
+
+SIGNED IN
+✓ Login successful
+
+  Account    ada
+  Workspace  paperclip-prod
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `✓ Login successful` with account and workspace | You're signed in; other commands no longer prompt for auth. |
+| Browser approval not completed in time | `browser login expired; run beaver login again` | Re-run `beaver login`; approve the browser prompt promptly this time. |
+| `BEAVER_TOKEN is not valid` | Error naming the invalid token | Check the token value, or unset `BEAVER_TOKEN` and sign in interactively instead. |
+
+## Used in
+
+- [Deploy workflow](/guides/deploy-workflow) — signing in is the first step before connecting
+  and deploying.

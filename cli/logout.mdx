@@ -1,12 +1,59 @@
 ---
 title: "beaver logout"
-description: "Clear the local Beaver session."
+sidebarTitle: "logout"
+description: "Sign out and clear the local Beaver session on this machine."
+icon: "right-from-bracket"
 ---
 
-## Examples
+Part of the session family: [`login`](/cli/login) → [`whoami`](/cli/whoami) to check who
+you're signed in as → **logout** (this page).
+
+## Purpose
+
+Use `beaver logout` when you're done using `beaver` on a shared or temporary machine, or
+before switching to a different account on the same machine.
+
+## Syntax
 
 ```bash
 beaver logout
 ```
 
-Signs out of the current machine. It does not remove projects, deployments, or enrolled machines.
+Takes no arguments and no flags.
+
+## Consequences
+
+Clears the local session on this machine only — `beaver whoami` afterward reports signed
+out, and any command needing an authenticated account prompts you to sign in again.
+
+<Warning>
+  This only affects the local session file on the machine you run it on. It does not remove
+  projects, deployments, or enrolled machines, and it does not sign you out anywhere else.
+</Warning>
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+```bash
+beaver logout
+```
+
+**Expected output** (reviewed against source):
+
+```text
+✓ Signed out of ada
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Success | `✓ Signed out of <account>` | Local session cleared. |
+| Already signed out | `You are not signed in.` | Nothing to do — the command exits cleanly either way. |
+
+## Used in
+
+- [`login`](/cli/login) and [`whoami`](/cli/whoami) — the rest of the session family.

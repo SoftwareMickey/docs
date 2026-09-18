@@ -1,0 +1,54 @@
+---
+title: "Configuration"
+description: "Your deployment settings live in one local file, and Beaver keeps a saved copy per container — the two can drift, and Beaver shows you exactly how."
+sidebarTitle: "Configuration"
+icon: "gear"
+---
+
+Your project's deployment settings — build strategy, health checks, replicas, resources,
+networks, volumes — live in one file, **`.beaver/config.yml`**, in your project directory.
+Beaver also keeps a **saved copy** of this configuration per container, separate from your
+local file, which is what actually gets applied when you or a teammate deploys.
+
+```bash
+beaver config show
+beaver config status
+```
+
+## Local versus saved — the distinction that matters
+
+Your local file is what you edit and commit. The saved copy is what Beaver actually deploys
+from. These two can disagree — someone changed something from the dashboard, or you edited
+locally but haven't pushed yet — and Beaver shows you exactly which fields differ rather than
+just telling you something's "out of sync." Keeping them in agreement is explicit: push your
+local edits, or pull the saved copy down to match it.
+
+## What you can see and control
+
+`.beaver/config.yml` can be generated (inferred from your Dockerfile/Compose file), authored
+by hand, or edited field by field via the CLI. A JSON Schema for the file's shape is
+available for editor autocomplete and validation — it describes your local YAML file's
+structure, not any server-side behavior.
+
+## What isn't tracked
+
+Some fields — like which Dockerfile path to build from — aren't part of the saved
+configuration at all. Pulling never overwrites them, since there's nothing saved to pull;
+they only ever come from your local file.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Building applications" href="/concepts/building-applications">
+    What configuration builds on top of.
+  </Card>
+  <Card title="State and drift" href="/concepts/state-and-drift">
+    The broader local/saved/running comparison this feeds into.
+  </Card>
+  <Card title="Config command reference" href="/cli/config">
+    The full authoring and sync command surface.
+  </Card>
+  <Card title="Deployment configuration" href="/deploying/deployment-configuration">
+    Port, health check, and resource fields specifically.
+  </Card>
+</CardGroup>

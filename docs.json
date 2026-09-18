@@ -31,6 +31,65 @@
             ]
           },
           {
+            "group": "Concepts",
+            "pages": [
+              "concepts/how-beaver-fits-together",
+              "concepts/accounts-and-workspaces",
+              "concepts/integrations",
+              "concepts/machine-and-agent-operation",
+              "concepts/beaver-cloud",
+              "concepts/projects",
+              "concepts/configuration",
+              "concepts/building-applications",
+              "concepts/preflight-and-planning",
+              "concepts/deployments",
+              "concepts/containers-and-replicas",
+              "concepts/compose-applications",
+              "concepts/domains-and-routing",
+              "concepts/scaling-and-resources",
+              "concepts/firewall",
+              "concepts/edge-and-performance-controls",
+              "concepts/services",
+              "concepts/service-databases-and-credentials",
+              "concepts/service-clusters",
+              "concepts/persistent-storage",
+              "concepts/backups-and-restoration",
+              "concepts/connecting-to-services-locally",
+              "concepts/observability",
+              "concepts/state-and-drift",
+              "concepts/rollback-promotion-and-recovery",
+              "concepts/ai-connections-and-alie",
+              "concepts/plans-and-billing",
+              "concepts/automation",
+              "concepts/troubleshooting"
+            ]
+          },
+          {
+            "group": "Services",
+            "pages": [
+              "services",
+              "services/postgresql",
+              "services/mysql",
+              "services/mariadb",
+              "services/mongodb",
+              "services/redis",
+              "services/kafka",
+              "services/rabbitmq",
+              "services/nats",
+              "services/meilisearch",
+              "services/minio"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "guides/deploy-workflow",
+              "guides/connect-and-machine-roles",
+              "guides/scaling",
+              "guides/rollback-and-recovery"
+            ]
+          },
+          {
             "group": "Infrastructure Setup",
             "pages": [
               "/infrastructure-setup",
@@ -98,33 +157,34 @@
           {
             "group": "Deployments",
             "pages": [
-              "cli/init", "cli/validate", "cli/contract", "cli/plan", "cli/deploy",
+              "cli/init", "cli/validate", "cli/preflight", "cli/config", "cli/plan", "cli/deploy",
               "cli/inspect", "cli/observe", "cli/status", "cli/recover", "cli/diff",
-              "cli/containers", "cli/container", "cli/deployment", "cli/compose",
-              "cli/logs", "cli/metrics", "cli/traffic"
+              "cli/containers", "cli/container", "cli/deployment", "cli/promote", "cli/compose",
+              "cli/logs", "cli/metrics", "cli/traffic", "cli/state", "cli/reconcile"
             ]
           },
           {
             "group": "Project management",
-            "pages": ["cli/project", "cli/environment", "cli/domain"]
+            "pages": ["cli/project", "cli/environment", "cli/domain", "cli/route"]
           },
           {
             "group": "Infrastructure",
             "pages": [
               "cli/doctor", "cli/connect", "cli/server", "cli/agent", "cli/machine",
-              "cli/firewall", "cli/scaling", "cli/edge"
+              "cli/health", "cli/mystic",
+              "cli/cloud", "cli/service", "cli/firewall", "cli/scaling", "cli/autoscale", "cli/edge"
             ]
           },
           {
             "group": "Account and integrations",
             "pages": [
               "cli/login", "cli/logout", "cli/whoami", "cli/github", "cli/integrations",
-              "cli/account", "cli/workspace", "cli/billing", "cli/plans", "cli/ai", "cli/alie"
+              "cli/account", "cli/workspace", "cli/billing", "cli/coupon", "cli/plans", "cli/ai", "cli/alie", "cli/skills"
             ]
           },
           {
             "group": "Utilities",
-            "pages": ["cli/git", "cli/docker", "cli/completion", "cli/history", "cli/update", "cli/version", "cli/shell"]
+            "pages": ["cli/git", "cli/docker", "cli/completion", "cli/history", "cli/update", "cli/version", "cli/shell", "cli/spec"]
           }
         ]
       }

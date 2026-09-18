@@ -1,16 +1,136 @@
 ---
 title: "beaver container"
+sidebarTitle: "container"
 description: "Inspect and operate on one deployed container."
+icon: "cube"
 ---
+
+<Info>
+  New here? [Containers and replicas](/concepts/containers-and-replicas) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+`beaver container` and [`beaver containers`](/cli/containers) are two distinct, real
+commands — `container` operates on **one** named container; `containers` **lists** all of
+them (with fleet-wide stats). Both are documented separately because they answer different
+questions, not because one is stale.
+
+## Purpose
+
+Use `beaver container <name> <action>` to inspect, redeploy, roll back, restart, or delete a
+single deployed container. `beaver destroy <name>` is a shorthand alias for `beaver container
+<name> delete` with the same confirmation.
+
+## Syntax
+
+```bash
+beaver container <name> <action> [args] [flags]
+```
+
+| Action | Purpose |
+| --- | --- |
+| `inspect` | Show the container's current detail. |
+| `logs` | Show or stream logs. |
+| `exec` | Run a command inside the container (default: interactive shell). |
+| `open` | Open the container in your browser, if it has a public route. |
+| `redeploy` | Rebuild and deploy the current source again. |
+| `history` | Show past deployments for this container. |
+| `rebuild` | Rebuild without changing the deployed source reference. |
+| `rollback` | Roll back to a previous deployment. |
+| `restart` | Restart the running container in place. |
+| `stop` / `start` | Stop or start the container. |
+| `advice` | Show recommendations for this container (e.g. resource sizing). |
+| `replicas` | Show or manage replica count. |
+| `delete` | Permanently delete the container. |
+
+## Flags
+
+<ParamField query="--tail" type="integer" default="200">
+  Number of log lines to show, for `logs`.
+</ParamField>
+<ParamField query="--follow" type="boolean" default="false">
+  Stream logs live instead of a one-shot tail, for `logs`.
+</ParamField>
+<ParamField query="--cmd" type="string" default="">
+  Command to run, for `exec`. Defaults to an interactive shell, e.g. `--cmd "cat
+  /etc/os-release"`.
+</ParamField>
+<ParamField query="--live" type="boolean" default="false">
+  For `open`: open the container's own live app URL instead of its Beaver dashboard page.
+  Requires the container to have a domain attached.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt, for `rollback`/`stop`/`delete`. See [shared
+  flags](/cli/shared-flags#yes).
+</ParamField>
+<ParamField query="--skip-preflight" type="boolean" default="false">
+  Proceed even if preflight reports a blocking finding, for `redeploy`/`rollback`. Recorded
+  as a server-side audit row.
+</ParamField>
+<ParamField query="--no-queue" type="boolean" default="false">
+  Fail immediately if the container's machine is offline, instead of queueing the
+  redeploy/rollback to run once its agent reconnects.
+</ParamField>
+<ParamField query="--acknowledge-data-loss" type="boolean" default="false">
+  Proceed even though this redeploy/rollback drops a volume the running release mounts.
+</ParamField>
+
+## Consequences
+
+`redeploy` and `rebuild` build and start a new release; `restart` restarts the existing
+container without a new build. `stop` takes the container offline until `start` is run
+again — anything depending on it becomes unreachable in the meantime.
+
+<Warning>
+  `delete` permanently removes the container and its deployment history. There is no undo.
+</Warning>
+
+<Warning>
+  If a redeploy or rollback would drop a volume the running release mounts, it's blocked by
+  default — pass `--acknowledge-data-loss` only once you've confirmed the data loss is
+  intended.
+</Warning>
+
+By default, a redeploy/rollback against an offline machine is queued and runs automatically
+once the machine's agent reconnects; pass `--no-queue` to fail immediately instead.
 
 ## Examples
 
-```bash
-beaver container <name> inspect
-beaver container <name> logs --tail 200
-beaver container api redeploy
-beaver container api rollback
-beaver container api delete --yes
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Inspect and tail logs
+beaver container api inspect
+beaver container api logs --tail 200 --follow
 ```
 
-Use `--yes` for supported destructive confirmations and `--json` or `--output` for scripts.
+```bash Redeploy and roll back
+beaver container api redeploy
+beaver container api rollback --yes
+```
+
+```bash Run a one-off command inside it
+beaver container api exec --cmd "cat /etc/os-release"
+```
+
+```bash Delete (or the shorthand alias)
+beaver container api delete --yes
+beaver destroy api
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| `redeploy` while machine offline (default) | Redeploy queued, exits without waiting | It runs automatically once the agent reconnects. |
+| `redeploy` offline with `--no-queue` | Immediate failure naming the machine as offline | Wait for the machine to reconnect, or use a different one. |
+| `delete` declined | Command exits without change | Nothing removed. |
+
+## Used in
+
+- [`deploy`](/cli/deploy) — `container <name> redeploy` is the pointer given when re-running
+  `beaver deploy` for an already-deployed repository+branch.

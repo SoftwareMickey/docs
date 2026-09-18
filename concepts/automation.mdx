@@ -1,0 +1,37 @@
+---
+title: "Automation"
+description: "Every command that would normally prompt can run non-interactively instead — for CI, cron, or any script that needs predictable behavior."
+sidebarTitle: "Automation"
+icon: "robot"
+---
+
+Every command that would normally ask for confirmation or print human-readable status can
+run non-interactively instead — for CI pipelines, cron jobs, or any script that needs
+predictable behavior.
+
+```bash
+beaver deploy --yes --wait --json
+```
+
+## The flags that make scripting possible
+
+Skip a confirmation prompt with `--yes`; get machine-readable output with `--json` or
+`--output yaml`; suppress narration with `--quiet` while still getting the result data. For
+anything asynchronous — a deploy, a scale operation — `--wait` blocks until it reaches a
+final state instead of returning as soon as it's accepted, with `--timeout` bounding how
+long that wait lasts. Every command exits non-zero on failure, so a script can branch on
+exit code alone.
+
+## What a timeout doesn't do
+
+A `--wait` timeout doesn't cancel the underlying operation — only the CLI's waiting. If a
+script needs the eventual outcome after a timeout, check status afterward rather than
+treating a timeout as the operation itself having failed.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Shared flags reference" href="/cli/shared-flags">
+    Every automation-relevant flag, in full.
+  </Card>
+</CardGroup>
