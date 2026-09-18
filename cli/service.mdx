@@ -125,6 +125,10 @@ Each service can hold multiple isolated **logical databases**, each with its own
 | `attached <container>` | Services attached to one app. |
 | `connect [service]` | Open a local tunnel to a managed service's database. |
 
+`attach` and `detach` also record the change under the app's `dependencies:` entry in its saved
+`.beaver/config.yml`. Run `beaver config pull <container>` (or `beaver state pull`) to bring it
+into your local file.
+
 <ParamField query="--container" type="string" default="">
   On `attach`/`detach`: application container. Interactive picker if omitted.
 </ParamField>
