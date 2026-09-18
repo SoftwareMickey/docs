@@ -84,6 +84,11 @@ again — anything depending on it becomes unreachable in the meantime.
   `delete` permanently removes the container and its deployment history. There is no undo.
 </Warning>
 
+Before deleting, `delete` detaches every [managed service](/cli/service) attached to the
+container: the attachment ends, its injected env vars are removed, and its database is freed
+for another app. The container is deleted only if every detach succeeds; with no attached
+services, `delete` proceeds as normal.
+
 <Warning>
   If a redeploy or rollback would drop a volume the running release mounts, it's blocked by
   default — pass `--acknowledge-data-loss` only once you've confirmed the data loss is
@@ -129,6 +134,7 @@ beaver destroy api
 | `redeploy` while machine offline (default) | Redeploy queued, exits without waiting | It runs automatically once the agent reconnects. |
 | `redeploy` offline with `--no-queue` | Immediate failure naming the machine as offline | Wait for the machine to reconnect, or use a different one. |
 | `delete` declined | Command exits without change | Nothing removed. |
+| `delete` can't detach an attached service | `container not deleted: could not detach service "<name>": …` | Nothing removed. If a secure detach is unfinished, complete it with `beaver service detach <name> --container <app> --secure`, then retry. |
 
 ## Used in
 
