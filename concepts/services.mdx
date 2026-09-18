@@ -35,6 +35,23 @@ deleting the service itself does that.
 Some service types don't support in-place version upgrades and require provisioning a new
 service and migrating data across.
 
+## Private vs shared data
+
+By default, attaching a new application gives it a brand-new, private slice of the service —
+its own database, key space, bucket, or equivalent, depending on the service type — that no
+other application can read or write. If you want two applications to work on the same data (an
+API and its background worker, say), you connect the second one to the first's existing
+resource instead and confirm you want to share it. Beaver never puts two applications on the
+same data unless you say so explicitly.
+
+## Each app has its own login
+
+Every application you attach to a service gets its own credential, scoped to only the data it's
+connected to — never a login shared with any other application, even one attached to the same
+underlying resource. Disconnecting an application revokes only its own credential; the
+resource and every other connected application are untouched. This is why detaching never
+deletes your data: it only removes the one login that no longer needs to exist.
+
 ## Where to go next
 
 <CardGroup cols={2}>

@@ -120,14 +120,24 @@ Each service can hold multiple isolated **logical databases**, each with its own
 
 | Subcommand | Purpose |
 | --- | --- |
-| `attach <name>` | Lock a database to an app, injecting its connection details as env vars. |
-| `detach <name>` | Remove that dependency. |
+| `attach <name>` | Connect an app to a service, injecting its connection details as env vars. |
+| `detach <name>` | Remove that connection. |
 | `attached <container>` | Services attached to one app. |
 | `connect [service]` | Open a local tunnel to a managed service's database. |
 
+Every service type binds the app to its own isolated resource — the specific word depends on
+the type (a database, a Redis key space, a RabbitMQ messaging area, a MinIO bucket, a
+Meilisearch index, a NATS subject prefix, a Kafka topic prefix) — see `beaver service catalog`
+for what a given type calls it. Attaching with no resource named auto-creates (or resumes) a
+new private one for the app; naming an existing resource with `--database`/`--resource` binds
+to it instead, and `--shared` is required when another app already holds it. Either way the app
+gets its own login — connecting two apps to the same resource never means they share a
+credential.
+
 `attach` and `detach` also record the change under the app's `dependencies:` entry in its saved
-`.beaver/config.yml`. Run `beaver config pull <container>` (or `beaver state pull`) to bring it
-into your local file.
+`.beaver/config.yml`, including which kind of resource it is (`resource_kind`) and whether the
+connection is private or shared (`access`). Run `beaver config pull <container>` (or
+`beaver state pull`) to bring it into your local file.
 
 <ParamField query="--container" type="string" default="">
   On `attach`/`detach`: application container. Interactive picker if omitted.
@@ -136,9 +146,29 @@ into your local file.
   On `attach`: prefix for the injected environment variable names.
 </ParamField>
 <ParamField query="--database" type="string" default="">
-  On `attach`: logical database to lock to this app. Required for Postgres/Redis; picker if
-  omitted. On `connect`: database name or ID within the service; omit for a service-level
-  tunnel.
+  On `attach`: an existing resource to connect to. Omit to auto-create a new private one for
+  this app instead (picker if interactive). On `connect`: database name or ID within the
+  service; omit for a service-level tunnel.
+</ParamField>
+<ParamField query="--new-database" type="string" default="">
+  On `attach`: name the auto-created private resource explicitly instead of deriving it from
+  the container's own name. Ignored if `--database` is set.
+</ParamField>
+<ParamField query="--resource" type="string" default="">
+  On `attach`: alias of `--database` — the kind-neutral name, since not every type's resource
+  is a database.
+</ParamField>
+<ParamField query="--new-resource" type="string" default="">
+  On `attach`: alias of `--new-database`.
+</ParamField>
+<ParamField query="--shared" type="boolean" default="false">
+  On `attach`: required when `--database`/`--resource` names a resource another active
+  attachment already binds. Every app still gets its own account; this only opts into two apps
+  working on the same data.
+</ParamField>
+<ParamField query="--read-only" type="boolean" default="false">
+  On `attach`: only meaningful alongside `--shared` — grants this app read-only access to the
+  resource instead of read/write.
 </ParamField>
 <ParamField query="--clean" type="boolean" default="false">
   On `detach`: also remove the previously-injected env vars from the application.
