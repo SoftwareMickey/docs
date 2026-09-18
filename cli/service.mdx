@@ -93,17 +93,21 @@ actually destroying data.
   on the service — treat it as a sensitive, deliberate action, not a routine check.
 </Warning>
 
-## Databases
+## Databases (and every other resource kind)
 
-Each service can hold multiple isolated **logical databases**, each with its own credential.
+Each service can hold multiple isolated **resources** — what that means depends on the
+service type: a Postgres/MySQL/MongoDB database, a Redis key space, a RabbitMQ messaging
+area, a MinIO bucket, a Meilisearch index, a NATS subject prefix, or a Kafka topic prefix (see
+`beaver service catalog` for which word applies). The command family is still called
+`database` for every type, kept as one name rather than a different subcommand per kind.
 
 | Subcommand | Purpose |
 | --- | --- |
-| `database list [service]` | Every logical database and its bound app. |
-| `database create <db> [service]` | Create an isolated logical database. |
-| `database reveal <db> [service]` | Print one database's connection string. |
-| `database rotate <db> [service]` | Rotate one database's credential independently of the service admin credential. |
-| `database delete <db> [service]` | Drop a logical database and its credential. |
+| `database list [service]` | Every resource on the service and the apps connected to it. |
+| `database create <name> [service]` | Create an isolated resource. |
+| `database reveal <name> [service]` | Print one resource's connection string. |
+| `database rotate <name> [service]` | Rotate the resource's own credential independently of the service admin credential. |
+| `database delete <name> [service]` | Drop a resource and its dedicated credential. |
 
 <Warning>
   `database reveal` and `database rotate` are sensitive actions with the same audit-logging
@@ -112,8 +116,8 @@ Each service can hold multiple isolated **logical databases**, each with its own
 </Warning>
 
 <Warning>
-  `database delete` permanently drops the database and its dedicated credential. It's
-  refused while a container is still attached — detach it first.
+  `database delete` permanently drops the resource and its data. It's refused while any app is
+  still connected to it — detach every connected app first.
 </Warning>
 
 ## Networking & attachment
@@ -331,6 +335,21 @@ beaver service create paperclip-db --type postgres
 beaver service attach paperclip-web --container paperclip-web --database paperclip
 ```
 
+```bash Attach with no flags — auto-creates a private resource
+beaver service create paperclip-cache --type redis
+beaver service attach paperclip-web --container paperclip-web
+```
+
+```bash Connect a non-database type — same verb, its own resource word
+beaver service create paperclip-uploads --type minio
+beaver service attach paperclip-web --container paperclip-web --resource uploads
+```
+
+```bash Two apps sharing one resource, each with its own login
+beaver service attach paperclip-worker --container paperclip-worker \
+  --database paperclip --shared
+```
+
 ```bash Back up before a risky change
 beaver service backup paperclip-db
 beaver service backup schedule paperclip-db --interval daily --retention 14
@@ -357,7 +376,8 @@ beaver service connect paperclip-db --local-port 5433
 | --- | --- | --- |
 | `create` success | New service, provisioning status | Check `service show <name>` until healthy. |
 | `delete` success | `<name> deleted — its data volume was retained` | Run `delete-volume` separately if you actually want the data gone. |
-| `database delete` while attached | Refusal naming the attached app | `detach` first, then retry. |
+| `database delete` while attached | Refusal naming every attached app | `detach` each one first, then retry. |
+| `attach` to a resource another app already holds, without `--shared` | Refusal naming the other app(s) | Pass `--shared` (and `--read-only` if appropriate) to confirm the two apps should share data. |
 | `cluster upgrade` member fails mid-rollout | Upgrade aborts; cluster stays on old version for remaining members | Investigate the failed member before retrying. |
 | `cluster resize` shrink without the extra flag | `--confirm-quorum-reduction` required error | Pass the flag once you've confirmed the quorum-floor change. |
 
