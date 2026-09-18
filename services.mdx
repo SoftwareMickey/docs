@@ -61,7 +61,7 @@ and versions for your account — new types and versions are added over time.
   </Step>
   <Step title="Attach it to your application">
     ```bash
-    beaver service attach paperclip-web --database paperclip-db
+    beaver service attach paperclip-db --container paperclip-web
     ```
     Your application receives a connection string as an environment variable. It can use it
     once the attachment takes effect — for most services, that's your next deployment.

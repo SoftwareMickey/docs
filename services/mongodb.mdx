@@ -26,7 +26,7 @@ beaver service create paperclip-db --type mongodb
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-db --env-prefix MONGO
+beaver service attach paperclip-db --container paperclip-web --env-prefix MONGO
 ```
 
 Your application receives a connection string as an environment variable using the prefix

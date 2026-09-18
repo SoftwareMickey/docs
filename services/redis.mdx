@@ -16,6 +16,9 @@ queues, and rate limiting.
     Single instance, cluster, or sentinel — see [Higher availability](#higher-availability)
     below.
   </Card>
+  <Card title="Key spaces" icon="key">
+    One service can host multiple isolated key spaces, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -27,7 +30,7 @@ beaver service create paperclip-cache --type redis
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-cache --env-prefix REDIS
+beaver service attach paperclip-cache --container paperclip-web --env-prefix REDIS
 ```
 
 Your application receives a connection string as an environment variable using the prefix

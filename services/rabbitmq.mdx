@@ -15,6 +15,9 @@ services via publish/subscribe or point-to-point messaging.
   <Card title="Deployment shape" icon="circle-nodes">
     Single instance by default; check `beaver service cluster create` for clustered setups.
   </Card>
+  <Card title="Messaging areas" icon="table">
+    One service can host multiple isolated vhosts, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -26,7 +29,7 @@ beaver service create paperclip-queue --type rabbitmq
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-queue --env-prefix RABBITMQ
+beaver service attach paperclip-queue --container paperclip-web --env-prefix RABBITMQ
 ```
 
 Your application receives connection details as an environment variable using the prefix

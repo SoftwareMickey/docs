@@ -15,6 +15,9 @@ typo-tolerant full-text search to an application without standing up a heavier s
   <Card title="Deployment shape" icon="circle-nodes">
     Single instance.
   </Card>
+  <Card title="Indexes" icon="list">
+    One service can host multiple isolated indexes, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -26,7 +29,7 @@ beaver service create paperclip-search --type meilisearch
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-search --env-prefix MEILI
+beaver service attach paperclip-search --container paperclip-web --env-prefix MEILI
 ```
 
 Your application receives connection details (host and API key) as an environment variable

@@ -26,7 +26,7 @@ beaver service create paperclip-db --type mariadb
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-db --env-prefix DATABASE
+beaver service attach paperclip-db --container paperclip-web --env-prefix DATABASE
 ```
 
 Your application receives a connection string as an environment variable using the prefix

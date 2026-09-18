@@ -16,6 +16,9 @@ provider's storage service.
   <Card title="Deployment shape" icon="circle-nodes">
     Single instance.
   </Card>
+  <Card title="Buckets" icon="box">
+    One service can host multiple isolated buckets, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -27,7 +30,7 @@ beaver service create paperclip-storage --type minio
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-storage --env-prefix S3
+beaver service attach paperclip-storage --container paperclip-web --env-prefix S3
 ```
 
 Your application receives connection details (endpoint, access key, secret key) as an
