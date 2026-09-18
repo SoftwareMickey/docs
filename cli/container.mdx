@@ -85,9 +85,10 @@ again — anything depending on it becomes unreachable in the meantime.
 </Warning>
 
 Before deleting, `delete` detaches every [managed service](/cli/service) attached to the
-container: the attachment ends, its injected env vars are removed, and its database is freed
-for another app. The container is deleted only if every detach succeeds; with no attached
-services, `delete` proceeds as normal.
+container: the attachment ends, its injected env vars are removed, and its own access to that
+service's resource is revoked. The resource and its data are never deleted as a side effect —
+only the container's own login to it. The container is deleted only if every detach succeeds;
+with no attached services, `delete` proceeds as normal.
 
 <Warning>
   If a redeploy or rollback would drop a volume the running release mounts, it's blocked by
