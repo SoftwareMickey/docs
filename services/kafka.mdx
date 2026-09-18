@@ -16,6 +16,9 @@ events.
   <Card title="Deployment shape" icon="circle-nodes">
     Provisioned as a multi-member cluster — see below.
   </Card>
+  <Card title="Topic prefixes" icon="hashtag">
+    One service can host multiple isolated topic prefixes, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -35,7 +38,7 @@ Replica count must be odd and at least 3.
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-queue --env-prefix KAFKA
+beaver service attach paperclip-queue --container paperclip-web --env-prefix KAFKA
 ```
 
 Your application receives connection details as an environment variable using the prefix

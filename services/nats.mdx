@@ -16,6 +16,9 @@ broker overhead.
   <Card title="Deployment shape" icon="circle-nodes">
     Single instance by default; check `beaver service cluster create` for clustered setups.
   </Card>
+  <Card title="Subject prefixes" icon="hashtag">
+    One service can host multiple isolated subject prefixes, one per attached application.
+  </Card>
 </CardGroup>
 
 ## Add it
@@ -27,7 +30,7 @@ beaver service create paperclip-bus --type nats
 ## Attach it
 
 ```bash
-beaver service attach paperclip-web --database paperclip-bus --env-prefix NATS
+beaver service attach paperclip-bus --container paperclip-web --env-prefix NATS
 ```
 
 Your application receives connection details as an environment variable using the prefix

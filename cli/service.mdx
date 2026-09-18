@@ -332,21 +332,21 @@ members' data, triggering a resync against the survivors.
 
 ```bash Provision and attach
 beaver service create paperclip-db --type postgres
-beaver service attach paperclip-web --container paperclip-web --database paperclip
+beaver service attach paperclip-db --container paperclip-web --database paperclip
 ```
 
 ```bash Attach with no flags — auto-creates a private resource
 beaver service create paperclip-cache --type redis
-beaver service attach paperclip-web --container paperclip-web
+beaver service attach paperclip-cache --container paperclip-web
 ```
 
 ```bash Connect a non-database type — same verb, its own resource word
 beaver service create paperclip-uploads --type minio
-beaver service attach paperclip-web --container paperclip-web --resource uploads
+beaver service attach paperclip-uploads --container paperclip-web --resource uploads
 ```
 
 ```bash Two apps sharing one resource, each with its own login
-beaver service attach paperclip-worker --container paperclip-worker \
+beaver service attach paperclip-db --container paperclip-worker \
   --database paperclip --shared
 ```
 

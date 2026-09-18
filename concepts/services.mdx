@@ -10,7 +10,7 @@ that you attach to your application instead of running and maintaining yourself.
 
 ```bash
 beaver service create paperclip-db --type postgres
-beaver service attach paperclip-web --database paperclip-db
+beaver service attach paperclip-db --container paperclip-web
 ```
 
 ## What attaching one actually does
