@@ -1,6 +1,6 @@
 ---
 title: "Backups and restoration"
-description: "A point-in-time copy of a service's data, on your schedule, restorable into a new service without touching the original."
+description: "A point-in-time copy of a service's data, on your schedule, restorable into the same service or a new one."
 sidebarTitle: "Backups & restoration"
 icon: "clock-rotate-left"
 ---
@@ -22,9 +22,38 @@ fact.
 ## What you can see and control
 
 You can trigger a backup manually or set a retention schedule so they happen automatically.
-Backup status shows whether the most recent one succeeded. Restoring creates a **new**
-service from a backup — it doesn't overwrite the original in place, so the source stays
-intact throughout.
+Backup status shows whether the most recent one succeeded.
+
+Restoring has two forms:
+
+- `beaver service restore <name> --backup <id>` puts the backup **into the existing service**,
+  replacing its current data. It always asks for confirmation, and there is no undo.
+- `beaver service create <name> --restore-from <id>` restores into a **new** service and leaves
+  the original untouched.
+
+## What a backup contains
+
+A backup covers **all** of a service's data, including every database your attached apps
+created, not just the service's default one.
+
+| Service | What is in the backup | Notes |
+| --- | --- | --- |
+| PostgreSQL | Every database, plus its roles | Role passwords are not included. |
+| MySQL, MariaDB | Every database | User accounts are not included. |
+| MongoDB | Every database | The service's own accounts are never restored. |
+| Redis | The whole dataset, all numbered databases | Restoring stops the service briefly while the data file is replaced. |
+| RabbitMQ | Topology: vhosts, users, queues, exchanges, bindings | Messages are not included. Restoring adds to existing topology and never deletes anything. |
+
+Credentials are never taken from a backup. A restore leaves the service's current credentials,
+including any you rotated after the backup was taken, exactly as they were.
+
+MinIO, Kafka, NATS, Meilisearch and Redis Cluster don't support backups. Backing up a single
+Redis Cluster node would capture only its own share of the data, so Beaver refuses rather
+than give you a backup that looks complete and isn't. Redis Sentinel services can be backed
+up, but can't be restored into an individual cluster member.
+
+A restore that can't bring the service back up is reported as failed. For Redis, the data that
+was there before is put back so the service keeps running.
 
 ## Before you rely on a restore
 

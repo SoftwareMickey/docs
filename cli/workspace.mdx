@@ -1,21 +1,256 @@
 ---
 title: "beaver workspace"
-description: "View or recover the current Beaver workspace."
+description: "Show, switch and manage workspaces, their members, invitations, approvals and ownership."
+icon: "users"
 ---
 
 <Info>
-  New here? [Accounts and workspaces](/concepts/accounts-and-workspaces) explains what this is and when to use it, before diving into syntax.
+  New here? [Workspaces and teams](/concepts/workspaces-and-teams) explains what a workspace is and when you need more than one,
+  and [Roles and permissions](/concepts/roles-and-permissions) explains what each member can do, before diving into syntax.
 </Info>
+
+<Note>
+  These commands need the Beaver CLI release that introduced Team workspaces. If `beaver workspace list` says the command is unknown,
+  run `beaver update`. A CLI that predates them keeps working, always in your personal workspace.
+</Note>
+
+## Purpose
+
+A workspace is where your plan, billing, machines and projects live. Everyone starts with a personal workspace; a team
+workspace adds members with roles. `beaver workspace` shows and switches workspaces, and manages the people, invitations,
+approvals and ownership of a team workspace. Most solo users never need more than `beaver workspace show`.
+
+## Syntax
+
+```bash
+beaver workspace <subcommand> [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `show` | Show the active workspace: plan, your role, seats and limits. |
+| `list` | List the workspaces you belong to, with your role and plan. |
+| `use <name\|id>` | Make a workspace the active one for every later command. |
+| `create <name>` | Create a team workspace (requires a plan that includes Team). |
+| `members` | List the members of the active workspace. |
+| `invite <email>` | Invite someone to the active workspace. |
+| `invites` | List pending invitations, or revoke or resend one. |
+| `accept <token>` | Accept a workspace invitation with the token from your invite email. |
+| `role <member> <role>` | Change a member's role (owner, admin, developer, viewer). |
+| `remove <member>` | Remove a member from the workspace. |
+| `leave` | Leave the active workspace. |
+| `activity` | Show what happened in the workspace, newest first. |
+| `approvals` | List open approval requests; `approve` and `reject` decide them. |
+| `transfer <member>` | Offer to hand the active workspace to another member (Owner only). |
+| `transfers` | List ownership offers made to you, and this workspace's own pending offer. |
+| `accept-transfer [id]` | Accept an offer to become a workspace's owner. |
+| `decline-transfer [id]` | Decline an offer to become a workspace's owner. |
+| `recreate` | Recreate your workspace after it was deleted. |
+
+## Choosing the workspace a command acts in
+
+Every command acts in exactly one workspace. Beaver picks it in this order, and stops at the first that is set:
+
+| Order | Source |
+| --- | --- |
+| 1 | `--workspace <name or id>` on the command |
+| 2 | The `BEAVER_WORKSPACE` environment variable |
+| 3 | The workspace chosen with `beaver workspace use` |
+| 4 | Your personal workspace |
+
+`--workspace` works on every command, not just `beaver workspace`. A name that matches more than one workspace is refused and
+the candidates are listed. `beaver workspace use personal` returns to your personal workspace. Membership is checked first
+in every case, and the choice is remembered until you change it. In the interactive shell the prompt shows a workspace that
+is not your personal one, for example `beaver [acme-team] ▸`.
+
+If you are removed from the workspace you had selected, the next command says so and forgets the selection.
+
+## Flags
+
+### `show`, `list`, `members`, `leave`
+
+No flags beyond the [shared flags](/cli/shared-flags). `--json` prints machine-readable output.
+
+### `use`
+
+Takes the workspace name or id as its argument. Use `personal` to return to your personal workspace.
+
+### `create`
+
+Takes the new workspace's name. It requires that you own a workspace on the Team plan.
+
+### `invite`
+
+<ParamField query="--role" type="string" default="developer">
+  Role to grant: `admin`, `developer` or `viewer`. You cannot grant a role above your own, and an invitation cannot make someone an Owner.
+</ParamField>
+<ParamField query="--link" type="boolean" default="false">
+  Create a shareable link instead of sending an email. The email argument is kept only as a label; the link is shown once,
+  works once, lasts 24 hours, and needs the workspace's `allow_link_invites` policy turned on by an Owner.
+</ParamField>
+
+### `invites`
+
+<ParamField query="--all" type="boolean" default="false">
+  Include accepted, revoked and expired invitations.
+</ParamField>
+<ParamField query="--revoke" type="string" default="">
+  Revoke the invitation with this id. Its seat is freed straight away.
+</ParamField>
+<ParamField query="--resend" type="string" default="">
+  Resend the invitation with this id. It issues a new link; the previous one stops working.
+</ParamField>
+
+### `accept`
+
+Takes the token from the invitation email. If you are not signed in yet, Beaver keeps the token, walks you through signing in, and
+then completes the acceptance. You must sign in with the email address the invitation was sent to.
+
+### `role` and `remove`
+
+`<member>` is a name, an email address or an id.
+
+### activity
+
+<ParamField query="--since" type="string" default="">
+  Only events after this time: an RFC 3339 timestamp, a duration such as `36h`, or days such as `7d`.
+</ParamField>
+<ParamField query="--actor" type="string" default="">
+  Only events by this member (name, email or id).
+</ParamField>
+<ParamField query="--action" type="string" default="">
+  Only this action, for example `member.invited`.
+</ParamField>
+<ParamField query="--mine" type="boolean" default="false">
+  Only your own activity.
+</ParamField>
+<ParamField query="--limit" type="integer" default="0">
+  Maximum events to return.
+</ParamField>
+<ParamField query="--cursor" type="string" default="">
+  Continue from a previous page.
+</ParamField>
+
+The feed merges audit events, deployments and operations. Owners and Admins see everyone's activity; other roles see their own.
+
+### `approvals`
+
+<ParamField query="--all" type="boolean" default="false">
+  Include decided and expired requests.
+</ParamField>
+<ParamField query="--mine" type="boolean" default="false">
+  Only requests you made.
+</ParamField>
+
+`beaver workspace approvals approve <id>` and `reject <id>` decide a request; both take `--note "…"`. Approving grants that one
+action to the requester, who repeats their request. Nothing runs on your behalf.
+
+### transfer
+
+<ParamField query="--confirm-name" type="string" default="">
+  The workspace's exact name. Asked for interactively when omitted; required with `--yes`.
+</ParamField>
+<ParamField query="--leave" type="boolean" default="false">
+  Leave the workspace when ownership changes hands, instead of staying as an Admin.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt, including the billing acknowledgement below.
+</ParamField>
+
+### `transfers`
+
+<ParamField query="--cancel" type="boolean" default="false">
+  Withdraw this workspace's pending transfer offer.
+</ParamField>
+
+## Consequences
+
+- **`invite`** sends an email and reserves a seat until the invitation is accepted, revoked or expires (7 days).
+- **`remove`** and **`leave`** take effect immediately: live connections close, API keys for the workspace stop working, and the
+  next request is refused. Nothing the person created is deleted.
+  See [Access, audit and removal](/concepts/team-access-and-audit).
+- **`role`** takes effect within a few seconds.
+- **`recreate`** exists as a recovery path, not routine maintenance. It does not restore plan or subscription history, only a
+  fresh Free workspace.
+
+### Handing a Team workspace to someone else
+
+Only the workspace's primary **Owner** can offer it, and only to an **Admin or Owner** who is currently active. It is an offer, not
+a hand-over: the person must accept within 72 hours, so nobody becomes the owner (and responsible for billing) by surprise.
+Nothing moves when they accept: every project, container and setting stays where it is; only who owns the workspace changes.
+
+**Billing.** A Team subscription is paid with the previous owner's payment method, so when the workspace has one, the command
+tells you so and asks you to confirm. After the transfer the subscription (and any extra seat packs) stops renewing; the workspace
+keeps its plan until the period already paid for ends, and the new Owner subscribes with their own payment method. A payment that
+is failing blocks the transfer until it is resolved.
+
+A person who owns a workspace that others belong to cannot delete their account until they transfer or remove the workspace.
 
 ## Examples
 
 <Info>
-  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not
+  executed end-to-end against a live workspace.
 </Info>
 
-```bash
+```bash Show the active workspace
 beaver workspace show
-beaver workspace recreate
 ```
 
-Most users only need `show`. Treat `recreate` as a recovery action and review its confirmation carefully.
+```bash Switch workspace
+beaver workspace list
+beaver workspace use acme-team
+```
+
+```bash Invite, then check
+beaver workspace invite ada@example.com --role developer
+beaver workspace invites
+```
+
+```bash Change a role or remove someone
+beaver workspace role ada@example.com admin
+beaver workspace remove ada@example.com
+```
+
+```bash Recent activity by one person
+beaver workspace activity --since 7d --actor ada@example.com
+```
+
+```bash Decide an approval request
+beaver workspace approvals
+beaver workspace approvals approve <id> --note "ship it"
+```
+
+```bash Hand the workspace to someone
+beaver workspace transfer grace@example.com --confirm-name acme-team
+beaver workspace transfers
+beaver workspace transfers --cancel
+beaver workspace accept-transfer
+```
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| The workspace does not exist, or you are not in it | `workspace not found` | `beaver workspace list`, then `beaver workspace use`. |
+| Your access is paused | `membership suspended` | The Owner adds seats or resubscribes. |
+| Your role lacks the permission | `insufficient permissions`, naming the permission and your role | Ask an Owner or Admin. |
+| A full workspace invites someone | `Your plan allows up to 5 team members.` | Revoke an invitation, remove a member, or add seats. |
+| An invitation cannot be used | `invalid or expired invitation` | Sign in with the invited address and use the newest link. |
+| The invitation email could not be sent | `` The email could not be sent. Run `beaver workspace invites --resend <id>` to try again. `` | Resend it. |
+| `transfer` with the wrong name | `NAME_MISMATCH` | Type the workspace's exact name. |
+| `transfer` to someone who is not an active Admin or Owner | `RECIPIENT_NOT_ELIGIBLE` | Make them an Admin first. |
+| `transfer` while an offer is waiting | `TRANSFER_PENDING` | Withdraw it with `transfers --cancel`. |
+| Accepting after 72 hours | `TRANSFER_EXPIRED` | Ask for a new offer. |
+| `transfer` while a payment is past due | `BILLING_UNRESOLVED` | Fix billing first. |
+| Leaving as the last Owner | `you are the only owner: transfer ownership or delete the workspace instead of leaving` | Transfer ownership first. |
+
+More messages, with fixes, are in [Troubleshooting Teams](/guides/troubleshooting-teams).
+
+## Used in
+
+- [Create a team](/guides/create-a-team) — check the workspace before and after buying Team.
+- [Invite and manage members](/guides/invite-and-manage-members) — invitations, roles and removal.
+- [Working in a shared workspace](/guides/working-in-a-shared-workspace) — switching and approvals.
+- [Removing members and leaving](/guides/removing-members-and-leaving) — removal and ownership transfer.
+- [`beaver billing`](/cli/billing) — the plan and seats behind a team workspace.

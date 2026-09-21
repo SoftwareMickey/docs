@@ -15,6 +15,9 @@ description: "List Beaver plans for the current workspace."
 
 ```bash
 beaver plans
+beaver billing plans --json
 ```
 
-Use [`beaver billing`](/cli/billing) to inspect the subscription, start checkout, cancel renewal, or view payments.
+The table lists each plan's monthly price, its per-month price when billed yearly, and the price of an extra seat on plans that sell them. Below it, each plan lists what it includes (members, machines, retention). A plan that isn't on sale yet is not listed.
+
+Use [`beaver billing`](/cli/billing) to price a team, inspect the subscription and seats, start checkout, cancel renewal, or view payments.
