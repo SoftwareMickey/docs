@@ -1,0 +1,90 @@
+---
+title: "Removing members and leaving"
+description: "Remove someone, leave a workspace, and hand ownership to another member."
+sidebarTitle: "Removing members & leaving"
+icon: "user-minus"
+---
+
+People change teams. Beaver makes removal immediate and safe: access ends at once, and nothing that person
+created is deleted.
+
+## Remove a member
+
+Owners and Admins can remove members, but never someone who ranks above them.
+
+```bash
+beaver workspace remove ada@example.com
+```
+
+This takes effect **immediately**:
+
+- Their open log streams and shells are closed.
+- Their next request in this workspace is refused.
+- Any API key they made for this workspace stops working.
+- Their **other** workspaces and their account are untouched.
+
+What stays: their projects, deployments and settings belong to the workspace, and a deployment already in progress
+is not interrupted. The [activity log](/concepts/team-access-and-audit) keeps every action they took, with their name and the role they
+held at the time. Removing them frees their seat, and you can invite them again later.
+
+## Leave a workspace
+
+```bash
+beaver workspace leave
+```
+
+Anyone can leave, with the same effect as being removed. The exception is the last Owner: **you cannot leave a workspace
+you are the only Owner of.** Transfer ownership first, or delete the workspace.
+
+## Hand over ownership
+
+Only the workspace's primary Owner can offer it, and only to an active **Admin or Owner**. It is an **offer**, not a
+hand-over: the person must accept within **72 hours**, so nobody becomes the owner, and responsible for billing, by surprise.
+
+```bash
+beaver workspace transfer grace@example.com --confirm-name acme-team
+beaver workspace transfers            # offers you have made or received
+beaver workspace transfers --cancel   # withdraw your pending offer
+```
+
+The person you offered it to accepts or declines:
+
+```bash
+beaver workspace accept-transfer
+beaver workspace decline-transfer
+```
+
+Nothing moves when they accept. Every project, container and setting stays exactly where it is; only who owns the
+workspace changes. You stay on as an Admin, unless you pass `--leave`.
+
+**Billing.** A Team subscription is paid with the previous owner's payment method, so the command tells you that and
+asks you to confirm. After the transfer the subscription and any seat packs stop renewing; the workspace keeps its plan
+until the period already paid for ends, and the new Owner subscribes with their own payment method. A failing payment
+blocks the transfer until it is resolved.
+
+See [`beaver workspace`](/cli/workspace#transfer) for the flags and failure codes.
+
+## Before deleting your account
+
+A person who owns a workspace that other people belong to cannot delete their account until they transfer
+or remove that workspace.
+
+## If something goes wrong
+
+| You see | Meaning and fix |
+| --- | --- |
+| `a workspace must keep at least one active owner` | Make another person an Owner first. |
+| `the workspace's primary owner cannot be demoted or removed; transfer ownership first` | Use `beaver workspace transfer`. |
+| `you are the only owner: transfer ownership or delete the workspace instead of leaving` | Same. |
+| `you cannot change or remove a member with a higher role than yours, or grant a higher role than yours` | Ask an Owner. |
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Access, audit and removal" href="/concepts/team-access-and-audit">
+    Exactly what removal does and what the log keeps.
+  </Card>
+  <Card title="Downgrading and what happens" href="/guides/downgrading-and-what-happens">
+    Seats and what happens when a plan ends.
+  </Card>
+</CardGroup>

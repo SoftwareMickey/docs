@@ -1,0 +1,57 @@
+---
+title: "Roles and permissions"
+description: "The four roles in a team workspace and exactly what each one can do. The permission table is generated from Beaver's own rules."
+sidebarTitle: "Roles & permissions"
+icon: "shield-check"
+---
+
+import PermissionMatrix from "/snippets/team-permission-matrix.mdx";
+
+Every member of a team workspace has one **role**. The role decides what they can see and change in
+that workspace, and it applies to the whole workspace.
+
+| Role | In one line |
+| --- | --- |
+| **Owner** | Everything, including money and ownership. Every workspace has at least one. |
+| **Admin** | Runs the workspace: people, domains, firewall, machines, approvals, and everything a Developer can do. Cannot change the plan or hand over ownership. |
+| **Developer** | Does the day-to-day work: create projects, deploy, operate containers, manage services, write secrets. Production is protected by default. |
+| **Viewer** | Read-only. Sees the workspace, but never a secret value and never makes a change. |
+
+## The full table
+
+This table is generated from the same rules Beaver enforces, so it cannot drift from what actually happens.
+
+<PermissionMatrix />
+
+## Rules that always hold
+
+- **You cannot grant a role above your own.** An Admin can make someone a Developer or Viewer, but not an Owner.
+  You also cannot change or remove someone who ranks above you.
+- **There is always an Owner.** The last active Owner cannot be demoted, removed or leave. The workspace's
+  primary Owner must hand ownership over first; see [Removing members and leaving](/guides/removing-members-and-leaving).
+- **Money and ownership are the Owner's alone.** Only an Owner can buy, change or cancel a plan, or offer the
+  workspace to someone else. An Admin who needs a plan or seats changed can send the Owner a request.
+- **A Viewer never sees a secret value.** The names of environment variables are visible; the values are withheld.
+- **You cannot approve your own request.** See [Production safety and approvals](/concepts/production-safety-and-approvals).
+
+## What you will see when something is refused
+
+| You are… | Beaver says | Meaning |
+| --- | --- | --- |
+| A member, but your role lacks the permission | `insufficient permissions`, naming the permission and your role | Ask an Owner or Admin, or see who holds it in the table above. |
+| Not a member of the workspace (or it does not exist) | `workspace not found` | Beaver answers identically for both, so nobody can probe which workspaces exist. |
+| A member whose access is paused | `membership suspended` | See [Downgrading and what happens](/guides/downgrading-and-what-happens). |
+
+In Beaver Desktop and the dashboard, controls you cannot use are disabled and say which role you would
+need, instead of failing after you click.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Production safety and approvals" href="/concepts/production-safety-and-approvals">
+    The switches that decide what a Developer can do in production.
+  </Card>
+  <Card title="Invite and manage members" href="/guides/invite-and-manage-members">
+    Add people and choose their roles.
+  </Card>
+</CardGroup>

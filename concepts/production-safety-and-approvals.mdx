@@ -1,0 +1,84 @@
+---
+title: "Production safety and approvals"
+description: "A team workspace protects production by default: Developers ask before they deploy there, and an Owner or Admin decides."
+sidebarTitle: "Production safety"
+icon: "lock"
+---
+
+A team workspace treats production differently from everything else. The defaults are deliberately
+cautious, and an Owner or Admin can loosen them for their own workspace.
+
+## Protected environments
+
+An environment is **protected** when it counts as production. By default that means an environment
+named `production`; an Owner or Admin can list other environments instead (for example `production` and
+`staging-eu`). Protection applies to deploying, redeploying, rolling back, promoting, retrying and
+restarting in that environment, and to revealing secret values stored for it.
+
+## What a Developer can do by default
+
+In a **new** team workspace, a Developer can work freely in every environment that is not protected. In a
+protected environment they cannot deploy directly and cannot reveal secret values; they can **ask**.
+
+Three policy switches, all **off** by default, change this for a workspace:
+
+| Switch | Turning it on lets Developers… |
+| --- | --- |
+| `developer_production` | deploy to protected environments without an approval |
+| `developer_secrets` | reveal secret values in protected environments without an approval |
+| `developer_machines` | enroll and manage machines |
+
+Only an Owner or Admin can change them, and every change is recorded in the activity log. You can also
+require a second person's approval for other sensitive actions; see [Roles and permissions](/concepts/roles-and-permissions#the-full-table)
+for the complete list of switches.
+
+## How an approval works
+
+<Steps>
+  <Step title="A Developer tries and is told to ask">
+    The action is refused with `PRODUCTION_RESTRICTED`, which says what was blocked, in which environment,
+    and, when someone else in the workspace can approve, how to ask.
+  </Step>
+  <Step title="They send a request">
+    The request records exactly what they want to do. It waits up to **24 hours** for an Owner or Admin.
+  </Step>
+  <Step title="An Owner or Admin decides">
+    They approve or reject it, with an optional note. **You cannot approve your own request**, even if
+    you are an Admin.
+  </Step>
+  <Step title="The Developer repeats the request">
+    An approval is a **one-time permission for that exact action**, usable for **one hour**. It does
+    not run anything on the approver's behalf, and it does not work for a different action, a different
+    environment or a second time. The deploy is recorded as the Developer's, with the approver named.
+  </Step>
+</Steps>
+
+<Note>
+  A workspace with only one person who can approve is never locked out of its own production. If nobody else
+  could approve, the Owner is not asked to approve their own change.
+</Note>
+
+## What is always true
+
+- **Approvals cannot be created by automation.** Only a signed-in person can approve. An AI assistant, an
+  API key or a machine cannot approve a request, including one it made itself.
+- **Every decision is recorded**: who asked, who decided, what for, and when.
+- **Refusals are recorded too.** A blocked attempt appears in the activity log as denied.
+
+<Warning>
+  Deployments triggered by a **push to a connected repository** (a webhook) have no signed-in person to check,
+  so they follow the branch mapping an Owner or Admin set up: pushing to a branch mapped to a protected
+  environment deploys there. Decide who may map a branch to production accordingly: pointing a branch at a
+  protected environment is itself an action a Developer needs approval for.
+</Warning>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Working in a shared workspace" href="/guides/working-in-a-shared-workspace">
+    Asking for and granting approvals in practice.
+  </Card>
+  <Card title="Access, audit and removal" href="/concepts/team-access-and-audit">
+    What the activity log records and who can read it.
+  </Card>
+</CardGroup>

@@ -5,6 +5,8 @@ sidebarTitle: "Plans & billing"
 icon: "credit-card"
 ---
 
+import PlanLadder from "/snippets/plan-ladder.mdx";
+
 Your Beaver plan sets usage limits. Billing covers what you're charged for **Beaver
 itself** — separate from whatever your infrastructure provider (AWS, a VPS host, your own
 hardware) charges you for the machines.
@@ -16,28 +18,48 @@ beaver billing
 
 ## The plans
 
-Beaver has two plans today. **Free** was previously called Hobby — same plan, new name.
+Beaver has three plans: **Free**, **Developer** and **Team**. Free was previously called Hobby — same plan,
+new name. Free and Developer are for one person; Team is for people working together in a shared
+[workspace](/concepts/workspaces-and-teams).
 
-| | Free | Developer |
-| --- | --- | --- |
-| Price | $0 | $15 / month, or $12 / month billed annually |
-| Connected machines | 2 | Unlimited |
-| Repositories | 5 | Unlimited |
-| Deployable branches per repository | 1 | Unlimited |
-| Deployments | Unlimited | Unlimited |
-| Managed services | 2 | 10 |
-| Team members | 1 (you) | 1 (you) |
-| Log and trace retention | 3 days | 14 days |
-| Support | Community | Email |
+This table is generated from the same numbers Beaver enforces:
 
-Both plans include the full deploy workflow — connecting a machine, deploying, inspecting a
-failure, and redeploying. The plans differ in how much you can run and how long history is
-kept, not in whether the basics work.
+<PlanLadder />
+
+All plans include the full deploy workflow — connecting a machine, deploying, inspecting a failure, and
+redeploying. Deployments are unlimited on every plan. The plans differ in how much you can run, how long history is
+kept, and whether you can work with other people, not in whether the basics work. Developer and Team include email
+support.
+
+Team adds what a group needs: [roles and permissions](/concepts/roles-and-permissions), a shared
+[activity log](/concepts/team-access-and-audit), [production safety and approvals](/concepts/production-safety-and-approvals),
+and a shared Alie.
 
 <Note>
-  Retention is how long Beaver keeps your logs and traces before they're cleared. It applies
-  to history only — it never affects your running apps or your deployments.
+  Retention is how long Beaver keeps your logs, traces and activity log before they're cleared. It applies to history
+  only — it never affects your running apps or your deployments.
 </Note>
+
+## What Team costs
+
+Team is **$59 a month and includes five people**. More people are added in **packs of five**, at **$10 per
+person per month** ($50 per pack). Billed annually it is **20% less**: $47.20 a month for the plan
+($566.40 a year), and $8 per extra person per month.
+
+| Team size | Monthly | Billed annually |
+| --- | --- | --- |
+| Up to 5 people | $59 / month | $566.40 / year ($47.20 / month) |
+| 6 to 10 people, for example 8 | $109 / month | $1,046.40 / year ($87.20 / month) |
+| 11 to 15 people | $159 / month | $1,526.40 / year ($127.20 / month) |
+
+<Note>
+  Extra seats are a second purchase. You buy the Team plan first, then add a pack of five with
+  `beaver billing seats buy`. `beaver billing quote --plan team --members 8` prices a team of any size before you buy
+  anything.
+</Note>
+
+Every member and every pending invitation uses a seat. Only the workspace **Owner** can buy, change or cancel a
+plan; an Admin can send the Owner a request instead.
 
 ## Two bills, not one
 
@@ -52,7 +74,14 @@ It never removes or stops something you already have — if your plan's limit dr
 you're running, everything keeps running and you're only blocked from adding more.
 
 `beaver billing subscription` shows your plan and how much of each limit you're using; a limit
-you're past is marked *over limit*.
+you're past is marked *over limit*. Managed services follow the same rule: if you are over your plan's
+allowance, existing services are never deleted or stopped; only creating a new one is blocked.
+
+## When a Team plan ends
+
+Cancelling keeps Team until the period you paid for ends. When it does, nothing is deleted: people beyond the new
+plan's seats are **paused, not removed**, over-limit resources keep running, and subscribing again restores everyone.
+See [Downgrading and what happens](/guides/downgrading-and-what-happens).
 
 ## Where to go next
 
@@ -62,5 +91,11 @@ you're past is marked *over limit*.
   </Card>
   <Card title="Plans command reference" href="/cli/plans">
     What's available at each tier.
+  </Card>
+  <Card title="Create a team" href="/guides/create-a-team">
+    Buy Team and invite your first teammate.
+  </Card>
+  <Card title="Downgrading and what happens" href="/guides/downgrading-and-what-happens">
+    Leaving Team is safe and reversible.
   </Card>
 </CardGroup>

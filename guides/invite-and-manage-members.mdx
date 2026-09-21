@@ -1,0 +1,118 @@
+---
+title: "Invite and manage members"
+description: "Invite people by email, choose their role, and see, resend, revoke, promote or remove them."
+sidebarTitle: "Invite & manage members"
+icon: "user-plus"
+---
+
+Owners and Admins manage who is in a team workspace. Every action here is recorded in the
+[activity log](/concepts/team-access-and-audit) against the person who did it.
+
+## Invite someone
+
+```bash
+beaver workspace invite ada@example.com --role developer
+```
+
+`--role` is `admin`, `developer` or `viewer` (the default is `developer`). You cannot invite someone to a role above
+your own, and an invitation cannot make someone an Owner; ownership is [handed over](/guides/removing-members-and-leaving)
+separately.
+
+The invitation is emailed to that address and stays valid for **7 days**. It uses a seat from the moment it is sent, so a full
+workspace cannot invite anyone until a seat is free.
+
+### What the invitee does
+
+<Steps>
+  <Step title="Sign in with the invited email address">
+    The invitation only works for the address it was sent to, and that address must be verified on their account.
+  </Step>
+  <Step title="Accept">
+    They click the link in the email, or run the command from a terminal:
+    ```bash
+    beaver workspace accept <token>
+    ```
+    If they are not signed in yet, Beaver keeps the token, walks them through signing in, and finishes accepting. They
+    do not paste it twice. Beaver Desktop also lists invitations addressed to your verified email address, with accept
+    and decline buttons, so the emailed token is not needed there.
+  </Step>
+  <Step title="Switch into the workspace">
+    ```bash
+    beaver workspace use acme-team
+    ```
+  </Step>
+</Steps>
+
+### Invitation links
+
+`--link` creates a shareable link instead of sending an email. The command still takes an email address, which is
+kept only as a label: the link works for **any signed-in, verified account that holds it**, so it lasts only **24
+hours**, works once, and is shown **once**, at creation.
+
+```bash
+beaver workspace invite contractor@example.com --link --role viewer
+```
+
+Links are off by default. An Owner must turn on `allow_link_invites` in the workspace policy first; see
+[Roles and permissions](/concepts/roles-and-permissions#the-full-table).
+
+## See, resend and revoke invitations
+
+```bash
+beaver workspace invites                       # pending invitations
+beaver workspace invites --all                 # include accepted, revoked and expired
+beaver workspace invites --resend <invite-id>  # a new link; the old one stops working
+beaver workspace invites --revoke <invite-id>  # frees its seat straight away
+```
+
+A resend needs at least a minute since the last send. To stop abuse, a workspace can send **30 invitations an hour**, and
+no more than **3 an hour to the same address**.
+
+## See and change members
+
+```bash
+beaver workspace members
+beaver workspace role ada@example.com admin
+beaver workspace remove ada@example.com
+```
+
+`role` and `remove` take a person's name, email address or id. The rules that always hold:
+
+- You cannot grant, change or remove a role **above your own**.
+- There is always at least one active Owner. The last one cannot be demoted or removed.
+- The workspace's primary Owner cannot be demoted or removed: [hand over ownership](/guides/removing-members-and-leaving) first.
+
+A role change takes effect within a few seconds. In Beaver Desktop and the dashboard, the person's controls update
+the next time the page refreshes its permissions.
+
+## Seats
+
+```bash
+beaver workspace show
+```
+
+shows how many seats are used and included. Every active member and every pending invitation counts; paused
+([suspended](/guides/downgrading-and-what-happens)) members do not.
+
+## If an invitation fails
+
+| You see | Meaning and fix |
+| --- | --- |
+| `Your plan allows up to 5 team members.` (`PLAN_LIMIT_REACHED`) | Every seat is used by a member or a pending invitation. Revoke an invitation, remove someone, or add a pack of seats. |
+| `that person is already a member of this workspace` | Nothing to do. |
+| `you cannot invite someone to a role above your own` | Ask an Owner. |
+| `this invitation was sent moments ago; try again in a minute` | Wait, then resend. |
+| `link invitations are not enabled for this workspace` | An Owner must enable `allow_link_invites`. |
+
+See [Troubleshooting Teams](/guides/troubleshooting-teams) for what the invitee sees.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Working in a shared workspace" href="/guides/working-in-a-shared-workspace">
+    Switching workspaces, roles day to day, and approvals.
+  </Card>
+  <Card title="`beaver workspace` reference" href="/cli/workspace">
+    Every subcommand and flag.
+  </Card>
+</CardGroup>

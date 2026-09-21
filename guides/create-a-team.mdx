@@ -1,0 +1,101 @@
+---
+title: "Create a team"
+description: "Upgrade your workspace to Team and invite your first teammate, without moving anything."
+sidebarTitle: "Create a team"
+icon: "users"
+---
+
+Team turns the workspace you already have into a shared one. Nothing moves: every project, machine,
+service, secret and setting stays where it is, and the people you add see it according to their
+[role](/concepts/roles-and-permissions).
+
+<Note>
+  Only the workspace **Owner** can buy a plan. If you are an Admin, ask the Owner with
+  `beaver billing request-upgrade --plan team`, or `request-seats` for more seats. Nothing is charged by a request.
+</Note>
+
+<Steps>
+  <Step title="Check you are in the right workspace">
+    ```bash
+    beaver workspace show
+    ```
+    This shows the active workspace, your role, its plan and its seats. If you belong to more than one, switch first with
+    `beaver workspace use <name>`; see [Working in a shared workspace](/guides/working-in-a-shared-workspace).
+  </Step>
+
+  <Step title="Price your team">
+    ```bash
+    beaver billing quote --plan team --members 8
+    ```
+    Team includes five people; more are added in packs of five. The quote shows exactly what you would pay, monthly or
+    yearly (`--cycle yearly`, which is 20% less). See [Plans and billing](/concepts/plans-and-billing).
+  </Step>
+
+  <Step title="Buy Team">
+    ```bash
+    beaver billing checkout --plan team --cycle monthly --gateway paystack
+    ```
+    This opens a hosted payment page. The plan applies once the payment provider confirms it, which can take a few
+    seconds; `beaver billing subscription` shows it when it has. If you are moving from Developer, the Developer
+    subscription stops renewing and runs to the end of the period you paid for. Nothing is refunded or prorated, and
+    the command asks you to confirm first.
+
+    Your workspace is converted **in place** to a team workspace, with you as its Owner.
+  </Step>
+
+  <Step title="Add seats if you need more than five (optional)">
+    ```bash
+    beaver billing seats buy --gateway paystack
+    ```
+    Each pack adds five seats on the same billing cycle. Every member and every pending invitation uses a seat.
+  </Step>
+
+  <Step title="Invite your first teammate">
+    ```bash
+    beaver workspace invite ada@example.com --role developer
+    ```
+    They get an email with a link. See [Invite and manage members](/guides/invite-and-manage-members).
+  </Step>
+</Steps>
+
+## Before you invite anyone
+
+A new team workspace is **cautious by default**, on purpose:
+
+- Developers can deploy freely everywhere **except protected environments** (production). There they must ask an
+  Owner or Admin first.
+- Developers cannot reveal secret values in production, and cannot enroll machines.
+- Nobody but an Owner can change the plan.
+
+If that is stricter than your team wants, an Owner or Admin can loosen it per workspace. See
+[Production safety and approvals](/concepts/production-safety-and-approvals) before you decide.
+
+## A second team workspace
+
+If you own a team workspace and want another, separate one, with its own members, machines, plan and bill:
+
+```bash
+beaver workspace create "Client work"
+```
+
+Each workspace has its own subscription. It requires a plan that includes Team.
+
+## If something goes wrong
+
+| You see | What it means |
+| --- | --- |
+| `--gateway is required (paystack or paypal)` | Pass `--gateway` to `checkout` or `seats buy`. |
+| `billing is managed by the workspace Owner` | Only the Owner can buy. Ask them, or run `beaver billing request-upgrade --plan team`. |
+| `your plan does not include team workspaces` | `beaver workspace create` needs a workspace that already has the Team plan. |
+| `team workspaces are not enabled for this workspace` | Team is not switched on for this workspace yet. See [Troubleshooting Teams](/guides/troubleshooting-teams). |
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Invite and manage members" href="/guides/invite-and-manage-members">
+    Send invitations, change roles, and remove people.
+  </Card>
+  <Card title="Billing command reference" href="/cli/billing">
+    Every billing subcommand and flag.
+  </Card>
+</CardGroup>

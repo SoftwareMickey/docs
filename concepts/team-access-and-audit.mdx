@@ -1,0 +1,91 @@
+---
+title: "Access, audit and removal"
+description: "How removing someone takes effect, what the activity log records, and what admins can and cannot see."
+sidebarTitle: "Access & audit"
+icon: "clipboard-list"
+---
+
+A team workspace is shared, so it has to answer three questions: **what happens the moment someone
+loses access, who did what, and who can see what.**
+
+## When someone is removed
+
+Removing a member, or a member leaving, takes effect **immediately, not at their next sign-in**:
+
+- Their live connections to the workspace, open log streams and shells, are closed.
+- Their next request in that workspace is refused, and to them the workspace now looks like it does not
+  exist (`workspace not found`).
+- Any API key they created for the workspace stops working.
+- Their other workspaces are **not affected**, and neither is their account.
+
+What stays: everything they created belongs to the workspace and remains, and a deployment already in
+progress is not interrupted. The activity log keeps every action they took, with their name and the role they held
+at the time, for as long as the plan's activity retention lasts.
+
+A removed person can be invited again later; their earlier history is reattached to them rather than
+starting over.
+
+<Note>
+  A member can also be **suspended** rather than removed, when a plan change leaves fewer seats than people.
+  Suspending is reversible and never deletes anyone. See [Downgrading and what happens](/guides/downgrading-and-what-happens).
+</Note>
+
+## What the activity log records
+
+Every change made in a team workspace is recorded with:
+
+- **who** did it (the person, not a shared account),
+- their **role at that moment**,
+- **what** they did and **which** thing they did it to,
+- whether it was **allowed or denied**, and when.
+
+This includes people-level events (invitations, role changes, removals, ownership offers), production actions and
+approvals, and **every time a secret value is revealed**. The value itself is never written to the log.
+
+Denied attempts are recorded as well as allowed ones, so a pattern of refused production deploys is visible.
+
+The log keeps entries for a limited time set by your plan: **7 days on Free, 30 on Developer, 90 on Team**. Older
+entries are cleared; that never affects your apps or deployments.
+
+## Who can read it
+
+| Role | Sees |
+| --- | --- |
+| Owner, Admin | Everyone's activity in the workspace |
+| Developer, Viewer | Their own activity |
+
+The workspace activity view merges audit events, deployments and operations into one feed. In the CLI, filter it
+by person, action or time; see [`beaver workspace activity`](/cli/workspace#activity).
+
+## What an admin can and cannot see
+
+| Admins **can** see | Admins **cannot** see |
+| --- | --- |
+| Everything in the workspace, including its members' email addresses | Another member's **private** Alie conversations, unless the member shared them with the workspace |
+| Everyone's activity, and pending invitations and approvals | Payment details and payment history, which are the Owner's alone |
+| Secret values, subject to the [production safety](/concepts/production-safety-and-approvals) rules | Anything in a workspace they do not belong to |
+
+Developers and Viewers see names but not email addresses in the member list.
+
+## What Beaver support can see
+
+To help you, VectorIHub staff can look at a workspace's plan, members, invitations and seat usage. They **cannot
+sign in as you, read secret values, or read anyone's private Alie conversations**, and every support action on your
+workspace is recorded and requires a written reason.
+
+## Alerts reach the right people
+
+Alerts about the workspace itself go to the people responsible for it, not to every member: a machine going offline
+reaches Owners and Admins, and a billing problem reaches the Owner. Owners and Admins can change who receives each
+kind, and each person can mute what they do not want.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Removing members and leaving" href="/guides/removing-members-and-leaving">
+    The steps, including handing over ownership.
+  </Card>
+  <Card title="Roles and permissions" href="/concepts/roles-and-permissions">
+    Who is allowed to do what.
+  </Card>
+</CardGroup>

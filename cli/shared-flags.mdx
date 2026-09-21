@@ -92,6 +92,18 @@ Distinct from `--json`: `--quiet` can be combined with any `--output` mode. It r
 progress/status narration ("Rebooting srv_web01...", "✓ Done") while still printing the
 actual result data in whichever format `--output` selected.
 
+## `--workspace`
+
+<ParamField query="--workspace" type="string" default="">
+  Act in this workspace (name or id) for this one command. Overrides the `BEAVER_WORKSPACE` environment variable and the
+  workspace chosen with `beaver workspace use`.
+</ParamField>
+
+Every command acts in exactly one workspace. When `--workspace` is not given, Beaver uses `BEAVER_WORKSPACE`, then the workspace you
+chose with `beaver workspace use`, then your personal workspace. Membership is checked first; a workspace you are not a member of
+looks the same as one that does not exist. A name that matches more than one workspace is refused, with every candidate's id.
+See [`beaver workspace`](/cli/workspace#choosing-the-workspace-a-command-acts-in).
+
 ## Example combining several
 
 ```bash

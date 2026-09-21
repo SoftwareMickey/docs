@@ -1,0 +1,122 @@
+---
+title: "Working in a shared workspace"
+description: "Switch between workspaces, know what your role lets you do, and handle production approvals."
+sidebarTitle: "Working in a shared workspace"
+icon: "people-group"
+---
+
+Once you belong to a team workspace, three things change day to day: **which workspace** your commands act in,
+**what your role allows**, and **how production changes are approved**.
+
+## Choose the workspace you are acting in
+
+```bash
+beaver workspace list            # every workspace you belong to, with your role and its plan
+beaver workspace use acme-team   # make it the active one for every later command
+beaver workspace use personal    # go back to your personal workspace
+```
+
+`beaver workspace use` checks that you are a member first, and remembers the choice. To act in another workspace for a
+single command, without changing what is remembered:
+
+```bash
+beaver workspace show --workspace acme-team
+BEAVER_WORKSPACE=acme-team beaver workspace show
+```
+
+When more than one is set, the most specific wins:
+
+| Order | Source |
+| --- | --- |
+| 1 | `--workspace <name or id>` on the command |
+| 2 | The `BEAVER_WORKSPACE` environment variable |
+| 3 | The workspace you chose with `beaver workspace use` |
+| 4 | Your personal workspace |
+
+Whenever the active workspace is not your personal one, the interactive shell prompt shows it, for example
+`beaver [acme-team] ▸`, so a production command is never run in the wrong workspace by accident. Beaver Desktop and the
+dashboard show it in the same way and have a workspace switcher.
+
+<Note>
+  If someone removes you from the workspace you had selected, your next command says
+  `` You are no longer a member of <name>; run `beaver workspace use` to pick another workspace. `` and forgets the selection.
+</Note>
+
+## What your role lets you do
+
+Your role applies to the whole workspace. The short version:
+
+- **Developer**: create projects, deploy, operate containers, manage services, write secrets, use Alie.
+  Production is protected; see below.
+- **Admin**: everything a Developer does, plus people, domains, firewall, machines, cloud accounts and approvals.
+- **Viewer**: read everything except secret values. Nothing can be changed.
+- **Owner**: everything, including the plan and handing over ownership.
+
+The exact table is in [Roles and permissions](/concepts/roles-and-permissions). When you try something your role does not
+allow, Beaver tells you which permission and which role you would need, and Desktop and the dashboard disable the control
+and say so.
+
+## Secrets
+
+Everyone who can see the workspace sees the **names** of environment variables. **Values** are shown to Developers, Admins
+and Owners in environments that are not protected. In a protected environment a Developer needs an approval, and a Viewer
+never sees values. Every time a value is revealed, the reveal is recorded with who did it.
+
+## Production changes and approvals
+
+By default a Developer cannot deploy, redeploy, roll back or promote in a protected environment, and cannot reveal its
+secrets. Instead:
+
+<Steps>
+  <Step title="You try, and are told to ask">
+    The action is refused with `PRODUCTION_RESTRICTED`, naming the environment and whether anyone else in the workspace
+    can approve.
+  </Step>
+  <Step title="You send a request">
+    In **Beaver Desktop or the dashboard**, a control you cannot use directly, but that an Owner or Admin could approve, reads
+    **Ask an admin**. Clicking it files the request, which records exactly what you want to do and waits up to 24 hours.
+    Owners and Admins are notified.
+  </Step>
+  <Step title="An Owner or Admin decides">
+    From the terminal:
+    ```bash
+    beaver workspace approvals                                  # open requests
+    beaver workspace approvals approve <id> --note "ship it"
+    beaver workspace approvals reject <id> --note "wait for the release window"
+    ```
+    or from the approvals inbox in Desktop or the dashboard. Nobody can approve their own request.
+  </Step>
+  <Step title="You repeat the same action">
+    Run the same command or click the same control again, **within one hour**. It runs as you, with the approver named in the
+    activity log. An approval works **once**, for **that exact action** only.
+  </Step>
+</Steps>
+
+<Warning>
+  The command-line client cannot file an approval request yet; it can list, approve and reject them. Developers who work
+  mainly in the terminal file the request from Desktop or the dashboard, then repeat the command in the terminal.
+</Warning>
+
+An Owner or Admin can also change the workspace policy so Developers may deploy to production directly. See
+[Production safety and approvals](/concepts/production-safety-and-approvals).
+
+## See what happened
+
+```bash
+beaver workspace activity --since 7d
+beaver workspace activity --actor ada@example.com --action member.role_changed
+beaver workspace activity --mine
+```
+
+Owners and Admins see everyone's activity; everyone sees their own. See [Access, audit and removal](/concepts/team-access-and-audit).
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Removing members and leaving" href="/guides/removing-members-and-leaving">
+    What happens when someone stops working in the workspace.
+  </Card>
+  <Card title="`beaver workspace` reference" href="/cli/workspace">
+    Every subcommand and flag.
+  </Card>
+</CardGroup>

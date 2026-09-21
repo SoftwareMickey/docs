@@ -1,7 +1,7 @@
 ---
 title: "beaver billing and plans"
 sidebarTitle: "billing"
-description: "Manage this workspace's plan, checkout, subscription, and payment history."
+description: "Manage this workspace's plan, seats, checkout, subscription, and payment history."
 icon: "credit-card"
 ---
 
@@ -11,8 +11,10 @@ icon: "credit-card"
 
 ## Purpose
 
-`beaver billing` manages your workspace's paid plan — checking out to upgrade, cancelling a
-subscription, downgrading back to Free, and reviewing payment history.
+`beaver billing` manages your workspace's paid plan — pricing a team, checking out to upgrade,
+buying or stopping extra seats, cancelling a subscription, downgrading back to Free, and
+reviewing payment history. Only the workspace **Owner** can change billing; an Admin can ask
+the Owner with `request-upgrade` or `request-seats`.
 [`beaver plans`](/cli/plans) is the standalone command for listing what plans are available;
 `beaver billing` is everything that follows once you've picked one.
 
@@ -25,27 +27,71 @@ beaver billing <subcommand> [flags]
 
 | Subcommand | Purpose |
 | --- | --- |
-| `subscription` | Show this workspace's current subscription, plus your plan and how much of each limit you're using. |
-| `checkout` | Start a hosted checkout to upgrade to Developer. |
+| `plans` | List the plans you can use, with prices and what each includes (same as `beaver plans`). |
+| `quote` | Price a plan for a team size before buying. |
+| `subscription` | Show the current subscription, seats, billing owner and next charge, plus your plan and how much of each limit you're using. |
+| `checkout` | Start a hosted checkout to upgrade (Developer, Team). |
+| `seats buy` / `seats cancel` | Buy a pack of 5 extra seats, or stop renewing one. |
 | `cancel` | Cancel the subscription's renewal. |
-| `downgrade-free` | Move the workspace back to the Free plan. (`downgrade-hobby` still works — Free was formerly called Hobby.) |
-| `payments` | List this workspace's payment history. |
+| `downgrade` | Move the workspace to Free, showing exactly what changes first. (`downgrade-free` and `downgrade-hobby` still work.) |
+| `request-upgrade` / `request-seats` | Ask the workspace Owner to upgrade or add seats. |
+| `payments` | List this workspace's payment history (Owner only). |
 
 ## Flags
 
 ### `checkout`
 
-<ParamField query="--cycle" type="string" default="" required>
-  Billing cycle: `monthly` or `yearly`. Required.
+<ParamField query="--plan" type="string" default="developer">
+  The plan to buy, for example `developer` or `team`.
+</ParamField>
+<ParamField query="--cycle" type="string" default="monthly">
+  Billing cycle: `monthly` or `yearly`.
 </ParamField>
 <ParamField query="--gateway" type="string" default="" required>
   Payment gateway: `paystack` or `paypal`. Required.
 </ParamField>
+<ParamField query="--extra-seats" type="integer" default="0">
+  Price this many extra seats (a multiple of 5) into the quote. Seats are bought after the plan
+  is active, with `beaver billing seats buy`.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation shown when the new plan replaces a subscription you already have.
+</ParamField>
 
-Price and plan are always resolved on the server — these two flags only choose how and how
-often you pay.
+Price and plan are always resolved on the server — these flags only choose what you buy and
+how you pay. Before anything is charged, `checkout` shows the priced lines.
 
-### `cancel` / `downgrade-free`
+### `quote`
+
+<ParamField query="--plan" type="string" default="team">
+  The plan to price.
+</ParamField>
+<ParamField query="--members" type="integer" default="">
+  How many people the team needs. Defaults to the seats the plan includes.
+</ParamField>
+<ParamField query="--cycle" type="string" default="monthly">
+  `monthly` or `yearly`.
+</ParamField>
+
+### `seats buy`
+
+<ParamField query="--gateway" type="string" default="" required>
+  Payment gateway: `paystack` or `paypal`. Required.
+</ParamField>
+
+### `request-upgrade` / `request-seats`
+
+<ParamField query="--plan" type="string" default="" required>
+  `request-upgrade` only: the plan to ask for.
+</ParamField>
+<ParamField query="--seats" type="integer" default="" required>
+  `request-seats` only: how many extra seats, a multiple of 5.
+</ParamField>
+<ParamField query="--note" type="string" default="">
+  A short note for the Owner (up to 300 characters).
+</ParamField>
+
+### `cancel` / `downgrade` / `seats cancel`
 
 <ParamField query="--yes" type="boolean" default="false">
   Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
@@ -55,15 +101,29 @@ often you pay.
 
 - **`checkout`** opens a hosted payment page in your browser. The upgrade only takes effect
   once the payment gateway confirms it — `beaver billing subscription` may take a few seconds
-  to reflect the change after you complete payment.
-- **`cancel`** stops future renewal charges but does **not** immediately revoke Developer
-  access — you keep it until the current billing period ends. This is not a refund.
-- **`downgrade-free`** moves the workspace to Free (the plan every workspace falls back to
-  with no active paid subscription) immediately.
+  to reflect the change after you complete payment. If the new plan replaces a subscription you
+  already have (for example Developer → Team), the old one stops renewing and runs until the end
+  of the period you paid for; there is no refund or proration, and `checkout` says so and asks
+  you to confirm first. Your workspace is converted in place: every machine, project and history
+  entry stays where it is.
+- **`seats buy`** adds a pack of 5 seats on the plan's cycle. **`seats cancel`** stops the pack's
+  renewal; its seats stay until the period you paid for ends. Nothing is refunded.
+- **`cancel`** stops future renewal charges (and any seat packs' renewals) but does **not**
+  immediately revoke your plan's access — you keep it until the current billing period ends.
+  This is not a refund.
+- **`downgrade`** on a paid workspace is **scheduled**, not immediate: it shows which members
+  would be paused (Free allows fewer), which retention limits apply, what is over the new
+  limits, and which paid seats end — then, after you confirm, moves the workspace to Free at the
+  end of the period you already paid for. Nothing is deleted. On a workspace with no paid
+  subscription it enrolls the workspace on Free straight away.
+- **`request-upgrade`** and **`request-seats`** change nothing and charge nothing; they send the
+  Owner a request they can approve or decline.
+- A member who isn't the Owner sees a plain explanation instead of a raw error, with the command
+  to ask.
 
 <Warning>
-  `downgrade-free` takes effect immediately, unlike `cancel`, which waits until the current
-  period ends. Confirm which one you mean before running either.
+  Only the Owner can pay for, change or cancel a plan. An Admin who runs `subscription` still
+  sees the plan, seats and usage, but not payment or renewal detail.
 </Warning>
 
 ## Examples
@@ -83,11 +143,28 @@ beaver billing subscription
 ```
 
 ```bash Downgrade to Free
-beaver billing downgrade-free --yes
+beaver billing downgrade --yes
 ```
 
 ```bash Upgrade
 beaver billing checkout --cycle monthly --gateway paystack
+```
+
+```bash Price a team of 8
+beaver billing quote --plan team --members 8
+```
+
+```bash Buy Team, yearly
+beaver billing checkout --plan team --cycle yearly --gateway paypal
+```
+
+```bash Add a pack of seats
+beaver billing seats buy --gateway paystack
+```
+
+```bash Ask the Owner (Admin)
+beaver billing request-upgrade --plan team
+beaver billing request-seats --seats 5
 ```
 
 ```bash Cancel renewal
@@ -124,9 +201,16 @@ Retention:         logs 3d · traces 3d
 
 | Situation | What you'll see | What to do |
 | --- | --- | --- |
-| `checkout` missing flags | `--cycle and --gateway are required` | Pass both flags. |
+| `checkout` without `--gateway` | `--gateway is required (paystack or paypal)` | Pass `--gateway`. |
+| `checkout` as a non-Owner | `… billing is managed by the workspace Owner. Ask them, or run: beaver billing request-upgrade --plan <plan>` | Ask the Owner, or send a request. |
+| `checkout` when already on that plan or higher | `can't start checkout: the workspace already has this plan or a higher one` | Nothing to buy. |
+| `quote` for a plan that isn't on sale | `no plan "<name>" is available to buy` | Run `beaver billing plans`. |
+| `seats buy` without an active plan that sells seats | the server's reason | Buy the plan first; Developer doesn't sell seats. |
 | `cancel` success | `✓ <message>` plus `Access until: <date>` | Renewal is off; access continues until that date. |
-| `downgrade-free` success | `✓ Now on Free` | Workspace is on the free plan immediately. |
+| `downgrade` on a paid workspace | the change list, then `✓ Downgrade scheduled — you keep your current plan until <date>` | Nothing changes until that date. |
+| `downgrade` already scheduled | `A downgrade to Free is already scheduled for <date>` | Nothing more to do. |
+| `downgrade` to anything but Free | `only a downgrade to Free is available` | Downgrade to Free, then buy the plan you want. |
+| `downgrade` on a workspace with no subscription | `✓ Now on Free` | Workspace is on the free plan immediately. |
 
 ## Used in
 
