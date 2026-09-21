@@ -39,6 +39,25 @@ Your application receives a connection string as an environment variable using t
 you choose (`DATABASE_URL` above). It's usable once the attachment takes effect — for most
 services, that's your next deployment.
 
+### If an attach doesn't finish
+
+Granting your application access to its database and writing the `DATABASE_*` variables
+are separate steps. If one fails, the attachment is kept but marked `access_pending`
+in `beaver service show`, and a deploy is blocked with
+`Attached service environment is incomplete`. The error includes the database's own
+message (credentials are never included).
+
+Fix the cause and run the same `beaver service attach` command again. It resumes
+where it stopped, rewrites all six managed variables (`DATABASE_URL`, `DATABASE_HOST`,
+`DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`), and the
+attachment returns to `ready`. Variables you set yourself with the same name are left alone.
+
+### Database names
+
+Names use lowercase letters, numbers and underscores, start with a letter, and can be up to
+57 characters. An application attached as read-only can query the database but can't create or
+change anything in it.
+
 ## Manage it
 
 ```bash

@@ -37,6 +37,16 @@ Your application receives connection details (endpoint, access key, secret key) 
 environment variable using the prefix you choose. It's usable once the attachment takes
 effect — for most services, that's your next deployment.
 
+### Bucket names
+
+Beaver names may contain underscores, but S3 bucket names can't. Beaver stores the bucket
+under the same name with each `_` replaced by `-`, so `user_uploads` becomes the bucket
+`user-uploads`. The name must be 3 to 63 characters and can't end in an underscore. When
+Beaver picks the name for you (from your container's name), it already follows these rules.
+
+Deleting a bucket removes the objects inside it. Beaver asks you to confirm first, and there
+is no undo.
+
 ## Manage it
 
 ```bash
