@@ -1,0 +1,58 @@
+---
+title: "A New Default Address"
+description: "Apps on Beaver now live under vectorihub.com instead of vectorihub.run. What changed, what stays the same, and what to check in your app."
+mode: "center"
+---
+
+<a href="/changelog" style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", fontSize: "0.875rem", opacity: 0.7, textDecoration: "none", color: "inherit" }}>← Changelog</a>
+
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", margin: "1rem 0 1.5rem" }}>
+  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+    <img src="https://github.com/SoftwareMickey.png" alt="Raven Muli" style={{ width: "40px", height: "40px", borderRadius: "9999px", margin: 0 }} />
+    <div>
+      <div style={{ fontWeight: 600 }}>Raven Muli</div>
+      <div style={{ fontSize: "0.875rem", opacity: 0.7 }}>Founder, VectorIHub</div>
+    </div>
+  </div>
+  <div style={{ textAlign: "right", fontSize: "0.875rem", opacity: 0.7 }}>
+    <div>v0.1.18</div>
+    <div>19 September 2026</div>
+  </div>
+</div>
+
+---
+
+The default address of an app deployed on Beaver is now under `vectorihub.com`. Addresses under `vectorihub.run` no longer resolve, because that domain has expired and will not be renewed.
+
+## What changed
+
+- **New apps** get their address under `vectorihub.com`.
+- **Existing apps** are moved to `vectorihub.com` one at a time. Every owner is told their new address, and whether the name changed, before their app is moved.
+- **Custom domains** keep working. A subdomain that you pointed at Beaver with a CNAME needs one DNS change, and `beaver domain list` shows it as **repoint DNS**. Run `beaver domain repoint <domain-id>` for the exact record. This is a one-time change: the new target does not depend on where your app's default address lives.
+- **`beaver domain`** gains `repoint` and an `ACTION` column in `beaver domain list`.
+- **Beaver Desktop and the API** show the address that is reachable now, and mark a superseded deployment's own address as no longer routed.
+
+## What stays the same
+
+Your app, its data and its settings. Your custom domains and their certificates. Your deployment history: past deployments keep the address they had when they were made.
+
+## What to check
+
+- Hardcoded absolute URLs to your old `.run` address.
+- OAuth and SSO redirect URIs.
+- CORS allowlists and allowed-host settings inside your app.
+- Webhooks that point at the old address.
+- Code that compares the `Host` header with a fixed name. During the move your app can receive requests carrying either name.
+
+The [Domains guide](/guides/domains) has the details.
+
+## You may be signed in again once
+
+The dashboard's session cookie is scoped to the new domain. When the old cookie is retired you may be asked to sign in one more time. Nothing else about your account changes.
+
+<CardGroup cols={2}>
+  <Card title="Domains guide" icon="globe" href="/guides/domains">
+    Default addresses, custom domains, and the checklist.
+  </Card>
+  <Card title="← Agent Connection Reliability" href="/changelog/agent-connection-reliability" />
+</CardGroup>

@@ -86,6 +86,7 @@
               "guides/deploy-workflow",
               "guides/connect-and-machine-roles",
               "guides/scaling",
+              "guides/domains",
               "guides/rollback-and-recovery"
             ]
           },

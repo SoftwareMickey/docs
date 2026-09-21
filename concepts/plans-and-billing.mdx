@@ -14,6 +14,31 @@ beaver plans
 beaver billing
 ```
 
+## The plans
+
+Beaver has two plans today. **Free** was previously called Hobby — same plan, new name.
+
+| | Free | Developer |
+| --- | --- | --- |
+| Price | $0 | $15 / month, or $12 / month billed annually |
+| Connected machines | 2 | Unlimited |
+| Repositories | 5 | Unlimited |
+| Deployable branches per repository | 1 | Unlimited |
+| Deployments | Unlimited | Unlimited |
+| Managed services | 2 | 10 |
+| Team members | 1 (you) | 1 (you) |
+| Log and trace retention | 3 days | 14 days |
+| Support | Community | Email |
+
+Both plans include the full deploy workflow — connecting a machine, deploying, inspecting a
+failure, and redeploying. The plans differ in how much you can run and how long history is
+kept, not in whether the basics work.
+
+<Note>
+  Retention is how long Beaver keeps your logs and traces before they're cleared. It applies
+  to history only — it never affects your running apps or your deployments.
+</Note>
+
 ## Two bills, not one
 
 Connecting your own machines means you pay your provider directly for them — Beaver's charge
@@ -22,10 +47,12 @@ actually on before assuming Beaver over- or under-charged you.
 
 ## What happens when a limit is reached
 
-What happens depends on the limit — some are hard stops (an action is blocked until you
-upgrade or free up room), others are soft (you're flagged but not blocked immediately).
-Check `beaver billing` for your account's current usage against its limits rather than
-assuming either behavior.
+Reaching a limit blocks **adding** one more of that thing until you upgrade or free up room.
+It never removes or stops something you already have — if your plan's limit drops below what
+you're running, everything keeps running and you're only blocked from adding more.
+
+`beaver billing subscription` shows your plan and how much of each limit you're using; a limit
+you're past is marked *over limit*.
 
 ## Where to go next
 

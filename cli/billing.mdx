@@ -12,7 +12,7 @@ icon: "credit-card"
 ## Purpose
 
 `beaver billing` manages your workspace's paid plan — checking out to upgrade, cancelling a
-subscription, downgrading back to Hobby, and reviewing payment history.
+subscription, downgrading back to Free, and reviewing payment history.
 [`beaver plans`](/cli/plans) is the standalone command for listing what plans are available;
 `beaver billing` is everything that follows once you've picked one.
 
@@ -25,10 +25,10 @@ beaver billing <subcommand> [flags]
 
 | Subcommand | Purpose |
 | --- | --- |
-| `subscription` | Show this workspace's current subscription. |
+| `subscription` | Show this workspace's current subscription, plus your plan and how much of each limit you're using. |
 | `checkout` | Start a hosted checkout to upgrade to Developer. |
 | `cancel` | Cancel the subscription's renewal. |
-| `downgrade-hobby` | Move the workspace back to the free Hobby plan. |
+| `downgrade-free` | Move the workspace back to the Free plan. (`downgrade-hobby` still works — Free was formerly called Hobby.) |
 | `payments` | List this workspace's payment history. |
 
 ## Flags
@@ -45,7 +45,7 @@ beaver billing <subcommand> [flags]
 Price and plan are always resolved on the server — these two flags only choose how and how
 often you pay.
 
-### `cancel` / `downgrade-hobby`
+### `cancel` / `downgrade-free`
 
 <ParamField query="--yes" type="boolean" default="false">
   Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
@@ -58,11 +58,11 @@ often you pay.
   to reflect the change after you complete payment.
 - **`cancel`** stops future renewal charges but does **not** immediately revoke Developer
   access — you keep it until the current billing period ends. This is not a refund.
-- **`downgrade-hobby`** moves the workspace to Hobby (the plan every workspace falls back to
+- **`downgrade-free`** moves the workspace to Free (the plan every workspace falls back to
   with no active paid subscription) immediately.
 
 <Warning>
-  `downgrade-hobby` takes effect immediately, unlike `cancel`, which waits until the current
+  `downgrade-free` takes effect immediately, unlike `cancel`, which waits until the current
   period ends. Confirm which one you mean before running either.
 </Warning>
 
@@ -80,6 +80,10 @@ beaver plans
 
 ```bash Check current subscription
 beaver billing subscription
+```
+
+```bash Downgrade to Free
+beaver billing downgrade-free --yes
 ```
 
 ```bash Upgrade
@@ -102,13 +106,27 @@ beaver billing payments
 Opening: https://checkout.example/session/cs_example
 ```
 
+**Expected output** (`subscription`, reviewed against source): your subscription status, then
+your plan and how much of each limit you've used. A limit you're past is flagged.
+
+```text
+No active paid subscription — this workspace is on Free.
+
+Plan:              Free
+Machines:          2 / 2
+Repositories:      1 / 5
+Managed services:  3 / 2  — over limit (existing ones keep running; you can't add more)
+Members:           1 / 1
+Retention:         logs 3d · traces 3d
+```
+
 ## Results & failures
 
 | Situation | What you'll see | What to do |
 | --- | --- | --- |
 | `checkout` missing flags | `--cycle and --gateway are required` | Pass both flags. |
 | `cancel` success | `✓ <message>` plus `Access until: <date>` | Renewal is off; access continues until that date. |
-| `downgrade-hobby` success | `✓ Now on Hobby` | Workspace is on the free plan immediately. |
+| `downgrade-free` success | `✓ Now on Free` | Workspace is on the free plan immediately. |
 
 ## Used in
 
