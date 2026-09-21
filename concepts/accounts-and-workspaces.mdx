@@ -6,9 +6,10 @@ icon: "user"
 ---
 
 Your **account** is your identity — one login, used everywhere. Your **workspace** is the
-top-level scope everything else (projects, machines, services) lives inside. For most
-people these feel like the same thing, because logging in creates a workspace automatically
-and you never have more than one.
+top-level scope everything else (projects, machines, services) lives inside. For a solo
+user these feel like the same thing, because logging in creates a personal workspace
+automatically. If you work with others you can also belong to team workspaces; see
+[Workspaces and teams](/concepts/workspaces-and-teams).
 
 ```bash
 beaver login
@@ -26,8 +27,8 @@ makes that make sense instead of feeling arbitrary.
 
 `beaver login` authenticates your account; `beaver whoami` shows who you're currently signed
 in as, and which workspace you're in. Everything you create — projects, connected machines,
-services — belongs to your workspace. Teammates you invite see the same workspace's
-resources, scoped by their own access level.
+services — belongs to a workspace. In a team workspace, the people you invite see the same
+resources, scoped by their [role](/concepts/roles-and-permissions).
 
 ## What deleting a workspace actually means
 
@@ -44,6 +45,9 @@ resources, scoped by their own access level.
 <CardGroup cols={2}>
   <Card title="How Beaver fits together" href="/concepts/how-beaver-fits-together">
     See where a workspace sits above everything else.
+  </Card>
+  <Card title="Workspaces and teams" href="/concepts/workspaces-and-teams">
+    Personal and team workspaces, members and seats.
   </Card>
   <Card title="Account command reference" href="/cli/account">
     Profile, MFA, and feedback commands.

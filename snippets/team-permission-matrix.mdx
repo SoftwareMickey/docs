@@ -1,0 +1,93 @@
+{/* GENERATED FILE — do not edit. Regenerate with `go run ./tools/permdoc` in vhb-server; source: tenant/permissions.go, tenant/docs.go. */}
+
+✓ the role holds it · — it does not · ⚙ a Developer holds it only when an Owner or Admin turns on the named policy switch (off by default).
+
+#### Workspace
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `workspace.manage` | Rename the workspace, change its policy switches and alert subscriptions, and send the Owner a request to buy or change a plan. | ✓ | ✓ | — | — |
+| `workspace.read` | See the workspace and everything in it: projects, deployments, containers, logs, metrics and activity. Secret values are separate. | ✓ | ✓ | ✓ | ✓ |
+
+#### Projects and deployments
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `deploy.production` | Deploy, redeploy, roll back, promote or restart in a protected (production) environment without asking for approval. | ✓ | ✓ | ⚙ `developer_production` | — |
+| `project.create` | Create projects, including connecting a repository and browsing its branches to do so. | ✓ | ✓ | ✓ | — |
+| `project.delete` | Delete a project, a container, a compose stack or a deployment. | ✓ | ✓ | — | — |
+| `project.deploy` | Deploy to environments that are not protected. | ✓ | ✓ | ✓ | — |
+| `project.redeploy` | Redeploy, rebuild, retry or cancel a deployment in an unprotected environment. | ✓ | ✓ | ✓ | — |
+| `project.rollback` | Roll a deployment back in an unprotected environment. | ✓ | ✓ | ✓ | — |
+
+#### Containers
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `container.exec` | Open a shell or run a command inside a container. | ✓ | ✓ | ✓ | — |
+| `container.operate` | Start, stop, restart, scale and change the settings of a container, and manage its alerts and backups. | ✓ | ✓ | ✓ | — |
+
+#### Machines and clouds
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `cloud.manage` | Connect, change or remove a cloud account. | ✓ | ✓ | — | — |
+| `machine.enroll` | Enroll a new machine into the workspace. | ✓ | ✓ | ⚙ `developer_machines` | — |
+| `machine.manage` | Change, remove and run maintenance on enrolled machines. | ✓ | ✓ | ⚙ `developer_machines` | — |
+
+#### Services
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `service.create` | Add a managed service (database, cache, queue, storage). | ✓ | ✓ | ✓ | — |
+| `service.manage` | Change, back up, restore or remove a managed service, its databases and its access. | ✓ | ✓ | ✓ | — |
+
+#### Secrets
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `secret.read` | Reveal secret values in protected (production) environments without asking for approval. In other environments anyone who can work in the workspace can read values; a Viewer never sees a value. Every reveal is recorded in the activity log. | ✓ | ✓ | ⚙ `developer_secrets` | — |
+| `secret.write` | Create, change and delete environment variables, environments and stored registry credentials. Writing never reveals a value. | ✓ | ✓ | ✓ | — |
+
+#### Networking
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `domain.manage` | Add, verify and remove domains and routes, and manage edge (connected) apps. | ✓ | ✓ | — | — |
+| `firewall.manage` | Change firewall rules, bans and lockdown, and the workspace firewall defaults. | ✓ | ✓ | — | — |
+
+#### People and governance
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `approval.decide` | Approve or reject a request for a production action. You cannot approve your own request. | ✓ | ✓ | — | — |
+| `audit.read` | Read every member's activity in the workspace log, not just your own. (Anyone who can see the workspace sees their own actions.) | ✓ | ✓ | — | — |
+| `member.invite` | Invite people, and see, resend or revoke pending invitations. | ✓ | ✓ | — | — |
+| `member.manage` | Remove members from the workspace. | ✓ | ✓ | — | — |
+| `role.change` | Change a member's role (never above your own). | ✓ | ✓ | — | — |
+
+#### Alie (AI assistant)
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `alie.configure` | Configure Alie for the workspace: providers, API keys and assistant policy. | ✓ | ✓ | — | — |
+| `alie.use` | Use Alie in the workspace, within the caller's own permissions. | ✓ | ✓ | ✓ | — |
+
+#### Owner only
+
+| Permission | What it allows | Owner | Admin | Developer | Viewer |
+|---|---|:-:|:-:|:-:|:-:|
+| `billing.manage` | Buy, change or cancel the plan and seats; see payment history. | ✓ | — | — | — |
+| `ownership.transfer` | Offer to transfer the workspace to another member. | ✓ | — | — | — |
+| `workspace.delete` | Delete the workspace. | ✓ | — | — | — |
+
+#### Policy switches
+
+| Switch | Default | Who can change it | What it does |
+|---|---|---|---|
+| `developer_production` | off | Owner or Admin | Let Developers deploy to protected (production) environments directly, without an approval. |
+| `developer_machines` | off | Owner or Admin | Let Developers enroll and manage machines. |
+| `developer_secrets` | off | Owner or Admin | Let Developers reveal secret values in protected environments without an approval. In other environments they can already read values, and writing a value never needs this. |
+| `allow_link_invites` | off | Owner only | Allow invitation links that any verified account holding the link can accept, instead of one tied to an email address. |
+| `protected_environments` | the environment named production | Owner or Admin | Which environments count as production for the protections above. |
+| `require_approval_for` | nothing | Owner or Admin | Sensitive actions that need a second person's approval even from someone who could do them directly. It only applies while the workspace has another person who can approve. |

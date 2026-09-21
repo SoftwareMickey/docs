@@ -1,0 +1,83 @@
+---
+title: "Workspaces and teams"
+description: "A workspace owns your projects, machines, secrets and plan. A team workspace lets several people work in it, each with a role."
+sidebarTitle: "Workspaces & teams"
+icon: "users"
+---
+
+A **workspace** is the container everything else in Beaver lives in: projects, deployments,
+machines, managed services, secrets, domains, the activity log, and the plan you pay for.
+Nothing in Beaver exists outside a workspace.
+
+Everyone starts with a **personal workspace**, created when you sign up. A **team workspace**
+is the same thing with more than one person in it. Each person has a [role](/concepts/roles-and-permissions)
+that decides what they can do.
+
+## Personal and team workspaces
+
+| | Personal | Team |
+| --- | --- | --- |
+| People | Just you | You and the people you invite, up to the seats on your plan |
+| Plan | Free or Developer | Team |
+| Roles | You are the Owner | Owner, Admin, Developer, Viewer |
+| Activity log | Your own actions | Everyone's actions, attributed to who did them |
+
+Moving from personal to team **converts the workspace in place**. When you buy the Team plan, the
+workspace you already have becomes a team workspace: every project, machine, service, secret and
+setting stays exactly where it is, and nothing is copied or migrated.
+
+You can belong to several workspaces at once, for example your own personal workspace and your
+company's team workspace. Each has its own plan, its own members and its own bill.
+
+## What "the workspace owns" means
+
+The workspace owns everything in it. The person who created a project, deployed an app or
+added a machine does not own it, and it does not leave with them if they are removed or leave.
+Beaver still records **who did what**, so an audit trail shows the person, their role at the
+time, and what they touched. See [Access, audit and removal](/concepts/team-access-and-audit).
+
+This is why billing belongs to the workspace, and why one person, the **Owner**, is
+responsible for it. Ownership can be handed to another member; see
+[Removing members and leaving](/guides/removing-members-and-leaving).
+
+## The active workspace
+
+If you belong to more than one workspace, each command, and each page in the dashboard or
+Beaver Desktop, acts in exactly one of them: the **active workspace**. You choose it once and
+Beaver keeps it, and it shows which workspace you are in whenever it is not your personal one.
+
+Choosing a workspace never gives you access to it. Membership is checked on **every request**, so
+if you are removed from a workspace, your next action in it is refused, even if you had it
+selected. To someone who is not a member, a workspace looks exactly like one that does not exist.
+
+## Seats
+
+A team plan includes a number of **seats**. Every member and every pending invitation uses one, so
+a full workspace cannot invite anyone else until an invitation is revoked, a member is removed, or
+seats are added. Team includes five, and more are added in packs of five. See
+[Plans and billing](/concepts/plans-and-billing).
+
+## Limits worth knowing
+
+- **Roles apply to the whole workspace.** There are no per-project roles yet: a Developer can work in every
+  project in the workspace, and a Viewer can see all of them.
+- **A person has one personal workspace**, but can own several team workspaces.
+- **Members are people, not machines.** Machines are enrolled into a workspace and are shared by everyone
+  allowed to use them.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Roles and permissions" href="/concepts/roles-and-permissions">
+    Exactly what each role can and cannot do.
+  </Card>
+  <Card title="Create a team" href="/guides/create-a-team">
+    Upgrade a workspace and invite your first teammate.
+  </Card>
+  <Card title="Production safety and approvals" href="/concepts/production-safety-and-approvals">
+    How a team keeps production changes deliberate.
+  </Card>
+  <Card title="Accounts and workspaces" href="/concepts/accounts-and-workspaces">
+    The difference between your account and a workspace.
+  </Card>
+</CardGroup>

@@ -1,0 +1,79 @@
+---
+title: "Downgrading and what happens"
+description: "Cancel Team or move to Free: nothing is deleted, people are paused rather than removed, and subscribing again restores everyone."
+sidebarTitle: "Downgrading & what happens"
+icon: "arrow-down"
+---
+
+Leaving Team is safe and reversible. The worst outcome of any billing change is "limited until you pay again". It is never
+"lost data" or "lost people".
+
+## Cancel, or schedule a downgrade
+
+Only the workspace **Owner** can change the plan.
+
+```bash
+beaver billing cancel        # stop renewal; keep Team until the period you paid for ends
+beaver billing downgrade     # preview what changes, then schedule a move to Free
+```
+
+- **Cancel** keeps Team until the end of the current period. Seat packs stop renewing too. Nothing is refunded.
+- **Downgrade** first shows you exactly what would change: which members would be paused, which retention limits will apply, and
+  what is over the new limits. After you confirm, the workspace moves to Free **at the end of the period you already paid for**.
+  Only Free is available as a downgrade target.
+
+While a cancellation or downgrade is pending, Beaver Desktop and the dashboard show when access ends.
+
+## What happens when Team ends
+
+| | What happens |
+| --- | --- |
+| **People** | Members beyond the new plan's seats are **suspended**, not removed. The Owner and the earliest-joined members stay active, up to the limit. Suspended people cannot act (`membership suspended`), do not use a seat, and keep their role. |
+| **Invitations** | Pending invitations are cancelled and their seats released. |
+| **Approvals** | Pending approval requests expire. |
+| **Your apps and data** | Untouched. Everything keeps running. |
+| **Anything over a limit** | Kept, not deleted or stopped. You can only **add** more once you are back under the limit. |
+| **History** | Logs, traces and the activity log follow the shorter retention of the new plan. Older entries are cleared over time. |
+| **The workspace itself** | Stays a team workspace, with its history, even with a single member. It does not silently turn back into a personal one, and it does not need to. |
+
+<Note>
+  A failed payment does not do any of this. While a payment is **past due** you keep full access, with notices, until the
+  gateway gives up on the subscription.
+</Note>
+
+## Come back
+
+**Subscribing again restores everyone.** Suspended members are reactivated in the order they were paused, and each
+change is recorded in the activity log. Buying more seats does the same up to the new limit.
+
+```bash
+beaver billing checkout --plan team --gateway paystack
+```
+
+## See what a change will do
+
+```bash
+beaver billing subscription
+beaver workspace show
+```
+
+show the plan, seats used and included, and any limit you are over.
+
+## If something goes wrong
+
+| You see | Meaning and fix |
+| --- | --- |
+| `membership suspended` | A plan change left fewer seats than people. The Owner can add seats or resubscribe. |
+| `only a downgrade to Free is available` | Downgrade to Free, then buy the plan you want. |
+| `A downgrade to Free is already scheduled for <date>` | Nothing more to do. |
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Plans and billing" href="/concepts/plans-and-billing">
+    What each plan includes and costs.
+  </Card>
+  <Card title="Billing command reference" href="/cli/billing">
+    Cancel, downgrade, seats and payments.
+  </Card>
+</CardGroup>

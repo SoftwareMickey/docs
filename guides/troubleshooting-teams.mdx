@@ -1,0 +1,73 @@
+---
+title: "Troubleshooting Teams"
+description: "What the messages in team workspaces mean and what to do about each one."
+sidebarTitle: "Troubleshooting Teams"
+icon: "life-ring"
+---
+
+Each message below is the text Beaver shows. Find yours, then follow the fix.
+
+## Workspace access
+
+| You see | What it means | What to do |
+| --- | --- | --- |
+| `workspace not found` | The workspace you selected does not exist **or you are not a member of it**. Beaver answers the same way for both, on purpose. | Run `beaver workspace list` to see yours, then `beaver workspace use <name>`. If you should be a member, ask an Owner or Admin whether you were removed. |
+| `` You are no longer a member of <name>; run `beaver workspace use` to pick another workspace. `` | You were removed from the workspace you had selected. Beaver forgot the selection. | Pick another workspace with `beaver workspace use`. |
+| `membership suspended` | You are a member, but your access is paused, usually because a plan change left fewer seats than people. | Ask the Owner to add seats or resubscribe. Nothing is lost; access returns automatically. See [Downgrading and what happens](/guides/downgrading-and-what-happens). |
+| `insufficient permissions` | Your role does not hold the permission, which the message names, along with your role. | Look the permission up in [Roles and permissions](/concepts/roles-and-permissions), then ask an Owner or Admin. |
+| `team workspaces are not enabled for this workspace` (`TEAM_DISABLED`) | Team features are not switched on for this workspace yet. Existing members keep full access; only inviting, changing roles, ownership offers and Team purchases are affected. | Contact support. Nothing you have will be lost. |
+| `your plan does not include team workspaces` (`FEATURE_NOT_IN_PLAN`) | You tried to create a team workspace without owning a workspace on the Team plan. | Buy Team first. See [Create a team](/guides/create-a-team). |
+
+## Invitations
+
+| You see | What it means | What to do |
+| --- | --- | --- |
+| `invalid or expired invitation` (`INVITE_INVALID`) | The link or token is wrong, was already used, was revoked, has expired, or was sent to a different email address. Beaver deliberately does not say which. | Sign in with the email address the invitation was sent to and use the **newest** link. Ask the person who invited you to resend it. |
+| `verify your email address before accepting an invitation` | Your account's email address is not verified. | Verify it, then accept again. |
+| `too many attempts, please try again later` | Too many acceptance attempts in an hour. | Wait, then try again with the right token. |
+| `Your plan allows up to 5 team members.` (`PLAN_LIMIT_REACHED`) | Every seat is used by a member or a pending invitation. The number is your plan's. | Revoke an invitation, remove a member, or add a pack of seats. See [Invite and manage members](/guides/invite-and-manage-members). |
+| `that person is already a member of this workspace` | The address belongs to an existing member. | Nothing to do. |
+| `you cannot invite someone to a role above your own` | You can only grant roles up to your own. | Ask an Owner. |
+| `this invitation was sent moments ago; try again in a minute` | A resend needs at least a minute since the last send. | Wait a minute. |
+| `link invitations are not enabled for this workspace` | Only an Owner can allow invitation links. | Ask an Owner to enable `allow_link_invites`. |
+| `` The email could not be sent. Run `beaver workspace invites --resend <id>` to try again. `` | The invitation exists, but the email did not go out. | Resend it. If it keeps failing, share a link instead with `--link`, or check the address. |
+| `invitation not found` | The invitation id does not exist in this workspace. | Run `beaver workspace invites`. |
+
+## Roles and ownership
+
+| You see | What it means | What to do |
+| --- | --- | --- |
+| `a workspace must keep at least one active owner` | This would leave the workspace with no Owner. | Make someone else an Owner first. |
+| `the workspace's primary owner cannot be demoted or removed; transfer ownership first` | Ownership has to be handed over, not just removed. | `beaver workspace transfer`. |
+| `you are the only owner: transfer ownership or delete the workspace instead of leaving` | You are the last Owner. | Transfer ownership, or delete the workspace. |
+| `you cannot change or remove a member with a higher role than yours, or grant a higher role than yours` | You cannot act on, or grant, a role above your own. | Ask an Owner. |
+| `member already has that role` | Nothing to change. | Nothing to do. |
+| `the recipient must be an active Admin or Owner of this workspace` (`RECIPIENT_NOT_ELIGIBLE`) | Ownership can only be offered to an active Admin or Owner. | Make them an Admin first. |
+| `this workspace already has a pending ownership transfer` (`TRANSFER_PENDING`) | An offer is already waiting. | Withdraw it with `beaver workspace transfers --cancel`. |
+| `this transfer has expired` (`TRANSFER_EXPIRED`) | The 72 hours passed. | Ask for a new offer. |
+| `type the workspace's name exactly to confirm` (`NAME_MISMATCH`) | The confirmation did not match. | Retype the exact name. |
+
+## Production and approvals
+
+| You see | What it means | What to do |
+| --- | --- | --- |
+| `you do not have permission to do this in a protected environment` (`PRODUCTION_RESTRICTED`) | You are a Developer and the environment is protected. The response says whether anyone else can approve. | Ask for approval; see [Working in a shared workspace](/guides/working-in-a-shared-workspace). |
+| `this workspace requires a second person to approve this action in a protected environment` | The workspace policy needs a second person even for people who could act directly. | Ask another Owner or Admin. |
+| `the approval is not valid for this request (already used, expired, or for a different operation)` | An approval works once, within an hour, for exactly the action that was approved. | Ask again, and repeat the exact same action promptly. |
+| `you cannot decide your own request` | Nobody can approve their own request. | Ask another Owner or Admin. |
+| `nobody else in this workspace can approve this request` | You are the only person who could approve, so there is no one to ask. | If you are the Owner, you can act directly. |
+| `this request has expired` | Requests wait 24 hours. | File a new one. |
+| `this request has already been decided` | Someone else got there first. | Nothing to do. |
+
+## Billing
+
+| You see | What it means | What to do |
+| --- | --- | --- |
+| `--gateway is required (paystack or paypal)` | Checkout needs a payment provider. | Add `--gateway`. |
+| `billing is managed by the workspace Owner` | Only an Owner can change the plan. | Ask them, or `beaver billing request-upgrade --plan team`. |
+| `a payment for this workspace is failing; ask the current owner to resolve it before you accept` (`BILLING_UNRESOLVED`) | An ownership transfer cannot complete while a payment is past due. | The current Owner fixes billing first. |
+
+<Tip>
+  If none of these match, run the command again with `--debug` for details, and include the message and what you were doing when you contact
+  support.
+</Tip>

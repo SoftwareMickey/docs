@@ -35,6 +35,10 @@
             "pages": [
               "concepts/how-beaver-fits-together",
               "concepts/accounts-and-workspaces",
+              "concepts/workspaces-and-teams",
+              "concepts/roles-and-permissions",
+              "concepts/production-safety-and-approvals",
+              "concepts/team-access-and-audit",
               "concepts/integrations",
               "concepts/machine-and-agent-operation",
               "concepts/beaver-cloud",
@@ -87,7 +91,13 @@
               "guides/connect-and-machine-roles",
               "guides/scaling",
               "guides/domains",
-              "guides/rollback-and-recovery"
+              "guides/rollback-and-recovery",
+              "guides/create-a-team",
+              "guides/invite-and-manage-members",
+              "guides/working-in-a-shared-workspace",
+              "guides/removing-members-and-leaving",
+              "guides/downgrading-and-what-happens",
+              "guides/troubleshooting-teams"
             ]
           },
           {
