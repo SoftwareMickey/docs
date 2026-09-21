@@ -25,6 +25,7 @@ beaver domain <subcommand> [flags]
 | `list` | List domains attached to a container. |
 | `add` | Attach a new domain. |
 | `verify <domain-id>` | Re-check DNS verification for a domain. |
+| `repoint <domain-id>` | Get the current DNS record for a CNAME domain that still points at an old Beaver address. |
 | `certificate <domain-id>` | Show a domain's TLS certificate status. |
 | `remove <domain-id>` | Detach a domain. |
 
@@ -49,6 +50,10 @@ publicly visible rather than assuming failure means misconfiguration. `remove` d
 domain from the container; it does not delete or affect your DNS records themselves — you
 still control those at your registrar.
 
+`repoint` keeps the domain, its certificate and its history; only the record you must create
+changes. Domains attached with an A record, and domains attached to a cloud, are not affected. See
+[Domains](/guides/domains) for background.
+
 ## Examples
 
 <Info>
@@ -65,6 +70,10 @@ beaver domain add --container paperclip-web --domain paperclip.example
 beaver domain verify dom_abc123
 ```
 
+```bash Move an old CNAME to the current target
+beaver domain repoint dom_abc123
+```
+
 ```bash Check certificate status
 beaver domain certificate dom_abc123
 ```
@@ -76,6 +85,7 @@ beaver domain certificate dom_abc123
 | Situation | What you'll see | What to do |
 | --- | --- | --- |
 | `verify` succeeds | Domain marked verified | TLS certificate issuance proceeds automatically. |
+| `list` shows **repoint DNS** in `ACTION` | The domain's CNAME points at an old Beaver address that no longer resolves | Run `beaver domain repoint <domain-id>`, then replace the record at your registrar with the one it prints. The target does not change again. |
 | `verify` fails | The specific DNS record still missing or incorrect | Fix the record at your registrar, wait for propagation, retry. |
 | `certificate` pending | Status shown as pending/issuing | Certificates issue automatically once verification passes; check back shortly. |
 

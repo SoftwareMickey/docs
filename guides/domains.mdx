@@ -1,0 +1,133 @@
+---
+title: "Domains"
+description: "Where your app is reachable: its default Beaver address, how that name is chosen, how to attach your own domain, and what changed when Beaver moved from vectorihub.run to vectorihub.com."
+sidebarTitle: "Domains"
+icon: "globe"
+---
+
+Every app you deploy on Beaver gets a **default address** the moment it is deployed. You can also
+attach your own domain. This page covers both, and the one-time move of the default address from
+`vectorihub.run` to `vectorihub.com`.
+
+<Info>
+  For the idea of how domains fit into a deployment, see [Domains and routing](/concepts/domains-and-routing).
+  For exact command syntax, see [`beaver domain`](/cli/domain).
+</Info>
+
+## Your default address
+
+A deployed app is reachable at `https://<name>.vectorihub.com`, with a TLS certificate issued and
+renewed for you. Nothing to configure.
+
+To see it or open it:
+
+```bash
+beaver containers      # lists your apps with their addresses
+beaver open <name>     # opens the app in your browser
+```
+
+The address is also shown in your dashboard and in Beaver Desktop.
+
+### How the name is chosen
+
+- The name comes from your app's name, lowercased, with each run of characters that are not letters
+  or digits replaced by a single hyphen, and any leading or trailing hyphen dropped.
+- If that name is already taken, or is one Beaver keeps for itself (for example `api`, `www`,
+  `docs`, `status`), Beaver adds a short random suffix, so you get something like `myapp-3fa91c2e`.
+- An app keeps its address across redeploys. Redeploying does not change the name your users visit.
+
+### Older deployment addresses
+
+Each deployment of an app also has its own address, used to tell deployments apart in history.
+Once a newer deployment replaces it, that older address stops answering. Always link to your app's
+default address, never to an address copied from an older deployment. Beaver Desktop marks those
+entries **no longer routed** so they are not mistaken for a working link.
+
+## Use your own domain
+
+Attach a domain you own to an app:
+
+```bash
+beaver domain add --container <name> --domain app.example.com
+```
+
+`beaver domain add` prints the DNS record to create at your DNS provider. Which record depends on the
+kind of name:
+
+| You attach | Record you create |
+| --- | --- |
+| A subdomain such as `app.example.com` | A **CNAME** pointing at the target Beaver gives you |
+| A bare domain such as `example.com` | **A** record(s) pointing at the address(es) Beaver gives you |
+
+Then check it:
+
+```bash
+beaver domain verify <domain-id>
+beaver domain list --container <name>
+```
+
+Once DNS resolves, verification passes and the certificate is issued automatically. DNS changes can
+take up to a few hours to be visible. If you use Cloudflare, set the records to **DNS only** (grey
+cloud) so verification and certificate issuance can see them.
+
+Your own domain is independent of the default address: your app stays reachable at its default
+address as well, and removing a custom domain never affects your DNS records or your app.
+
+## The move from `vectorihub.run` to `vectorihub.com`
+
+`vectorihub.run` has expired and is not being renewed, so addresses ending in `.run` no longer
+resolve. Beaver's default address is now under `vectorihub.com`.
+
+**What you need to know**
+
+- Your app keeps its name where it can. If that name is not available under the new domain, it gets
+  a short suffix as described above. You will be told your new address before your app is moved.
+- Anything that has your old `.run` address written into it needs updating. See the checklist below.
+- Your own custom domains keep working. If your custom domain is a **subdomain** that you pointed
+  with a CNAME at an old Beaver target, you need to make one DNS change, described next.
+
+### If `beaver domain list` says "repoint DNS"
+
+A subdomain custom domain used to be pointed at a Beaver target under the old `.run` name. That
+target no longer resolves, so the domain shows **repoint DNS** in the `ACTION` column.
+
+```bash
+beaver domain repoint <domain-id>
+```
+
+This prints the one new record to create. Replace your old CNAME with it. Your domain, its
+certificate and its history are kept; only the record changes. Verification runs automatically as
+soon as the new record resolves.
+
+This is a one-time change: the new target is a Beaver-owned name that does not depend on where your
+app's default address lives, so it will not need to change again if the default address moves.
+
+Bare domains (A records) and domains attached to a cloud are not affected.
+
+### Checklist: what to check in your app
+
+- **Hardcoded absolute URLs** to your app's old `.run` address, in code, config, emails or docs.
+- **OAuth and SSO redirect URIs** registered with providers such as GitHub or Google.
+- **CORS allowlists** and allowed-host settings inside your own app.
+- **Webhooks** that other services send to your old `.run` address.
+- **Code that reads the `Host` header** and compares it with a fixed name. During the move your app
+  can receive requests carrying either the old or the new name; make sure it accepts both, or takes
+  the name from configuration.
+- **Bookmarks and monitors** pointing at the old address.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="beaver domain" icon="at" href="/cli/domain">
+    Attach, verify, repoint and remove custom domains.
+  </Card>
+  <Card title="Domains and routing" icon="globe" href="/concepts/domains-and-routing">
+    How a domain reaches a deployment, and what to check when it does not.
+  </Card>
+  <Card title="Changelog" icon="newspaper" href="/changelog/new-default-address">
+    What changed, and what stays the same.
+  </Card>
+  <Card title="Rollback and recovery" icon="rotate-ccw" href="/guides/rollback-and-recovery">
+    Going back to an earlier deployment.
+  </Card>
+</CardGroup>
