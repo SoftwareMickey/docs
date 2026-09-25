@@ -45,7 +45,9 @@ beaver workspace <subcommand> [flags]
 | `transfers` | List ownership offers made to you, and this workspace's own pending offer. |
 | `accept-transfer [id]` | Accept an offer to become a workspace's owner. |
 | `decline-transfer [id]` | Decline an offer to become a workspace's owner. |
-| `recreate` | Recreate your workspace after it was deleted. |
+| `rename [<id\|name>] <new-name>` | Rename the active workspace, or another one you own. |
+| `delete [<id\|name>]` | Delete the active workspace, or another one you own (Owner only). A team workspace must have no other members, no pending invitations and no projects first. |
+| `recreate` | Recreate your personal workspace after it was deleted, with its projects. |
 
 ## Choosing the workspace a command acts in
 

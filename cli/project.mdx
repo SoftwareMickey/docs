@@ -15,6 +15,11 @@ A project is the top-level grouping every container and environment in Beaver be
 Use `beaver project create` when starting something new, `list`/`show` to find a project's
 ID, and `delete` only when you mean to permanently remove everything in it.
 
+Every command here acts in the **active workspace** (see [choosing the workspace a command
+acts in](/cli/workspace#choosing-the-workspace-a-command-acts-in)): `list` shows only its
+projects, `create` adds to it, and `show`/`delete` report a project of any other workspace as
+not found.
+
 ## Syntax
 
 ```bash

@@ -17,6 +17,8 @@ Each message below is the text Beaver shows. Find yours, then follow the fix.
 | `insufficient permissions` | Your role does not hold the permission, which the message names, along with your role. | Look the permission up in [Roles and permissions](/concepts/roles-and-permissions), then ask an Owner or Admin. |
 | `team workspaces are not enabled for this workspace` (`TEAM_DISABLED`) | Team features are not switched on for this workspace yet. Existing members keep full access; only inviting, changing roles, ownership offers and Team purchases are affected. | Contact support. Nothing you have will be lost. |
 | `your plan does not include team workspaces` (`FEATURE_NOT_IN_PLAN`) | You tried to create a team workspace without owning a workspace on the Team plan. | Buy Team first. See [Create a team](/guides/create-a-team). |
+| A project is missing, or `project not found` | Every project belongs to exactly one workspace, and you are acting in a different one. Beaver answers `not found` for another workspace's project even when you own it. | Run `beaver workspace list`, switch with `beaver workspace use <name>` (or the workspace switcher in the dashboard), then `beaver project list`. |
+| `the workspace still has projects; delete them first` | A team workspace can only be deleted once it has no projects left. | Delete its projects (`beaver project list`, then `beaver project delete <id>`), then delete the workspace. |
 
 ## Invitations
 

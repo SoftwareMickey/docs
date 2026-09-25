@@ -21,6 +21,18 @@ bleeding into each other matters — a `staging` environment in one project has 
 with a `staging` environment in another. The project boundary is what keeps that clean, and
 it's usually the first thing you create.
 
+## A project belongs to one workspace
+
+Every project lives in exactly one [workspace](/concepts/workspaces-and-teams) — the one that was
+active when it was created. Switching workspace switches the projects you see: the dashboard,
+`beaver project list` and every other project command show only the active workspace's
+projects. A project from another workspace — even one you own — is reported as not found
+there, never shown or changed.
+
+Members of a team workspace all see its projects; what each of them may do with one depends
+on their role. A team workspace can't be deleted while it still has projects: delete them
+first, so nothing is left running in a workspace no one can reach.
+
 ## What you can see and control
 
 A project can hold multiple deployable applications (containers) under one shared set of
