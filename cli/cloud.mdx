@@ -55,6 +55,9 @@ move together.
 | `machines [cloud]` | List a cloud's member machines. |
 | `machines add [machine...]` | Add machines to a cloud. |
 | `machines rm [machine]` | Remove a machine from a cloud. |
+| `machines pending [cloud]` | List machines awaiting operator approval to join a cloud. |
+| `machines approve <machine-id>` | Approve a pending machine. |
+| `machines reject <machine-id>` | Reject a pending machine. |
 | `preflight <machine>...` | Check machines for cloud-membership readiness before adding them. |
 
 <ParamField query="--cloud" type="string" default="">
@@ -64,8 +67,13 @@ move together.
   On `machines add`: preflight finding IDs to admit past, for findings you've reviewed and
   intentionally want to proceed despite.
 </ParamField>
+<ParamField query="--from-workspace" type="string" default="">
+  On `machines add`: contribute a machine belonging to a different workspace you're also a
+  member of, without switching your session's active workspace first. See [Sharing with
+  another workspace](#sharing-with-another-workspace).
+</ParamField>
 <ParamField query="--yes" type="boolean" default="false">
-  On `machines rm`: skip the confirmation prompt.
+  On `machines rm`/`machines reject`: skip the confirmation prompt.
 </ParamField>
 <ParamField query="--cloud" type="string" default="">
   On `preflight`: re-check the members of this existing cloud instead of a fresh set.
@@ -80,6 +88,55 @@ move together.
 <ParamField query="--yes" type="boolean" default="false">
   On `preflight`: skip the `--fix` confirmation prompt.
 </ParamField>
+
+Once a cloud's join policy is `approval_required` (this happens automatically once a second
+workspace holds a grant on it, or its private network is active — see [Sharing with another
+workspace](#sharing-with-another-workspace)), a contributed machine sits in `machines pending`
+until an operator approves or rejects it, instead of joining immediately.
+
+## Sharing with another workspace
+
+<Info>
+  [Sharing a Beaver Cloud across workspaces](/concepts/cloud-sharing) explains grants, roles
+  and quotas before diving into syntax.
+</Info>
+
+| Subcommand | Purpose |
+| --- | --- |
+| `workspace ls` | List every workspace holding a grant on a cloud, with role, status and quota. |
+| `workspace invite <workspace-id>` | Invite a workspace onto this cloud. |
+| `workspace remove <workspace-id>` | Revoke a workspace's grant (staged, then confirmed). |
+
+<ParamField query="--cloud" type="string" default="">
+  Cloud slug or name for `workspace` subcommands. Interactive picker if omitted.
+</ParamField>
+<ParamField query="--role" type="string" default="consumer">
+  On `workspace invite`: `consumer`, `contributor`, `operator` or `admin`.
+</ParamField>
+<ParamField query="--max-cpu" type="integer" default="0">
+  On `workspace invite`: a quota ceiling in CPU cores (0 = unlimited).
+</ParamField>
+<ParamField query="--max-memory" type="integer" default="0">
+  On `workspace invite`: a quota ceiling in MB (0 = unlimited).
+</ParamField>
+<ParamField query="--confirm" type="boolean" default="false">
+  On `workspace remove`: finish a staged revoke. Without it, the first call only reports the
+  impact and stages the grant to `termination_pending` — existing workloads keep running,
+  only new deploys from that workspace are blocked.
+</ParamField>
+
+There is no directory to search — an invited workspace's ID is shared with you directly by
+whoever administers it. `workspace invite` prints a one-time token; the invited workspace's
+admin accepts it with `beaver workspace cloud accept <token>` (see [`beaver
+workspace`](/cli/workspace#cloud)), the counterpart command from the invited side. The same
+page also covers requesting access to a cloud you don't hold a grant on yet
+(`beaver workspace cloud request`), and approving or denying those requests
+(`beaver workspace cloud approve`/`deny`).
+
+`machines add --from-workspace <workspace>` contributes a machine belonging to a workspace
+you're also a member of, without switching your whole session's active workspace — the
+backend still checks you're actually a member of that workspace, so this never lets you
+impersonate a workspace you don't belong to.
 
 ## Network
 

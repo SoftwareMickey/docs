@@ -48,6 +48,12 @@ beaver workspace <subcommand> [flags]
 | `rename [<id\|name>] <new-name>` | Rename the active workspace, or another one you own. |
 | `delete [<id\|name>]` | Delete the active workspace, or another one you own (Owner only). A team workspace must have no other members, no pending invitations and no projects first. |
 | `recreate` | Recreate your personal workspace after it was deleted, with its projects. |
+| `cloud accept <token>` | Accept a Beaver Cloud invitation — the active workspace gains a grant on that cloud. |
+| `cloud request <cloud-id>` | Request access to a Beaver Cloud you don't yet hold a grant on. |
+| `cloud requests` | List pending access requests on a cloud you administer. |
+| `cloud approve <request-id>` | Approve a pending access request. |
+| `cloud deny <request-id>` | Deny a pending access request. |
+| `cloud grants` | List every cloud grant the active workspace holds, across every cloud. |
 
 ## Choosing the workspace a command acts in
 
@@ -111,6 +117,40 @@ then completes the acceptance. You must sign in with the email address the invit
 ### `role` and `remove`
 
 `<member>` is a name, an email address or an id.
+
+### `cloud`
+
+<Info>
+  [Sharing a Beaver Cloud across workspaces](/concepts/cloud-sharing) explains grants, quotas
+  and what "request" vs. "invite" means before diving into syntax. `beaver cloud workspace
+  invite/ls/remove` (see [`beaver cloud`](/cli/cloud#sharing-with-another-workspace)) is the
+  same lifecycle from the *administering* workspace's side; these are its counterpart from the
+  *requesting/invited* workspace's side.
+</Info>
+
+There is no directory of clouds or workspaces to browse — a cloud ID (for `request`) or an
+invitation token (for `accept`) is shared with you directly by whoever administers the cloud,
+matching this platform's same-account/invite-only sharing posture.
+
+<ParamField query="--role" type="string" default="consumer">
+  On `request`: the role you're asking for — `consumer`, `contributor`, `operator` or `admin`.
+  The approving admin may grant different terms than requested.
+</ParamField>
+<ParamField query="--max-cpu" type="integer" default="0">
+  On `request`: a requested quota ceiling in CPU cores (0 = unspecified). On `approve`:
+  overrides the requested ceiling.
+</ParamField>
+<ParamField query="--max-memory" type="integer" default="0">
+  On `request`: a requested quota ceiling in MB (0 = unspecified). On `approve`: overrides the
+  requested ceiling.
+</ParamField>
+<ParamField query="--cloud-id" type="string" default="">
+  On `requests`: the cloud to list pending access requests for.
+</ParamField>
+
+`accept`'s token comes from whoever ran `beaver cloud workspace invite` on the cloud; it is
+shown once and is single-use. `approve`/`deny` require `manage_cloud` on the request's cloud —
+the same capability `beaver cloud workspace invite`/`remove` require.
 
 ### activity
 
