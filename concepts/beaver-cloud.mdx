@@ -64,21 +64,39 @@ inspect` always tells you exactly where something landed.
 ## What a cloud doesn't do for you
 
 <Warning>
-  If a machine in the cloud goes offline, whatever was running on it stays associated with
-  that machine — it does not hop to another member on its own. A cloud gives you room to
-  place *new* work; it doesn't make existing workloads survive one machine going down. If
-  that machine won't come back soon, recover explicitly — see [Rollback, promotion, and
-  recovery](/concepts/rollback-promotion-and-recovery).
+  If a machine in the cloud goes offline, whatever was running on it does **not** hop to
+  another member automatically — a cloud gives you room to place *new* work, but nothing
+  reschedules existing work on its own (no autonomous failover). Recovery is an explicit
+  action you take: `beaver cloud impact <machine>` shows what would break, `beaver cloud
+  drain <machine>` stops sending it new work, and `beaver cloud evacuate <machine>` moves
+  everything off it onto another member with room — see the [cloud command
+  reference](/cli/cloud#recovery). If the machine itself is gone for good, see [Rollback,
+  promotion, and recovery](/concepts/rollback-promotion-and-recovery).
 </Warning>
 
 Gateway and cross-machine network diagnostics are available but are advanced territory —
 you're unlikely to need them unless you're actively debugging connectivity between members.
 
+## Sharing a cloud with another workspace
+
+A cloud belongs to one workspace by default, but it doesn't have to stay that way: a workspace
+that administers a cloud can invite another workspace to deploy onto it, contribute machines to
+it, or both — without either workspace losing anything it already had. See [Sharing a Beaver
+Cloud across workspaces](/concepts/cloud-sharing) for the full model, including quotas, billing
+attribution, and what a machine's contributor badge means.
+
+**Existing clouds need no action.** A cloud with a single workspace behaves exactly as it
+always has — sharing is additive, never a migration you have to opt into.
+
 ## Where to go next
 
 <CardGroup cols={2}>
   <Card title="Cloud command reference" href="/cli/cloud">
-    Every subcommand — capacity, nodes, network, services.
+    Every subcommand — capacity, nodes, network, services, recovery.
+  </Card>
+  <Card title="Sharing a cloud across workspaces" href="/concepts/cloud-sharing">
+    Invites, grants, quotas, contributed machines, and billing when more than one workspace
+    uses the same cloud.
   </Card>
   <Card title="Connect and machine roles guide" href="/guides/connect-and-machine-roles">
     Connect machines and group them into a cloud, step by step.
