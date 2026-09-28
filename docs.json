@@ -74,6 +74,9 @@
             "pages": [
               "services",
               "services/postgresql",
+              "services/postgres-pgvector",
+              "services/postgres-postgis",
+              "services/postgres-timescaledb",
               "services/mysql",
               "services/mariadb",
               "services/mongodb",

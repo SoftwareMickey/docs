@@ -38,7 +38,7 @@ created, not just the service's default one.
 
 | Service | What is in the backup | Notes |
 | --- | --- | --- |
-| PostgreSQL | Every database, plus its roles | Role passwords are not included. |
+| PostgreSQL | Every database, plus its roles | Role passwords are not included. The pgvector, PostGIS and TimescaleDB flavors are covered the same way; TimescaleDB hypertables, including compressed chunks, are restored intact. |
 | MySQL, MariaDB | Every database | User accounts are not included. |
 | MongoDB | Every database | The service's own accounts are never restored. |
 | Redis | The whole dataset, all numbered databases | Restoring stops the service briefly while the data file is replaced. |
@@ -51,6 +51,8 @@ MinIO, Kafka, NATS, Meilisearch and Redis Cluster don't support backups. Backing
 Redis Cluster node would capture only its own share of the data, so Beaver refuses rather
 than give you a backup that looks complete and isn't. Redis Sentinel services can be backed
 up, but can't be restored into an individual cluster member.
+
+A backup records the versions it was taken on — for PostgreSQL, the PostgreSQL major version and, for a flavor, the extension release — and a restore checks them before changing anything. A restore into an older PostgreSQL major version is refused, restoring onto a different extension release is refused, and restoring into a newer PostgreSQL major version is allowed. A backup taken before versions were recorded is never refused on this basis.
 
 A restore that can't bring the service back up is reported as failed. For Redis, the data that
 was there before is put back so the service keeps running.
