@@ -10,7 +10,7 @@ SQL database with strong support for structured data, transactions, and extensio
 
 <CardGroup cols={2}>
   <Card title="Supported versions" icon="tag">
-    14, 15, 16 (default), 17 — run `beaver service catalog` for the current list.
+    14, 15, 16 (default), 17, 18 — run `beaver service catalog` for the current list.
   </Card>
   <Card title="Logical databases" icon="table">
     One service can host multiple isolated databases, one per attached application.
@@ -28,6 +28,48 @@ Omit `--version` to use the default, or pin one explicitly:
 ```bash
 beaver service create paperclip-db --type postgres --version 17
 ```
+
+## Flavors
+
+PostgreSQL comes in flavors for common workloads. Each is the same managed database — the same
+credentials, attach, backups, and health checks — with an extension already enabled in every
+database, and each has its own release you can pin with `--distribution-version`.
+
+<CardGroup cols={3}>
+  <Card title="pgvector" icon="vector-square" href="/services/postgres-pgvector">
+    Embeddings and similarity search.
+  </Card>
+  <Card title="PostGIS" icon="map-location-dot" href="/services/postgres-postgis">
+    Geospatial data.
+  </Card>
+  <Card title="TimescaleDB" icon="chart-line" href="/services/postgres-timescaledb">
+    Metrics, IoT, and other time-series data.
+  </Card>
+</CardGroup>
+
+```bash
+beaver service create embeddings --type pgvector
+```
+
+Your plan may include only some flavors; `beaver service catalog` marks the ones it doesn't.
+
+## Versions and upgrades
+
+PostgreSQL 14, 15, 16 (default), 17 and 18 are supported. `beaver service show` lists the
+PostgreSQL version and, for a flavor, the extension release as separate fields.
+
+A major version upgrade is never done in place: Beaver backs the service up, restores it into a
+new server on the newer version, checks it, and only then switches over, leaving the original
+data untouched. Upgrades are forward only, skipping a major version needs explicit
+confirmation, and a downgrade is refused. Starting an upgrade is not yet available from the CLI
+or the desktop app.
+
+## Health
+
+Besides checking that the database answers, Beaver periodically writes and reads a row to prove
+the data path works. A service that is running but fails that check — for example one that has
+gone read-only — is shown as **degraded** rather than healthy, and returns to healthy once the
+check passes. Nothing is restarted for you. See [Services](/concepts/services#health).
 
 ## Attach it
 

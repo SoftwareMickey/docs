@@ -22,7 +22,7 @@ it — multi-member clusters.
 
 | Subcommand | Purpose |
 | --- | --- |
-| `catalog` | Supported service types, versions, and defaults. |
+| `catalog` | Supported service types, versions, extension releases, and defaults. Types your plan does not include are marked `(not in plan)`. |
 | `create <name>` | Provision a new service. |
 | `list` | Every service in your workspace. |
 | `show [name]` | Status, placement, config, and attached apps. |
@@ -33,6 +33,11 @@ it — multi-member clusters.
 </ParamField>
 <ParamField query="--version" type="string" default="">
   On `create`: service version. Defaults to the catalog's default for the type.
+</ParamField>
+<ParamField query="--distribution-version" type="string" default="">
+  On `create`: the extension release for a type that has one — the PostgreSQL flavors `pgvector`,
+  `postgis`, and `timescaledb`. Defaults to the catalog's default for the type and is rejected
+  for a type without one. `beaver service catalog` lists the releases in its DISTRIBUTION column.
 </ParamField>
 <ParamField query="--no-persistence" type="boolean" default="false">
   On `create`: provision without a data volume. Only for types whose catalog spec allows it.
@@ -333,6 +338,10 @@ members' data, triggering a resync against the survivors.
 ```bash Provision and attach
 beaver service create paperclip-db --type postgres
 beaver service attach paperclip-db --container paperclip-web --database paperclip
+```
+
+```bash Provision a PostgreSQL flavor with a pinned extension release
+beaver service create paperclip-vectors --type pgvector --version 17 --distribution-version 0.8.6
 ```
 
 ```bash Attach with no flags — auto-creates a private resource

@@ -75,7 +75,10 @@ you're running, everything keeps running and you're only blocked from adding mor
 
 `beaver billing subscription` shows your plan and how much of each limit you're using; a limit
 you're past is marked *over limit*. Managed services follow the same rule: if you are over your plan's
-allowance, existing services are never deleted or stopped; only creating a new one is blocked.
+allowance, existing services are never deleted or stopped; only creating a new one is blocked. A plan can
+also limit which service types you may create (for example, whether the TimescaleDB flavor is included),
+separately from how many; the catalog marks the types your plan excludes, and existing services of a type a plan
+later stops including are left alone.
 
 ## When a Team plan ends
 
