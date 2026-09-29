@@ -34,6 +34,7 @@
             "group": "Concepts",
             "pages": [
               "concepts/how-beaver-fits-together",
+              "concepts/activity-and-following",
               "concepts/accounts-and-workspaces",
               "concepts/workspaces-and-teams",
               "concepts/roles-and-permissions",
@@ -93,6 +94,7 @@
             "group": "Workflows",
             "pages": [
               "guides/deploy-workflow",
+              "guides/publishing-a-template",
               "guides/connect-and-machine-roles",
               "guides/scaling",
               "guides/domains",
@@ -197,6 +199,10 @@
               "cli/login", "cli/logout", "cli/whoami", "cli/github", "cli/integrations",
               "cli/account", "cli/workspace", "cli/billing", "cli/coupon", "cli/plans", "cli/ai", "cli/alie", "cli/skills"
             ]
+          },
+          {
+            "group": "Activity & templates",
+            "pages": ["cli/follow", "cli/profile", "cli/publish", "cli/template", "cli/activity"]
           },
           {
             "group": "Utilities",

@@ -1,0 +1,76 @@
+---
+title: "beaver activity"
+sidebarTitle: "activity"
+description: "A compact view of your Following feed, in the terminal."
+icon: "list"
+---
+
+<Info>
+  New here? [Activity and following](/concepts/activity-and-following) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver activity` renders your Following feed directly in the terminal — public activity from
+the users and templates you follow, never your own followers' activity, and never anything
+unpublished.
+
+## Syntax
+
+```bash
+beaver activity [flags]
+```
+
+## Flags
+
+<ParamField query="--limit" type="int" default="20">
+  Max items to fetch.
+</ParamField>
+<ParamField query="--more" type="boolean" default="false">
+  Fetch the next page, using `--cursor` from a previous run's output.
+</ParamField>
+<ParamField query="--cursor" type="string" default="">
+  Resume from this cursor. Only takes effect together with `--more`.
+</ParamField>
+<ParamField query="--json" type="boolean" default="false">
+  Print the feed as JSON instead of the human-readable summary.
+</ParamField>
+
+## Consequences
+
+Read-only. Pagination is cursor-based, matching the underlying feed — there is no page-number
+flag to jump around with.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Your recent Following feed
+beaver activity
+```
+
+```bash Next page
+beaver activity --more --cursor eyJmZWVkX2lkIjoi...
+```
+
+```bash Scripted use
+beaver activity --json --limit 50
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| You follow nothing yet, or nothing's been published | "Nothing here yet." | [`beaver follow`](/cli/follow) a user or template — or browse Explore on the web app. |
+
+## Used in
+
+- [`follow`](/cli/follow) — what populates this feed.
+- [`deploy --from-template`](/cli/deploy) — each templated item prints the exact command to
+  deploy it.

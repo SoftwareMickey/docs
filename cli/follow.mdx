@@ -1,0 +1,66 @@
+---
+title: "beaver follow"
+sidebarTitle: "follow"
+description: "Follow a user or a public template from the terminal."
+icon: "user-plus"
+---
+
+<Info>
+  New here? [Activity and following](/concepts/activity-and-following) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver follow` follows a user or a public template — their future published templates,
+releases, and forks appear in [`beaver activity`](/cli/activity) and on the web app's
+Following feed. `beaver unfollow` reverses it.
+
+## Syntax
+
+```bash
+beaver follow <username|template-id>
+beaver unfollow <username|template-id>
+```
+
+Takes exactly one argument. A value that looks like a template id (a UUID) is followed as a
+template; anything else is looked up as a username.
+
+## Consequences
+
+Unfollowing leaves no trace anywhere — no "X unfollowed Y" ever appears, to the followed
+account or to anyone else.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Follow a user
+beaver follow raven
+```
+
+```bash Follow a template by id
+beaver follow 3fa85f64-5717-4562-b3fc-2c963f66afa6
+```
+
+```bash Unfollow
+beaver unfollow raven
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| Username doesn't exist, or their profile isn't visible to you | An error | Double-check the spelling — a private profile and an unknown username look the same. |
+| A template id that doesn't exist | An error | Confirm the id from [`beaver profile`](/cli/profile) or the web app. |
+| Following the same target twice | No error — the second call is a no-op | — |
+
+## Used in
+
+- [`activity`](/cli/activity) — a followed account or template's activity shows up here.
+- [`profile`](/cli/profile) — shows follower/following counts.
