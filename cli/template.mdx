@@ -1,0 +1,73 @@
+---
+title: "beaver template"
+sidebarTitle: "template"
+description: "Fork a public template into your own workspace, from the terminal."
+icon: "code-fork"
+---
+
+<Info>
+  New here? [Activity and following](/concepts/activity-and-following) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver template fork` deploys a public template into your workspace **and** creates a
+private draft template attributed back to the original — a starting point you can customize
+and, when ready, publish yourself with [`beaver publish template`](/cli/publish).
+
+## Syntax
+
+```bash
+beaver template fork <template-id> [flags]
+```
+
+## Flags
+
+<ParamField query="--env" type="string (repeatable)" default="">
+  `KEY=value` for a required environment variable. Repeat the flag for more than one.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Never prompt for a missing environment variable — fail immediately instead, naming which
+  ones are missing. Use this for scripted/CI runs.
+</ParamField>
+
+## Consequences
+
+Without `--yes`, a required environment variable you didn't supply via `--env` is prompted
+for interactively. With `--yes` (or when stdin isn't a terminal), a missing one fails the
+command immediately rather than hanging.
+
+The resulting draft template is private — nothing about a fork is visible to anyone until
+you explicitly publish it.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Fork, prompting for any required values
+beaver template fork 3fa85f64-5717-4562-b3fc-2c963f66afa6
+```
+
+```bash Fork non-interactively
+beaver template fork 3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  --env DATABASE_URL=postgres://... --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| A required env var wasn't supplied, `--yes` was passed | An error naming the exact missing variable(s) | Re-run with `--env KEY=value` for each. |
+| Template id doesn't exist, or isn't public | An error | Confirm the id — it must be a published template, not a draft. |
+
+## Used in
+
+- [`publish`](/cli/publish) — publish the resulting draft when it's ready.
+- [`deploy --from-template`](/cli/deploy) — the same deploy step, without creating a draft
+  you can republish.

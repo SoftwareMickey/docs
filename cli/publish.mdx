@@ -1,0 +1,87 @@
+---
+title: "beaver publish"
+sidebarTitle: "publish"
+description: "Publish a project as a deployable public template, from the terminal."
+icon: "upload"
+---
+
+<Info>
+  New here? [Publishing a template](/guides/publishing-a-template) walks the full guarantee this command gives you, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver publish template` publishes a project as a public (or unlisted) template — the same
+action as the web app's publish flow, from the terminal. It always shows you a preview of
+exactly what becomes public before asking you to confirm; there is no way to publish blind.
+
+## Syntax
+
+```bash
+beaver publish template --project <name> [flags]
+```
+
+## Flags
+
+<ParamField query="--project" type="string" required>
+  The project name to publish. Required — run `beaver project list` to see names in your
+  active workspace.
+</ParamField>
+<ParamField query="--name" type="string" default="">
+  Template name. Defaults to the project's own name.
+</ParamField>
+<ParamField query="--description" type="string" default="">
+  Template description.
+</ParamField>
+<ParamField query="--tags" type="string" default="">
+  Comma-separated tags, e.g. `postgresql,backups`.
+</ParamField>
+<ParamField query="--visibility" type="string" default="public">
+  `public` (listed on the Explore feed) or `unlisted` (reachable only by direct link).
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt after the preview. The preview itself is never skipped.
+</ParamField>
+
+## Consequences
+
+The command prints a preview of every field that becomes public, before anything is
+committed — this is the same information [Publishing a template](/guides/publishing-a-template)
+covers in full: source coordinates, service shape, and the *names* (never values) of
+required environment variables. Publishing again after the first time uses [`beaver
+template`](/cli/template)'s release mechanism instead — this command refuses a project
+that's already published.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Publish with a preview and confirmation prompt
+beaver publish template --project my-api
+```
+
+```bash Tagged, unlisted, scripted (no prompt)
+beaver publish template --project my-api \
+  --tags postgresql,backups --visibility unlisted --yes
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| No project by that name | An error | Check `beaver project list` for the exact name in your active workspace. |
+| The project has no deployable container yet | An error asking for one first | Deploy the project at least once, then publish. |
+| The project is already published | A conflict error | Use `beaver template`'s release path for a new version — this command only handles the first publish. |
+| You decline the confirmation prompt | "Aborted — nothing was published." | Nothing changed; re-run when ready. |
+
+## Used in
+
+- [`template fork`](/cli/template) — forking creates a private draft you publish with this
+  same command.
+- [`deploy --from-template`](/cli/deploy) — what someone else runs against what you publish.
