@@ -1,20 +1,31 @@
 ---
 title: "beaver github"
 sidebarTitle: "github"
-description: "Connect GitHub accounts and browse repository branches for deployment."
+description: "See how you sign in and which GitHub accounts Beaver can read, connect repositories, and browse branches for deployment."
 icon: "github"
 ---
 
 <Info>
-  New here? [Integrations](/concepts/integrations) explains what this is and when to use it, before diving into syntax.
+  New here? [Integrations](/concepts/integrations) explains what this is and when to use it, and
+  [Signing in vs. connecting repositories](/concepts/signing-in-and-repository-access) explains why
+  signing in with GitHub and giving Beaver repository access are two separate things.
 </Info>
 
 ## Purpose
 
-Use `beaver github` to connect a GitHub account (via the Beaver GitHub App) so `beaver
-deploy --git` and `beaver compose deploy` can see your repositories, and to list a
-repository's branches when scripting a deploy. For managing integrations generally (not just
-GitHub), see [`beaver integrations`](/cli/integrations).
+Use `beaver github` to see how you sign in to Beaver and which GitHub accounts (via the Beaver
+GitHub App) Beaver can read repositories from — with each connection's health. Use
+`beaver github install` to give Beaver access to repositories, so `beaver deploy --git` and
+`beaver compose deploy` can see them, and `beaver github branches` to list a repository's
+branches when scripting a deploy. For managing integrations generally (not just GitHub), see
+[`beaver integrations`](/cli/integrations).
+
+<Note>
+  Signing in with GitHub only proves who you are; it never gives Beaver access to your
+  repositories. Repository access is the explicit grant made by `beaver github install`. Both
+  are separate from [`beaver git --auth`](/cli/git), which only checks the GitHub login on the
+  machine you run it on.
+</Note>
 
 ## Syntax
 
@@ -24,14 +35,25 @@ beaver github [subcommand] [flags]
 
 | Subcommand | Purpose |
 | --- | --- |
-| *(none)*, or `accounts` | List your connected GitHub accounts. |
-| `install` | Connect a new GitHub account. |
+| *(none)* | Show your sign-in methods and each connected GitHub account, with its health (connected, suspended, disconnected). |
+| `accounts` | Alias for the bare command. |
+| `install` | Give Beaver access to your GitHub repositories, and wait for the result. |
 | `branches` | List a repository's branches. |
 
 ## Flags
 
-<ParamField query="--return-to" type="string" default="">
-  On `install`: URL to return to after the install flow completes. Optional.
+<ParamField query="--json" type="boolean" default="false">
+  On the bare command: print the connection status as JSON, for scripts.
+</ParamField>
+<ParamField query="--no-browser" type="boolean" default="false">
+  On `install`: print the URL instead of opening a browser (SSH, CI). The command still waits;
+  open the URL on any device signed in to the same Beaver account.
+</ParamField>
+<ParamField query="--no-wait" type="boolean" default="false">
+  On `install`: return right after opening the browser instead of waiting for the result.
+</ParamField>
+<ParamField query="--timeout" type="duration" default="10m">
+  On `install`: how long to wait for the connection to finish.
 </ParamField>
 <ParamField query="--repo" type="string" default="" required>
   On `branches`: repository clone URL — the same value `beaver deploy --repo` accepts.
@@ -42,7 +64,21 @@ beaver github [subcommand] [flags]
 
 `install` opens the Beaver GitHub App's install page in your browser — connecting an account
 is a GitHub-side authorization, not something that happens without your explicit approval
-there.
+there. Beaver then asks GitHub to confirm your account has access to what you installed; if
+GitHub can't confirm it, nothing is connected.
+
+## Exit codes for `install`
+
+Scripts can branch on the ending. The words are the same ones the web and desktop apps show.
+
+| Exit code | Result | Meaning |
+| --- | --- | --- |
+| `0` | connected, or requested | Connected — or an organization owner has been asked to approve it. |
+| `3` | cancelled | You backed out on GitHub. No access was granted. |
+| `4` | denied | GitHub did not confirm you control that installation. Nothing was saved. |
+| `5` | failed | GitHub returned an error while finishing. Nothing was saved. |
+| `6` | expired | The connection attempt expired; run `beaver github install` again. |
+| `7` | timeout | Gave up waiting. If you finished in the browser, run `beaver github` to check. |
 
 ## Examples
 
@@ -60,6 +96,14 @@ beaver github
 beaver github install
 ```
 
+```bash Over SSH, without a browser
+beaver github install --no-browser
+```
+
+```bash Machine-readable status
+beaver github --json
+```
+
 ```bash List a repo's branches (for scripted deploys)
 beaver github branches --repo https://github.com/ada/paperclip
 ```
@@ -70,8 +114,13 @@ beaver github branches --repo https://github.com/ada/paperclip
 
 | Situation | What you'll see | What to do |
 | --- | --- | --- |
-| No accounts connected | An empty list | Run `beaver github install`. |
+| No accounts connected | A message that no GitHub repositories are connected | Run `beaver github install`. |
+| A connection shows *suspended* | The GitHub App installation is suspended | Ask an owner of that GitHub account to unsuspend it. |
+| A connection shows *disconnected* | The app was uninstalled or lost access | Run `beaver github install` to reconnect. |
+| `install` ends *denied* | Exit code `4` | Make sure your browser is signed in to the right GitHub account, then retry. |
 | `branches` with an inaccessible repo | An error naming the access issue | Confirm your connected account can see that repository. |
+
+Every message is explained in [Troubleshooting GitHub](/guides/troubleshooting-github).
 
 ## Used in
 
