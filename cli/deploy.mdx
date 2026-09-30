@@ -109,6 +109,20 @@ redeploy`](/cli/container) instead.
   below.
 </ParamField>
 
+### From a public template
+
+<ParamField query="--from-template" type="string" default="">
+  Deploy a [public template](/concepts/activity-and-following) by id instead of the local
+  project — see [`beaver profile`](/cli/profile) or [`beaver activity`](/cli/activity) for
+  template ids. When set, every other flag on this page (Dockerfile discovery, the GitHub
+  wizard, preflight) is skipped — everything needed comes from the template itself.
+</ParamField>
+<ParamField query="--template-env" type="string (repeatable)" default="">
+  `KEY=value` for a required environment variable, when using `--from-template`. Repeat the
+  flag for more than one. Not the same flag as the non-interactive `--env` below, which
+  selects a deployment environment, not a variable value.
+</ParamField>
+
 ### Non-interactive / CI
 
 Passing `--project-id`, `--repo`, `--branch`, `--cloud`, `--container-name`, and
@@ -224,6 +238,11 @@ beaver deploy --git
 beaver deploy --dry-run
 ```
 
+```bash Deploy a public template
+beaver deploy --from-template 3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  --template-env DATABASE_URL=postgres://...
+```
+
 ```bash Non-interactive / CI
 beaver deploy \
   --project-id proj_abc \
@@ -262,3 +281,7 @@ Building paperclip-web from Dockerfile...
 - [Dockerfile requirements](/deploying/dockerfile-requirements)
 - [Deployment configuration](/deploying/deployment-configuration)
 - [Environment variables](/deploying/environment-variables)
+- [`template fork`](/cli/template) — deploys a template AND creates a private draft you can
+  customize and republish, instead of `--from-template`'s plain deploy.
+- [`activity`](/cli/activity) — prints the exact `--from-template` command for each templated
+  item in your feed.

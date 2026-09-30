@@ -1,0 +1,90 @@
+---
+title: "Activity, following, and Explore"
+description: "Three separate feeds — Following, Explore, and your Workspace — and what following, publishing, and reporting actually do."
+sidebarTitle: "Activity & following"
+icon: "users"
+---
+
+Beaver has three distinct feeds. They look similar, but they answer different questions, and
+none of them overlap by accident.
+
+## The three feeds
+
+| Feed | Answers | Scope |
+| --- | --- | --- |
+| **Following** | "What have people and templates I follow published?" | Strictly what you follow — never your own followers' activity, never anything unpublished. |
+| **Explore** | "What's worth discovering that I don't follow yet?" | Every public template and post, ranked for relevance and recency. Includes a "Trending now" view for recent momentum specifically. |
+| **Workspace activity** | "What happened in my workspace?" | Deployments, builds, and team actions — entirely separate from the two feeds above, and never mixed with them. |
+
+Following and Explore both show only things someone explicitly **published** — nothing
+routine (a deploy, a config change, an internal audit event) ever appears in either one on
+its own. Workspace activity is the opposite: it's exactly that routine operational log, kept
+in its own place on purpose.
+
+## Following and unfollowing
+
+You can follow a user, or a public template. Following a user surfaces everything *they*
+publish; following a template surfaces new releases and forks *of that template*, regardless
+of who forks it.
+
+**Unfollowing — and blocking, and muting — leave no trace.** There is no "X unfollowed Y"
+notice anywhere, to anyone. Blocking someone hides your activity from them and theirs from
+you in both directions; muting only ever affects your own feed and is invisible to the muted
+account. Know this before relying on it: if you're expecting a visible signal when you
+unfollow or block someone, there isn't one, deliberately.
+
+## Publishing
+
+Publishing turns a private project into a public (or unlisted) **template** — something
+anyone can deploy into their own workspace with one action, or fork into a draft they
+customize before publishing themselves. See [Publishing a
+template](/guides/publishing-a-template) for exactly what becomes public and what to
+double-check before you do it — the short version is: every publish shows you a preview of
+the exact fields that become public before anything commits, and environment variable
+**values** are never included, only their names.
+
+A **fork** keeps attribution back to the original template, however many times it's
+re-published down the chain — every deployer can always see where a template originally came
+from.
+
+## Share links and your analytics
+
+Every public post or template can be shared with a link. When someone opens your link, signs
+up through it, or deploys what you shared, Beaver credits that link to you — so you can see
+which things you publish actually get people using Beaver, not just looking at it.
+
+Publishers get an **analytics** tab on their own profile: views, deploys, forks, saves,
+comments, and sign-ups that came in through your links, for the last 7 days, 30 days, or all
+time. Only you can see it. Views appear there and in your digest — **never as an individual
+notification**, and opening your own link doesn't count.
+
+## Verified creators
+
+Some publishers carry a small **verified** badge on their profile, their templates, and their
+cards in your feeds. It means the Beaver team has confirmed them as a known, trusted
+publisher, and their templates rank slightly higher in Explore. It's granted by Beaver
+operators only — there's no application form or self-service way to get it.
+
+## Reporting and moderation
+
+Reporting a piece of content (a post, a template, or an account) sends it to platform
+operators for review — reporting is never visible to the person or content you reported, and
+doesn't remove anything by itself. An operator reviewing your report may dismiss it or act on
+it; either way, nothing about *your* report is ever shown to the reported party.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Publishing a template" href="/guides/publishing-a-template">
+    What becomes public, and what doesn't.
+  </Card>
+  <Card title="beaver follow" href="/cli/follow">
+    Follow a user or template from the terminal.
+  </Card>
+  <Card title="beaver activity" href="/cli/activity">
+    Your Following feed, in the terminal.
+  </Card>
+  <Card title="beaver publish" href="/cli/publish">
+    Publish a project as a template from the terminal.
+  </Card>
+</CardGroup>

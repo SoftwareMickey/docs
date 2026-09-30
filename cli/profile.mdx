@@ -1,0 +1,66 @@
+---
+title: "beaver profile"
+sidebarTitle: "profile"
+description: "Show your own profile, or another user's public profile."
+icon: "id-card"
+---
+
+<Info>
+  New here? [Activity and following](/concepts/activity-and-following) explains what this is and when to use it, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver profile` shows a profile — your own by default, or a specific user's public one.
+
+## Syntax
+
+```bash
+beaver profile [username] [flags]
+```
+
+With no argument, shows your own profile. With a username, shows that user's public profile
+if it's visible to you.
+
+## Flags
+
+<ParamField query="--json" type="boolean" default="false">
+  Print the profile as JSON instead of a human-readable summary.
+</ParamField>
+
+## Consequences
+
+Read-only — this command never changes anything.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Your own profile
+beaver profile
+```
+
+```bash Someone else's profile
+beaver profile raven
+```
+
+```bash Scripted use
+beaver profile raven --json
+```
+
+</CodeGroup>
+
+## Results & failures
+
+| Situation | What you'll see | What to do |
+| --- | --- | --- |
+| A private profile, or an unknown username | Not found | These look identical on purpose — a private profile's existence is never confirmed to someone it isn't visible to. |
+
+## Used in
+
+- [`follow`](/cli/follow) — follow the account you just looked up.
+- [`activity`](/cli/activity) — your Following feed.
