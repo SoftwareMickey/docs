@@ -41,6 +41,7 @@
               "concepts/production-safety-and-approvals",
               "concepts/team-access-and-audit",
               "concepts/integrations",
+              "concepts/signing-in-and-repository-access",
               "concepts/machine-and-agent-operation",
               "concepts/beaver-cloud",
               "concepts/cloud-sharing",
@@ -104,7 +105,8 @@
               "guides/working-in-a-shared-workspace",
               "guides/removing-members-and-leaving",
               "guides/downgrading-and-what-happens",
-              "guides/troubleshooting-teams"
+              "guides/troubleshooting-teams",
+              "guides/troubleshooting-github"
             ]
           },
           {
