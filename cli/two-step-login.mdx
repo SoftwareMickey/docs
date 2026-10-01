@@ -1,0 +1,31 @@
+---
+title: "Signing in with 2-step verification"
+description: "How beaver login behaves for accounts with 2-step verification, and what to do in scripts and CI."
+sidebarTitle: "2-step login"
+icon: "shield-check"
+---
+
+`beaver login` signs you in through your browser. If your account has 2-step verification you
+use your passkey, or enter the code, on the web page you approve in; the CLI never asks for either.
+Passkeys belong to the browser, so there is no terminal prompt, flag or environment variable for one.
+
+The direct password path (`--password`) is deprecated and is closed to accounts with 2-step
+verification. On a terminal the CLI falls back to browser sign-in; in a non-interactive run it
+stops with exit code `77`.
+
+## Scripts and CI
+
+There is deliberately no flag that skips 2-step verification. Approve a device session once on a
+machine with a browser (or run `beaver login --no-browser` and open the URL on any device), then use that
+session, for example by exporting `BEAVER_TOKEN`. Never put a password or an authenticator seed in CI.
+
+<Note>
+If a workspace you belong to requires 2-step verification and you have not turned it on, the
+sign-in is refused with `policy_mfa_required` until you do. If it requires a **passkey**, approve the
+sign-in in the browser with a passkey; a code is refused with `policy_passkey_required`.
+</Note>
+
+`beaver account mfa disable` takes a code or a recovery code. If your account uses a passkey, use a
+recovery code or turn 2-step verification off in the browser under Settings → Security.
+
+See [2-step verification](/concepts/two-step-verification) for recovery and workspace rules.
