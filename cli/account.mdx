@@ -13,7 +13,7 @@ icon: "user"
 
 `beaver account` covers everything scoped to *you* as a user — as opposed to
 [`workspace`](/cli/workspace) (your team/org) or [`billing`](/cli/billing) (payment). Use it
-to view or edit your profile, turn on two-factor authentication (MFA), or send feedback
+to view or edit your profile, turn on two-factor authentication (MFA; see [2-step verification](/concepts/two-step-verification)), or send feedback
 straight from the CLI.
 
 ## Syntax
@@ -61,6 +61,12 @@ Only the flags you pass are changed; omitted fields are left as-is.
 
 ### `mfa disable`
 
+<ParamField query="--code" type="string" default="">
+  Current 6-digit code from your authenticator app. Either `--code` or `--recovery-code` is required.
+</ParamField>
+<ParamField query="--recovery-code" type="string" default="">
+  An unused recovery code, if you can't reach your authenticator app. Each code works once.
+</ParamField>
 <ParamField query="--yes" type="boolean" default="false">
   Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
 </ParamField>
@@ -81,10 +87,14 @@ Only the flags you pass are changed; omitted fields are left as-is.
 
 - `profile update` changes are account-wide and visible immediately wherever your profile is
   shown; they don't affect running deployments or machines.
-- `mfa setup` generates a new TOTP secret and QR code every time it's run — running it again
-  before finishing `mfa verify` invalidates the previous, unfinished setup.
-- `mfa disable` removes two-factor protection from your account — password alone protects it
-  afterward.
+- `mfa setup` starts a *pending* setup with a new secret and QR code. It never changes a factor that's
+  already working — running it again before finishing `mfa verify` replaces only the unfinished setup,
+  and an unfinished setup expires after 15 minutes.
+- `mfa verify` prints your recovery codes once, the first time MFA is enabled. Save them then; they
+  can't be shown again.
+- `mfa disable` needs proof of the factor itself (an authenticator code or a recovery code), then
+  removes two-factor protection and signs your other sessions out — password alone protects the
+  account afterward.
 
 <Warning>
   `mfa disable` reduces your account's protection to password-only. Make sure you have a
@@ -108,6 +118,10 @@ beaver account profile update --full-name "Ada Lovelace" --location "Remote"
 beaver account mfa setup
 # scan the QR or enter the secret in your authenticator app
 beaver account mfa verify --code 123456
+```
+
+```bash Disable MFA
+beaver account mfa disable --code 123456 --yes
 ```
 
 ```bash Send feedback

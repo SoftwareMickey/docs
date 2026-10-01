@@ -42,6 +42,7 @@
               "concepts/team-access-and-audit",
               "concepts/integrations",
               "concepts/signing-in-and-repository-access",
+              "concepts/two-step-verification",
               "concepts/machine-and-agent-operation",
               "concepts/beaver-cloud",
               "concepts/cloud-sharing",
@@ -200,7 +201,7 @@
             "group": "Account and integrations",
             "pages": [
               "cli/login", "cli/logout", "cli/whoami", "cli/github", "cli/integrations",
-              "cli/account", "cli/workspace", "cli/billing", "cli/coupon", "cli/plans", "cli/ai", "cli/alie", "cli/skills"
+              "cli/account", "cli/two-step-login", "cli/workspace", "cli/billing", "cli/coupon", "cli/plans", "cli/ai", "cli/alie", "cli/skills"
             ]
           },
           {

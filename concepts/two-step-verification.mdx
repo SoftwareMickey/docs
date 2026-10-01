@@ -1,0 +1,103 @@
+---
+title: "2-step verification"
+description: "What 2-step verification protects in Beaver, what it does not, how recovery works, and how a workspace can require it."
+sidebarTitle: "2-step verification"
+icon: "shield-check"
+---
+
+import Tables from "/snippets/two-step-tables.mdx";
+
+2-step verification adds a second proof to signing in with a password, Google or GitHub: a six-digit
+code from an authenticator app, or a **passkey or security key**. Anyone who learns your password
+still cannot sign in without it.
+
+## What it protects, and what it does not
+
+<Warning>
+The codes are one-time passwords. They stop password reuse and leaked-password attacks. They are
+**not phishing-resistant**: someone who tricks you into typing a code into a fake page can use it
+within its short lifetime. Check the address bar before you type a code. A passkey does not have this
+weakness — see below.
+</Warning>
+
+- **Protected:** every sign-in to the web app, and approving a new CLI or Desktop sign-in.
+- **Re-checked at the moment:** a few sensitive actions ask for a fresh code even when you are
+  signed in (see the table below).
+- **Not covered:** a session that is already signed in keeps working until it ends or is signed out.
+  This is why changing or turning off the factor signs out every other session.
+
+## Passkeys and security keys
+
+A passkey (your fingerprint, face or screen lock) or a hardware security key is bound to Beaver's
+real address by your browser. A look-alike site cannot ask it for anything, so unlike a code it
+**cannot be phished**.
+
+- **Add one** under Settings → Security → Passkeys and security keys. You can hold up to ten, alongside
+  an authenticator app. Adding one when you already have a factor asks you to confirm with it first, so a
+  stolen session cannot enrol someone else's key.
+- **At sign-in** the browser shows its own prompt. An authenticator code and your recovery codes stay
+  available as fallbacks; an account with only passkeys is never shown a code box.
+- **Synced passkeys** (iCloud Keychain, Google Password Manager, a password manager) work on your other
+  devices and survive losing one. A hardware key is a single object: register two.
+- **Removing** one signs your other browsers and devices out. Removing the last one turns 2-step
+  verification off, with the same confirmation and the same sign-out as turning it off directly.
+- **Lost every passkey?** Recovery codes and the email recovery below work exactly as they do for an
+  authenticator app, and they remove passkeys too.
+- **CLI and Desktop** never prompt for a passkey — the browser does. A device approved with one is
+  labelled "Approved with a passkey".
+
+<Note>
+If a key reports a signature counter that goes backwards, it may have been copied. A hardware key is
+refused and the event appears in your Security activity; remove it and add a new one. Synced passkeys
+do not report a meaningful counter, so they are never refused for it.
+</Note>
+
+## Recovery codes
+
+Turning it on shows ten recovery codes once. Each works once, in place of an authenticator code.
+Keep them somewhere that is not your phone. Generating a new set retires the old one. Signing in
+with a recovery code signs your other browsers out and marks your devices for review.
+
+## If you lose both
+
+You have two routes. Both end with 2-step verification removed and every session signed out, so you
+sign in again and set it up fresh.
+
+1. **Email recovery.** Ask for it on the sign-in page. A link is emailed to the account address; confirm
+   it within one hour. Removal then happens after a **72-hour wait**, during which every confirmation
+   email says how to cancel. The page gives the same answer whether or not an account exists, so it
+   cannot be used to look people up.
+2. **Support.** Support can reset it for you after you answer verification questions. A reset needs
+   a written reason, a second support person to approve it, and a 24-hour delay (skipped if you
+   prove you control the mailbox). You are told and can cancel during the delay.
+
+## Workspaces that require it
+
+An Owner can require 2-step verification for a workspace. Members who already have it are
+unaffected. Members who do not get a **grace period** (7 days by default, 0–30, set by the Owner)
+counted from the later of when the rule turned on and when they joined, with reminders at 3 days and
+1 day. After the deadline the workspace is blocked for them until they turn it on. A member who just
+had their factor removed by recovery or a support reset gets **no grace**, since they were secure
+before. If you are in several workspaces, the earliest deadline applies.
+
+While a workspace requires it, approving a CLI or Desktop sign-in for that account needs the factor
+on first.
+
+### Requiring a passkey
+
+An Owner can choose the stricter **Passkey or security key only** level instead of "Authenticator app or
+passkey". Only a session that **signed in with a passkey** satisfies it; a session that used a code or a
+recovery code is refused with `MFA_PASSKEY_REQUIRED` until the person signs in again with their passkey.
+Members who only have an authenticator app get a fresh grace period when the Owner tightens the rule,
+and CLI or Desktop sign-ins must be approved with a passkey too. The Owner needs a passkey themselves
+and must be signed in with it to turn this on, so the change can never lock them out.
+
+## Reference
+
+<Tables />
+
+## Audit trail
+
+Your account's **Security activity** list shows sign-ins, code failures, changes and recovery events
+for your account. Workspace events are purged on the workspace's audit-retention schedule; account
+security events currently have no automatic purge.
