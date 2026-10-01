@@ -13,15 +13,15 @@ you're signed in as → [`logout`](/cli/logout) to clear the session.
 Run `beaver login` before any command that needs an authenticated account — most commands
 that talk to your workspace (`deploy`, `machine`, `service`, etc.) will prompt you to sign in
 automatically on first use if you haven't already. Signing in interactively opens a browser
-for approval by default — you can sign in there with GitHub or your email, and the terminal
+for approval by default — you can sign in there with Google, GitHub or your email, and the terminal
 never asks for a password or a token. Pass `--no-browser` on a machine without a browser,
 `--password` for an email/password prompt instead, or use `BEAVER_TOKEN` for a fully
 non-interactive session (CI, scripts, headless machines).
 
 <Note>
-  Signing in with GitHub proves who you are; it does not give Beaver access to your
-  repositories (that is [`beaver github install`](/cli/github)) and it is unrelated to
-  [`beaver git --auth`](/cli/git). See
+  Signing in with Google or GitHub proves who you are; it does not give Beaver access to your
+  Google account or your repositories (that is [`beaver github install`](/cli/github)) and it is
+  unrelated to [`beaver git --auth`](/cli/git). See
   [Signing in vs. connecting repositories](/concepts/signing-in-and-repository-access).
 </Note>
 
@@ -38,7 +38,7 @@ environment, never as a command-line argument.
 
 <ParamField query="--no-browser" type="boolean" default="false">
   Print the approval URL instead of opening a browser (SSH, CI). Open it on any device — your
-  phone or laptop — sign in there (with GitHub or your email), and approve. The command keeps
+  phone or laptop — sign in there (with Google, GitHub or your email), and approve. The command keeps
   waiting and finishes when you do.
 </ParamField>
 

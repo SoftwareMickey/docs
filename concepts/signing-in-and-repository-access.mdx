@@ -1,9 +1,12 @@
 ---
 title: "Signing in vs. connecting repositories"
-description: "Signing in with GitHub proves who you are. Connecting repositories is a separate, explicit choice about what Beaver may read."
+description: "Signing in with Google or GitHub proves who you are. Connecting repositories is a separate, explicit choice about what Beaver may read."
 sidebarTitle: "Signing in vs. repositories"
 icon: "key-round"
 ---
+
+You can sign in to Beaver with **Google**, **GitHub** or an email and password. Signing in with
+Google or GitHub only ever proves who you are — [read how Google works below](#signing-in-with-google).
 
 "GitHub" shows up in three different places in Beaver, and they are deliberately kept apart.
 Most confusion about GitHub in Beaver comes from treating them as one thing.
@@ -42,6 +45,40 @@ A few things worth knowing:
 - **You can connect GitHub to an existing account** from account settings, and remove it
   again — as long as you keep at least one other way to sign in.
 
+## Signing in with Google
+
+Choosing *Continue with Google* asks Google for three things: that you are who you say you are,
+your email address, and your basic profile (name and picture). That is all the permission
+requested — **identity only**. Beaver gets no access to your Gmail, Drive, Calendar, contacts or
+any other part of your Google account, and no access to any Google Cloud or Workspace resource.
+If you are new, an account is created for you; if you have signed in this way before, you are
+signed back in to the same account.
+
+Beaver keeps your Google account's permanent id, your name, email address (and whether Google
+verified it) and your picture, so it can recognise you next time. It does **not** keep a Google
+token of any kind.
+
+A few things worth knowing:
+
+- **Google must have verified your email.** If it hasn't, or Google shares no address, Beaver
+  can't create an account from it. See [Troubleshooting Google](/guides/troubleshooting-google).
+- **If an account already uses your Google email,** Beaver will not merge the two silently. You
+  are offered **Email me a sign-in link**: it goes to the existing account's own address, and
+  only when you confirm there is Google connected. That proves you control the mailbox, which a
+  matching address alone does not. (If that address was never verified, confirming also resets
+  its password and signs out its sessions, so nobody who registered it earlier keeps access.)
+- **Google and GitHub can be on one account.** Each is a way to sign in to the *same* Beaver
+  account; connecting one never signs you out of the other.
+- **If your account has two-factor authentication,** signing in with Google still asks for the
+  second factor before a session begins.
+- **The command line and the desktop app** never sign in with Google themselves. `beaver login`
+  and Beaver Desktop open your browser, where you choose Google, GitHub or email and approve the
+  device — see [`beaver login`](/cli/login). The desktop app uses your system browser because
+  Google refuses sign-in inside embedded windows.
+- **You can connect Google to an existing account, change which Google account is connected,
+  or remove it** from *Settings → Security*, as long as you keep at least one other way to sign
+  in. If Google is your only way in, add a password first.
+
 ## Connecting repositories
 
 Repository access comes from the **Beaver GitHub App**. Installing it is a GitHub-side
@@ -71,6 +108,26 @@ long as the installation stands.
 ## Common questions
 
 <AccordionGroup>
+  <Accordion title="Can I use Google and GitHub on one account?">
+    Yes. Each is a separate way to sign in to the same Beaver account. Connect the second from
+    *Settings → Security*, and remove either later as long as one way to sign in remains.
+    GitHub *repository access* is a different thing again and is unaffected either way.
+  </Accordion>
+  <Accordion title="I signed up with email — can I add Google?">
+    Yes. Sign in as usual, then choose *Connect Google* in *Settings → Security*. Or choose
+    *Continue with Google* on the sign-in page: if the Google email matches your account, you'll
+    be offered an emailed link to your Beaver address that connects it once you confirm.
+  </Accordion>
+  <Accordion title="I changed my Google email — am I locked out?">
+    No. Beaver recognises your Google account by its permanent id, not by the address, so signing
+    in keeps working. Your Beaver account's email is not rewritten when Google's changes.
+  </Accordion>
+  <Accordion title="How do I revoke Beaver's access on Google's side?">
+    Beaver stores no Google token, so there is nothing to revoke for security. To remove Beaver
+    from your Google account's list of apps anyway, open
+    [Google's third-party access page](https://myaccount.google.com/permissions) and remove it;
+    to stop signing in with Google, disconnect it in *Settings → Security* too.
+  </Accordion>
   <Accordion title="I signed in with GitHub — why can't Beaver see my repositories?">
     Signing in only proves who you are. Repository access is a separate step: install the
     Beaver GitHub App and choose repositories. New GitHub sign-ups are offered this step right
@@ -122,6 +179,9 @@ Each has a remedy in [Troubleshooting GitHub](/guides/troubleshooting-github).
   </Card>
   <Card title="Troubleshooting GitHub" href="/guides/troubleshooting-github">
     Every sign-in and connection message, with the exact remedy.
+  </Card>
+  <Card title="Troubleshooting Google" href="/guides/troubleshooting-google">
+    The messages specific to signing in with Google, and Google's own error pages for operators.
   </Card>
   <Card title="beaver github" href="/cli/github">
     Check and manage repository access from the command line.
