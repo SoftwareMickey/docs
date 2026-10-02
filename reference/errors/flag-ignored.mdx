@@ -1,0 +1,47 @@
+---
+title: "FLAG_IGNORED"
+sidebarTitle: "FLAG_IGNORED"
+description: "What the FLAG_IGNORED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["FLAG_IGNORED", "A flag has no effect on this command", "error", "failure", "beaver help FLAG_IGNORED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**A flag has no effect on this command**
+
+The flag is not supported by this command and would have been silently ignored.
+
+| | |
+| --- | --- |
+| Code | `FLAG_IGNORED` |
+| Kind | Invalid input |
+| HTTP status | `400` |
+| CLI exit status | `1` |
+
+## What to do
+
+The response names the flag or argument and shows an accepted value. Run `beaver help <command>` for the command's flags.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "FLAG_IGNORED",
+    "message": "A flag has no effect on this command",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "A flag has no effect on this command"
+  }
+}
+```
+
+Look it up offline with `beaver help FLAG_IGNORED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

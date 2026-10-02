@@ -1,0 +1,47 @@
+---
+title: "CLIENT_TOO_OLD"
+sidebarTitle: "CLIENT_TOO_OLD"
+description: "What the CLIENT_TOO_OLD failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["CLIENT_TOO_OLD", "This version of the Beaver CLI is too old", "error", "failure", "beaver help CLIENT_TOO_OLD"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**This version of the Beaver CLI is too old**
+
+The server needs a newer CLI than the one making the request; update the CLI.
+
+| | |
+| --- | --- |
+| Code | `CLIENT_TOO_OLD` |
+| Kind | Invalid input |
+| HTTP status | `426` |
+| CLI exit status | `1` |
+
+## What to do
+
+The response names the flag or argument and shows an accepted value. Run `beaver help <command>` for the command's flags.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "CLIENT_TOO_OLD",
+    "message": "This version of the Beaver CLI is too old",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "This version of the Beaver CLI is too old"
+  }
+}
+```
+
+Look it up offline with `beaver help CLIENT_TOO_OLD`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

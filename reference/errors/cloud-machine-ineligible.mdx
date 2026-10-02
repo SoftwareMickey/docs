@@ -1,0 +1,71 @@
+---
+title: "CLOUD_MACHINE_INELIGIBLE"
+sidebarTitle: "CLOUD_MACHINE_INELIGIBLE"
+description: "What the CLOUD_MACHINE_INELIGIBLE failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["CLOUD_MACHINE_INELIGIBLE", "Machine cannot join this cloud", "error", "failure", "beaver help CLOUD_MACHINE_INELIGIBLE"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Machine cannot join this cloud**
+
+One or more requirements for joining a cloud are not met. Each requirement is listed with its status and repair.
+
+| | |
+| --- | --- |
+| Code | `CLOUD_MACHINE_INELIGIBLE` |
+| Kind | Eligibility |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+Every requirement is listed with its status. Fix the failed ones — each has its own repair — then run the command again, or use `--check` to see the verdict without changing anything.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "CLOUD_MACHINE_INELIGIBLE",
+    "message": "Machine cannot join this cloud",
+    "operation": "cloud.machine.add",
+    "changed": false,
+    "conditions": [
+      {
+        "id": "machine.online",
+        "label": "Machine agent is online",
+        "status": "passed"
+      },
+      {
+        "id": "cloud.wireguard_unavailable.srv_1",
+        "label": "WireGuard tooling is missing",
+        "status": "failed",
+        "detail": "wg and wg-quick are not on PATH",
+        "repair": {
+          "kind": "automatic",
+          "description": "Installs wireguard-tools, then re-checks",
+          "command": "beaver cloud preflight srv_1 --cloud production --fix",
+          "safe_to_automate": true,
+          "requires_confirm": true
+        }
+      }
+    ],
+    "repairs": [],
+    "retry": {
+      "command": "beaver cloud machines add srv_1 --cloud production",
+      "safe": true
+    },
+    "request_id": "req_8f3a21c0",
+    "error": "Machine cannot join this cloud"
+  }
+}
+```
+
+Look it up offline with `beaver help CLOUD_MACHINE_INELIGIBLE`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

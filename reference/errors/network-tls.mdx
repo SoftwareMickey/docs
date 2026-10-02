@@ -1,0 +1,47 @@
+---
+title: "NETWORK_TLS"
+sidebarTitle: "NETWORK_TLS"
+description: "What the NETWORK_TLS failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["NETWORK_TLS", "The server's certificate could not be verified", "error", "failure", "beaver help NETWORK_TLS"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The server's certificate could not be verified**
+
+The TLS handshake failed: untrusted or expired certificate, wrong host name, or a wrong system clock.
+
+| | |
+| --- | --- |
+| Code | `NETWORK_TLS` |
+| Kind | Temporary |
+| HTTP status | `503` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "NETWORK_TLS",
+    "message": "The server's certificate could not be verified",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The server's certificate could not be verified"
+  }
+}
+```
+
+Look it up offline with `beaver help NETWORK_TLS`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

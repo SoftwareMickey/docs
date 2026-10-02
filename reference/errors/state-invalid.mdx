@@ -1,0 +1,47 @@
+---
+title: "STATE_INVALID"
+sidebarTitle: "STATE_INVALID"
+description: "What the STATE_INVALID failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["STATE_INVALID", "The resource is not in a state that allows this", "error", "failure", "beaver help STATE_INVALID"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The resource is not in a state that allows this**
+
+The resource's current state does not permit the operation; the response gives the current and required state and the transition.
+
+| | |
+| --- | --- |
+| Code | `STATE_INVALID` |
+| Kind | Resource State |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "STATE_INVALID",
+    "message": "The resource is not in a state that allows this",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The resource is not in a state that allows this"
+  }
+}
+```
+
+Look it up offline with `beaver help STATE_INVALID`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

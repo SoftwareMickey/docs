@@ -1,0 +1,140 @@
+---
+title: "Scripting and CI"
+sidebarTitle: "Scripting and CI"
+description: "What a script or pipeline can rely on: stdout and stderr, the failure document, error codes, exit statuses, --check and non-interactive behaviour."
+icon: "terminal"
+type: reference
+audience: [developer, operator]
+keywords: ["ci", "script", "pipeline", "automation", "json", "error.code", "exit status", "check", "non-interactive", "jq", "github actions"]
+---
+
+Everything here is a contract: it does not change between releases without a note in the changelog. Scripts, CI pipelines and agents can build on it. The short version: **read `--json`, branch on `error.code`, use the exit status only to tell success from failure.**
+
+## Output streams
+
+| Mode | On success | On failure |
+| --- | --- | --- |
+| default (table) | The result on **stdout** | The failure report on **stderr**; **stdout stays empty** |
+| `--json` (or `--output json`) | One JSON document on stdout | One JSON document on **stdout**, nothing on stdout besides it |
+| `--output yaml` | One YAML document on stdout | One YAML document on stdout |
+
+Progress lines such as "Fetching machines…" go to stderr, so they never appear in front of a document. Colour is off whenever the output is not a terminal, and `NO_COLOR` or `--no-color` turns it off in a terminal too. `--quiet` hides routine status lines; it never hides a refusal.
+
+## The failure document
+
+With `--json`, every failure is the same shape, for every command:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "CLOUD_MACHINE_INELIGIBLE",
+    "message": "Machine cannot join this cloud",
+    "changed": false,
+    "conditions": [
+      { "id": "machine.online", "label": "Machine agent is online", "status": "passed" },
+      {
+        "id": "cloud.wireguard_unavailable.srv_1",
+        "label": "WireGuard tooling is missing",
+        "status": "failed",
+        "repair": { "kind": "automatic", "command": "beaver cloud preflight srv_1 --cloud production --fix" }
+      }
+    ],
+    "repairs": [],
+    "retry": { "command": "beaver cloud machines add srv_1 --cloud production", "safe": true },
+    "request_id": "req_8f3a21c0"
+  }
+}
+```
+
+| Field | Use it to |
+| --- | --- |
+| `error.code` | **Branch on this.** It is stable; every code has a page in the [error code reference](/reference/errors). |
+| `error.changed` | Know whether anything was altered: `false`, `true`, `"partial"` or `"unknown"`. `"unknown"` means check before you retry. |
+| `error.conditions[]` | See every requirement that was checked — `passed`, `failed`, `warning` or `skipped` — with the repair for each failed one. |
+| `error.retry` | Repeat the operation. `safe: true` means repeating it cannot do harm. |
+| `error.request_id` | Quote it to support. It identifies the exact failure. |
+
+Never branch on `error.message` or on the text of the table report: wording improves between releases, codes do not change.
+
+## Exit statuses
+
+import ExitStatusTable from "/snippets/exit-status-table.mdx";
+
+<ExitStatusTable />
+
+Use the status to tell success from failure. To learn *why* a command failed, read `error.code`. `beaver help exit-status` prints this table offline, and `beaver help CODE` prints a code's meaning.
+
+## Check before you change
+
+`--check` evaluates every requirement for an operation and reports all of them, without changing anything. It exits `0` when nothing stands in the way and `1` with the failure document when something does. Use it to gate a step:
+
+```bash
+beaver cloud machines add srv_1 --cloud production --check --json
+```
+
+`beaver cloud machines add --fix` repairs what Beaver can repair safely, then joins; it asks for confirmation first, and in a script you pass `--yes` to accept.
+
+## Non-interactive behaviour
+
+When there is no terminal, a command never waits for an answer and never guesses one:
+
+- A command that needs your confirmation fails at once with `FLAG_REQUIRES`, naming the flag that lets it proceed (`--yes`). Nothing has changed.
+- Colour and spinners are off.
+
+## Signing in from CI
+
+Sign in once on a machine with a browser, then give the pipeline the session token:
+
+```bash
+BEAVER_TOKEN="$SESSION_TOKEN" beaver login
+```
+
+`beaver login` validates the token and saves it for the steps that follow. Accounts with [2-step verification](/teams/two-step-verification) can never sign in with a password in a script, and there is no flag that skips the second factor. Never put a password or an authenticator seed in CI.
+
+## Upgrading scripts
+
+Failure output was made structured and consistent. A back-compat audit ran the same corpus through the previous release and this one: **exit statuses are identical** and **success output in `--json` is unchanged**, apart from the differences below. If a script reads the old text, move it to `--json` and `error.code`.
+
+| What changed | Before | Now | What to do |
+| --- | --- | --- | --- |
+| A failure in the default (table) mode | The message was printed on **stdout** | The report is printed on **stderr**; stdout is empty | Read stderr for the message, or use `--json` and read stdout |
+| A failure with `--json` | Often a plain sentence on stdout, even though you asked for JSON | **One JSON document** on stdout with `error.code`, `conditions`, `repairs` and `request_id`; the server's own sentence is still in `error.message` and `error.error` | Parse the document; branch on `error.code` |
+| Progress lines ("Fetching machines…") | Written to stdout, ahead of the result | Written to stderr | Nothing: piped output is now only the result |
+| A command that needs confirmation, with no terminal and no `--yes` | Printed "Cancelled." and **exited `0`** having done nothing | Exits `1` with `FLAG_REQUIRES`, naming `--yes` | Pass `--yes` where the pipeline means it |
+| An empty list | A one-line message | A count and the command that adds the first item | Use `--json` for machine reading |
+| Some commands ignored `--json` | Printed text | Print JSON | Nothing |
+
+Everything in this table is additive in meaning: the same information is present, in a stable place. Codes and statuses are only ever added; existing ones are never renumbered.
+
+## Retries
+
+Commands that only read retry transient failures for you, up to three times, honouring `Retry-After`. Commands that change something are **never** retried automatically: an `error.changed` of `"unknown"` means the first attempt may have been applied. Set `BEAVER_NO_RETRY=1` to turn automatic read retries off.
+
+## A pipeline step
+
+This step gates on a machine being able to join a cloud. It branches on the code, prints the failed requirements and the exact repair commands, and exits non-zero without joining anything. The same script is executed against the CLI in its own test suite.
+
+```bash
+#!/bin/sh
+# Gate a pipeline step on a machine being able to join a cloud.
+set -eu
+
+machine="${1:?usage: ci-pipeline.sh MACHINE CLOUD}"
+cloud="${2:?usage: ci-pipeline.sh MACHINE CLOUD}"
+
+# --check changes nothing. --json puts exactly one document on stdout and
+# nothing on stderr, whether the command succeeds or fails.
+if out=$(beaver cloud machines add "$machine" --cloud "$cloud" --check --json); then
+  echo "ready: $machine can join $cloud"
+else
+  # Branch on the stable code, never on the message text.
+  code=$(printf '%s' "$out" | jq -r '.error.code')
+  echo "blocked: $code" >&2
+  printf '%s' "$out" | jq -r '.error.conditions[] | select(.status == "failed") | "  - " + .label' >&2
+  printf '%s' "$out" | jq -r '.error.conditions[] | select(.status == "failed") | .repair.command // empty | "  fix: " + .' >&2
+  exit 1
+fi
+```
+
+For every command and flag, see the [command reference](/cli). For what each status and code means, see [Exit codes and output formats](/reference/exit-codes-and-output) and the [error codes](/reference/errors).

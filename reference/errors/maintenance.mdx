@@ -1,0 +1,47 @@
+---
+title: "MAINTENANCE"
+sidebarTitle: "MAINTENANCE"
+description: "What the MAINTENANCE failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["MAINTENANCE", "Beaver is in maintenance", "error", "failure", "beaver help MAINTENANCE"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Beaver is in maintenance**
+
+The platform is in a maintenance window. The response gives the window and the status page.
+
+| | |
+| --- | --- |
+| Code | `MAINTENANCE` |
+| Kind | Temporary |
+| HTTP status | `503` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "MAINTENANCE",
+    "message": "Beaver is in maintenance",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Beaver is in maintenance"
+  }
+}
+```
+
+Look it up offline with `beaver help MAINTENANCE`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

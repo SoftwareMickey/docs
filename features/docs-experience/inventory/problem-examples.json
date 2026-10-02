@@ -1,0 +1,54 @@
+{
+  "_comment": "Recorded failure documents, one per code where a real example is worth showing. Hand-written from real output (beaver-cli e2e fixtures). A code without an entry gets the generated minimal shape. Keep each a complete {ok:false,error:{…}} document.",
+  "CLOUD_MACHINE_INELIGIBLE": {
+    "ok": false,
+    "error": {
+      "code": "CLOUD_MACHINE_INELIGIBLE",
+      "message": "Machine cannot join this cloud",
+      "operation": "cloud.machine.add",
+      "changed": false,
+      "conditions": [
+        { "id": "machine.online", "label": "Machine agent is online", "status": "passed" },
+        {
+          "id": "cloud.wireguard_unavailable.srv_1",
+          "label": "WireGuard tooling is missing",
+          "status": "failed",
+          "detail": "wg and wg-quick are not on PATH",
+          "repair": {
+            "kind": "automatic",
+            "description": "Installs wireguard-tools, then re-checks",
+            "command": "beaver cloud preflight srv_1 --cloud production --fix",
+            "safe_to_automate": true,
+            "requires_confirm": true
+          }
+        }
+      ],
+      "repairs": [],
+      "retry": { "command": "beaver cloud machines add srv_1 --cloud production", "safe": true },
+      "request_id": "req_8f3a21c0",
+      "error": "Machine cannot join this cloud"
+    }
+  },
+  "AUTH_EXPIRED": {
+    "ok": false,
+    "error": {
+      "code": "AUTH_EXPIRED",
+      "message": "Your session has expired",
+      "changed": false,
+      "conditions": [
+        {
+          "id": "auth.session",
+          "label": "Your session is valid",
+          "status": "failed",
+          "detail": "The session this machine holds is no longer accepted.",
+          "expected": "an active session",
+          "actual": "expired",
+          "repair": { "kind": "command", "description": "Sign in again, then run the command again", "command": "beaver login" }
+        }
+      ],
+      "repairs": [],
+      "request_id": "req_41c9d7e2",
+      "error": "Your session has expired"
+    }
+  }
+}

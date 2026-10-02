@@ -1,0 +1,63 @@
+[
+  {
+    "status": 0,
+    "scope": "every command",
+    "meaning": "Success. For --check: nothing stands in the way."
+  },
+  {
+    "status": 1,
+    "scope": "every command",
+    "meaning": "Failure. Every registered problem code exits 1 unless listed below; the cause is error.code in --json output and the CODE of the printed report. Cancelling at a prompt keeps the status the command had and is not a failure.",
+    "codes": [
+      "*"
+    ]
+  },
+  {
+    "status": 77,
+    "scope": "any command that needs a verified account",
+    "meaning": "2-step verification is required: the workspace requires it and your account does not have it.",
+    "codes": [
+      "MFA_REQUIRED"
+    ]
+  },
+  {
+    "status": 2,
+    "scope": "beaver config …",
+    "meaning": "Usage error: a flag or argument the command does not accept."
+  },
+  {
+    "status": 3,
+    "scope": "beaver config …",
+    "meaning": "Local I/O error: a file could not be read or written."
+  },
+  {
+    "status": 4,
+    "scope": "beaver config …",
+    "meaning": "Server error while saving or loading configuration."
+  },
+  {
+    "status": 3,
+    "scope": "beaver github install",
+    "meaning": "You cancelled."
+  },
+  {
+    "status": 4,
+    "scope": "beaver github install",
+    "meaning": "GitHub denied the request."
+  },
+  {
+    "status": 5,
+    "scope": "beaver github install",
+    "meaning": "The install failed."
+  },
+  {
+    "status": 6,
+    "scope": "beaver github install",
+    "meaning": "The approval link expired."
+  },
+  {
+    "status": 7,
+    "scope": "beaver github install",
+    "meaning": "Timed out waiting for the install."
+  }
+]

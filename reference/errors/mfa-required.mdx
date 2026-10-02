@@ -1,0 +1,47 @@
+---
+title: "MFA_REQUIRED"
+sidebarTitle: "MFA_REQUIRED"
+description: "What the MFA_REQUIRED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["MFA_REQUIRED", "This workspace requires 2-step verification", "error", "failure", "beaver help MFA_REQUIRED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**This workspace requires 2-step verification**
+
+The workspace enforces 2-step verification and the account has none.
+
+| | |
+| --- | --- |
+| Code | `MFA_REQUIRED` |
+| Kind | Permission |
+| HTTP status | `403` |
+| CLI exit status | `77` |
+
+## What to do
+
+Ask an Owner or Admin of the workspace to do this or to change your role. If another workspace of yours has access, switch with `beaver workspace use`.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "MFA_REQUIRED",
+    "message": "This workspace requires 2-step verification",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "This workspace requires 2-step verification"
+  }
+}
+```
+
+Look it up offline with `beaver help MFA_REQUIRED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

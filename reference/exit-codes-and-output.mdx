@@ -12,27 +12,13 @@ A `beaver` command exits **`0`** on success and **non-zero** on failure, so a sc
 
 ## Codes
 
-| Code | Where | Meaning |
-| --- | --- | --- |
-| `0` | every command | Success |
-| `1` | every command | Failure. The default for anything that is not listed below, including a timeout while waiting with `--wait` |
-| `77` | any command that needs a verified account | **2-step verification is required.** The workspace requires it and your account does not have it. Turn it on, then run the command again ([2-step verification](/teams/two-step-verification)) |
-| `2` | `beaver config …` | Usage error: a flag or argument the command does not accept |
-| `3` | `beaver config …` | Local I/O error: a file could not be read or written |
-| `4` | `beaver config …` | Server error while saving or loading configuration |
+import ExitStatusTable from "/snippets/exit-status-table.mdx";
 
-`beaver github install` has its own set, so a script can tell why the connection ended:
+<ExitStatusTable />
 
-| Code | Result |
-| --- | --- |
-| `0` | GitHub is connected, or an organization owner has been asked to approve it (nothing more to do here) |
-| `3` | You cancelled |
-| `4` | GitHub denied the request |
-| `5` | It failed |
-| `6` | The approval link expired |
-| `7` | It timed out waiting |
+Read a status together with the command that produced it: `3` and `4` mean different things under `beaver config` and under `beaver github install`. The same table is printed offline by `beaver help exit-status`.
 
-Codes `3` and `4` therefore mean different things under `beaver config` and `beaver github install`. Read the code together with the command that produced it.
+The *reason* for a failure is not the status. Every failure carries a stable **code** — `error.code` in `--json` output — and each code has its own page in the [error code reference](/reference/errors). Branch on the code, not on the status or the message text.
 
 ## Waiting and timeouts
 

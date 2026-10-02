@@ -1,0 +1,47 @@
+---
+title: "OPERATION_FAILED"
+sidebarTitle: "OPERATION_FAILED"
+description: "What the OPERATION_FAILED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["OPERATION_FAILED", "The operation failed", "error", "failure", "beaver help OPERATION_FAILED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The operation failed**
+
+An operation failed after it started; the response names the failed stage and what changed.
+
+| | |
+| --- | --- |
+| Code | `OPERATION_FAILED` |
+| Kind | Async Operation |
+| HTTP status | `500` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "OPERATION_FAILED",
+    "message": "The operation failed",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The operation failed"
+  }
+}
+```
+
+Look it up offline with `beaver help OPERATION_FAILED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

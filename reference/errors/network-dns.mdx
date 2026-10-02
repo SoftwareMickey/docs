@@ -1,0 +1,47 @@
+---
+title: "NETWORK_DNS"
+sidebarTitle: "NETWORK_DNS"
+description: "What the NETWORK_DNS failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["NETWORK_DNS", "The server's name could not be resolved", "error", "failure", "beaver help NETWORK_DNS"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The server's name could not be resolved**
+
+DNS resolution of the server's host name failed.
+
+| | |
+| --- | --- |
+| Code | `NETWORK_DNS` |
+| Kind | Temporary |
+| HTTP status | `503` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "NETWORK_DNS",
+    "message": "The server's name could not be resolved",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The server's name could not be resolved"
+  }
+}
+```
+
+Look it up offline with `beaver help NETWORK_DNS`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

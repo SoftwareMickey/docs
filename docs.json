@@ -558,9 +558,103 @@
               "reference/deployment-specification",
               "reference/environment-variables",
               "reference/exit-codes-and-output",
+              "reference/scripting-and-ci",
               "reference/limits-and-quotas",
               "reference/supported-versions",
               "reference/glossary"
+            ]
+          },
+          {
+            "group": "Error codes",
+            "pages": [
+              "reference/errors/index",
+              {
+                "group": "Conflict",
+                "pages": [
+                  "reference/errors/conflict"
+                ]
+              },
+              {
+                "group": "Eligibility",
+                "pages": [
+                  "reference/errors/cloud-machine-ineligible",
+                  "reference/errors/precondition-failed"
+                ]
+              },
+              {
+                "group": "Internal",
+                "pages": [
+                  "reference/errors/internal"
+                ]
+              },
+              {
+                "group": "Invalid input",
+                "pages": [
+                  "reference/errors/cancelled",
+                  "reference/errors/client-too-old",
+                  "reference/errors/context-unresolved",
+                  "reference/errors/flag-conflict",
+                  "reference/errors/flag-ignored",
+                  "reference/errors/flag-invalid-value",
+                  "reference/errors/flag-requires",
+                  "reference/errors/invalid-request",
+                  "reference/errors/local-prerequisite"
+                ]
+              },
+              {
+                "group": "Not found",
+                "pages": [
+                  "reference/errors/ambiguous",
+                  "reference/errors/not-found"
+                ]
+              },
+              {
+                "group": "Permission",
+                "pages": [
+                  "reference/errors/forbidden",
+                  "reference/errors/forbidden-capability",
+                  "reference/errors/mfa-required",
+                  "reference/errors/step-up-required"
+                ]
+              },
+              {
+                "group": "Plan and quota",
+                "pages": [
+                  "reference/errors/quota-exceeded"
+                ]
+              },
+              {
+                "group": "Sign-in",
+                "pages": [
+                  "reference/errors/auth-expired",
+                  "reference/errors/auth-required"
+                ]
+              },
+              {
+                "group": "Async Operation",
+                "pages": [
+                  "reference/errors/operation-failed"
+                ]
+              },
+              {
+                "group": "Resource State",
+                "pages": [
+                  "reference/errors/state-invalid"
+                ]
+              },
+              {
+                "group": "Temporary",
+                "pages": [
+                  "reference/errors/maintenance",
+                  "reference/errors/network-dns",
+                  "reference/errors/network-proxy",
+                  "reference/errors/network-timeout",
+                  "reference/errors/network-tls",
+                  "reference/errors/network-unreachable",
+                  "reference/errors/rate-limited",
+                  "reference/errors/temporary"
+                ]
+              }
             ]
           }
         ]
