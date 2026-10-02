@@ -1,0 +1,59 @@
+---
+title: "Choose your infrastructure"
+sidebarTitle: "Choose your infrastructure"
+description: "One machine or several, a laptop or a provider, one role or two — a two-minute decision before you run beaver connect."
+keywords: ["choose your infrastructure", "beaver connect"]
+icon: "compass"
+type: howto
+audience: [evaluator, operator]
+interfaces: [cli]
+---
+
+Beaver runs your application on machines **you** own and keep patched, powered on and reachable. It never provisions
+or bills you for infrastructure; your provider does that. This page helps you decide what to connect first.
+
+<Note>
+Every application deployment runs in a [Beaver Cloud](/infrastructure/beaver-cloud) — a named group of your machines.
+A cloud can contain a single machine, so "one machine" is a complete setup.
+</Note>
+
+## Decide in three questions
+
+<Steps>
+  <Step title="Where will the machine live?">
+    - **Your laptop or workstation** — fine for trying Beaver and for a **Builder**. See
+      [Use your laptop as a Builder](/infrastructure/laptop-builder). Connected Builder and Host machines must be Linux.
+    - **A VPS or cloud instance** — Hetzner, Contabo, DigitalOcean and similar, or AWS, Google Cloud or Azure. Prepare it
+      with the [provider guide](/infrastructure/providers), then connect it.
+  </Step>
+  <Step title="What should it do?">
+    A machine has a **role**: **Builder** (turns your code into an image), **Host** (runs your application) or
+    **Builder + Host** (both). Start with **Builder + Host** on one machine. You can split roles later without changing
+    your app or Dockerfile — see [Machines and roles](/infrastructure/machines-and-roles).
+  </Step>
+  <Step title="One machine or several?">
+    One machine is enough to start. Add machines when you want production traffic kept away from builds, or one build
+    deployed to more than one Host. Group them into a Beaver Cloud — [Beaver Cloud](/infrastructure/beaver-cloud).
+  </Step>
+</Steps>
+
+## Common setups
+
+| Your situation | Setup |
+| --- | --- |
+| Trying Beaver, a personal or small project | One Linux machine, **Builder + Host**, in a one-machine cloud |
+| A small team with staging and production | One **Builder + Host** per environment, one cloud each |
+| Production traffic isolated from builds | A dedicated **Builder** and one or more dedicated **Hosts**, in one cloud |
+| Many services at scale | Dedicated Builder(s) feeding several Hosts |
+
+## What a cloud does not do
+
+If a machine in a cloud goes offline, what was running on it does **not** move automatically. A cloud gives you room to
+place new work; recovery is an action you take. See [Beaver Cloud](/infrastructure/beaver-cloud#what-a-cloud-doesnt-do-for-you).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connect a machine" icon="plug" href="/infrastructure/connect-a-machine">What `beaver connect` checks and asks.</Card>
+  <Card title="Prepare a provider" icon="globe" href="/infrastructure/providers">AWS, Google Cloud, Azure or any VPS.</Card>
+</CardGroup>

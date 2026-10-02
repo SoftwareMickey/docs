@@ -1,0 +1,59 @@
+---
+title: "What is Beaver?"
+sidebarTitle: "What is Beaver?"
+description: "Beaver deploys your Dockerfile to machines you own. What it handles for you, how VectorIHub and Beaver relate, and what it deliberately does not do."
+icon: "info"
+type: concept
+audience: [evaluator]
+---
+
+**Beaver** is a deployment platform for applications that ship as Docker images. You keep your machines, your provider
+and your Dockerfile; Beaver adds a consistent way to connect machines, build and deploy, put services next to your
+app, secure access, and recover when something goes wrong.
+
+## VectorIHub and Beaver
+
+**VectorIHub** is the platform and company; **Beaver** is the name of the product you use. Every interface carries
+the Beaver name: **Beaver CLI**, **Beaver Desktop**, the Dashboard, **Beaver Cloud** (a group of your machines),
+**Beaver Edge** (routing and performance controls in front of an app), and managed **Services**. Alie is Beaver's
+infrastructure assistant. These docs say "Beaver" for the product and name the specific piece when it matters.
+
+## What Beaver handles for you
+
+<CardGroup cols={2}>
+  <Card title="Builds from your Dockerfile" icon="docker" href="/deploy/builds-and-images">
+    Your Dockerfile is the source of truth — no hidden build logic, any language.
+  </Card>
+  <Card title="Deploy to machines you own" icon="server" href="/infrastructure/providers">
+    The same app deploys to a VPS, AWS, Google Cloud, Azure or another Linux machine.
+  </Card>
+  <Card title="Environments and promotion" icon="layers" href="/deploy/rollback-and-recovery">
+    Development, staging and production, with rollback and promotion between them.
+  </Card>
+  <Card title="Managed services" icon="database" href="/data/services">
+    Databases, caches and brokers created and attached for you, with backups.
+  </Card>
+  <Card title="Teams and approvals" icon="users" href="/teams">
+    Roles, protected production and an audit trail when more than one person works in a workspace.
+  </Card>
+  <Card title="Observe and recover" icon="activity" href="/operate/observability">
+    Logs, metrics and traffic, drift detection, and recovery paths.
+  </Card>
+</CardGroup>
+
+## What Beaver does not do
+
+- It is **not a hosting provider**. Your infrastructure provider bills you for machines; Beaver's plan covers Beaver.
+- It does **not generate a Dockerfile or detect your framework**. A Dockerfile is required.
+- It does not change your app to fit a platform: the same image runs wherever you point it.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="How Beaver fits together" icon="network" href="/start/how-beaver-fits-together">
+    Workspaces, projects, environments, machines, clouds and deployments in one picture.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/start/quickstart-dashboard">
+    Deploy your first application.
+  </Card>
+</CardGroup>

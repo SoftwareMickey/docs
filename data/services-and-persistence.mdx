@@ -1,0 +1,104 @@
+---
+title: "Services"
+description: "Attach a managed database, cache, or similar backing component to your application instead of running and maintaining it yourself."
+sidebarTitle: "Services"
+icon: "database"
+type: concept
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+---
+
+A **service** is a managed backing component — a database, cache, or similar dependency —
+that you attach to your application instead of running and maintaining yourself.
+
+In the CLI: `beaver service create paperclip-db --type postgres`; `beaver service attach paperclip-db --container paperclip-web`.
+
+## What attaching one actually does
+
+`paperclip-web` needs a Postgres database. Instead of running Postgres on the same machine
+and managing its backups and upgrades by hand, you provision a service (`paperclip-db`) and
+attach it. Your application receives a connection string as an environment variable, using a
+prefix you choose, and can use it once the attachment takes effect — for most services,
+that's your next deployment.
+
+## What you can see and control
+
+You can resize a service's resources, upgrade its version, and detach it later. Detaching
+removes the injected variable but does **not** delete the underlying database — only
+deleting the service itself does that.
+
+<Warning>
+  Deleting a service permanently removes its data. Detaching an application from a service
+  does not delete the service — delete it separately if that's actually what you want.
+</Warning>
+
+Some service types don't support in-place version upgrades and require provisioning a new
+service and migrating data across.
+
+## Health
+
+A service is reported healthy only when it is actually usable. Beaver checks that the container
+is running and that the service answers. For PostgreSQL and its flavors it goes one step
+further and periodically proves the data path works: a real write and read, plus a query that
+uses the flavor's extension (a nearest-neighbour search for pgvector, a spatial query for
+PostGIS, a hypertable for TimescaleDB).
+
+A service that is running but fails that check is shown as **degraded**, not healthy — for
+example a database that has gone read-only while its process is still up. Degraded is a
+warning, not an outage: nothing is stopped or restarted for you, and the service returns to
+healthy on its own once the check passes again.
+
+## PostgreSQL versions and flavors
+
+PostgreSQL 14 to 18 are supported. PostgreSQL also comes as flavors — pgvector, PostGIS, and
+TimescaleDB — that add an extension for a specific workload. A flavor has two versions that
+move independently: the PostgreSQL major version and the extension's own release. Both are
+shown separately wherever a service is displayed.
+
+A major version upgrade never changes a running database in place. Beaver backs the service
+up, restores it into a new server on the newer version, checks it, and only then switches over,
+leaving the original data untouched. Upgrades are forward only, skipping a major version needs
+explicit confirmation, and a downgrade is refused. Upgrading is not yet available from the CLI
+or the desktop app.
+
+## Which service types your plan includes
+
+Your plan can restrict **which** service types you may create, separately from **how many**. A
+type your plan doesn't include is still listed in the catalog, marked as not in your plan, and
+creating it is refused with a message saying so — distinct from an unsupported type or from
+being at your service limit. Changing plans changes what you can create next; services you
+already have are never stopped or removed because a plan changed.
+
+## Private vs shared data
+
+By default, attaching a new application gives it a brand-new, private slice of the service —
+its own database, key space, bucket, or equivalent, depending on the service type — that no
+other application can read or write. If you want two applications to work on the same data (an
+API and its background worker, say), you connect the second one to the first's existing
+resource instead and confirm you want to share it. Beaver never puts two applications on the
+same data unless you say so explicitly.
+
+## Each app has its own login
+
+Every application you attach to a service gets its own credential, scoped to only the data it's
+connected to — never a login shared with any other application, even one attached to the same
+underlying resource. Disconnecting an application revokes only its own credential; the
+resource and every other connected application are untouched. This is why detaching never
+deletes your data: it only removes the one login that no longer needs to exist.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Service databases and credentials" href="/data/credentials-and-connection-strings">
+    What's inside a service once it's attached.
+  </Card>
+  <Card title="Persistent storage" href="/data/persistent-volumes">
+    What a service's data actually lives on.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Provisioning, attaching, resizing, upgrades — exact syntax.
+  </Card>
+  <Card title="Environments and variables" href="/deploy/environment-variables">
+    How the injected connection variable behaves like any other.
+  </Card>
+</CardGroup>

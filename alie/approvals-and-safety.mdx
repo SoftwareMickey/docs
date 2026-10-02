@@ -1,0 +1,68 @@
+---
+title: "Approvals and safety"
+sidebarTitle: "Approvals and safety"
+description: "See what Alie is waiting to do, approve or reject it, set which tools need approval, and read the audit trail."
+keywords: ["approvals and safety", "ai assistant", "production access", "request approval", "beaver alie autopilot", "beaver alie audit"]
+icon: "shield-check"
+type: howto
+audience: [developer, team-lead, security]
+interfaces: [desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Alie proposes actions with real effects. By default it **asks first**. An approval confirms **one specific proposed action**; it does not grant broader access.
+
+## Decide what is waiting
+
+<Tabs>
+  <Tab title="Dashboard"><Note>Decide from Desktop or the CLI.</Note></Tab>
+  <Tab title="Desktop">**Approvals** lists actions waiting for a decision, showing the exact operation, with **Approve** and **Reject** and an optional note. It shows the CLI equivalent for what you are deciding.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver alie approvals                  # every action waiting on confirmation, across the workspace
+    beaver alie approve <approval-id>
+    beaver alie reject <approval-id>
+    ```
+  </Tab>
+</Tabs>
+
+## Choose which tools need approval
+
+Each tool falls back to a default approval mode derived from its risk. You can override one:
+
+```bash
+beaver alie approval-policies                         # per-tool overrides (says so if there are none)
+beaver alie approval-policy set --tool <tool> --mode approval    # approval | auto
+```
+
+## Autopilot — how far it can act with no confirmation
+
+<Warning>
+Autopilot controls how far Alie can act with **no human confirmation at all**. Setting it above `off` is a consequential, **workspace-wide** change — confirm you mean it.
+</Warning>
+
+```bash
+beaver alie autopilot                       # show the current level
+beaver alie autopilot set --level safe      # off | safe | diagnostic | action | destructive
+```
+
+Each level permits everything the one before it does, plus more. Start at `off`.
+
+## See what happened
+
+```bash
+beaver alie audit --limit 100               # Alie's tool and action audit trail
+beaver alie audit --event-type <type>       # one event type
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Safe production use" icon="shield" href="/alie/safe-production-use">Guardrails worth setting.</Card>
+  <Card title="Automation policies" icon="sliders-horizontal" href="/alie/automation-policies">Per-area autonomy in Desktop.</Card>
+</CardGroup>

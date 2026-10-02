@@ -1,0 +1,117 @@
+---
+title: "Back up and restore a service"
+description: "A point-in-time copy of a service's data, on your schedule, restorable into the same service or a new one."
+keywords: ["backup", "restore", "back up a database", "snapshot", "point in time", "schedule backups", "recover data"]
+sidebarTitle: "Backups & restoration"
+icon: "clock-rotate-left"
+type: howto
+audience: [operator]
+interfaces: [cli]
+---
+
+A **backup** is a point-in-time copy of a service's data, taken manually or on a schedule you
+configure, that you can restore from later.
+
+```bash
+beaver service backup paperclip-db
+beaver service backup schedule paperclip-db --interval daily --retention 14
+```
+
+## Take, schedule and ship backups
+
+```bash
+beaver service backup paperclip-db                                   # a manual backup now
+beaver service backup schedule paperclip-db --interval daily --retention 14   # daily | weekly | disabled
+beaver service backup list paperclip-db                              # your backups and whether the latest succeeded
+beaver service backup delete paperclip-db <backup-id>                # permanently delete one backup
+```
+
+A backup is checksummed and stored **on the service's own node, on its disk** — which protects you from bad data, not from losing the machine. To keep a copy elsewhere, register an
+**off-node destination** and ship backups to it:
+
+```bash
+beaver service backup-destination create s3-backups --kind s3 --bucket my-bucket --region us-east-1 --access-key-id <id> --secret-access-key <secret>
+beaver service backup-destination create second-node --kind beaver_machine --machine-id <machine-id>
+beaver service backup paperclip-db --destination <destination-id>
+```
+
+Backups are refused against a service that is currently unhealthy; scheduled backups keep the number you set with `--retention` (manual backups are exempt).
+
+## Restore
+
+```bash
+beaver service restore paperclip-db --backup <backup-id>        # into the SAME service — overwrites live data, no undo
+beaver service create paperclip-copy --type postgres --restore-from <backup-id>   # into a NEW service, original untouched
+```
+
+**Rehearse a restore into a new service before you need one** — it is the safe way to prove your backups work.
+
+## When to actually take one
+
+Before a risky change to a service, on a recurring schedule for anything you can't afford to
+lose, or when you're actually recovering from data loss or corruption — not just after the
+fact.
+
+## What you can see and control
+
+You can trigger a backup manually or set a retention schedule so they happen automatically.
+Backup status shows whether the most recent one succeeded.
+
+Restoring has two forms:
+
+- `beaver service restore <name> --backup <id>` puts the backup **into the existing service**,
+  replacing its current data. It always asks for confirmation, and there is no undo.
+- `beaver service create <name> --restore-from <id>` restores into a **new** service and leaves
+  the original untouched.
+
+## What a backup contains
+
+A backup covers **all** of a service's data, including every database your attached apps
+created, not just the service's default one.
+
+| Service | What is in the backup | Notes |
+| --- | --- | --- |
+| PostgreSQL | Every database, plus its roles | Role passwords are not included. The pgvector, PostGIS and TimescaleDB flavors are covered the same way; TimescaleDB hypertables, including compressed chunks, are restored intact. |
+| MySQL, MariaDB | Every database | User accounts are not included. |
+| MongoDB | Every database | The service's own accounts are never restored. |
+| Redis | The whole dataset, all numbered databases | Restoring stops the service briefly while the data file is replaced. |
+| RabbitMQ | Topology: vhosts, users, queues, exchanges, bindings | Messages are not included. Restoring adds to existing topology and never deletes anything. |
+
+Credentials are never taken from a backup. A restore leaves the service's current credentials,
+including any you rotated after the backup was taken, exactly as they were.
+
+MinIO, Kafka, NATS, Meilisearch and Redis Cluster don't support backups. Backing up a single
+Redis Cluster node would capture only its own share of the data, so Beaver refuses rather
+than give you a backup that looks complete and isn't. Redis Sentinel services can be backed
+up, but can't be restored into an individual cluster member.
+
+A backup records the versions it was taken on — for PostgreSQL, the PostgreSQL major version and, for a flavor, the extension release — and a restore checks them before changing anything. A restore into an older PostgreSQL major version is refused, restoring onto a different extension release is refused, and restoring into a newer PostgreSQL major version is allowed. A backup taken before versions were recorded is never refused on this basis.
+
+A restore that can't bring the service back up is reported as failed. For Redis, the data that
+was there before is put back so the service keeps running.
+
+## Before you rely on a restore
+
+<Warning>
+  Restore compatibility isn't universal — check whether a backup can be restored into a
+  different service type or version before relying on that path. Restoring into an
+  incompatible target fails cleanly rather than partially restoring, but confirm
+  compatibility first rather than finding out during an actual incident.
+</Warning>
+
+A restore isn't confirmed complete just because the command succeeds — verify the recovered
+data looks right before treating it as done, especially for anything time-sensitive.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services" href="/data/services-and-persistence">
+    What's being backed up.
+  </Card>
+  <Card title="Persistent storage" href="/data/persistent-volumes">
+    The layer a backup ultimately protects.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Backup, schedule, and restore commands, exact syntax.
+  </Card>
+</CardGroup>

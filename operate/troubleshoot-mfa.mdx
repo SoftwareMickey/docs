@@ -1,0 +1,49 @@
+---
+title: "I am locked out of 2-step verification"
+sidebarTitle: "2-step lockout"
+description: "You lost your authenticator and passkeys — the recovery routes and their delays."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [team-lead, security]
+interfaces: [dashboard, cli]
+keywords: ["lost authenticator", "recovery code", "2fa locked out", "mfa recovery"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+You cannot complete 2-step verification at sign-in.
+
+## Check first
+
+1. Do you have a **recovery code**? You were shown ten when you turned it on; each works once in place of an authenticator code.
+2. A passkey-required workspace refuses a recovery code with `MFA_PASSKEY_REQUIRED` until you sign in again with your passkey.
+
+## Causes and fixes
+
+### No codes, no authenticator: email recovery
+
+Ask for it on the sign-in page. Confirm the emailed link within **one hour**. Removal then happens after a **72-hour wait**, and every email says how to cancel.
+
+### Support reset
+
+Support can reset it after verification questions. It needs a written reason, a second support person's approval and a 24-hour delay (skipped if you prove you control the mailbox); you can cancel during the delay.
+
+## Then
+
+Both routes end with 2-step verification removed and every session signed out, so you set it up fresh. Details: [2-step verification](/teams/two-step-verification#if-you-lose-both).
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="2-step verification" icon="arrow-right" href="/teams/two-step-verification">The page that prevents or explains this.</Card>
+</CardGroup>

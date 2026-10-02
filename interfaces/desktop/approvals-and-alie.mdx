@@ -1,0 +1,62 @@
+---
+title: "Approvals, Alie and traces in Desktop"
+sidebarTitle: "Approvals, Alie, traces"
+description: "The Approvals inbox (team workspaces), the Alie assistant rail and the Traces explorer: what each shows, what you can decide there, and how Alie asks before it acts."
+icon: "shield-check"
+type: interface
+audience: [team-lead, operator, developer]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Approvals
+
+<Note>
+**Approvals** appears in the navigator **only in a team workspace** — approvals do not exist in a personal one. See [Production approvals](/teams/production-approvals).
+</Note>
+
+**Approvals** is the inbox of production changes waiting for a decision. A badge on the navigator item counts what you can decide. The inbox shows **Open approval requests**; select one to see the **Request detail** — exactly what it would allow: the action, environment, source, expiry and parameters. Then **Approve** or **Reject**, with an optional **Note for the requester**. An Owner or Admin decides; if that is not you, the page says so. Each request also shows its **CLI equivalent**.
+
+The same requests are in the Dashboard's **Team → Approvals** and in `beaver workspace approvals`: a request decided in one is decided everywhere.
+
+## Alie
+
+**Alie** is the assistant. Choose **Alie** in the navigator, in the footer, or **Open Alie** in the command palette; it opens as a rail beside your work and can expand to cover the center. A new conversation offers starters — *Explain something*, *Reason through a problem*, *Write or improve code*, *Plan a task* — a mode (**Agent**) and the connected AI provider to use.
+
+| Part | What it does |
+| --- | --- |
+| **Sessions** | Your conversations with Alie; **New conversation** starts another |
+| **Context meter** | How much of the model's context the conversation has used |
+| **Equivalent command** | When Alie proposes a change, the exact `beaver` command it corresponds to, with **Run in terminal** — you confirm before it runs |
+| **No AI provider connected** | Shown until you connect one; **Manage AI connections** opens **Settings → AI Harnesses** |
+
+How Alie decides what it may do is set by [Automation policy](/alie/automation-policies) and what it may read by **Settings → Context Permissions** ([Settings](/interfaces/desktop/settings)). See [What is Alie](/alie/what-is-alie), [Sessions and context](/alie/sessions-and-context) and [Approvals and safety](/alie/approvals-and-safety).
+
+## Traces
+
+**Traces** is a cross-task explorer for what Alie did, with a count (*2 of 2 tasks in this workspace*), **Since** and **Until** filters, and filters by machine, model or provider, and deployment. Each task shows its goal, time and state — for example **Needs input** or **Done**; search by goal or id.
+
+<Shot name="desktop/traces" alt="The Traces explorer: a task list with filters on the left and a prompt to select a task." />
+
+Select a task for its **Timeline**, a read-only **Replay**, and exports — **Export (audit)** and **Export (fixture)**. The timeline groups what happened: the task's **Contract**, **Context**, each **Step**, any **Approval**, **Tool activity**, **Evidence**, **Machine execution** and a **Lesson**; **This isn't right** lets you flag a wrong result. A task with nothing recorded says so; a task with no gateway-dispatched steps has nothing to replay.
+
+## Same task in the other interfaces
+
+| Task | Dashboard | CLI |
+| --- | --- | --- |
+| Approve a change | **Team → Approvals** | `beaver workspace approvals` |
+| Ask Alie | Alie session page | `beaver alie` |
+| Replay what Alie did | Not available | `beaver alie sessions` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Alie" icon="bot" href="/alie">Use and control Alie.</Card>
+  <Card title="Production approvals" icon="shield-check" href="/teams/production-approvals">How approvals work.</Card>
+</CardGroup>

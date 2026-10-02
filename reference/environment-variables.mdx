@@ -1,0 +1,55 @@
+---
+title: "Environment variables reference"
+sidebarTitle: "Environment variables"
+description: "The variables the Beaver CLI reads, and the connection variables Beaver injects into your containers when you attach a service."
+icon: "key"
+type: reference
+audience: [developer, operator]
+keywords: ["BEAVER_TOKEN", "BEAVER_WORKSPACE", "NO_COLOR", "DATABASE_URL", "env prefix", "reserved variables"]
+---
+
+Two different things are called environment variables: the ones **the CLI reads** on your computer or in CI, and the ones **your app reads** inside its container. For how to set the second kind, see [Environment variables](/deploy/environment-variables).
+
+## Read by the CLI
+
+| Variable | Used by | Meaning |
+| --- | --- | --- |
+| `BEAVER_TOKEN` | `beaver login` | A session token. When set, `beaver login` skips the prompt, validates the token against Beaver and saves it to `~/.beaver_config.json` exactly like an interactive login. It is the way to sign in on a machine with no browser, such as a CI runner. It is a **session** token, not a scoped CI credential; it carries your account's access |
+| `BEAVER_WORKSPACE` | every command | The workspace this process acts in, by id or name. Beaten by `--workspace`; beats the workspace saved by `beaver workspace use` |
+| `BEAVER_DEBUG` | `beaver doctor`, `beaver connect` | `1` prints diagnostic detail to standard error, like `--debug` |
+| `NO_COLOR` | all output | Any non-empty value turns colour off. `--no-color` does the same for one command. Colour is also off when output is not a terminal |
+| `INSTALL_DIR` | the install script | Where `install.sh` puts the `beaver` binary (default `/usr/local/bin`) |
+
+A password or authenticator secret never belongs in CI. An account with 2-step verification cannot sign in with a password from a script; sign in once with `beaver login` and export that session as `BEAVER_TOKEN` ([2-step verification](/teams/two-step-verification)).
+
+## Injected into your containers by an attached service
+
+Attaching a [managed service](/data/credentials-and-connection-strings) to an app adds six variables, all starting with a **prefix**:
+
+| Variable | Value |
+| --- | --- |
+| `<PREFIX>_URL` | The full connection URL |
+| `<PREFIX>_HOST` | The service's address inside your cloud's network |
+| `<PREFIX>_PORT` | The service's port |
+| `<PREFIX>_NAME` | The database, key space, vhost, index, bucket, topic prefix or subject prefix — whatever the service type calls its unit of isolation |
+| `<PREFIX>_USER` | The username |
+| `<PREFIX>_PASSWORD` | The password |
+
+Each service type has a default prefix, listed in [Supported versions](/reference/supported-versions#the-service-catalog) (for example `DATABASE` for PostgreSQL and MySQL, `REDIS` for Redis). Choose your own with `--env-prefix` when you attach, so several services of one type can coexist (`DATABASE`, `ANALYTICS_DB`). A prefix must start with a capital letter and contain only `A`–`Z`, `0`–`9` and `_`, up to 64 characters.
+
+## Names to avoid
+
+Beaver does not publish a list of reserved variable names, but these cause trouble in practice:
+
+- **The injected names above.** If you set `DATABASE_URL` yourself and also attach a service with the default prefix, the two compete. Use `--env-prefix` or pick another name.
+- **`PORT`, `HOST`, `HOSTNAME`.** Many frameworks read them to decide what to listen on. Set them in your Dockerfile, as [Bring your own app](/deploy/bring-your-own-app) does, and match the port in `.beaver/config.yml`.
+- **Anything starting `BEAVER_`.** Reserved for the CLI.
+
+## Build time and run time
+
+Variables you set in Beaver are applied to the **running container**. A framework that bakes values such as `VITE_*` or `NEXT_PUBLIC_*` into its JavaScript does so when the image is **built**, so those values must be available to `docker build`:
+
+- For a deployment Beaver recognises as a **static front end**, the variables you set are also passed to the image build as build arguments. Declare each one with `ARG` in the build stage of your Dockerfile to receive it. Names that look like secrets (keys, tokens, passwords) are never passed to a build.
+- For anything else, nothing is passed to the build. Commit non-secret build values in a file your build reads (for example `.env.production`), or set them with `ENV` in the Dockerfile.
+
+Everything a front-end bundler inlines becomes **public** in the browser. Never put a secret in one. See [Bring your own app](/deploy/bring-your-own-app#three-starting-shapes).

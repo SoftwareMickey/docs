@@ -1,0 +1,43 @@
+---
+title: "The three interfaces"
+sidebarTitle: "Interfaces overview"
+description: "What the Dashboard, Beaver Desktop and the Beaver CLI are each for, who they suit, and what each cannot do."
+icon: "layout-dashboard"
+type: concept
+audience: [evaluator, developer, operator, team-lead]
+---
+
+Beaver does one job — deploy and operate applications on infrastructure you own — and offers it through three interfaces. They are not three products:
+they are three views onto **one workspace**. Anything you create in one — a project, a deployment, a service, an approval — is there when you open another.
+
+|  | Dashboard | Beaver Desktop | Beaver CLI |
+| --- | --- | --- | --- |
+| **What it is** | The web app, in your browser | A desktop app with an infrastructure map, a terminal and an assistant rail | The `beaver` command in a terminal |
+| **Best at** | Deploying from a repository; running a team; billing | Seeing every machine, cloud, service, volume and network at once | Everything else: scripts, CI, SSH sessions, and connecting machines |
+| **Changes things?** | Yes — most of what the product does | Mostly no — it shows the exact `beaver` command and runs it in its terminal | Yes — nearly every capability is a command |
+| **Needs installing?** | No | Yes (not yet publicly distributed — see [Install Beaver Desktop](/install/desktop)) | Yes — [Install the CLI](/install/cli) |
+| **Signs in with** | Google, GitHub or email | A browser approval page | A browser approval page |
+
+## Who each suits
+
+- **Dashboard** — you prefer clicking to typing, your code is on GitHub, or you manage people, roles, approvals and billing. See the [Dashboard guides](/interfaces/dashboard/tour).
+- **Desktop** — you run several machines or clouds and want the picture, or you want a terminal, a project view and the Alie assistant in one window. See the [Desktop guides](/interfaces/desktop/shell-tour).
+- **CLI** — you deploy from CI, work over SSH, or script anything. It is also the only way to enrol a machine. See [Common CLI workflows](/interfaces/cli/workflows).
+
+## What none of them hide from you
+
+Each interface says so when it cannot do something. In the [capability matrix](/interfaces/capability-matrix) a task an interface cannot do is marked **No** and
+names the interface that can; Desktop's action sheets print the equivalent `beaver` command rather than doing it silently.
+
+<Note>
+Some Dashboard and Desktop screens exist but are not reachable yet — for example Desktop's **Deployments** and **Observability** sections, and the Dashboard's
+**Resource Usage** and **Build Minutes** pages. These guides describe only what you can open today.
+</Note>
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">Task by task.</Card>
+  <Card title="How state is shared" icon="refresh-cw" href="/interfaces/how-state-is-shared">What follows you between them.</Card>
+  <Card title="Choose your interface" icon="compass" href="/start/choose-your-interface">Where to start.</Card>
+</CardGroup>

@@ -1,0 +1,87 @@
+---
+title: "Your first managed service"
+sidebarTitle: "5. First service"
+description: "Create a Postgres service, attach it to your app, read its connection details, and connect to it from your laptop."
+keywords: ["first database", "create a database", "managed service", "postgres", "connection string", "getting started"]
+icon: "database"
+type: tutorial
+audience: [developer]
+interfaces: [dashboard, desktop, cli]
+time: "10 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Create a managed **PostgreSQL** service on one of your machines, attach your application to it so it gets its own private database and
+login, then connect to it locally. Other service types follow the same shape — see the [catalog](/data/services).
+
+## Before you start
+
+A running [deployment](/start/first-deploy) (the application you will attach) and a connected machine with room for the service. Your plan
+limits how many managed services you can have — see [Plans and billing](/teams/plans-and-billing).
+
+## Steps
+
+<Steps>
+  <Step title="Create the service">
+    <Tabs>
+      <Tab title="Dashboard">Open the **Managed services** page and create a service of type Postgres.</Tab>
+      <Tab title="Desktop">The **Services** section lists services and its create sheet shows the command to run; creating happens in the CLI or Dashboard.</Tab>
+      <Tab title="CLI">
+        ```bash
+        beaver service catalog                       # supported types, versions, defaults
+        beaver service create paperclip-db --type postgres
+        ```
+      </Tab>
+    </Tabs>
+    Beaver places it on a machine with room (pin one with `--machine`). Pin a version with `--version` if you need one; omitted, the catalog default is used.
+  </Step>
+  <Step title="Attach your application">
+    ```bash
+    beaver service attach paperclip-db --container <app-container>
+    ```
+    Attaching gives the app a **private** database and its **own** credential, and injects the connection variables into the app. Add
+    `--env-prefix DB_` to prefix the variable names. To share an existing database between two apps you must say so explicitly with
+    `--database <name> --shared`.
+  </Step>
+  <Step title="See the connection details">
+    ```bash
+    beaver service show paperclip-db
+    beaver service reveal paperclip-db
+    ```
+    `show` lists status, placement and attached applications. `reveal` prints the live connection string and **records an audit event** on the service.
+  </Step>
+  <Step title="Connect from your laptop">
+    ```bash
+    beaver service connect paperclip-db --database <db-name> --local-port 5432
+    ```
+    Opens `127.0.0.1:5432`, relayed through Beaver to the real service. The database is never published on a public port. In another terminal use
+    `psql` against `127.0.0.1`.
+  </Step>
+</Steps>
+
+## Verify it worked
+
+Your app can read and write its database; `beaver service attached <app-container>` lists the attachment; the service shows as healthy in
+`beaver service show`.
+
+## If it fails
+
+Try `beaver service retry paperclip-db` for an unhealthy service. Detaching an app (`beaver service detach`) ends only that app's access — it never deletes data.
+
+## Clean up
+
+`beaver service delete paperclip-db` removes the container but **keeps the data volume**; `beaver service delete-volume` destroys the data permanently.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Back it up" icon="archive-restore" href="/data/backups-and-restore">Backups and restore.</Card>
+  <Card title="PostgreSQL" icon="database" href="/data/services/postgresql">Versions, flavors, upgrades.</Card>
+</CardGroup>

@@ -1,0 +1,50 @@
+---
+title: "A notification did not arrive"
+sidebarTitle: "Notification not received"
+description: "You expected a notification and did not get one — digests, severity and on-call explain most cases."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [team-lead, operator]
+interfaces: [dashboard, cli]
+keywords: ["no email", "notification missing", "digest", "on-call"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+An alert you expected did not reach you.
+
+## Check first
+
+1. `beaver notifications --unread` — it may be in your inbox even if no message reached you.
+2. `beaver workspace digest` — is a digest holding non-urgent items?
+3. `beaver workspace on-call` — who an alert would actually reach right now.
+
+## Causes and fixes
+
+### It is waiting in a digest
+
+Non-urgent notifications are bundled; **critical and security notifications are never held for a digest**.
+
+### The wrong person is on call
+
+`beaver workspace on-call` shows the same resolution the system uses to page people.
+
+### Severity is lower than you assumed
+
+Filter by severity: `beaver notifications --severity=warning`.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Notifications" icon="arrow-right" href="/operate/notifications">The page that prevents or explains this.</Card>
+</CardGroup>

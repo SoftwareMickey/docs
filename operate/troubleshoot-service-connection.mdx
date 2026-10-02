@@ -1,0 +1,59 @@
+---
+title: "My app cannot connect to a service"
+sidebarTitle: "Service connection fails"
+description: "Your application or your laptop cannot reach a managed service."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer]
+interfaces: [cli]
+keywords: ["database connection refused", "cannot connect to postgres", "service unreachable", "redis connection"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+Connection refused, timeouts or authentication errors talking to a managed database or broker.
+
+## Check first
+
+1. `beaver service show <name>` — is it healthy, and is your app listed as attached?
+2. `beaver service attached <app-container>` — confirms the attachment.
+3. Did you **redeploy** after attaching? The connection variables reach the app on the next deployment.
+
+## Causes and fixes
+
+### The service is unhealthy or stopped
+
+`beaver service retry <name>` or `beaver service start <name>`.
+
+### The app has not been redeployed since attaching
+
+Redeploy so the injected variables take effect.
+
+### The app reads the wrong variable names
+
+Variables are `<PREFIX>_URL`, `_HOST`, `_PORT`, `_NAME`, `_USER`, `_PASSWORD`; the prefix is the type's default (for example `DATABASE`, `REDIS`) unless you set `--env-prefix`.
+
+### From your laptop: no tunnel
+
+Services are never on a public port. Open one: `beaver service connect <name> --local-port <port>` ([Connect locally](/data/connect-locally)). An explicit port that is already in use fails.
+
+### A credential was rotated
+
+After `beaver service database rotate`, every place using the old value must reconnect with the new one.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Credentials and connection strings" icon="arrow-right" href="/data/credentials-and-connection-strings">The page that prevents or explains this.</Card>
+  <Card title="Create a service" icon="arrow-right" href="/data/create-a-service">The page that prevents or explains this.</Card>
+</CardGroup>

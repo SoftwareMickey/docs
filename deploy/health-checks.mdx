@@ -1,0 +1,69 @@
+---
+title: "Health checks"
+sidebarTitle: "Health checks"
+description: "Tell Beaver how to know your app is healthy, so rollouts wait for it and you see problems early."
+keywords: ["health checks", "healthcheck", "probe", "beaver config health", "beaver init"]
+icon: "heart-pulse"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A **health check** is an HTTP request Beaver sends to your running container. With a `rolling` [strategy](/deploy/deployment-configuration), the previous version keeps
+serving until the new one passes it — so a broken release never replaces a working one.
+
+<Note>
+**HTTP checks only.** `beaver config health` accepts an HTTP path. Command and TCP checks are reserved and not supported yet.
+</Note>
+
+## Add an endpoint
+
+Your app needs a path that returns a success status when it can serve traffic — often `/health` or `/healthz`:
+
+```js
+if (req.url === "/health") return res.end("ok");
+```
+
+If your Dockerfile already declares a `HEALTHCHECK`, `beaver init` reads it and proposes a matching path.
+
+## Configure it
+
+```bash
+beaver config health --http /health --interval 10s --timeout 5s --retries 3
+```
+
+| Flag | Meaning |
+| --- | --- |
+| `--http` | Absolute path, for example `/healthz` |
+| `--interval` | Time between checks |
+| `--timeout` | How long one check may take |
+| `--retries` | Consecutive failures before the container is marked unhealthy (at least 1) |
+
+With several services, pass the service name. `beaver config health disable` removes the section and the platform default applies. The setting is written to
+`.beaver/config.yml` and saved to Beaver unless you pass `--no-push`.
+
+## Verify
+
+```bash
+beaver inspect       # shows the release's health
+beaver preflight --full   # rehearses a throwaway candidate: build, health, teardown
+```
+
+## If a release will not become healthy
+
+Under `rolling` the old version keeps running; under `recreate` it stays down. **A failed deployment does not roll back on its own** — read
+[Rollback and recovery](/deploy/rollback-and-recovery). Common causes: the app binds to `127.0.0.1` instead of `0.0.0.0`, listens on a different port than
+configured, or needs environment variables that are not set for this environment.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Deployment configuration" icon="sliders" href="/deploy/deployment-configuration">The other run-time settings.</Card>
+  <Card title="Deployment lifecycle" icon="rocket" href="/deploy/deployment-lifecycle">Rolling versus recreate.</Card>
+</CardGroup>

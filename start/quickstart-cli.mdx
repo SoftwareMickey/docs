@@ -1,0 +1,155 @@
+---
+title: "Quickstart: deploy from the CLI"
+sidebarTitle: "Quickstart: CLI"
+description: "Install the CLI, connect a machine, create a cloud and deploy a Dockerfile app — about fifteen minutes, all from your terminal."
+keywords: ["quickstart", "cli", "terminal", "beaver login", "beaver deploy", "get started"]
+icon: "terminal"
+type: tutorial
+audience: [evaluator, developer]
+interfaces: [cli]
+time: "15 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll build
+
+One Linux machine running as a **Builder + Host**, grouped into a one-machine **Beaver Cloud**, with a small web app deployed
+to it from a GitHub repository. Everything below runs in a terminal.
+
+## Before you start
+
+- A **Linux machine you own** — Ubuntu, Debian or Rocky Linux, amd64 or arm64 — with **Docker** and **Git** installed and
+  internet access. A cheap VPS works; so does a spare Linux box. ([Choose your infrastructure](/start/choose-your-infrastructure))
+- A **Docker Hub account**. Beaver builds an image on the Builder and pushes it, tagged with your Docker Hub username.
+- A **GitHub repository** with a `Dockerfile` at its root. `beaver deploy` builds the commit you pushed — the Builder clones it
+  from GitHub using the GitHub login **on that machine** (a private repository needs one; step 4). No app yet? Use the [sample app](#a-minimal-app-to-deploy) at the end.
+
+<Warning>
+A `Dockerfile` is required. Beaver does not generate one or detect your framework — see
+[Dockerfile requirements](/deploy/dockerfile-requirements).
+</Warning>
+
+## Steps
+
+<Steps>
+  <Step title="Install the CLI on the machine">
+    ```bash
+    curl -fsSL https://cli.vectorihub.com/install.sh | sh
+    beaver version
+    beaver doctor
+    ```
+    `beaver doctor` checks your system before you connect it and changes nothing. See [Install the CLI](/install/cli).
+  </Step>
+  <Step title="Sign in">
+    ```bash
+    beaver login
+    ```
+    Your browser opens so you can approve the sign-in. On a server with no browser use `beaver login --no-browser`, open the
+    printed link on any device, and approve there. Confirm with `beaver whoami`.
+  </Step>
+  <Step title="Let Beaver see your repository">
+    ```bash
+    beaver github install
+    ```
+    This opens the Beaver GitHub App's install page so you can choose which repositories Beaver may see — this is how Beaver lists them and follows pushes. Signing in with
+    GitHub does not grant it, and it is separate from the GitHub login the Builder uses to clone
+    ([why](/teams/signing-in-and-repository-access)).
+  </Step>
+  <Step title="Sign the machine in to Docker Hub and GitHub">
+    ```bash
+    docker login
+    beaver docker --auth
+    gh auth login          # needed to clone a private repository on this machine
+    beaver git --auth
+    ```
+    `beaver docker --auth` confirms a valid Docker Hub login on this machine; `beaver git --auth` confirms the GitHub CLI login the Builder uses to clone. Both checks are local — Beaver never sees these logins.
+  </Step>
+  <Step title="Connect the machine">
+    ```bash
+    beaver connect
+    ```
+    The wizard checks the system and network, prepares Docker and Git, registers the machine and installs the Beaver agent.
+    When it asks for a role choose **Builder + Host**. If your connection drops, run it again — it resumes.
+    See [Connect a machine](/infrastructure/connect-a-machine).
+  </Step>
+  <Step title="Create a Beaver Cloud">
+    Every deployment runs in a cloud. Find your machine's name, then create a cloud containing it:
+    ```bash
+    beaver machine list
+    beaver cloud create paperclip-prod --machines <machine-name>
+    ```
+    Replace `paperclip-prod` with any name you like. A cloud can hold a single machine. See [Beaver Cloud](/infrastructure/beaver-cloud).
+  </Step>
+  <Step title="Deploy">
+    Commit and push your app, then from the repository directory:
+    ```bash
+    beaver deploy --cloud paperclip-prod
+    ```
+    Answer the prompts — container name, the port your app listens on, your Docker Hub username and the environment. Beaver
+    builds on the Builder, pushes the image and starts it on the Host. `beaver deploy` refuses to run with uncommitted changes or
+    unpushed commits, because the Builder can only build what it can fetch.
+  </Step>
+</Steps>
+
+## Result
+
+Check what is running and follow its output:
+
+```bash
+beaver inspect
+beaver observe --logs
+```
+
+`inspect` shows the current release, commit, health, route and the machine it landed on. The route is your app's default
+address — open it in a browser.
+
+## If it fails
+
+- **`beaver deploy` stops asking for a cloud** — create one first (step 6).
+- **Build or push fails** — check `beaver docker --auth` and that your Docker Hub username is right.
+- **The Builder can't fetch your repository** — for a private repository, check `beaver git --auth` on the Builder; if Beaver can't list it, re-run `beaver github install` and include it.
+- More: [Troubleshooting](/operate/troubleshooting).
+
+## Clean up
+
+Delete the deployment with `beaver container <name> delete` (permanent), and disconnect the machine with
+`beaver machine remove <machine-id>` (the machine itself is never touched).
+
+## A minimal app to deploy
+
+<CodeGroup>
+```js server.js
+const http = require("http");
+const port = process.env.PORT || 3000;
+http
+  .createServer((req, res) => {
+    if (req.url === "/health") return res.end("ok");
+    res.end("Hello from Beaver\n");
+  })
+  .listen(port, "0.0.0.0");
+```
+```dockerfile Dockerfile
+FROM node:22-slim
+WORKDIR /app
+COPY server.js .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+</CodeGroup>
+
+Commit both files to a GitHub repository and push. When the deploy asks for the port, answer `3000`.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Add a domain" icon="globe" href="/network/domains">Attach your own domain with a certificate.</Card>
+  <Card title="Add a database" icon="database" href="/data">Create a managed Postgres and attach it.</Card>
+  <Card title="Use the Dashboard too" icon="layout-dashboard" href="/start/choose-your-interface">Your deployment already appears there.</Card>
+  <Card title="Production checklist" icon="list-checks" href="/start/production-readiness">Before real traffic arrives.</Card>
+  <Card title="How state is shared" icon="refresh-cw" href="/interfaces/how-state-is-shared">What follows you between the CLI, Dashboard and Desktop.</Card>
+</CardGroup>

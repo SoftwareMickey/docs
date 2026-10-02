@@ -1,0 +1,76 @@
+---
+title: "Activity, notifications and billing in the Dashboard"
+sidebarTitle: "Activity, notifications, billing"
+description: "The Activity feeds, the notification inbox, and the Billing pages: what each shows, how to read a limit-hit, and where to resolve it."
+keywords: ["build minutes", "resource usage", "find a dashboard feature", "where is billing", "usage limits", "notifications inbox", "dashboard activity"]
+icon: "bell"
+type: interface
+audience: [developer, team-lead]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Activity
+
+**Activity** is the social side of Beaver: discover templates and builders, follow people, and publish your own. Its views are **Following**, **Explore**, **Saved** and **Workspace** (visible only to workspace members), plus **Preferences** and **Publish template**.
+
+| Area | Shows | Actions |
+| --- | --- | --- |
+| **Following** | Public activity from builders and templates you follow | **Follow**, reply, save |
+| **Explore** | Trending templates, topics and suggested creators; sort the list | **Deploy**, **Fork**, **Share**, **View configuration** |
+| **Saved** | Templates only you can see | Open or remove |
+| **Publish template** | A flow that turns a project into a template | See [Publishing a template](/deploy/publishing-a-template) |
+| **Your analytics** | Views, deploys, forks, saves, comments and signups via links, over a window you choose — only you can see them | — |
+
+A **public profile** (reached from a builder's name) shows their templates and **badges** — such as the verified-creator badge — and you can **Block** or mute a creator. **Share** gives a link; opening a shared link lands on that template. Your own profile is under **Profile → Edit profile**. See [Activity and following](/operate/activity-and-following).
+
+## Notifications
+
+**Notifications** is your inbox. Tabs filter by **Unread** and **Read**; filters narrow by **Severity** (**Critical**, **Warning**, **Success**, **Info**), **Category** and **Workspace** (a single workspace, **Personal** or **All workspaces**). Open an item for details and its **Technical details**.
+Some need an action — their state moves **Needs acknowledgement** → **Acknowledged** → **Resolved**, or **Expired**. **Mark all read** clears the unread count. Delivery preferences are in **Settings → Notifications**, with three tabs: **Email** (which emails you get, per category and, for a team, per workspace), **Schedule** (digest timing) and **Activity** (the social notifications that **Activity → Preferences** opens). Mandatory alerts are always on, and your choices are saved even if your email is not yet verified. See [Notifications](/operate/notifications).
+
+<Shot name="dashboard/notifications" alt="The Notifications inbox with an Action required section and the rest of the feed below it." />
+
+## Billing
+
+**Billing** has three sections — **Overview**, **Plan & seats** and **Payments**.
+
+| Section | Shows | Actions |
+| --- | --- | --- |
+| **Overview** | A billing summary: plan, status, next charge, billing owner, payment provider; usage such as seats used; recent payments | **Change plan**, **View all payments** |
+| **Plan & seats** | Your current plan, included and extra seats, total capacity, members using seats | **Change plan**, **Add 5 seats**, **Stop renewing** extra seats, **Redeem a promotional code**, **Cancel plan** |
+| **Payments** | Total paid, successful and pending payments, a table with date, amount, reference and provider | Search by reference; filter by status, provider and date; open a payment for details |
+
+Choosing a plan opens **Choose a plan** and **Compare plans**, then **Review plan change** — which shows the new plan, the charge today and what changes — before a hosted checkout. A cancelled checkout shows **Checkout cancelled**: *no plan changes were made and you were not charged*.
+
+<Note>
+Only the **billing owner** can change the plan or buy seats. Everyone else sees a request button — **Request sent to the billing owner** — and the CLI has `beaver billing request-upgrade` and `beaver billing request-seats`.
+</Note>
+
+<Shot name="dashboard/billing" alt="The Billing page with the plan summary, usage against limits and payment history." />
+
+### What hitting a limit looks like
+
+When a plan limit blocks an action, the screen or command says which limit and points to **Billing**; **Over capacity** appears on the seats section when members exceed seats. Resolve it by changing the plan, buying seats, or removing what you no longer need — see
+[Plans and billing](/teams/plans-and-billing) and [Plan limits](/operate/troubleshoot-plan-limit).
+
+<Warning>
+**Resource Usage** and **Build Minutes** pages exist in the product but are not reachable in the Dashboard today. Plan usage appears on the home screen's **Usage** panel and in Billing.
+</Warning>
+
+## Same task in the other interfaces
+
+Activity: `beaver follow`, `beaver activity`. Notifications: `beaver notifications`. Billing: `beaver billing`. Desktop shows notifications as desktop alerts and an approvals inbox; billing changes happen on the web. All tasks: [capability matrix](/interfaces/capability-matrix).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Plans and billing" icon="credit-card" href="/teams/plans-and-billing">Plans, seats and what happens on downgrade.</Card>
+  <Card title="Notifications" icon="bell" href="/operate/notifications">Kinds, delivery and acknowledgement.</Card>
+</CardGroup>

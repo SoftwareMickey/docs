@@ -1,0 +1,61 @@
+---
+title: "Sessions and context"
+sidebarTitle: "Sessions and context"
+description: "Start, resume, fork and tidy Alie conversations, see what they used, and give Alie standing knowledge about your workspace."
+keywords: ["sessions and context", "ai assistant", "beaver alie sessions", "beaver alie"]
+icon: "messages-square"
+type: howto
+audience: [developer]
+interfaces: [desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A chat with Alie is a **session**. You can come back to it, branch it, and see what it cost.
+
+## Work with sessions
+
+<Tabs>
+  <Tab title="Dashboard"><Note>Alie has a session view in the Dashboard; the session management commands below are CLI.</Note></Tab>
+  <Tab title="Desktop">The **Alie** panel opens beside whatever you are looking at — a machine, a cloud, a service — and starts with that context. Conversation resets when the context changes. It can expand to cover the whole screen.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver alie                        # start a chat
+    beaver alie --resume               # pick a session to resume (or pass a name or id)
+    beaver alie sessions               # list; add --all to include archived
+    beaver alie session <session>      # one session's detail
+    beaver alie fork <session>         # a new session seeded from where this one is
+    beaver alie compact <session>      # force-compact into a structured summary
+    beaver alie sessions rename <session> <new-name>
+    beaver alie sessions archive <session>     # hidden from the default list, never deleted
+    beaver alie sessions delete <session>      # permanent
+    beaver alie usage <session>        # token usage
+    ```
+  </Tab>
+</Tabs>
+
+`archive` hides a session; `delete` removes it permanently. `fork` leaves the original untouched.
+
+## What Alie knows about your workspace
+
+Workspace-wide context that Alie applies across conversations — manage it from the CLI:
+
+```bash
+beaver alie knowledge            # team knowledge rules applied to every relevant conversation
+beaver alie runbooks             # reusable remediation runbooks
+beaver alie goals                # standing infrastructure goals evaluated on an ongoing basis
+beaver alie policies             # infrastructure policies
+```
+
+Each has an `add` form (for example `beaver alie knowledge add --rule "<statement>"`). In Desktop, **Settings → Alie** has **Memory**, **Context Permissions** and **Tools & Routing** pages for what Alie may remember, see and use.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Approvals and safety" icon="shield-check" href="/alie/approvals-and-safety">What waits for you.</Card>
+  <Card title="Alie command reference" icon="terminal" href="/cli/alie">Every subcommand and flag.</Card>
+</CardGroup>

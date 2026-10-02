@@ -1,0 +1,37 @@
+---
+title: "Spending controls"
+sidebarTitle: "Spending controls"
+description: "Cap what Alie can spend per day and per conversation, and see today's spend and each session's usage."
+keywords: ["spending controls", "ai assistant", "beaver alie spend-cap", "beaver alie usage"]
+icon: "wallet"
+type: howto
+audience: [team-lead, developer]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Alie uses **your** provider key, so its model usage is billed by your provider. Beaver lets you put limits on it.
+
+```bash
+beaver alie spend-cap                              # the workspace's daily and per-session limits, and today's spend
+beaver alie spend-cap set --daily 20 --session 5   # USD per day and per conversation (both required)
+beaver alie usage <session>                        # token usage for one session
+```
+
+<Note>
+A new, lower limit applies once saved. A conversation already over it is not affected retroactively; the limit takes effect at its next usage check.
+</Note>
+
+AI usage is also measured against your plan — see [Plans and billing](/teams/plans-and-billing).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connect a provider" icon="plug" href="/alie/connect-an-ai-provider">Where the key lives.</Card>
+  <Card title="Approvals and safety" icon="shield-check" href="/alie/approvals-and-safety">Control what it may do.</Card>
+</CardGroup>

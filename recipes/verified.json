@@ -1,0 +1,17 @@
+{
+  "go-binary": {
+    "date": "2026-10-02",
+    "docker": "29.1.3",
+    "image_mb": 13
+  },
+  "node-server": {
+    "date": "2026-10-02",
+    "docker": "29.1.3",
+    "image_mb": 167
+  },
+  "static-site": {
+    "date": "2026-10-02",
+    "docker": "29.1.3",
+    "image_mb": 48
+  }
+}

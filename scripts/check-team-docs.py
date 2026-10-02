@@ -5,7 +5,7 @@
 
 1. Every subcommand listed by `beaver workspace --help` has a row in cli/workspace.mdx.
 2. Every `beaver workspace <sub>` used in an example anywhere in the docs is a real subcommand.
-3. Every message and error code quoted in guides/troubleshooting-teams.mdx (first column, and the
+3. Every message and error code quoted in operate/troubleshooting-teams.mdx (first column, and the
    parenthesised CODE) exists verbatim in the backend or CLI source — placeholders like <id> and "..."
    split a message into fragments, and each fragment must exist.
 4. Every generated snippet carries the "GENERATED FILE" header (the content itself is checked by
@@ -47,10 +47,13 @@ def main():
                 if line.strip().startswith("```"):
                     in_fence = not in_fence
                     continue
-                code = line if in_fence else " ".join(re.findall(r"`([^`]+)`", line))
-                for mm in re.finditer(r"beaver workspace ([a-z][a-z-]+)", code):
-                    if mm.group(1) not in valid:
-                        fail.append(f"{os.path.join(root, f)}:{i}: `beaver workspace {mm.group(1)}` is not a subcommand")
+                # each `inline span` is checked on its own — joining spans made "`beaver workspace` and `beaver billing`"
+                # read as "beaver workspace beaver"
+                codes = [line] if in_fence else re.findall(r"`([^`]+)`", line)
+                for code in codes:
+                    for mm in re.finditer(r"beaver workspace ([a-z][a-z-]+)", code):
+                        if mm.group(1) not in valid:
+                            fail.append(f"{os.path.join(root, f)}:{i}: `beaver workspace {mm.group(1)}` is not a subcommand")
 
     # 3. quoted messages exist in source
     def in_source(fragment):
@@ -60,7 +63,7 @@ def main():
             if r.stdout.strip(): return True
         return False
 
-    tpage = open(f"{a.docs}/guides/troubleshooting-teams.mdx").read()
+    tpage = open(f"{a.docs}/operate/troubleshooting-teams.mdx").read()
     checked = 0
     for line in tpage.splitlines():
         if not line.startswith("| ") or line.startswith("| You see") or line.startswith("| ---"): continue
@@ -81,7 +84,7 @@ def main():
             for fr in frags:
                 checked += 1
                 if not in_source(fr) and not in_source(fr.lower()) and not in_source(fr.capitalize()):
-                    fail.append(f"guides/troubleshooting-teams.mdx quotes {fr!r}, which is in neither the backend nor the CLI source")
+                    fail.append(f"operate/troubleshooting-teams.mdx quotes {fr!r}, which is in neither the backend nor the CLI source")
 
     # 4. generated snippets are marked
     for name in ("team-permission-matrix.mdx", "plan-ladder.mdx"):

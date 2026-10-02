@@ -1,0 +1,89 @@
+---
+title: "Exit codes and output formats"
+sidebarTitle: "Exit codes and output"
+description: "What status a beaver command exits with, which commands use special codes, and how --json and --output change what is printed."
+icon: "terminal"
+type: reference
+audience: [developer, operator]
+keywords: ["exit code", "exit status", "json", "script", "ci", "yaml", "--output", "--quiet"]
+---
+
+A `beaver` command exits **`0`** on success and **non-zero** on failure, so a script can use `&&`, `||` and `set -e`. Most failures exit `1`. A few commands use more specific codes so a script can branch.
+
+## Codes
+
+| Code | Where | Meaning |
+| --- | --- | --- |
+| `0` | every command | Success |
+| `1` | every command | Failure. The default for anything that is not listed below, including a timeout while waiting with `--wait` |
+| `77` | any command that needs a verified account | **2-step verification is required.** The workspace requires it and your account does not have it. Turn it on, then run the command again ([2-step verification](/teams/two-step-verification)) |
+| `2` | `beaver config …` | Usage error: a flag or argument the command does not accept |
+| `3` | `beaver config …` | Local I/O error: a file could not be read or written |
+| `4` | `beaver config …` | Server error while saving or loading configuration |
+
+`beaver github install` has its own set, so a script can tell why the connection ended:
+
+| Code | Result |
+| --- | --- |
+| `0` | GitHub is connected, or an organization owner has been asked to approve it (nothing more to do here) |
+| `3` | You cancelled |
+| `4` | GitHub denied the request |
+| `5` | It failed |
+| `6` | The approval link expired |
+| `7` | It timed out waiting |
+
+Codes `3` and `4` therefore mean different things under `beaver config` and `beaver github install`. Read the code together with the command that produced it.
+
+## Waiting and timeouts
+
+`--wait` blocks until a deployment or other operation reaches a final state; `--timeout` (default `5m`) bounds the wait. If the timeout passes the command exits non-zero, but **the operation itself is not cancelled** — check it with `beaver deployment status` instead of assuming it failed. See [Shared flags](/cli/shared-flags).
+
+## Output formats
+
+| Flag | Output |
+| --- | --- |
+| *(none)* | A human-readable table or report. Colour only on a terminal; `NO_COLOR` or `--no-color` turns it off |
+| `--json` | One JSON document on standard output, and nothing else — safe to pipe to `jq`. Same as `--output json` |
+| `--output yaml` | The same document as YAML |
+| `--quiet` | Suppresses status lines (`Rebooting…`, `✓ Done`) and still prints the data, in whatever `--output` selects |
+| `--yes` | Skips a confirmation prompt. It never changes what the command does |
+
+In a table-mode failure the report goes to **standard error**; in JSON or YAML mode the error is the document on standard output.
+
+### Shape of JSON output
+
+`beaver config` commands wrap their result in an envelope:
+
+```json
+{ "ok": true, "data": { "valid": true, "errors": null }, "error": null }
+```
+
+Other commands print their data directly (`beaver whoami --json` prints `{ "logged_in": false }` when signed out). Treat the **field names of a command's own data as the contract you can test against today**; there is no published promise that every command keeps the same envelope.
+
+Every failure in JSON mode is one document of this shape, whatever the command:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "unknown flag: --nope",
+    "changed": false,
+    "conditions": [],
+    "repairs": []
+  }
+}
+```
+
+`code` is a stable, upper-case name (`INVALID_REQUEST`, `OPERATION_FAILED`, `MFA_REQUIRED`, `PLAN_LIMIT_REACHED`, `PRODUCTION_RESTRICTED` …); branch on it rather than on `message`. `changed` says whether anything was modified before the failure. `conditions` and `repairs` list what was wrong and what to do about it.
+
+## In CI
+
+```bash
+beaver deploy --cloud paperclip-prod --wait --timeout 10m --json > result.json
+code=$?
+if [ "$code" -eq 77 ]; then echo "this workspace requires 2-step verification"; fi
+exit "$code"
+```
+
+See [Automation](/deploy/ci-cd) for a complete pipeline.

@@ -1,0 +1,53 @@
+---
+title: "Resize and upgrade a service"
+sidebarTitle: "Resize and upgrade"
+description: "Change a service's CPU and memory in place, and what to know about version upgrades."
+keywords: ["resize and upgrade a service", "resize and upgrade", "database", "cache", "beaver service cluster", "beaver service resize"]
+icon: "scaling"
+type: howto
+audience: [operator]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Resize
+
+```bash
+beaver service resize paperclip-db --cpu 2 --memory 4096
+```
+
+Resizes **in place** — same volume, same credentials, same container name. It is refused, with the shortfall named, if the machine the service runs on does not have the
+allocatable capacity for the new size. Check headroom first with `beaver cloud capacity <cloud>`
+([Capacity and placement](/infrastructure/capacity-and-placement)). Defaults per type are on each page in the [catalog](/data/services).
+
+For a clustered service, grow or shrink the **member count** instead: `beaver service cluster resize`.
+
+## Tune settings
+
+`beaver service config set` sets a service's catalog-declared tunables (for example connection limits where a type exposes them).
+
+## Upgrade a version
+
+<Warning>
+**Starting a PostgreSQL major-version upgrade is not yet available from the CLI or the Desktop app.** Beaver's model is that a major upgrade is never done in place: it backs the service up, restores it into a
+new server on the newer version, checks it, and only then switches over, leaving the original data untouched. Upgrades are forward-only and a downgrade is refused.
+</Warning>
+
+What you can do today:
+
+- **Move to a newer version yourself, safely:** take a backup, then create a **new** service on the newer version restoring from it —
+  `beaver service create paperclip-db-v17 --type postgres --version 17 --restore-from <backup-id>` — point your application at it, and delete the old service only when you are satisfied
+  ([Backups and restore](/data/backups-and-restore)). Restores check the recorded version before changing anything, so an incompatible target fails cleanly.
+- **Clustered services** can roll a version upgrade one member at a time: `beaver service cluster upgrade`.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="PostgreSQL" icon="database" href="/data/services/postgresql">Versions and the upgrade model.</Card>
+  <Card title="Backups and restore" icon="archive-restore" href="/data/backups-and-restore">Rehearse the move first.</Card>
+</CardGroup>

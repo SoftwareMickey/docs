@@ -1,0 +1,81 @@
+---
+title: "Your first production promotion"
+sidebarTitle: "6. First promotion"
+description: "Ship the exact image you tested in staging to production, without rebuilding, with an approval gate in a team workspace."
+keywords: ["promote to production", "staging to production", "first promotion", "approval", "getting started"]
+icon: "arrow-up-right"
+type: tutorial
+audience: [developer, team-lead]
+interfaces: [dashboard, desktop, cli]
+time: "15 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Deploy to a **staging** environment, check it, then **promote** the same built image to **production**. Promotion reuses the existing image and starts a
+new deployment of it in the target environment, so what you tested is exactly what ships.
+
+## Before you start
+
+- A [first deployment](/start/first-deploy) on a branch assigned to a source environment such as `staging`.
+- A `production` environment on the project. List environments with `beaver environment list`; create one with
+  `beaver environment create --name production --project-id <id> --branch main`.
+- In a team workspace: production is **protected**. A Developer must ask an Owner or Admin; see [Production approvals](/teams/production-approvals).
+
+## Steps
+
+<Steps>
+  <Step title="Check staging">
+    ```bash
+    beaver inspect
+    beaver observe --logs
+    ```
+  </Step>
+  <Step title="Promote">
+    Run from the project directory on the staging branch:
+    ```bash
+    beaver promote production
+    ```
+    A banner warns you before the confirmation because production deploys **immediately** once you confirm. `--yes` skips the prompt.
+  </Step>
+  <Step title="If approval is required">
+    The command is refused with `PRODUCTION_RESTRICTED` and tells you how to ask. An Owner or Admin decides:
+    ```bash
+    beaver workspace approvals
+    beaver workspace approvals approve <id> --note "ship it"
+    ```
+    The approval is a one-time permission for that exact action and lasts one hour. Repeat `beaver promote production` within the hour. You cannot approve
+    your own request.
+  </Step>
+</Steps>
+
+<Note>
+Each environment keeps its **own** environment variables; promoting an image does not carry staging's variables to production. Set production's first —
+[Environment variables](/deploy/environment-variables).
+</Note>
+
+## Verify it worked
+
+<Tabs>
+  <Tab title="Dashboard">The production deployment shows the new release under **Deployments**; approvals decided under **Team → Approvals**.</Tab>
+  <Tab title="Desktop">**Approvals** shows the request and its decision.</Tab>
+  <Tab title="CLI">`beaver inspect` against the production environment; `beaver container <name> history` lists releases.</Tab>
+</Tabs>
+
+## If it goes wrong
+
+Start read-only with `beaver recover`, then `beaver recover --rollback` returns to the last healthy release. See
+[Rollback and recovery](/deploy/rollback-and-recovery). A rollback restores the release, not your data.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Production readiness" icon="list-checks" href="/start/production-readiness">Before real traffic.</Card>
+  <Card title="Recovery model" icon="history" href="/operate/recovery-model">Rollback, configuration rollback and promotion differ.</Card>
+</CardGroup>

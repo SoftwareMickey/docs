@@ -1,0 +1,31 @@
+---
+title: "Services and data"
+sidebarTitle: "Overview"
+description: "Managed databases, caches and brokers you attach to an application — connect, back up, restore and scale them."
+icon: "database"
+type: hub
+audience: [developer, operator]
+---
+
+A **service** is a managed database, cache or broker that Beaver runs for you on your machines and attaches to your
+application, so you do not install or maintain it yourself.
+
+<Tip>
+**Start here:** [Services and persistence](/data/services-and-persistence) explains the model; the
+[catalog](/data/services) lists what you can create.
+</Tip>
+
+## Do
+
+<CardGroup cols={2}>
+  <Card title="Browse the catalog" icon="library" href="/data/services">Every supported service type.</Card>
+  <Card title="Credentials and connection strings" icon="key" href="/data/credentials-and-connection-strings">Isolated logins per application.</Card>
+  <Card title="Connect from your laptop" icon="plug" href="/data/connect-locally">An authenticated tunnel — no public port.</Card>
+  <Card title="Back up and restore" icon="archive-restore" href="/data/backups-and-restore">Point-in-time copies on your schedule.</Card>
+  <Card title="High availability" icon="layers" href="/data/high-availability">Run a service across several members.</Card>
+  <Card title="Persistent volumes" icon="hard-drive" href="/data/persistent-volumes">Make specific paths survive a replacement.</Card>
+</CardGroup>
+
+## Look up and fix
+
+[`beaver service`](/cli/service) · [Troubleshooting](/operate/troubleshooting)

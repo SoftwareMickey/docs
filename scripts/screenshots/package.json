@@ -1,0 +1,7 @@
+{
+  "name": "docs-screenshots",
+  "private": true,
+  "type": "module",
+  "description": "features/docs-experience V94 — reproducible, redacted UI screenshots from seeded fixtures. No dependencies: Chrome over CDP with Node 22's built-in WebSocket.",
+  "scripts": { "capture": "node capture.mjs", "check": "node capture.mjs --check" }
+}

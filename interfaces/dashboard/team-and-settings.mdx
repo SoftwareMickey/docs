@@ -1,0 +1,83 @@
+---
+title: "Team, settings and integrations in the Dashboard"
+sidebarTitle: "Team and settings"
+description: "The Team pages, personal Settings, Integrations and 2-step verification setup in the Dashboard: where each is and what you can do there."
+icon: "users"
+type: interface
+audience: [team-lead, developer, security]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Team
+
+**Team** appears in the sidebar only in a [team workspace](/teams/accounts-workspaces-teams). It has six sections:
+
+| Section | Shows | Actions | How-to |
+| --- | --- | --- | --- |
+| **Overview** | Active members, pending approvals, items needing attention, recent activity, quick actions | **Invite a member**, **Review approvals**, **Configure access policies**, **Open Billing**, **Manage machines** | [Working in a shared workspace](/teams/working-in-a-shared-workspace) |
+| **Members** | Members with role, status and joined date; seats used; **Pending invitations** | **Invite member** (by email, or **Create a shareable link** that works once and expires in 24 hours), change role, **Remove from workspace**, **Resend invitation**, **Revoke invitation** | [Invite members](/teams/invite-members) |
+| **Access policies** | **Protected environments**, **Developer permissions**, **Invitation security** | Add or remove protected environments, choose what developers may do without asking, allow or block shareable links; changes apply once you save | [Production approvals](/teams/production-approvals) |
+| **Approvals** | Open **Approval requests** with who asked, the action, environment, source and expiry, and the exact parameters it would allow | **Approve** or **Reject** with a note — an Owner or Admin decides | [Production approvals](/teams/production-approvals) |
+| **Activity** | The workspace's audit history, filtered by period, category and person | Filter | [Audit history](/teams/audit-history) |
+| **Settings** | Workspace name and ID, plan, type, your role, **Ownership** | **Transfer ownership** (Owner only), **Leave this workspace** in the *Danger zone* | [Leaving, removing and transferring](/teams/removing-members-and-leaving) |
+
+## Accept invitation, approve a device, onboarding
+
+The **Accept invitation** page opens from an invitation link, while you are signed in with the email address it was sent to. A shareable link skips the email match. See [Invite members](/teams/invite-members).
+
+**Approve this device** opens when the CLI or Desktop sends you to approve a sign-in: check that the code matches what the app shows, then approve. **Onboarding: connect repositories** guides your first GitHub connection. To change workspace at any time, use the **workspace switcher** at the top of the sidebar — see [Switch workspaces](/teams/switch-workspaces).
+
+<Shot name="dashboard/team" alt="The Team settings page with the members list and an Attention required panel." />
+
+## Settings
+
+**Settings** has a scope switch: **Personal**, **Current workspace**, **Current project** and **This device**.
+
+| Scope | Shows |
+| --- | --- |
+| **Personal** | Your **Account settings**, in three tabs — **General**, **Security** and **Connected devices** (below) |
+| **Current workspace** | The workspace's effective settings with where each value comes from: **Explicit overrides**, **Drifted from config** and **Pending approval** counts; search; **Show advanced**. Change a setting here — see [Settings and precedence](/teams/settings-and-precedence) |
+| **Current project**, **This device** | Not fully available in the Dashboard yet — the page points you to the project's own **Settings** tab |
+
+### Personal → Account settings
+
+| Tab | Shows | Actions |
+| --- | --- | --- |
+| **General** | Profile information, account details (name, username, email, account ID, member since), email verification | **Edit profile**, **Delete account** (blocked until you transfer shared workspaces you own; you type to confirm) |
+| **Security** | **Security status** (**Good** or **Can be improved**); **Sign-in methods** (**Google** — **Connected**, **Change Google account** — and **GitHub**); **Password**; **2-step verification**; **Recovery codes**; passkeys; **Security activity** | **Change password** or **Add a password**, **Set up** or **Turn off** 2-step verification, **Generate new codes**, add or remove a passkey |
+| **Connected devices** | Beaver CLI and Desktop sessions signed in to your account (**Current**, **Revoked**, **Expired**) | **Refresh devices**, revoke a session |
+
+<Note>
+**Passkeys** appear only when your deployment has them enabled. See [Two-step verification](/teams/two-step-verification).
+</Note>
+
+2-step verification setup opens its own page (**Set up 2-step verification**) with a QR code, a code check and recovery codes. See [Two-step verification](/teams/two-step-verification) and [Sign-in methods](/teams/sign-in-methods).
+
+<Shot name="dashboard/settings-devices" alt="Personal Settings on the Devices tab, listing the devices signed in to the account." />
+
+## Integrations
+
+**Integrations** shows each connected service with a state: **Connected**, **Pending**, **Needs Reauth** or **Disconnected**. **GitHub** lets you **Add GitHub account**, **Manage repository access**, **Repair connection**, check the connection again, or **Disconnect GitHub**; it also shows a **Default source account**. Slack and Notion appear with their own settings where available.
+Connecting GitHub for deployment is separate from signing in with GitHub — see [Sign-in and repository access](/teams/signing-in-and-repository-access).
+
+## The workspace page
+
+A **Workspace** page lists the servers and deployments that belong to the workspace, as a read-only summary.
+
+## Same task in the other interfaces
+
+Invite: `beaver workspace invite`. Approvals: `beaver workspace approvals`, and Desktop's **Approvals** inbox. 2-step: `beaver account mfa`. All tasks: [capability matrix](/interfaces/capability-matrix).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Teams" icon="users" href="/teams">The whole Teams section.</Card>
+  <Card title="Settings and precedence" icon="sliders" href="/teams/settings-and-precedence">Which setting wins when several apply.</Card>
+</CardGroup>

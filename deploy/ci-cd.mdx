@@ -1,0 +1,105 @@
+---
+title: "Deploy from CI"
+sidebarTitle: "CI and automation"
+description: "Run Beaver non-interactively in a pipeline: authenticate with a token, deploy, wait, and read the result."
+keywords: ["deploy from ci", "ci and automation", "github actions", "pipeline", "beaver login", "beaver deploy"]
+icon: "terminal"
+type: howto
+audience: [developer]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Every command that would prompt can run non-interactively, so Beaver works in CI, cron and scripts. This page is the recipe: the flags, authentication, a non-interactive deploy and a pipeline example.
+
+<Note>
+CI use is a CLI workflow. The Dashboard and Desktop have no scripted mode.
+</Note>
+
+## The flags that make scripting possible
+
+| Flag | Effect |
+| --- | --- |
+| `--yes` | Skips confirmation prompts. It never changes what the command does. |
+| `--wait` | Blocks until the operation reaches a final state instead of returning once it is accepted. |
+| `--timeout 10m` | Bounds `--wait` (default 5 minutes). **A timeout does not cancel the operation** — check its status afterward. |
+| `--json` / `--output yaml` | Machine-readable output. |
+| `--quiet` | Suppresses narration but still prints the result data. |
+
+A command exits non-zero on failure, so a script can branch on the exit code.
+
+## Authenticate
+
+On a machine with no browser, a CI runner included, set `BEAVER_TOKEN`:
+
+```bash
+BEAVER_TOKEN=... beaver login
+```
+
+The token is the same session token a normal `beaver login` saves locally, so one signed-in machine can hand its session to another through this variable. Store it as a
+secret in your CI system — anything that can read it acts as you.
+
+## Deploy non-interactively
+
+Passing `--project-id`, `--repo`, `--branch`, `--cloud`, `--container-name` and `--docker-user` together skips every prompt:
+
+```bash
+beaver deploy \
+  --project-id 3f9c1a2b-0000-4000-8000-000000000001 \
+  --repo owner/paperclip --branch main \
+  --cloud paperclip-prod --container-name app \
+  --docker-user mydockeruser --container-port 3000 \
+  --wait --timeout 10m --json
+```
+
+Use `--auto-create-environment` if the branch may not have an environment yet, `--env-file`/`--env-var` for variables, and `--dry-run` to preview.
+
+<Warning>
+Beaver deploys a **pushed commit**. In CI, make sure the commit exists on GitHub (the runner is normally checked out from it) and that Beaver can read the repository.
+</Warning>
+
+## A GitHub Actions example
+
+```yaml .github/workflows/deploy.yml
+name: deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the Beaver CLI
+        run: curl -fsSL https://cli.vectorihub.com/install.sh | INSTALL_DIR=$HOME/.local/bin sh && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Deploy
+        env:
+          BEAVER_TOKEN: ${{ secrets.BEAVER_TOKEN }}
+        run: |
+          beaver login
+          beaver deploy --project-id "${{ vars.BEAVER_PROJECT_ID }}" --repo "${{ github.repository }}" \
+            --branch main --cloud paperclip-prod --container-name app \
+            --docker-user "${{ vars.DOCKER_USER }}" --container-port 3000 --wait --timeout 10m
+```
+
+<Note>
+Because a push to a deployed branch already triggers a release, you may not need a CI deploy step at all — use CI to **gate** (tests) and let the push deploy, or use
+`--wait` to make a pipeline fail when the deploy fails. See [Deploy from GitHub](/deploy/from-github).
+</Note>
+
+## Other commands that fit a pipeline
+
+`beaver preflight --fail-on-warning` fails the pipeline on a warning verdict; `beaver promote production --yes` promotes after tests; `beaver recover --rollback --yes` rolls back
+on failure ([recover](/cli/recover)). Every flag is in [Shared flags](/cli/shared-flags).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Shared flags" icon="flag" href="/cli/shared-flags">The full list and their exact behaviour.</Card>
+  <Card title="Promote" icon="arrow-up-right" href="/deploy/promote">Gate production with an approval.</Card>
+</CardGroup>

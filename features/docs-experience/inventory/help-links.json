@@ -1,0 +1,541 @@
+{
+  "version": 1,
+  "base": "https://docs.vectorihub.com",
+  "keys": {
+    "cli.account": {
+      "path": "/cli/account",
+      "surface": "cli",
+      "where": "beaver account --help footer"
+    },
+    "cli.activity": {
+      "path": "/cli/activity",
+      "surface": "cli",
+      "where": "beaver activity --help footer"
+    },
+    "cli.agent": {
+      "path": "/cli/agent",
+      "surface": "cli",
+      "where": "beaver agent --help footer"
+    },
+    "cli.ai": {
+      "path": "/cli/ai",
+      "surface": "cli",
+      "where": "beaver ai --help footer"
+    },
+    "cli.alie": {
+      "path": "/cli/alie",
+      "surface": "cli",
+      "where": "beaver alie --help footer"
+    },
+    "cli.autoscale": {
+      "path": "/cli/autoscale",
+      "surface": "cli",
+      "where": "beaver autoscale --help footer"
+    },
+    "cli.billing": {
+      "path": "/cli/billing",
+      "surface": "cli",
+      "where": "beaver billing --help footer"
+    },
+    "cli.cloud": {
+      "path": "/cli/cloud",
+      "surface": "cli",
+      "where": "beaver cloud --help footer"
+    },
+    "cli.completion": {
+      "path": "/cli/completion",
+      "surface": "cli",
+      "where": "beaver completion --help footer"
+    },
+    "cli.compose": {
+      "path": "/cli/compose",
+      "surface": "cli",
+      "where": "beaver compose --help footer"
+    },
+    "cli.config": {
+      "path": "/cli/config",
+      "surface": "cli",
+      "where": "beaver config --help footer"
+    },
+    "cli.connect": {
+      "path": "/cli/connect",
+      "surface": "cli",
+      "where": "beaver connect --help footer"
+    },
+    "cli.container": {
+      "path": "/cli/container",
+      "surface": "cli",
+      "where": "beaver container --help footer"
+    },
+    "cli.containers": {
+      "path": "/cli/containers",
+      "surface": "cli",
+      "where": "beaver containers --help footer"
+    },
+    "cli.coupon": {
+      "path": "/cli/coupon",
+      "surface": "cli",
+      "where": "beaver coupon --help footer"
+    },
+    "cli.deploy": {
+      "path": "/cli/deploy",
+      "surface": "cli",
+      "where": "beaver deploy --help footer"
+    },
+    "cli.deployment": {
+      "path": "/cli/deployment",
+      "surface": "cli",
+      "where": "beaver deployment --help footer"
+    },
+    "cli.diff": {
+      "path": "/cli/diff",
+      "surface": "cli",
+      "where": "beaver diff --help footer"
+    },
+    "cli.docker": {
+      "path": "/cli/docker",
+      "surface": "cli",
+      "where": "beaver docker --help footer"
+    },
+    "cli.doctor": {
+      "path": "/cli/doctor",
+      "surface": "cli",
+      "where": "beaver doctor --help footer"
+    },
+    "cli.domain": {
+      "path": "/cli/domain",
+      "surface": "cli",
+      "where": "beaver domain --help footer"
+    },
+    "cli.edge": {
+      "path": "/cli/edge",
+      "surface": "cli",
+      "where": "beaver edge --help footer"
+    },
+    "cli.environment": {
+      "path": "/cli/environment",
+      "surface": "cli",
+      "where": "beaver environment --help footer"
+    },
+    "cli.firewall": {
+      "path": "/cli/firewall",
+      "surface": "cli",
+      "where": "beaver firewall --help footer"
+    },
+    "cli.follow": {
+      "path": "/cli/follow",
+      "surface": "cli",
+      "where": "beaver follow --help footer"
+    },
+    "cli.git": {
+      "path": "/cli/git",
+      "surface": "cli",
+      "where": "beaver git --help footer"
+    },
+    "cli.github": {
+      "path": "/cli/github",
+      "surface": "cli",
+      "where": "beaver github --help footer"
+    },
+    "cli.health": {
+      "path": "/cli/health",
+      "surface": "cli",
+      "where": "beaver health --help footer"
+    },
+    "cli.history": {
+      "path": "/cli/history",
+      "surface": "cli",
+      "where": "beaver history --help footer"
+    },
+    "cli.incidents": {
+      "path": "/cli/incidents",
+      "surface": "cli",
+      "where": "beaver incidents --help footer"
+    },
+    "cli.init": {
+      "path": "/cli/init",
+      "surface": "cli",
+      "where": "beaver init --help footer"
+    },
+    "cli.inspect": {
+      "path": "/cli/inspect",
+      "surface": "cli",
+      "where": "beaver inspect --help footer"
+    },
+    "cli.integrations": {
+      "path": "/cli/integrations",
+      "surface": "cli",
+      "where": "beaver integrations --help footer"
+    },
+    "cli.login": {
+      "path": "/cli/login",
+      "surface": "cli",
+      "where": "beaver login --help footer"
+    },
+    "cli.logout": {
+      "path": "/cli/logout",
+      "surface": "cli",
+      "where": "beaver logout --help footer"
+    },
+    "cli.logs": {
+      "path": "/cli/logs",
+      "surface": "cli",
+      "where": "beaver logs --help footer"
+    },
+    "cli.machine": {
+      "path": "/cli/machine",
+      "surface": "cli",
+      "where": "beaver machine --help footer"
+    },
+    "cli.metrics": {
+      "path": "/cli/metrics",
+      "surface": "cli",
+      "where": "beaver metrics --help footer"
+    },
+    "cli.mystic": {
+      "path": "/cli/mystic",
+      "surface": "cli",
+      "where": "beaver mystic --help footer"
+    },
+    "cli.notifications": {
+      "path": "/cli/notifications",
+      "surface": "cli",
+      "where": "beaver notifications --help footer"
+    },
+    "cli.observe": {
+      "path": "/cli/observe",
+      "surface": "cli",
+      "where": "beaver observe --help footer"
+    },
+    "cli.plan": {
+      "path": "/cli/plan",
+      "surface": "cli",
+      "where": "beaver plan --help footer"
+    },
+    "cli.plans": {
+      "path": "/cli/plans",
+      "surface": "cli",
+      "where": "beaver plans --help footer"
+    },
+    "cli.preflight": {
+      "path": "/cli/preflight",
+      "surface": "cli",
+      "where": "beaver preflight --help footer"
+    },
+    "cli.profile": {
+      "path": "/cli/profile",
+      "surface": "cli",
+      "where": "beaver profile --help footer"
+    },
+    "cli.project": {
+      "path": "/cli/project",
+      "surface": "cli",
+      "where": "beaver project --help footer"
+    },
+    "cli.promote": {
+      "path": "/cli/promote",
+      "surface": "cli",
+      "where": "beaver promote --help footer"
+    },
+    "cli.publish": {
+      "path": "/cli/publish",
+      "surface": "cli",
+      "where": "beaver publish --help footer"
+    },
+    "cli.reconcile": {
+      "path": "/cli/reconcile",
+      "surface": "cli",
+      "where": "beaver reconcile --help footer"
+    },
+    "cli.recover": {
+      "path": "/cli/recover",
+      "surface": "cli",
+      "where": "beaver recover --help footer"
+    },
+    "cli.route": {
+      "path": "/cli/route",
+      "surface": "cli",
+      "where": "beaver route --help footer"
+    },
+    "cli.scaling": {
+      "path": "/cli/scaling",
+      "surface": "cli",
+      "where": "beaver scaling --help footer"
+    },
+    "cli.server": {
+      "path": "/cli/server",
+      "surface": "cli",
+      "where": "beaver server --help footer"
+    },
+    "cli.service": {
+      "path": "/cli/service",
+      "surface": "cli",
+      "where": "beaver service --help footer"
+    },
+    "cli.settings": {
+      "path": "/cli/settings",
+      "surface": "cli",
+      "where": "beaver settings --help footer"
+    },
+    "cli.shell": {
+      "path": "/cli/shell",
+      "surface": "cli",
+      "where": "beaver shell --help footer"
+    },
+    "cli.skills": {
+      "path": "/cli/skills",
+      "surface": "cli",
+      "where": "beaver skills --help footer"
+    },
+    "cli.spec": {
+      "path": "/cli/spec",
+      "surface": "cli",
+      "where": "beaver spec --help footer"
+    },
+    "cli.state": {
+      "path": "/cli/state",
+      "surface": "cli",
+      "where": "beaver state --help footer"
+    },
+    "cli.status": {
+      "path": "/cli/status",
+      "surface": "cli",
+      "where": "beaver status --help footer"
+    },
+    "cli.template": {
+      "path": "/cli/template",
+      "surface": "cli",
+      "where": "beaver template --help footer"
+    },
+    "cli.traffic": {
+      "path": "/cli/traffic",
+      "surface": "cli",
+      "where": "beaver traffic --help footer"
+    },
+    "cli.two-step-login": {
+      "path": "/cli/two-step-login",
+      "surface": "cli",
+      "where": "beaver two-step-login --help footer"
+    },
+    "cli.update": {
+      "path": "/cli/update",
+      "surface": "cli",
+      "where": "beaver update --help footer"
+    },
+    "cli.validate": {
+      "path": "/cli/validate",
+      "surface": "cli",
+      "where": "beaver validate --help footer"
+    },
+    "cli.version": {
+      "path": "/cli/version",
+      "surface": "cli",
+      "where": "beaver version --help footer"
+    },
+    "cli.whoami": {
+      "path": "/cli/whoami",
+      "surface": "cli",
+      "where": "beaver whoami --help footer"
+    },
+    "cli.workspace": {
+      "path": "/cli/workspace",
+      "surface": "cli",
+      "where": "beaver workspace --help footer"
+    },
+    "dashboard.activity": {
+      "path": "/operate/activity-and-following",
+      "surface": "dashboard",
+      "where": "Activity page header"
+    },
+    "dashboard.billing": {
+      "path": "/teams/plans-and-billing",
+      "surface": "dashboard",
+      "where": "Billing page header"
+    },
+    "dashboard.clouds": {
+      "path": "/infrastructure/clouds",
+      "surface": "dashboard",
+      "where": "Cloud page header"
+    },
+    "dashboard.composers": {
+      "path": "/deploy/compose-applications",
+      "surface": "dashboard",
+      "where": "Composers page header"
+    },
+    "dashboard.containers": {
+      "path": "/deploy/containers-and-replicas",
+      "surface": "dashboard",
+      "where": "Containers page header"
+    },
+    "dashboard.edge": {
+      "path": "/network/beaver-edge",
+      "surface": "dashboard",
+      "where": "Beaver Edge page header"
+    },
+    "dashboard.error-page": {
+      "path": "/operate/troubleshooting",
+      "surface": "dashboard",
+      "where": "Error page"
+    },
+    "dashboard.home": {
+      "path": "/interfaces/dashboard/tour",
+      "surface": "dashboard",
+      "where": "Dashboard overview header"
+    },
+    "dashboard.home.empty": {
+      "path": "/start/quickstart-dashboard",
+      "surface": "dashboard",
+      "where": "Brand-new workspace empty state"
+    },
+    "dashboard.incidents": {
+      "path": "/operate/incidents",
+      "surface": "dashboard",
+      "where": "Incidents page header"
+    },
+    "dashboard.integrations": {
+      "path": "/deploy/integrations",
+      "surface": "dashboard",
+      "where": "Integrations page header"
+    },
+    "dashboard.mfa.setup": {
+      "path": "/teams/two-step-verification",
+      "surface": "dashboard",
+      "where": "2-step verification setup"
+    },
+    "dashboard.nodes": {
+      "path": "/infrastructure/machines-and-roles",
+      "surface": "dashboard",
+      "where": "Nodes page header"
+    },
+    "dashboard.nodes.error": {
+      "path": "/operate/troubleshoot-machine-offline",
+      "surface": "dashboard",
+      "where": "Nodes could not be loaded error state"
+    },
+    "dashboard.notifications": {
+      "path": "/operate/notifications",
+      "surface": "dashboard",
+      "where": "Notifications inbox header"
+    },
+    "dashboard.plan-limit": {
+      "path": "/operate/troubleshoot-plan-limit",
+      "surface": "dashboard",
+      "where": "Plan-limit prompt"
+    },
+    "dashboard.projects": {
+      "path": "/deploy/projects",
+      "surface": "dashboard",
+      "where": "Projects page header"
+    },
+    "dashboard.services": {
+      "path": "/data/services",
+      "surface": "dashboard",
+      "where": "Managed services page"
+    },
+    "dashboard.team.approvals": {
+      "path": "/teams/production-approvals",
+      "surface": "dashboard",
+      "where": "Team approvals empty state"
+    },
+    "dashboard.team.overview": {
+      "path": "/teams/working-in-a-shared-workspace",
+      "surface": "dashboard",
+      "where": "Team overview"
+    },
+    "desktop.alie": {
+      "path": "/alie/index",
+      "surface": "desktop",
+      "where": "Alie rail"
+    },
+    "desktop.approvals": {
+      "path": "/teams/production-approvals",
+      "surface": "desktop",
+      "where": "Approvals inbox"
+    },
+    "desktop.automation-policy": {
+      "path": "/alie/automation-policies",
+      "surface": "desktop",
+      "where": "Automation Policy settings"
+    },
+    "desktop.clouds": {
+      "path": "/infrastructure/clouds",
+      "surface": "desktop",
+      "where": "Beaver Cloud section"
+    },
+    "desktop.deployments": {
+      "path": "/interfaces/desktop/networks-storage-services",
+      "surface": "desktop",
+      "where": "Deployments section"
+    },
+    "desktop.infrastructure.home": {
+      "path": "/interfaces/desktop/infrastructure",
+      "surface": "desktop",
+      "where": "Infrastructure home"
+    },
+    "desktop.machines": {
+      "path": "/infrastructure/machines-and-roles",
+      "surface": "desktop",
+      "where": "Machines section"
+    },
+    "desktop.machines.empty": {
+      "path": "/infrastructure/connect-a-machine",
+      "surface": "desktop",
+      "where": "No machines empty state"
+    },
+    "desktop.networks": {
+      "path": "/interfaces/desktop/networks-storage-services",
+      "surface": "desktop",
+      "where": "Networks section"
+    },
+    "desktop.observability": {
+      "path": "/operate/observability",
+      "surface": "desktop",
+      "where": "Observability and Traces sections"
+    },
+    "desktop.services": {
+      "path": "/data/services",
+      "surface": "desktop",
+      "where": "Services section"
+    },
+    "desktop.settings": {
+      "path": "/interfaces/desktop/settings",
+      "surface": "desktop",
+      "where": "Settings shell"
+    },
+    "desktop.settings.account": {
+      "path": "/teams/sign-in-methods",
+      "surface": "desktop",
+      "where": "Account settings"
+    },
+    "desktop.settings.notifications": {
+      "path": "/operate/notifications",
+      "surface": "desktop",
+      "where": "Notifications and on-call settings"
+    },
+    "desktop.settings.repository-access": {
+      "path": "/teams/signing-in-and-repository-access",
+      "surface": "desktop",
+      "where": "Repository access settings"
+    },
+    "desktop.settings.security": {
+      "path": "/network/security-checklist",
+      "surface": "desktop",
+      "where": "Security & Privacy settings"
+    },
+    "desktop.shell": {
+      "path": "/interfaces/desktop/shell-tour",
+      "surface": "desktop",
+      "where": "Shell tour / empty detail pane"
+    },
+    "desktop.storage": {
+      "path": "/data/persistent-volumes",
+      "surface": "desktop",
+      "where": "Storage section"
+    },
+    "desktop.terminal": {
+      "path": "/interfaces/desktop/terminal-and-projects",
+      "surface": "desktop",
+      "where": "Terminal"
+    }
+  }
+}

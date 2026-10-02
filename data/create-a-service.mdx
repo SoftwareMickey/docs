@@ -1,0 +1,85 @@
+---
+title: "Create and manage a service"
+sidebarTitle: "Create a service"
+description: "Provision a managed database, cache or broker, check it, stop and start it, and delete it safely."
+keywords: ["create and manage a service", "create a service", "database", "cache", "beaver service show", "beaver service retry"]
+icon: "database"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A **service** is a managed database, cache or broker that Beaver runs for you on one of your connected machines. The model is in [Services and persistence](/data/services-and-persistence);
+what you can create is in the [catalog](/data/services).
+
+## Before you begin
+
+A connected machine with room, and a plan that allows another service — your plan limits how many managed services you can have ([Plans and billing](/teams/plans-and-billing)).
+
+## Create one
+
+<Tabs>
+  <Tab title="Dashboard">Open **Managed services** and create a service, choosing its type.</Tab>
+  <Tab title="Desktop"><Note>Desktop's **Services** section lists services and its create sheet shows the command to run; creating happens in the CLI or Dashboard.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver service catalog                                   # supported types, versions and defaults
+    beaver service create paperclip-db --type postgres
+    ```
+    | Flag | What it does |
+    | --- | --- |
+    | `--type` | The service type; omit for an interactive picker |
+    | `--version` | A version from the catalog (default: the type's default) |
+    | `--distribution-version` | The extension release for pgvector, PostGIS or TimescaleDB |
+    | `--machine` | Pin placement to one machine (default: chosen by capacity) |
+    | `--no-persistence` | No data volume — only for types that allow it (for example Redis) |
+    | `--restore-from` | Restore a backup into the new service before it is marked healthy |
+  </Tab>
+</Tabs>
+
+## Attach it to an application
+
+```bash
+beaver service attach paperclip-db --container api
+```
+
+Attaching gives the application a **private** database and its **own** credential and injects the connection variables into it; redeploy for them to take effect.
+See [Credentials and connection strings](/data/credentials-and-connection-strings).
+
+## Look at it and operate it
+
+```bash
+beaver service list
+beaver service show paperclip-db              # status, placement and attached applications
+beaver service restart paperclip-db           # also: stop, start
+beaver service retry paperclip-db             # re-attempt provisioning an unhealthy service
+beaver service config set --help             # set catalog-declared tunables
+```
+
+## Delete it
+
+```bash
+beaver service delete paperclip-db            # removes the container; the data volume is KEPT
+beaver service delete-volume paperclip-db     # permanently destroys the data — a separate, heavily confirmed step
+```
+
+<Warning>
+`delete-volume` cannot be undone. Take and verify a [backup](/data/backups-and-restore) first if the data matters.
+</Warning>
+
+## If it fails
+
+`beaver service show` names what is wrong; `beaver service retry` re-attempts provisioning. Creation is refused with the shortfall named if the chosen machine does not have the capacity.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Resize and upgrade" icon="scaling" href="/data/resize-and-upgrade">Change size, move versions.</Card>
+  <Card title="Connect from your laptop" icon="plug" href="/data/connect-locally">A tunnel with no public port.</Card>
+</CardGroup>

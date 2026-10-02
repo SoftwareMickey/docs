@@ -1,0 +1,97 @@
+---
+title: "Desktop settings"
+sidebarTitle: "Settings"
+description: "Every Settings page in Beaver Desktop — what each controls, and which controls work today and which are shown but not active yet."
+icon: "settings"
+type: interface
+audience: [developer, operator, security]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+**Settings** is in the navigator's **System** group (and the footer). It opens a settings navigator with four groups — **Core**, **Alie**, **Workspace** and **System** — a **Back** button, and a **System status** strip that shows whether your AI provider is connected.
+Most pages configure **this computer only** (see [How state is shared](/interfaces/how-state-is-shared)); the few that read or change account data say so.
+
+<Shot name="desktop/settings-general" alt="Settings on the General page, with the four-group settings navigator on the left and the Startup card showing which toggles are active." />
+
+<Note>
+**Some controls are visibly disabled.** Desktop shows a preference that is planned but not wired yet in a faded state with a note saying why, rather than hiding it or pretending it works. Each table below lists what **works today** and what is **shown but not active**. Reset Desktop settings returns every preference to its default.
+</Note>
+
+## Core
+
+### General
+
+How Beaver Desktop starts and behaves on this computer.
+
+| Works today | Shown but not active |
+| --- | --- |
+| **Restore last workspace** — reopen the project and navigator position from when you quit. **Launch Beaver at login** — in the installed app only | **Restore terminal sessions** (not yet), **Start Beaver Agent automatically** (Desktop never starts or stops the local agent), **Start minimized** (not yet), **Automatically detect Beaver projects** (detection always runs), **Confirm before destructive actions** (no confirmation dialog exists yet), **Default projects directory** (no folder picker yet) |
+
+### AI Harnesses
+
+The AI providers connected to your workspace — for example Claude Code or OpenAI — with the connection type (a subscription or an API key), how many models each offers, and **Configure →** for a connection's detail. Connections are made with `beaver ai connect`; until one exists the page shows **No AI harness connected**. See [Connect an AI provider](/alie/connect-an-ai-provider).
+
+### Automation Policy
+
+How much Alie may do on its own, **per namespace** (for example Workspace, Deployment, Machine, Cloud), at one of four levels — **Observe**, **Assist**, **Operate**, **Autonomous** — with an **Accepted outputs ÷ human review minutes** measure. A destructive action never runs on its own at any level; that floor is not editable. You can set a namespace's level and the checks it requires, apply or dismiss the **Recent lessons** Beaver suggests — nothing applies itself —
+and choose whether to **Contribute anonymized failure patterns** (off by default; nothing from the workspace is shared until you turn it on). See [Automation policies](/alie/automation-policies).
+
+<Shot name="desktop/settings-security-privacy" alt="Settings on the Security and Privacy page, with the AI data switches and the local data sizes." />
+
+## Alie
+
+| Page | Works today | Shown but not active |
+| --- | --- | --- |
+| **Alie** | **Enable Alie** (off removes it from the navigator); **Activity detail** (Full, Minimal or Off); **Default harness**; **Automatically include** — what a conversation may carry | **Default mode** shows the single mode the rail supports (**Agent**) |
+| **Memory** | Allow Alie to remember (**Global**, **Per workspace** or **Disabled**); notes you save with **Remember this** on a reply; **Clear workspace memory**, **Clear all local Alie memory** | **Export memory** (not yet); Alie never extracts notes automatically |
+| **Context Permissions** | What Alie may read before it leaves the device, switched on or off globally or per workspace: project files (names and evidence, never contents), Git state, `.beaver` configuration, deployment state, infrastructure state, environment variable **names** (off by default — never values) | **Secrets** (Desktop never collects a secret value, so there is nothing to grant), **Terminal output** (no path carries it to Alie yet), **Browser context** (not applicable) |
+| **Tools & Routing** | Per-harness tool availability; the **Beaver config** tools (create, edit and delete `.beaver/config.yml`, set replicas, resources, networks, volumes) each set to **Require approval** or **Auto**; **Harness routing** — which harness opens each kind of conversation | Deploy-tier and delete-tier tools always **Require approval** and have no Auto switch; a full allow/ask/deny table and **Let Alie delegate work between harnesses** are not built |
+| **Skills** | The reusable playbooks Alie sequences — name, version, scope (**Workspace** or **Platform**), whether enabled — and **Details →**: rollout, trigger conditions, required tools and permissions, constraints, completion checks and escalation conditions | — |
+
+## Workspace
+
+| Page | Works today | Shown but not active |
+| --- | --- | --- |
+| **Projects & Workspace** | A read-only summary: what is detected on opening a folder (Git repository, `.beaver/config.yml`, Dockerfile, Docker Compose, project structure), the scan depth, the folders always ignored, and what Beaver may write back | None of it is editable yet — every detection is always on, and writes are scoped by which project is open, not by file kind |
+| **Terminal** | Default shell; appearance (**System terminal** or **Beaver custom**); font, weight, size, line height and cursor; **Copy on select**; **Command intelligence** — the master switch, **Completion popup**, **Signature panel**, **Pre-execution diagnostics** (advisory only — Enter always runs what you typed) and **Value completion** | **Open terminal in current project**, **Restore terminals**, **Confirm terminal exit**, the three **Beaver integration** switches and **Ghost text** are stored but not wired |
+| **Git** | **Before deployment** guards for **Dirty workspace** and **Unpushed commits** — each **Ignore**, **Warn** or **Block** — applied the next time you use **Deploy this** | **Show dirty workspace indicator** is always on |
+| **Beaver CLI & Agent** | Versions of Desktop and the CLI, and whether the CLI is detected; **Copy & run in a terminal** for the install command | The local agent's status shows **Not available**; **Check for updates** is not built |
+| **Activity** | Your profile and your Following feed (the five most recent public items); **Open on web** for Explore and publishing | — |
+
+## System
+
+| Page | Works today | Shown but not active |
+| --- | --- | --- |
+| **Notifications** | **Desktop notifications** and **Sound**; the workspace's **On call** schedules (on-call rotations), **Escalation** policies (who is told if nobody acknowledges a critical alert) and **Digest** (**Immediately**, **Daily digest**, **Weekly digest**) — critical and security alerts are never held for a digest | The per-category toggles (**Deployments**, **Build failures**, **Unhealthy containers**, **Machine offline**, **Alie task completion**, **Harness disconnected**, **CLI updates**) are saved but do not drive delivery yet |
+| **Appearance** | **Theme** — **System**, **Light**, **Dark**; **Reduce motion** | **UI density** and **Sidebar size** are not wired |
+| **Security & Privacy** | **AI data** — what Alie folds into a conversation (the same switches as Context Permissions); **Local data** sizes and **Open Beaver Desktop's data folder** | **Require authentication** for production actions, secrets and machine deletion (nothing to gate yet); **Clear cache** and **Clear logs** read **Nothing to clear** — Desktop keeps neither |
+| **Updates** | Installed versions of Desktop and the Beaver CLI | **Automatic Desktop updates**, **Automatic Beaver CLI updates** and **Automatically update Agent** are not available; harness updates (Codex, Claude Code) are fixed to **Notify only** |
+| **Account** | The Account settings page: who you are signed in as and how, the active workspace, your plan (the **plan card**) and role; 2-step verification status with **Manage on web**; **Sign-in** methods; **Repository access**; an **Upgrade to Team** card with the equivalent `beaver billing` commands; **Manage account** (opens the Dashboard); **Switch workspace** | 2-step verification is managed on the web — Desktop never asks for a code |
+| **Advanced** | The control-plane address in use; **Reset Desktop settings** (every preference returns to its default; never touches an open project or your sign-in) | **Override endpoint**, **Debug logging**, **Developer tools**, **Experimental features** and **Reset local Beaver state** are not available |
+| **About** | Desktop version, device, platform and what it is running in | **Documentation**, **Report an issue** and **View licenses** read **Not configured** |
+
+<Warning>
+**Reset Desktop settings** clears preferences on this computer. Your account, workspaces and deployments are not affected.
+</Warning>
+
+## Repository access
+
+**Account** shows **Sign-in** methods and **Repository access** — the GitHub accounts connected to Beaver. Connecting or repairing them happens in the Dashboard; see [Sign-in and repository access](/teams/signing-in-and-repository-access).
+
+## Same task in the other interfaces
+
+Account-level settings are in the Dashboard's **Settings**; workspace-level ones are `beaver settings` (see [Settings and precedence](/teams/settings-and-precedence)). Desktop-local pages — General, Terminal, Appearance, Updates — have no equivalent elsewhere.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Settings and precedence" icon="sliders" href="/teams/settings-and-precedence">Which value wins.</Card>
+  <Card title="Alie" icon="bot" href="/alie">What the Alie settings change.</Card>
+</CardGroup>

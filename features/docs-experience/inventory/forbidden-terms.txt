@@ -1,0 +1,7 @@
+# regex<TAB>message — Era 15 V15 terminology lint (prose only; fenced code and inline code are exempt). All are errors.
+\bALIE\b	write "Alie" — the UI spells it Alie (inventory/terminology.csv)
+\bruntime node	the machine role is "Host" (Builder, Host, Builder + Host)
+\bGitLab\b	GitLab is not a supported integration (currently GitHub only) — do not imply it is
+\bVectorihub\b	write "VectorIHub"
+\bVector iHub\b	write "VectorIHub"
+\bvectorihub CLI\b	write "Beaver CLI"

@@ -3,10 +3,11 @@ title: "beaver alie"
 sidebarTitle: "alie"
 description: "Chat with Alie, Beaver's infrastructure AI, and manage sessions, approvals, and workspace-wide AI settings."
 icon: "wand-magic-sparkles"
+type: reference
 ---
 
 <Info>
-  New here? [AI connections and Alie](/concepts/ai-connections-and-alie) explains what this is and when to use it, before diving into syntax.
+  New here? [AI connections and Alie](/alie/what-is-alie) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 <Note>
@@ -33,9 +34,9 @@ manage sessions, approvals, and workspace-wide AI settings without starting a co
 | `sessions` | List your sessions. |
 | `audit` | Show Alie's tool and action audit trail. |
 | `session [session]` | Show one session's detail. |
-| `rename <session> <new-name>` | Rename a session. |
-| `delete <session>` | Delete a session. |
-| `archive <session>` | Archive a session — hidden from the default list, never deleted. |
+| `sessions rename <session> <new-name>` | Rename a session. |
+| `sessions delete <session>` | Delete a session. |
+| `sessions archive <session>` | Archive a session — hidden from the default list, never deleted. |
 | `fork <session>` | Fork a session into a new one, seeded from its current state. |
 | `compact [session]` | Force-compact a session into a structured summary. |
 | `model [session]` | Show or change a session's model. |
@@ -56,7 +57,7 @@ manage sessions, approvals, and workspace-wide AI settings without starting a co
   On `sessions`: include archived/inactive sessions in the list.
 </ParamField>
 <ParamField query="--force" type="boolean" default="false">
-  On `delete <session>`: skip the confirmation prompt. See [shared
+  On `sessions delete <session>`: skip the confirmation prompt. See [shared
   flags](/cli/shared-flags#yes) — same behavior, this command's own flag name.
 </ParamField>
 <ParamField query="--event-type" type="string" default="">
@@ -68,7 +69,7 @@ manage sessions, approvals, and workspace-wide AI settings without starting a co
 
 ### Consequences
 
-`delete` permanently removes a session; `archive` only hides it from the default list — use
+`sessions delete` permanently removes a session; `sessions archive` only hides it from the default list — use
 `archive` if you might want the history back later. `fork` doesn't affect the original
 session; it starts a new one seeded from where the original left off.
 

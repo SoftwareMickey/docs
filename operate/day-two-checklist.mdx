@@ -1,0 +1,32 @@
+---
+title: "Day-two checklist"
+sidebarTitle: "Day-two checklist"
+description: "A routine for running Beaver in production — what to look at daily, weekly and monthly."
+keywords: ["day-two checklist", "beaver notifications", "beaver incidents"]
+icon: "calendar-check"
+type: howto
+audience: [operator, team-lead]
+---
+
+Once you are live ([Production readiness](/start/production-readiness)), these keep it that way. Each line is something you can check in a minute.
+
+## Daily
+
+- [ ] **Anything critical?** `beaver notifications --severity=critical --unread` and `beaver incidents --status=open`. ([Notifications](/operate/notifications), [Incidents](/operate/incidents))
+- [ ] **Is everything up?** The Dashboard home's needs-attention view, or `beaver machine fleet-overview`. ([Status words](/operate/deployment-status))
+
+## Weekly
+
+- [ ] **Drift?** `beaver state status` for each project. ([Drift and reconcile](/operate/drift-and-reconcile))
+- [ ] **Capacity headroom?** `beaver cloud capacity <cloud>`. ([Capacity and placement](/infrastructure/capacity-and-placement))
+- [ ] **Backups succeeding?** `beaver service backup list <service>`. ([Backups and restore](/data/backups-and-restore))
+- [ ] **Pending approvals?** `beaver workspace approvals`. ([Production approvals](/teams/production-approvals))
+
+## Monthly
+
+- [ ] **Restore one backup into a new service** and check it. ([Backups and restore](/data/backups-and-restore))
+- [ ] **Review who has access** — `beaver workspace members` and your roles. ([Roles and permissions](/teams/roles-and-permissions))
+- [ ] **OS updates** on machines — `beaver machine package-update`, when it suits you. ([Machine maintenance](/cli/machine))
+- [ ] **Domains and certificates** still healthy — `beaver route inspect <domain>`. ([TLS](/network/tls))
+- [ ] **Plan fit** — limits and usage. ([Plans and billing](/teams/plans-and-billing))
+- [ ] **Rehearse rollback** — `beaver recover` is read-only and safe to run. ([Rollback and recovery](/deploy/rollback-and-recovery))

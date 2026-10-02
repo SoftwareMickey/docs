@@ -1,0 +1,59 @@
+---
+title: "Sign-in methods"
+sidebarTitle: "Sign-in methods"
+description: "Sign in with email, Google or GitHub, see which methods your account has, and add or remove one without losing access."
+keywords: ["sign-in methods", "beaver login", "beaver whoami"]
+icon: "log-in"
+type: howto
+audience: [team-lead, developer, security]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A **sign-in method** is a way to prove who you are to your Beaver account: your email, Google, or GitHub. You can have more than one on the same account. Signing in is **separate from
+repository access** — see [Signing in vs. connecting repositories](/teams/signing-in-and-repository-access) for that distinction and for every message each flow can show.
+
+## See your methods
+
+<Tabs>
+  <Tab title="Dashboard">**Settings → Security** lists the ways you can sign in.</Tab>
+  <Tab title="Desktop">Desktop signs you in through your browser (see [Install Beaver Desktop](/install/desktop)); manage methods in the Dashboard.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver whoami --methods     # also shows which sign-in methods this account has (one network call)
+    beaver github               # your sign-in methods and each connected GitHub account's health
+    ```
+  </Tab>
+</Tabs>
+
+## Add or remove one
+
+- **Add Google or GitHub** to an existing account from **Settings → Security**. If you choose *Continue with Google* on the sign-in page and the Google email matches your account, you are offered an emailed link
+  to your Beaver address that connects it once you confirm.
+- **Remove** one from the same page. Beaver will not let you remove your **only** way to sign in.
+- Beaver recognises your Google account by its permanent id, not its address, so changing your Google email does not lock you out.
+
+## Sign in from the CLI or Desktop
+
+The CLI and Desktop never ask for a password or token. `beaver login` (and Desktop's **Sign in**) opens a browser approval page — **Approve this device** — where you sign in with any of your methods and approve the connection.
+On a server with no browser, `beaver login --no-browser` prints the link to open on any device. If 2-step verification is on, the approval page asks for it.
+
+## Protect the account
+
+Turn on [2-step verification](/teams/two-step-verification); an Owner can require it for a workspace.
+
+## If it fails
+
+Every message you can see signing in with [GitHub](/operate/troubleshooting-github) or [Google](/operate/troubleshooting-google) has its own entry.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="2-step verification" icon="shield-check" href="/teams/two-step-verification">Authenticator, passkeys, recovery.</Card>
+  <Card title="Repository access" icon="github" href="/teams/signing-in-and-repository-access">Why it is separate.</Card>
+</CardGroup>

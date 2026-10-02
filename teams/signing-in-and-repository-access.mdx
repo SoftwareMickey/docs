@@ -1,0 +1,195 @@
+---
+title: "Signing in vs. connecting repositories"
+description: "Signing in with Google or GitHub proves who you are. Connecting repositories is a separate, explicit choice about what Beaver may read."
+sidebarTitle: "Signing in vs. repositories"
+icon: "key-round"
+type: concept
+audience: [developer, team-lead]
+interfaces: [dashboard, desktop, cli]
+---
+
+You can sign in to Beaver with **Google**, **GitHub** or an email and password. Signing in with
+Google or GitHub only ever proves who you are — [read how Google works below](#signing-in-with-google).
+
+"GitHub" shows up in three different places in Beaver, and they are deliberately kept apart.
+Most confusion about GitHub in Beaver comes from treating them as one thing.
+
+| | What it answers | What you do | What it lets Beaver do |
+| --- | --- | --- | --- |
+| **Signing in with GitHub** | Who are you? | Choose *Continue with GitHub* on the sign-in page | Recognise you. Nothing else. |
+| **Repository access** | Which repositories may Beaver read? | Install the Beaver GitHub App and pick repositories | Read and clone the repositories you selected, and hear about changes to them |
+| **GitHub on your own machine** | Can *this computer* reach GitHub? | Sign in to the GitHub CLI locally | Nothing on Beaver's side — Beaver never sees it |
+
+The rule that keeps this understandable: **signing in never gives Beaver access to your
+repositories, and repository access never signs anyone in.** They start separately, succeed
+or fail separately, and end separately.
+
+## Signing in with GitHub
+
+Choosing *Continue with GitHub* asks GitHub two things: who you are, and your email address.
+That is all the permission requested. If you are new, an account is created for you; if you
+have signed in this way before, you are signed back in to the same account.
+
+Beaver keeps your GitHub user id, username, avatar and email address so it can recognise you
+next time. It does **not** keep a GitHub access token — the short-lived token GitHub hands
+over while you sign in is used once and discarded.
+
+A few things worth knowing:
+
+- **If your GitHub email is private,** the account is still created. It is given a
+  placeholder address that cannot receive mail, so Beaver has no email to reach you on until
+  you make one available.
+- **If an account already uses your email,** Beaver will not merge the two automatically. You
+  are asked to sign in the way you first created the account, then connect GitHub from your
+  account settings. This is deliberate: an email address alone is not proof that two accounts
+  belong to the same person.
+- **If your account has two-factor authentication,** signing in with GitHub still asks for the
+  second factor before a session begins.
+- **You can connect GitHub to an existing account** from account settings, and remove it
+  again — as long as you keep at least one other way to sign in.
+
+## Signing in with Google
+
+Choosing *Continue with Google* asks Google for three things: that you are who you say you are,
+your email address, and your basic profile (name and picture). That is all the permission
+requested — **identity only**. Beaver gets no access to your Gmail, Drive, Calendar, contacts or
+any other part of your Google account, and no access to any Google Cloud or Workspace resource.
+If you are new, an account is created for you; if you have signed in this way before, you are
+signed back in to the same account.
+
+Beaver keeps your Google account's permanent id, your name, email address (and whether Google
+verified it) and your picture, so it can recognise you next time. It does **not** keep a Google
+token of any kind.
+
+A few things worth knowing:
+
+- **Google must have verified your email.** If it hasn't, or Google shares no address, Beaver
+  can't create an account from it. See [Troubleshooting Google](/operate/troubleshooting-google).
+- **If an account already uses your Google email,** Beaver will not merge the two silently. You
+  are offered **Email me a sign-in link**: it goes to the existing account's own address, and
+  only when you confirm there is Google connected. That proves you control the mailbox, which a
+  matching address alone does not. (If that address was never verified, confirming also resets
+  its password and signs out its sessions, so nobody who registered it earlier keeps access.)
+- **Google and GitHub can be on one account.** Each is a way to sign in to the *same* Beaver
+  account; connecting one never signs you out of the other.
+- **If your account has two-factor authentication,** signing in with Google still asks for the
+  second factor before a session begins.
+- **The command line and the desktop app** never sign in with Google themselves. `beaver login`
+  and Beaver Desktop open your browser, where you choose Google, GitHub or email and approve the
+  device — see [`beaver login`](/cli/login). The desktop app uses your system browser because
+  Google refuses sign-in inside embedded windows.
+- **You can connect Google to an existing account, change which Google account is connected,
+  or remove it** from *Settings → Security*, as long as you keep at least one other way to sign
+  in. If Google is your only way in, add a password first.
+
+## Connecting repositories
+
+Repository access comes from the **Beaver GitHub App**. Installing it is a GitHub-side
+decision: GitHub shows you the account you are installing it on and lets you choose *all
+repositories* or only the ones you name. Beaver can read only what you selected there.
+
+When you finish, Beaver asks GitHub to confirm that **your** GitHub account really has access
+to that installation. Only then is it connected. This is what stops one person from claiming
+another person's or organisation's installation just by knowing its number.
+
+What that means in practice:
+
+- **Personal accounts:** you can connect the installation on your own GitHub account.
+- **Organisations:** any member who can access the installation can connect it. Each Beaver
+  user who connects the same organisation gets their own connection; nobody takes over
+  anyone else's.
+- **Organisations that require approval:** if you are not an owner, GitHub sends the owner a
+  request instead of installing. Beaver shows *Installation requested*; once an owner
+  approves, connect again.
+- **Nothing is ever connected without that confirmation.** If GitHub cannot confirm it, the
+  attempt ends as *denied* and nothing is saved.
+
+Beaver stores which installation you connected, the account it belongs to and how repositories
+were selected. It does not store a token for it; access is granted to Beaver on demand for as
+long as the installation stands.
+
+## Common questions
+
+<AccordionGroup>
+  <Accordion title="Can I use Google and GitHub on one account?">
+    Yes. Each is a separate way to sign in to the same Beaver account. Connect the second from
+    *Settings → Security*, and remove either later as long as one way to sign in remains.
+    GitHub *repository access* is a different thing again and is unaffected either way.
+  </Accordion>
+  <Accordion title="I signed up with email — can I add Google?">
+    Yes. Sign in as usual, then choose *Connect Google* in *Settings → Security*. Or choose
+    *Continue with Google* on the sign-in page: if the Google email matches your account, you'll
+    be offered an emailed link to your Beaver address that connects it once you confirm.
+  </Accordion>
+  <Accordion title="I changed my Google email — am I locked out?">
+    No. Beaver recognises your Google account by its permanent id, not by the address, so signing
+    in keeps working. Your Beaver account's email is not rewritten when Google's changes.
+  </Accordion>
+  <Accordion title="How do I revoke Beaver's access on Google's side?">
+    Beaver stores no Google token, so there is nothing to revoke for security. To remove Beaver
+    from your Google account's list of apps anyway, open
+    [Google's third-party access page](https://myaccount.google.com/permissions) and remove it;
+    to stop signing in with Google, disconnect it in *Settings → Security* too.
+  </Accordion>
+  <Accordion title="I signed in with GitHub — why can't Beaver see my repositories?">
+    Signing in only proves who you are. Repository access is a separate step: install the
+    Beaver GitHub App and choose repositories. New GitHub sign-ups are offered this step right
+    after their account is created, and it can be skipped and done later.
+  </Accordion>
+  <Accordion title="I uninstalled the GitHub App — am I signed out?">
+    No. Your session and your ability to sign in are unchanged. Beaver notices the
+    uninstall, marks that connection as disconnected, and projects that used it can no longer
+    pull new commits until you connect again.
+  </Accordion>
+  <Accordion title="I removed GitHub as a sign-in method — did my repositories disconnect?">
+    No. Removing GitHub as a way to sign in leaves your repository connections exactly as
+    they were, and signing out does too. Beaver will not let you remove your only way to sign
+    in.
+  </Accordion>
+  <Accordion title="Which GitHub does my build machine use?">
+    Neither of the above. A machine that builds your code uses the GitHub sign-in on that
+    machine itself, which Beaver never sees and never stores. Checking it is a separate,
+    local step from signing in to Beaver or connecting repositories.
+  </Accordion>
+  <Accordion title="Someone removed a repository from the app — what happens?">
+    Beaver is told by GitHub and updates what it can see. Projects linked to a repository that
+    is no longer selected stop pulling new commits; select the repository again in GitHub's
+    settings for the app to restore it.
+  </Accordion>
+</AccordionGroup>
+
+## The words you will see
+
+Finishing a connection always ends in one of these, in the web app, the desktop app and the
+command line alike.
+
+| Result | Meaning |
+| --- | --- |
+| **Connected** | GitHub confirmed your access and the repositories you selected are available. |
+| **Requested** | An organisation owner must approve the app. Nothing is connected yet. |
+| **Cancelled** | You backed out on GitHub. No access was granted. |
+| **Denied** | GitHub did not confirm your account has access to that installation. Nothing was saved. |
+| **Expired** | The link only works once, in the browser that started it. Start again. |
+| **Failed** | GitHub returned an error while finishing. Nothing was saved; try again. |
+
+Each has a remedy in [Troubleshooting GitHub](/operate/troubleshooting-github).
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Integrations" href="/deploy/integrations">
+    What connected services are for, and what breaks when access is lost.
+  </Card>
+  <Card title="Troubleshooting GitHub" href="/operate/troubleshooting-github">
+    Every sign-in and connection message, with the exact remedy.
+  </Card>
+  <Card title="Troubleshooting Google" href="/operate/troubleshooting-google">
+    The messages specific to signing in with Google, and Google's own error pages for operators.
+  </Card>
+  <Card title="beaver github" href="/cli/github">
+    Check and manage repository access from the command line.
+  </Card>
+  <Card title="beaver login" href="/cli/login">
+    Sign in from a terminal, including over SSH.
+  </Card>
+</CardGroup>

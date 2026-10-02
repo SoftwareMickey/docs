@@ -1,0 +1,50 @@
+---
+title: "A plan limit blocks an action"
+sidebarTitle: "Plan limit"
+description: "Beaver refuses because your plan's limit is reached — which limits exist and how to resolve them."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [team-lead, developer]
+interfaces: [dashboard, cli]
+keywords: ["plan limit", "your plan allows up to", "upgrade your plan", "seat limit"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+`Your plan allows up to N connected machines.` · `…managed services.` · `…repositories.` · `Your plan does not include X services.` · `Your plan allows up to 5 team members.` (`PLAN_LIMIT_REACHED`)
+
+## Check first
+
+1. `beaver workspace show` — the active workspace, its plan and its limits.
+2. `beaver service catalog` marks the service types your plan includes.
+
+## Causes and fixes
+
+### You have reached a count limit
+
+Remove something you no longer need, or move to a plan with a higher limit. Compare plans in [Plans and billing](/teams/plans-and-billing).
+
+### The type is not in your plan
+
+Choose another type, or upgrade.
+
+### You are not the Owner
+
+Only the Owner can change the plan: `billing is managed by the workspace Owner`. Ask them, or `beaver billing request-upgrade --plan team` (nothing is charged by a request).
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Plans and billing" icon="arrow-right" href="/teams/plans-and-billing">The page that prevents or explains this.</Card>
+  <Card title="Downgrades and retention" icon="arrow-right" href="/teams/downgrades-and-retention">The page that prevents or explains this.</Card>
+</CardGroup>

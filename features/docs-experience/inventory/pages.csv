@@ -1,0 +1,226 @@
+path,target_path,type_target,audience,interfaces,words,thin,stale,in_nav,action_later
+alie/approvals-and-safety,alie/approvals-and-safety,howto,developer;team-lead;security,desktop;cli,281,y,,y,new
+alie/automation-policies,alie/automation-policies,howto,team-lead;developer;security,desktop,262,y,,y,new
+alie/connect-an-ai-provider,alie/connect-an-ai-provider,howto,developer,desktop;cli,355,,,y,new
+alie/index,alie/index,hub,developer,,108,,,y,new
+alie/safe-production-use,alie/safe-production-use,howto,team-lead;security;developer,,278,y,,y,new
+alie/sessions-and-context,alie/sessions-and-context,howto,developer,desktop;cli,322,,,y,new
+alie/spending-controls,alie/spending-controls,howto,team-lead;developer,cli,138,y,,y,new
+alie/troubleshooting,alie/troubleshooting,troubleshooting,developer,desktop;cli,235,y,,y,new
+alie/what-is-alie,alie/what-is-alie,concept,developer,dashboard;desktop;cli,315,,,y,rewrite Era13 V71
+cli,cli,hub,developer;operator,cli,1420,,,y,"keep (reference, features/docs)"
+cli/account,cli/account,reference,dev;ops,cli,689,,,y,"keep (reference, features/docs)"
+cli/activity,cli/activity,reference,dev;ops,cli,266,,,y,"keep (reference, features/docs)"
+cli/agent,cli/agent,reference,dev;ops,cli,366,,,y,"keep (reference, features/docs)"
+cli/ai,cli/ai,reference,dev;ops,cli,796,,,y,"keep (reference, features/docs)"
+cli/alie,cli/alie,reference,dev;ops,cli,1557,,,y,"keep (reference, features/docs)"
+cli/autoscale,cli/autoscale,reference,dev;ops,cli,586,,,y,"keep (reference, features/docs)"
+cli/billing,cli/billing,reference,dev;ops,cli,1296,,,y,"keep (reference, features/docs)"
+cli/cloud,cli/cloud,reference,dev;ops,cli,2207,,,y,"keep (reference, features/docs)"
+cli/completion,cli/completion,reference,dev;ops,cli,58,,,y,"keep (reference, features/docs)"
+cli/compose,cli/compose,reference,dev;ops,cli,901,,,y,"keep (reference, features/docs)"
+cli/config,cli/config,reference,dev;ops,cli,1660,,,y,"keep (reference, features/docs)"
+cli/connect,cli/connect,reference,dev;ops,cli,555,,,y,"keep (reference, features/docs)"
+cli/container,cli/container,reference,dev;ops,cli,815,,,y,"keep (reference, features/docs)"
+cli/containers,cli/containers,reference,dev;ops,cli,268,,,y,"keep (reference, features/docs)"
+cli/coupon,cli/coupon,reference,dev;ops,cli,314,,,y,"keep (reference, features/docs)"
+cli/deploy,cli/deploy,reference,dev;ops,cli,1529,,y,y,"keep (reference, features/docs)"
+cli/deployment,cli/deployment,reference,dev;ops,cli,468,,,y,"keep (reference, features/docs)"
+cli/diff,cli/diff,reference,dev;ops,cli,307,,,y,"keep (reference, features/docs)"
+cli/docker,cli/docker,reference,dev;ops,cli,238,,,y,"keep (reference, features/docs)"
+cli/doctor,cli/doctor,reference,dev;ops,cli,607,,,y,"keep (reference, features/docs)"
+cli/domain,cli/domain,reference,dev;ops,cli,511,,,y,"keep (reference, features/docs)"
+cli/edge,cli/edge,reference,dev;ops,cli,1276,,y,y,"keep (reference, features/docs)"
+cli/environment,cli/environment,reference,dev;ops,cli,650,,,y,"keep (reference, features/docs)"
+cli/firewall,cli/firewall,reference,dev;ops,cli,827,,,y,"keep (reference, features/docs)"
+cli/follow,cli/follow,reference,dev;ops,cli,281,,,y,"keep (reference, features/docs)"
+cli/git,cli/git,reference,dev;ops,cli,114,,,y,"keep (reference, features/docs)"
+cli/github,cli/github,reference,dev;ops,cli,774,,,y,"keep (reference, features/docs)"
+cli/health,cli/health,reference,dev;ops,cli,437,,,y,"keep (reference, features/docs)"
+cli/history,cli/history,reference,dev;ops,cli,231,,,y,"keep (reference, features/docs)"
+cli/incidents,cli/incidents,reference,dev;ops,cli,239,,,y,"keep (reference, features/docs)"
+cli/init,cli/init,reference,dev;ops,cli,368,,,y,"keep (reference, features/docs)"
+cli/inspect,cli/inspect,reference,dev;ops,cli,232,,,y,"keep (reference, features/docs)"
+cli/integrations,cli/integrations,reference,dev;ops,cli,322,,,y,"keep (reference, features/docs)"
+cli/login,cli/login,reference,dev;ops,cli,654,,,y,"keep (reference, features/docs)"
+cli/logout,cli/logout,reference,dev;ops,cli,237,,,y,"keep (reference, features/docs)"
+cli/logs,cli/logs,reference,dev;ops,cli,259,,,y,"keep (reference, features/docs)"
+cli/machine,cli/machine,reference,dev;ops,cli,1720,,,y,"keep (reference, features/docs)"
+cli/metrics,cli/metrics,reference,dev;ops,cli,332,,,y,"keep (reference, features/docs)"
+cli/mystic,cli/mystic,reference,dev;ops,cli,277,,,y,"keep (reference, features/docs)"
+cli/notifications,cli/notifications,reference,dev;ops,cli,224,,,y,"keep (reference, features/docs)"
+cli/observe,cli/observe,reference,dev;ops,cli,437,,,y,"keep (reference, features/docs)"
+cli/plan,cli/plan,reference,dev;ops,cli,288,,,y,"keep (reference, features/docs)"
+cli/plans,cli/plans,reference,dev;ops,cli,121,,,y,"keep (reference, features/docs)"
+cli/preflight,cli/preflight,reference,dev;ops,cli,662,,,y,"keep (reference, features/docs)"
+cli/profile,cli/profile,reference,dev;ops,cli,218,,,y,"keep (reference, features/docs)"
+cli/project,cli/project,reference,dev;ops,cli,404,,,y,"keep (reference, features/docs)"
+cli/promote,cli/promote,reference,dev;ops,cli,450,,,y,"keep (reference, features/docs)"
+cli/publish,cli/publish,reference,dev;ops,cli,442,,,y,"keep (reference, features/docs)"
+cli/reconcile,cli/reconcile,reference,dev;ops,cli,391,,,y,"keep (reference, features/docs)"
+cli/recover,cli/recover,reference,dev;ops,cli,502,,,y,"keep (reference, features/docs)"
+cli/route,cli/route,reference,dev;ops,cli,236,,,y,"keep (reference, features/docs)"
+cli/scaling,cli/scaling,reference,dev;ops,cli,1027,,,y,"keep (reference, features/docs)"
+cli/server,cli/server,reference,dev;ops,cli,82,,,y,"keep (reference, features/docs)"
+cli/service,cli/service,reference,dev;ops,cli,2490,,,y,"keep (reference, features/docs)"
+cli/settings,cli/settings,reference,dev;ops,cli,509,,,y,"keep (reference, features/docs)"
+cli/shared-flags,cli/shared-flags,reference,dev;ops,cli,674,,,y,"keep (reference, features/docs)"
+cli/shell,cli/shell,reference,dev;ops,cli,53,,,y,"keep (reference, features/docs)"
+cli/skills,cli/skills,reference,dev;ops,cli,420,,,y,"keep (reference, features/docs)"
+cli/spec,cli/spec,reference,dev;ops,cli,415,,,y,"keep (reference, features/docs)"
+cli/state,cli/state,reference,dev;ops,cli,823,,,y,"keep (reference, features/docs)"
+cli/status,cli/status,reference,dev;ops,cli,330,,,y,"keep (reference, features/docs)"
+cli/template,cli/template,reference,dev;ops,cli,326,,,y,"keep (reference, features/docs)"
+cli/traffic,cli/traffic,reference,dev;ops,cli,462,,,y,"keep (reference, features/docs)"
+cli/two-step-login,cli/two-step-login,reference,dev;ops,cli,230,,,y,"keep (reference, features/docs)"
+cli/update,cli/update,reference,dev;ops,cli,57,,,y,"keep (reference, features/docs)"
+cli/validate,cli/validate,reference,dev;ops,cli,292,,,y,"keep (reference, features/docs)"
+cli/version,cli/version,reference,dev;ops,cli,44,,,y,"keep (reference, features/docs)"
+cli/whoami,cli/whoami,reference,dev;ops,cli,290,,,y,"keep (reference, features/docs)"
+cli/workspace,cli/workspace,reference,dev;ops,cli,2222,,,y,"keep (reference, features/docs)"
+data/backups-and-restore,data/backups-and-restore,howto,operator,cli,826,,,y,split howtos Era9 V48
+data/connect-locally,data/connect-locally,howto,developer,cli,362,,,y,howto Era9 V47
+data/create-a-service,data/create-a-service,howto,developer;operator,dashboard;desktop;cli,428,,,y,new
+data/credentials-and-connection-strings,data/credentials-and-connection-strings,howto,developer,dashboard;cli,581,,,y,howto Era9 V47
+data/high-availability,data/high-availability,howto,operator,cli,396,,,y,howto Era9 V49
+data/index,data/index,hub,developer;operator,,125,,,y,new
+data/persistent-volumes,data/persistent-volumes,concept,developer;operator,desktop;cli,270,,,y,howto Era9 V50
+data/resize-and-upgrade,data/resize-and-upgrade,howto,operator,cli,295,y,,y,new
+data/services,data/services,hub,developer;operator,cli,463,,,y,catalog hub Era9 V51
+data/services-and-persistence,data/services-and-persistence,concept,developer;operator,dashboard;desktop;cli,764,,,y,survivor concept Era14
+data/services/kafka,data/services/kafka,howto,developer;operator,cli,544,,,y,service recipe Era9 V51
+data/services/mariadb,data/services/mariadb,howto,developer;operator,cli,508,,,y,service recipe Era9 V51
+data/services/meilisearch,data/services/meilisearch,howto,developer;operator,cli,483,,,y,service recipe Era9 V51
+data/services/minio,data/services/minio,howto,developer;operator,cli,578,,,y,service recipe Era9 V51
+data/services/mongodb,data/services/mongodb,howto,developer;operator,cli,502,,,y,service recipe Era9 V51
+data/services/mysql,data/services/mysql,howto,developer;operator,cli,533,,,y,service recipe Era9 V51
+data/services/nats,data/services/nats,howto,developer;operator,cli,489,,,y,service recipe Era9 V51
+data/services/postgres-pgvector,data/services/postgres-pgvector,howto,developer;operator,cli,710,,,y,service recipe Era9 V51
+data/services/postgres-postgis,data/services/postgres-postgis,howto,developer;operator,cli,711,,,y,service recipe Era9 V51
+data/services/postgres-timescaledb,data/services/postgres-timescaledb,howto,developer;operator,cli,765,,,y,service recipe Era9 V51
+data/services/postgresql,data/services/postgresql,howto,developer;operator,cli,925,,,y,service recipe Era9 V51
+data/services/rabbitmq,data/services/rabbitmq,howto,developer;operator,cli,483,,,y,service recipe Era9 V51
+data/services/redis,data/services/redis,howto,developer;operator,cli,558,,,y,service recipe Era9 V51
+deploy/builds,deploy/builds,howto,developer;operator,dashboard;cli,401,,,y,new
+deploy/builds-and-images,deploy/builds-and-images,concept,developer,cli,250,,,y,survivor concept + builds howto Era7 V34
+deploy/ci-cd,deploy/ci-cd,howto,developer,cli,512,,,y,new
+deploy/compose-applications,deploy/compose-applications,howto,developer,dashboard;cli,390,,,y,retype howto Era7 V33
+deploy/configuration,deploy/configuration,concept,developer,cli,294,,,y,merge env vars Era7 V35
+deploy/containers-and-replicas,deploy/containers-and-replicas,concept,developer;operator,dashboard;desktop;cli,277,,,y,keep Era7
+deploy/deployment-configuration,deploy/deployment-configuration,howto,developer,cli,480,,,y,keep Era7 V35
+deploy/deployment-lifecycle,deploy/deployment-lifecycle,concept,developer,,283,,,y,survivor concept Era14
+deploy/dockerfile-requirements,deploy/dockerfile-requirements,howto,developer,cli,389,,,y,rework as from-dockerfile Era7 V32
+deploy/environment-variables,deploy/environment-variables,howto,developer,dashboard;cli,403,,,y,merge env-vars-and-secrets Era7 V35
+deploy/environments,deploy/environments,howto,developer;team-lead,dashboard;cli,283,y,,y,new
+deploy/from-github,deploy/from-github,howto,developer,dashboard;cli,554,,,y,new
+deploy/from-local-project,deploy/from-local-project,howto,developer,cli,438,,,y,new
+deploy/health-checks,deploy/health-checks,howto,developer;operator,cli,324,,,y,new
+deploy/history,deploy/history,howto,developer;operator,dashboard;cli,294,y,,y,new
+deploy/index,deploy/index,hub,developer,,183,,,y,new
+deploy/integrations,deploy/integrations,concept,developer,dashboard;cli,279,,,y,fold into from-github Era7 V32
+deploy/overview,deploy/overview,howto,developer,dashboard;desktop;cli,411,,,y,rewrite Era7 V32
+deploy/preflight-and-planning,deploy/preflight-and-planning,concept,developer,cli,255,,,y,keep Era7
+deploy/projects,deploy/projects,concept,developer,dashboard;desktop;cli,381,,,y,keep Era7 V32
+deploy/promote,deploy/promote,howto,developer;team-lead,cli,294,y,,y,new
+deploy/publishing-a-template,deploy/publishing-a-template,howto,developer,dashboard;cli,510,,,y,keep
+deploy/rollback-and-recovery,deploy/rollback-and-recovery,howto,developer;operator,dashboard;cli,337,,,y,split rollback/promote/history Era7 V37
+deploy/scale,deploy/scale,howto,developer;operator,cli,274,y,,y,merge scaling-and-resources Era7 V36
+deploy/scaling-and-resources,deploy/scaling-and-resources,concept,developer;operator,cli,299,,,y,merge into scale Era7 V36
+index,index,hub,evaluator;developer;team-lead;operator;security,dashboard;desktop;cli,476,,,y,rewrite Era4 V14
+infrastructure/aws,infrastructure/aws,howto,operator,cli,675,,,y,provider template Era8 V43
+infrastructure/azure,infrastructure/azure,howto,operator,cli,1010,,,y,provider template Era8 V43
+infrastructure/beaver-cloud,infrastructure/beaver-cloud,concept,operator,dashboard;desktop;cli,758,,,y,split clouds howto Era8 V41
+infrastructure/capacity-and-placement,infrastructure/capacity-and-placement,howto,operator,desktop;cli,372,,,y,new
+infrastructure/clouds,infrastructure/clouds,howto,operator,dashboard;desktop;cli,363,,,y,new
+infrastructure/connect-a-machine,infrastructure/connect-a-machine,howto,operator;developer,dashboard;desktop;cli,795,,,y,add interface tabs Era8 V40
+infrastructure/connect-and-machine-roles,infrastructure/connect-and-machine-roles,howto,operator,cli,257,y,,y,merge machines-and-roles Era8 V40
+infrastructure/custom-vps-providers,infrastructure/custom-vps-providers,howto,operator,cli,960,,,y,provider template Era8 V43
+infrastructure/drain-and-evacuate,infrastructure/drain-and-evacuate,howto,operator,cli,321,,,y,new
+infrastructure/firewall-requirements,infrastructure/firewall-requirements,reference,operator;security,,610,,,y,keep
+infrastructure/google-cloud,infrastructure/google-cloud,howto,operator,cli,876,,,y,provider template Era8 V43
+infrastructure/index,infrastructure/index,hub,operator,,182,,,y,new
+infrastructure/laptop-builder,infrastructure/laptop-builder,howto,developer;operator,cli,999,,,y,keep
+infrastructure/machine-and-agent-operation,infrastructure/machine-and-agent-operation,concept,operator,cli,358,,,y,merge machines-and-roles Era8 V40
+infrastructure/machines-and-roles,infrastructure/machines-and-roles,concept,operator,cli,882,,,y,merge connect-and-machine-roles Era8 V40
+infrastructure/providers,infrastructure/providers,hub,operator,,243,,,y,keep as provider hub Era8 V43
+infrastructure/storage-and-networks,infrastructure/storage-and-networks,howto,operator;developer,dashboard;desktop;cli,614,,,y,new
+install/cli,install/cli,howto,evaluator;developer,cli,801,,,y,verify Era5 V20
+install/cli-windows,install/cli-windows,howto,evaluator;developer,cli,600,,,y,verify Era5 V20
+install/desktop,install/desktop,howto,developer;operator,desktop,379,,,y,new
+install/doctor,install/doctor,howto,developer;operator,cli,610,,,y,keep
+network/access-controls,network/access-controls,howto,security;operator;team-lead,dashboard;cli,354,,,y,new
+network/beaver-edge,network/beaver-edge,howto,operator,dashboard;cli,319,,,y,howto Era10 V54
+network/domains,network/domains,howto,developer;operator,dashboard;cli,888,,,y,keep Era10 V52
+network/domains-and-routing,network/domains-and-routing,concept,developer;operator,dashboard;cli,269,,,y,split howtos Era10 V52
+network/firewall,network/firewall,concept,operator;security,dashboard;cli,323,,,y,howto Era10 V55
+network/index,network/index,hub,developer;operator;security,,171,,,y,new
+network/load-balancing,network/load-balancing,howto,developer;operator,dashboard;cli,366,,,y,new
+network/rate-limiting,network/rate-limiting,howto,developer;operator;security,dashboard;cli,355,,,y,new
+network/secrets,network/secrets,howto,developer;security,dashboard;cli,361,,,y,new
+network/security-checklist,network/security-checklist,howto,security;team-lead;operator,,310,,,y,new
+network/shared-responsibility,network/shared-responsibility,concept,security;team-lead;evaluator,,404,,,y,new
+network/tls,network/tls,howto,developer;operator,dashboard;cli,300,,,y,new
+operate/activity-and-following,operate/activity-and-following,concept,developer;team-lead,dashboard;cli,687,,,y,keep (split how-to Era11 V60)
+operate/day-two-checklist,operate/day-two-checklist,howto,operator;team-lead,,200,y,,y,new
+operate/deployment-status,operate/deployment-status,reference,developer;operator,,398,,,y,new
+operate/drift-and-reconcile,operate/drift-and-reconcile,howto,developer;operator,desktop;cli,263,y,,y,new
+operate/incidents,operate/incidents,howto,operator,dashboard;cli,146,y,,y,new
+operate/index,operate/index,hub,developer;operator,,162,,,y,new
+operate/logs,operate/logs,howto,developer;operator,dashboard;desktop;cli,257,y,,y,new
+operate/metrics-and-traffic,operate/metrics-and-traffic,howto,developer;operator,dashboard;desktop;cli,259,y,,y,new
+operate/notifications,operate/notifications,howto,developer;team-lead;operator,dashboard;desktop;cli,263,y,,y,new
+operate/observability,operate/observability,concept,operator,,257,,,y,survivor concept Era14
+operate/recovery-model,operate/recovery-model,concept,operator,cli,258,,,y,survivor concept Era14
+operate/state-and-drift,operate/state-and-drift,concept,operator,desktop;cli,332,,,y,survivor concept Era14
+operate/troubleshoot-502-503,operate/troubleshoot-502-503,troubleshooting,developer;operator,dashboard;cli,218,y,,y,new
+operate/troubleshoot-build,operate/troubleshoot-build,troubleshooting,developer,dashboard;cli,326,,,y,new
+operate/troubleshoot-connect,operate/troubleshoot-connect,troubleshooting,operator;developer,cli,178,y,,y,new
+operate/troubleshoot-deploy-unhealthy,operate/troubleshoot-deploy-unhealthy,troubleshooting,developer;operator,dashboard;cli,262,y,,y,new
+operate/troubleshoot-domain,operate/troubleshoot-domain,troubleshooting,developer;operator,dashboard;cli,253,y,,y,new
+operate/troubleshoot-env-var,operate/troubleshoot-env-var,troubleshooting,developer,dashboard;cli,198,y,,y,new
+operate/troubleshoot-machine-offline,operate/troubleshoot-machine-offline,troubleshooting,operator,dashboard;desktop;cli,198,y,,y,new
+operate/troubleshoot-mfa,operate/troubleshoot-mfa,troubleshooting,team-lead;security,dashboard;cli,202,y,,y,new
+operate/troubleshoot-notification,operate/troubleshoot-notification,troubleshooting,team-lead;operator,dashboard;cli,158,y,,y,new
+operate/troubleshoot-plan-limit,operate/troubleshoot-plan-limit,troubleshooting,team-lead;developer,dashboard;cli,199,y,,y,new
+operate/troubleshoot-production-approval,operate/troubleshoot-production-approval,troubleshooting,developer;team-lead,dashboard;desktop;cli,208,y,,y,new
+operate/troubleshoot-repository-access,operate/troubleshoot-repository-access,troubleshooting,developer,dashboard;cli,232,y,,y,new
+operate/troubleshoot-service-connection,operate/troubleshoot-service-connection,troubleshooting,developer,cli,240,y,,y,new
+operate/troubleshoot-tls,operate/troubleshoot-tls,troubleshooting,developer;operator,dashboard;cli,177,y,,y,new
+operate/troubleshooting,operate/troubleshooting,hub,developer;operator;team-lead,,356,,,y,symptom hub Era11 V64
+operate/troubleshooting-github,operate/troubleshooting-github,troubleshooting,developer,dashboard;desktop;cli,1210,,,y,split into symptom pages Era11 V65
+operate/troubleshooting-google,operate/troubleshooting-google,troubleshooting,developer,dashboard;desktop;cli,916,,,y,split into symptom pages Era11 V65
+operate/troubleshooting-teams,operate/troubleshooting-teams,troubleshooting,team-lead,dashboard;cli,1371,,,y,split into symptom pages Era11 V65
+start/choose-your-infrastructure,start/choose-your-infrastructure,howto,evaluator;operator,cli,385,,,y,rewrite Era4 V18
+start/choose-your-interface,start/choose-your-interface,howto,evaluator;developer,dashboard;desktop;cli,591,,,y,new
+start/evaluate-vs-production,start/evaluate-vs-production,howto,evaluator;team-lead;operator,,255,y,,y,new
+start/first-cloud,start/first-cloud,tutorial,operator;developer,dashboard;desktop;cli,326,,,y,new
+start/first-deploy,start/first-deploy,tutorial,developer,dashboard;desktop;cli,487,,,y,new
+start/first-domain,start/first-domain,tutorial,developer;operator,dashboard;cli,370,,,y,new
+start/first-machine,start/first-machine,tutorial,developer;operator,dashboard;desktop;cli,375,,,y,new
+start/first-production-promotion,start/first-production-promotion,tutorial,developer;team-lead,dashboard;desktop;cli,352,,,y,new
+start/first-service,start/first-service,tutorial,developer,dashboard;desktop;cli,416,,,y,new
+start/how-beaver-fits-together,start/how-beaver-fits-together,concept,evaluator;developer,,647,,,y,refresh Era4 V19
+start/production-readiness,start/production-readiness,howto,developer;team-lead;operator;security,,298,y,,y,new
+start/quickstart-cli,start/quickstart-cli,tutorial,evaluator;developer,cli,822,,,y,new
+start/quickstart-dashboard,start/quickstart-dashboard,tutorial,evaluator;developer,dashboard,566,,,y,rewrite Era5 V22
+start/quickstart-desktop,start/quickstart-desktop,tutorial,evaluator;developer;operator,desktop,348,,,y,new
+start/quickstart-team,start/quickstart-team,tutorial,team-lead,dashboard;desktop;cli,331,,,y,new
+start/what-is-vectorihub,start/what-is-vectorihub,concept,evaluator,,339,,,y,rewrite Era4 V16 (merged with features)
+teams/accounts-workspaces-teams,teams/accounts-workspaces-teams,concept,team-lead,dashboard;desktop;cli,734,,,y,new
+teams/audit-history,teams/audit-history,concept,team-lead;security,dashboard;cli,641,,,y,split removal howto Era12 V67
+teams/cloud-sharing,teams/cloud-sharing,howto,team-lead,dashboard;cli,1430,,,y,keep Era12 V68
+teams/create-a-team,teams/create-a-team,howto,team-lead,dashboard;desktop;cli,582,,,y,keep Era12 V66
+teams/downgrades-and-retention,teams/downgrades-and-retention,howto,team-lead,dashboard;cli,537,,,y,keep Era12 V70
+teams/index,teams/index,hub,team-lead;security,,160,,,y,new
+teams/invite-members,teams/invite-members,howto,team-lead,dashboard;desktop;cli,678,,,y,keep Era12 V67
+teams/plans-and-billing,teams/plans-and-billing,concept,team-lead,dashboard;desktop;cli,693,,,y,keep Era12 V70
+teams/production-approvals,teams/production-approvals,concept,team-lead;security,dashboard;desktop;cli,579,,,y,split howto Era12 V67
+teams/removing-members-and-leaving,teams/removing-members-and-leaving,howto,team-lead,dashboard;cli,539,,,y,keep Era12 V68
+teams/roles-and-permissions,teams/roles-and-permissions,concept,team-lead;security,dashboard;desktop;cli,458,,,y,keep Era12 V67
+teams/settings-and-precedence,teams/settings-and-precedence,concept,developer;team-lead,cli,631,,,y,survivor concept Era14
+teams/sign-in-methods,teams/sign-in-methods,howto,team-lead;developer;security,dashboard;desktop;cli,356,,,y,new
+teams/signing-in-and-repository-access,teams/signing-in-and-repository-access,concept,developer;team-lead,dashboard;desktop;cli,1747,,,y,split sign-in-methods + repository-access Era12 V69
+teams/switch-workspaces,teams/switch-workspaces,howto,developer;team-lead,dashboard;desktop;cli,337,,,y,new
+teams/two-step-verification,teams/two-step-verification,concept,team-lead;security,dashboard;desktop;cli,976,,,y,split howto Era12 V69
+teams/working-in-a-shared-workspace,teams/working-in-a-shared-workspace,howto,developer;team-lead,dashboard;desktop;cli,766,,,y,keep Era12 V68
+deploy/bring-your-own-app,deploy/bring-your-own-app,howto,developer,dashboard desktop cli,1100,,,y,new Era19 V99

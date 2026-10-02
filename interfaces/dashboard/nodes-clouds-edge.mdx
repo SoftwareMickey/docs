@@ -1,0 +1,82 @@
+---
+title: "Nodes, clouds, Edge and incidents in the Dashboard"
+sidebarTitle: "Nodes, clouds, Edge"
+description: "Where your machines, Beaver Clouds, Beaver Edge apps, managed services and incidents are in the Dashboard, what each panel means, and which actions are Dashboard-only or CLI-only."
+icon: "server"
+type: interface
+audience: [operator, developer]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Nodes
+
+**Nodes** shows infrastructure health for the machines enrolled with Beaver. If none are enrolled, the page says so and shows [`beaver connect`](/infrastructure/connect-a-machine) — a machine joins the Dashboard only after you run it.
+
+Select a machine to see:
+
+| Panel | Shows |
+| --- | --- |
+| **Management mode** | **Observe**, **Assisted** or **Autopilot** — how much Beaver may do on its own — and the machine's **Desired state** |
+| **Pending approvals** | Actions Beaver proposed in Assisted mode, awaiting your **Approve** or **Reject** |
+| **Beaver Monitoring** | CPU, memory, disk and network over a window; **Anomalies** (unusual for this machine) and **Right-sizing** advice, which is advisory only |
+| **Core services** and **Containers** | What runs on the machine: name, status, memory, restarts |
+| **Alert rules** and **Machine activity** | Alert thresholds, and a timeline you can open event by event |
+| **Security posture** | The latest scan: SSH password authentication, root login, security updates, reboot required, Docker socket exposure, and a **public exposure map** of ports, containers, domains and firewall state |
+| **Maintenance actions** | Safe cleanups such as **Clean up safe items**, **Storage trend**, **Log inventory**, **Maintenance windows** and **Maintenance history** — each action asks you to confirm and lists the workloads that may be interrupted |
+
+Roles, enrolment and the agent are covered in [Machines and roles](/infrastructure/machines-and-roles). The same data is in Desktop's **Machines** and the CLI's `beaver machine`.
+
+<Shot name="dashboard/nodes" alt="The Nodes page showing infrastructure health with a card per machine and its role and status." />
+
+## Clouds
+
+**Clouds** manages your [Beaver Clouds](/infrastructure/clouds). It is not in the sidebar; open it from a deployment's cloud link or the managed services page.
+
+| Area | Shows | Actions |
+| --- | --- | --- |
+| **Health** and **Capacity** | Machines in the cloud, allocatable CPU and memory, network | — |
+| **Machines** | Each machine's role and status | **Drain**, **Undrain**, **Evacuate** — see [Drain and evacuate](/infrastructure/drain-and-evacuate) |
+| **Sharing** | Which workspaces use the cloud and their grants (**Consumer**, **Contributor**, **Operator**, **Admin**), with limits | **Invite workspace**, **Request access to a cloud**, **Approve** or **Deny** pending requests |
+| **Contribution vs. consumption** | What your workspace contributes and consumes | — |
+
+Creating a cloud is a CLI action: [`beaver cloud create`](/cli/cloud). See [Cloud sharing](/teams/cloud-sharing).
+
+## Beaver Edge
+
+**Beaver Edge** lists your connected apps — applications whose origin stays where it is while Beaver Edge handles the public endpoint. **Connect an app** asks for a **Public domain** (a subdomain you control, to which you add one CNAME record) and an **Origin URL**, with optional preferred region and an
+option to allow an unencrypted origin connection. Open an app to manage its backends, verification and traffic. See [Beaver Edge](/network/beaver-edge).
+
+<Shot name="dashboard/edge" alt="The Beaver Edge page listing connected apps and the health of their origins." />
+
+## Managed services
+
+**Managed services** lists every service in the workspace, with type and status, for PostgreSQL, MySQL, MariaDB, MongoDB, Redis, Kafka, RabbitMQ, NATS, Meilisearch and MinIO. It is a list: **creating**, attaching, backing up and restoring services are [CLI actions](/data/create-a-service), and Desktop's **Services**
+section shows each service's connection, storage, backups, metrics, logs and credentials.
+
+<Shot name="dashboard/incidents" alt="The Incidents page listing open and monitored incidents with severity and affected resources." />
+
+## Incidents
+
+**Incidents** lists open and past incidents with their timeline; you can acknowledge one. Reached from **Open incidents** on the home screen. See [Incidents](/operate/incidents).
+
+## Same task in the other interfaces
+
+| Task | CLI | Desktop |
+| --- | --- | --- |
+| See a machine's health | `beaver machine overview` | **Machines → machine** |
+| Drain a machine | `beaver cloud drain` | Not available — read-only |
+| Acknowledge an incident | `beaver incidents acknowledge` | Open incidents show on a machine's **Overview** and **Events** |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Infrastructure" icon="server" href="/infrastructure">Machines, clouds and providers.</Card>
+  <Card title="Operate" icon="activity" href="/operate">Observe, respond and recover.</Card>
+</CardGroup>

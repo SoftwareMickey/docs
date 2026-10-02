@@ -1,0 +1,92 @@
+old_path,new_path,type_target,audience,interfaces,action_later
+index,index,hub,ev;dev,dashboard;desktop;cli,rewrite Era4 V14
+documentation,start/what-is-vectorihub,concept,ev,,rewrite Era4 V16 (merged with features)
+features,start/product-tour,concept,ev,,fold into what-is-vectorihub Era4 V16 then retire
+quickstart,start/quickstart-dashboard,tutorial,ev;dev,dashboard,rewrite Era5 V22
+choose-your-setup,start/choose-your-infrastructure,howto,ev;ops,,rewrite Era4 V18
+installation,install/cli,howto,ev;dev,cli,verify Era5 V20
+installation-windows,install/cli-windows,howto,ev;dev,cli,verify Era5 V20
+beaver-doctor,install/doctor,howto,dev;ops,cli,keep
+connect,infrastructure/connect-a-machine,howto,ops;dev,dashboard;desktop;cli,add interface tabs Era8 V40
+machine-roles,infrastructure/machines-and-roles,concept,ops,cli,merge connect-and-machine-roles Era8 V40
+laptop-builder,infrastructure/laptop-builder,howto,dev;ops,cli,keep
+infrastructure-setup,infrastructure/providers,hub,ops,,keep as provider hub Era8 V43
+infrastructure-setup/aws,infrastructure/aws,howto,ops,cli,provider template Era8 V43
+infrastructure-setup/azure,infrastructure/azure,howto,ops,cli,provider template Era8 V43
+infrastructure-setup/google-cloud,infrastructure/google-cloud,howto,ops,cli,provider template Era8 V43
+infrastructure-setup/custom-vps-providers,infrastructure/custom-vps-providers,howto,ops,cli,provider template Era8 V43
+infrastructure-setup/firewall-requirements,infrastructure/firewall-requirements,reference,ops;sec,,keep
+deploying/dockerfile-requirements,deploy/dockerfile-requirements,howto,dev,cli,rework as from-dockerfile Era7 V32
+deploying/deployment-configuration,deploy/deployment-configuration,howto,dev,cli,keep Era7 V35
+deploying/environment-variables,deploy/environment-variables,howto,dev,dashboard;cli,merge env-vars-and-secrets Era7 V35
+development,,,,,retire (Mintlify boilerplate; not in nav)
+services,data/services,hub,dev;ops,cli,catalog hub Era9 V51
+services/postgresql,data/services/postgresql,howto,dev;ops,cli,service recipe Era9 V51
+services/postgres-pgvector,data/services/postgres-pgvector,howto,dev;ops,cli,service recipe Era9 V51
+services/postgres-postgis,data/services/postgres-postgis,howto,dev;ops,cli,service recipe Era9 V51
+services/postgres-timescaledb,data/services/postgres-timescaledb,howto,dev;ops,cli,service recipe Era9 V51
+services/mysql,data/services/mysql,howto,dev;ops,cli,service recipe Era9 V51
+services/mariadb,data/services/mariadb,howto,dev;ops,cli,service recipe Era9 V51
+services/mongodb,data/services/mongodb,howto,dev;ops,cli,service recipe Era9 V51
+services/redis,data/services/redis,howto,dev;ops,cli,service recipe Era9 V51
+services/kafka,data/services/kafka,howto,dev;ops,cli,service recipe Era9 V51
+services/rabbitmq,data/services/rabbitmq,howto,dev;ops,cli,service recipe Era9 V51
+services/nats,data/services/nats,howto,dev;ops,cli,service recipe Era9 V51
+services/meilisearch,data/services/meilisearch,howto,dev;ops,cli,service recipe Era9 V51
+services/minio,data/services/minio,howto,dev;ops,cli,service recipe Era9 V51
+concepts/how-beaver-fits-together,start/how-beaver-fits-together,concept,ev;dev,,refresh Era4 V19
+concepts/activity-and-following,operate/activity-and-following,concept,dev;lead,dashboard;cli,keep (split how-to Era11 V60)
+concepts/accounts-and-workspaces,teams/accounts-and-workspaces,concept,lead,dashboard;desktop;cli,merge into accounts-workspaces-teams Era12 V66
+concepts/workspaces-and-teams,teams/workspaces-and-teams,concept,lead,dashboard;desktop;cli,merge into accounts-workspaces-teams Era12 V66
+concepts/roles-and-permissions,teams/roles-and-permissions,concept,lead;sec,dashboard;desktop;cli,keep Era12 V67
+concepts/production-safety-and-approvals,teams/production-approvals,concept,lead;sec,dashboard;desktop;cli,split howto Era12 V67
+concepts/team-access-and-audit,teams/audit-history,concept,lead;sec,dashboard;cli,split removal howto Era12 V67
+concepts/integrations,deploy/integrations,concept,dev,dashboard;cli,fold into from-github Era7 V32
+concepts/signing-in-and-repository-access,teams/signing-in-and-repository-access,concept,dev;lead,dashboard;desktop;cli,split sign-in-methods + repository-access Era12 V69
+concepts/two-step-verification,teams/two-step-verification,concept,lead;sec,dashboard;desktop;cli,split howto Era12 V69
+concepts/machine-and-agent-operation,infrastructure/machine-and-agent-operation,concept,ops,cli,merge machines-and-roles Era8 V40
+concepts/beaver-cloud,infrastructure/beaver-cloud,concept,ops,dashboard;desktop;cli,split clouds howto Era8 V41
+concepts/cloud-sharing,teams/cloud-sharing,concept,lead,dashboard;cli,keep Era12 V68
+concepts/projects,deploy/projects,concept,dev,dashboard;desktop;cli,keep Era7 V32
+concepts/configuration,deploy/configuration,concept,dev,cli,merge env vars Era7 V35
+concepts/settings-and-precedence,teams/settings-and-precedence,concept,dev;lead,cli,survivor concept Era14
+concepts/building-applications,deploy/builds-and-images,concept,dev,cli,survivor concept + builds howto Era7 V34
+concepts/preflight-and-planning,deploy/preflight-and-planning,concept,dev,cli,keep Era7
+concepts/deployments,deploy/deployment-lifecycle,concept,dev,,survivor concept Era14
+concepts/containers-and-replicas,deploy/containers-and-replicas,concept,dev;ops,dashboard;desktop;cli,keep Era7
+concepts/compose-applications,deploy/compose-applications,concept,dev,dashboard;desktop;cli,retype howto Era7 V33
+concepts/domains-and-routing,network/domains-and-routing,concept,dev;ops,dashboard;cli,split howtos Era10 V52
+concepts/scaling-and-resources,deploy/scaling-and-resources,concept,dev;ops,cli,merge into scale Era7 V36
+concepts/firewall,network/firewall,concept,ops;sec,dashboard;cli,howto Era10 V55
+concepts/edge-and-performance-controls,network/beaver-edge,concept,ops,dashboard;cli,howto Era10 V54
+concepts/services,data/services-and-persistence,concept,dev;ops,dashboard;desktop;cli,survivor concept Era14
+concepts/service-databases-and-credentials,data/credentials-and-connection-strings,concept,dev,dashboard;cli,howto Era9 V47
+concepts/service-clusters,data/high-availability,concept,ops,cli,howto Era9 V49
+concepts/persistent-storage,data/persistent-volumes,concept,dev;ops,desktop;cli,howto Era9 V50
+concepts/backups-and-restoration,data/backups-and-restore,concept,ops,cli,split howtos Era9 V48
+concepts/connecting-to-services-locally,data/connect-locally,concept,dev,cli,howto Era9 V47
+concepts/observability,operate/observability,concept,ops,,survivor concept Era14
+concepts/state-and-drift,operate/state-and-drift,concept,ops,desktop;cli,survivor concept Era14
+concepts/rollback-promotion-and-recovery,operate/recovery-model,concept,ops,cli,survivor concept Era14
+concepts/ai-connections-and-alie,alie/what-is-alie,concept,dev,desktop;cli,rewrite Era13 V71
+concepts/plans-and-billing,teams/plans-and-billing,concept,lead,dashboard;desktop;cli,keep Era12 V70
+concepts/automation,deploy/automation-and-ci,concept,dev,cli,fold into ci-cd Era7 V39
+concepts/troubleshooting,operate/troubleshooting,hub,dev;ops,,symptom hub Era11 V64
+guides/deploy-workflow,deploy/overview,howto,dev,dashboard;desktop;cli,rewrite Era7 V32
+guides/publishing-a-template,deploy/publishing-a-template,howto,dev,dashboard;cli,keep
+guides/connect-and-machine-roles,infrastructure/connect-and-machine-roles,howto,ops,cli,merge machines-and-roles Era8 V40
+guides/scaling,deploy/scale,howto,dev;ops,cli,merge scaling-and-resources Era7 V36
+guides/domains,network/domains,howto,dev;ops,dashboard;cli,keep Era10 V52
+guides/rollback-and-recovery,deploy/rollback-and-recovery,howto,dev;ops,dashboard;cli,split rollback/promote/history Era7 V37
+guides/create-a-team,teams/create-a-team,howto,lead,dashboard;desktop;cli,keep Era12 V66
+guides/invite-and-manage-members,teams/invite-members,howto,lead,dashboard;desktop;cli,keep Era12 V67
+guides/working-in-a-shared-workspace,teams/working-in-a-shared-workspace,howto,dev;lead,dashboard;desktop;cli,keep Era12 V68
+guides/removing-members-and-leaving,teams/removing-members-and-leaving,howto,lead,dashboard;cli,keep Era12 V68
+guides/downgrading-and-what-happens,teams/downgrades-and-retention,howto,lead,dashboard;cli,keep Era12 V70
+guides/troubleshooting-teams,operate/troubleshooting-teams,troubleshooting,lead,dashboard;cli,split into symptom pages Era11 V65
+guides/troubleshooting-github,operate/troubleshooting-github,troubleshooting,dev,dashboard;desktop;cli,split into symptom pages Era11 V65
+guides/troubleshooting-google,operate/troubleshooting-google,troubleshooting,dev,dashboard;desktop;cli,split into symptom pages Era11 V65
+languages/javascript,deploy/bring-your-own-app,howto,dev,cli,consolidate Era19 V100
+languages/go,deploy/bring-your-own-app,howto,dev,cli,consolidate Era19 V100
+runtimes/nodejs,deploy/bring-your-own-app,howto,dev,cli,consolidate Era19 V100
+runtimes/go,deploy/bring-your-own-app,howto,dev,cli,consolidate Era19 V100

@@ -14,203 +14,554 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Get started",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Welcome",
             "pages": [
-              "documentation",
-              "installation",
-              "installation-windows",
-              "beaver-doctor",
-              "choose-your-setup",
-              "connect",
-              "machine-roles",
-              "laptop-builder",
-              "quickstart"
+              "index",
+              "start/what-is-vectorihub",
+              "start/how-beaver-fits-together",
+              "start/concepts",
+              "start/choose-your-interface",
+              "start/choose-your-infrastructure"
             ]
           },
           {
-            "group": "Concepts",
+            "group": "Install",
             "pages": [
-              "concepts/how-beaver-fits-together",
-              "concepts/activity-and-following",
-              "concepts/accounts-and-workspaces",
-              "concepts/workspaces-and-teams",
-              "concepts/roles-and-permissions",
-              "concepts/production-safety-and-approvals",
-              "concepts/team-access-and-audit",
-              "concepts/integrations",
-              "concepts/signing-in-and-repository-access",
-              "concepts/two-step-verification",
-              "concepts/machine-and-agent-operation",
-              "concepts/beaver-cloud",
-              "concepts/cloud-sharing",
-              "concepts/projects",
-              "concepts/configuration",
-              "concepts/settings-and-precedence",
-              "concepts/building-applications",
-              "concepts/preflight-and-planning",
-              "concepts/deployments",
-              "concepts/containers-and-replicas",
-              "concepts/compose-applications",
-              "concepts/domains-and-routing",
-              "concepts/scaling-and-resources",
-              "concepts/firewall",
-              "concepts/edge-and-performance-controls",
-              "concepts/services",
-              "concepts/service-databases-and-credentials",
-              "concepts/service-clusters",
-              "concepts/persistent-storage",
-              "concepts/backups-and-restoration",
-              "concepts/connecting-to-services-locally",
-              "concepts/observability",
-              "concepts/state-and-drift",
-              "concepts/rollback-promotion-and-recovery",
-              "concepts/ai-connections-and-alie",
-              "concepts/plans-and-billing",
-              "concepts/automation",
-              "concepts/troubleshooting"
+              "install/cli",
+              "install/cli-windows",
+              "install/desktop",
+              "install/doctor"
             ]
           },
           {
-            "group": "Services",
+            "group": "Quickstarts",
             "pages": [
-              "services",
-              "services/postgresql",
-              "services/postgres-pgvector",
-              "services/postgres-postgis",
-              "services/postgres-timescaledb",
-              "services/mysql",
-              "services/mariadb",
-              "services/mongodb",
-              "services/redis",
-              "services/kafka",
-              "services/rabbitmq",
-              "services/nats",
-              "services/meilisearch",
-              "services/minio"
+              "start/quickstart-cli",
+              "start/quickstart-dashboard",
+              "start/quickstart-desktop",
+              "start/quickstart-team"
             ]
           },
           {
-            "group": "Workflows",
+            "group": "First steps",
             "pages": [
-              "guides/deploy-workflow",
-              "guides/publishing-a-template",
-              "guides/connect-and-machine-roles",
-              "guides/scaling",
-              "guides/domains",
-              "guides/rollback-and-recovery",
-              "guides/create-a-team",
-              "guides/invite-and-manage-members",
-              "guides/working-in-a-shared-workspace",
-              "guides/removing-members-and-leaving",
-              "guides/downgrading-and-what-happens",
-              "guides/troubleshooting-teams",
-              "guides/troubleshooting-github",
-              "guides/troubleshooting-google"
-            ]
-          },
-          {
-            "group": "Infrastructure Setup",
-            "pages": [
-              "/infrastructure-setup",
-              "/infrastructure-setup/aws",
-              "/infrastructure-setup/google-cloud",
-              "/infrastructure-setup/azure",
-              "/infrastructure-setup/custom-vps-providers",
-              "/infrastructure-setup/firewall-requirements"
-            ]
-          },
-          {
-            "group": "Deploying with Docker",
-            "pages": [
-              "/deploying/dockerfile-requirements",
-              "/deploying/deployment-configuration",
-              "/deploying/environment-variables"
-            ]
-          },
-          {
-            "group": "Languages",
-            "pages": [
-              "/languages/javascript",
-              "/languages/go"
-            ]
-          },
-          {
-            "group": "Runtimes",
-            "pages": [
-              "/runtimes/nodejs",
-              "/runtimes/go"
-            ]
-          },
-          {
-            "group": "Frameworks",
-            "pages": [
-              "/frameworks/react",
-              "/frameworks/vue",
-              "/frameworks/angular",
-              "/frameworks/nextjs",
-              "/frameworks/nuxt",
-              "/frameworks/svelte",
-              "/frameworks/astro",
-              "/frameworks/remix",
-              "/frameworks/express",
-              "/frameworks/fastify",
-              "/frameworks/nestjs",
-              "/frameworks/hapi",
-              "/frameworks/koa",
-              "/frameworks/adonisjs",
-              "/frameworks/gin",
-              "/frameworks/fiber",
-              "/frameworks/echo",
-              "/frameworks/chi"
+              "start/evaluate-vs-production",
+              "start/first-machine",
+              "start/first-cloud",
+              "start/first-deploy",
+              "start/first-domain",
+              "start/first-service",
+              "start/first-production-promotion",
+              "start/production-readiness"
             ]
           }
         ]
       },
       {
-        "tab": "CLI",
+        "tab": "Deploy",
+        "groups": [
+          {
+            "group": "Build and deploy",
+            "pages": [
+              "deploy/index",
+              "deploy/overview",
+              "deploy/from-github",
+              "deploy/from-local-project",
+              "deploy/dockerfile-requirements",
+              "deploy/bring-your-own-app",
+              "deploy/compose-applications",
+              "deploy/builds",
+              "deploy/integrations",
+              "deploy/publishing-a-template"
+            ]
+          },
+          {
+            "group": "Configure",
+            "pages": [
+              "deploy/deployment-configuration",
+              "deploy/health-checks",
+              "deploy/environments",
+              "deploy/environment-variables",
+              "deploy/configuration",
+              "deploy/preflight-and-planning"
+            ]
+          },
+          {
+            "group": "Ship and operate",
+            "pages": [
+              "deploy/scale",
+              "deploy/promote",
+              "deploy/rollback-and-recovery",
+              "deploy/history",
+              "deploy/ci-cd"
+            ]
+          },
+          {
+            "group": "Understand",
+            "pages": [
+              "deploy/deployment-lifecycle",
+              "deploy/projects",
+              "deploy/builds-and-images",
+              "deploy/containers-and-replicas",
+              "deploy/scaling-and-resources"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Infrastructure",
+        "groups": [
+          {
+            "group": "Machines",
+            "pages": [
+              "infrastructure/index",
+              "infrastructure/connect-a-machine",
+              "infrastructure/machines-and-roles",
+              "infrastructure/laptop-builder",
+              "infrastructure/connect-and-machine-roles",
+              "infrastructure/machine-and-agent-operation"
+            ]
+          },
+          {
+            "group": "Beaver Cloud",
+            "pages": [
+              "infrastructure/beaver-cloud",
+              "infrastructure/clouds",
+              "infrastructure/capacity-and-placement",
+              "infrastructure/drain-and-evacuate",
+              "infrastructure/storage-and-networks"
+            ]
+          },
+          {
+            "group": "Providers",
+            "pages": [
+              "infrastructure/providers",
+              "infrastructure/aws",
+              "infrastructure/google-cloud",
+              "infrastructure/azure",
+              "infrastructure/custom-vps-providers",
+              "infrastructure/firewall-requirements"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Data",
+        "groups": [
+          {
+            "group": "Services catalog",
+            "pages": [
+              "data/index",
+              "data/services",
+              {
+                "group": "Relational databases",
+                "pages": [
+                  "data/services/postgresql",
+                  "data/services/postgres-pgvector",
+                  "data/services/postgres-postgis",
+                  "data/services/postgres-timescaledb",
+                  "data/services/mysql",
+                  "data/services/mariadb"
+                ]
+              },
+              {
+                "group": "Document, key-value and search",
+                "pages": [
+                  "data/services/mongodb",
+                  "data/services/redis",
+                  "data/services/meilisearch"
+                ]
+              },
+              {
+                "group": "Messaging and object storage",
+                "pages": [
+                  "data/services/kafka",
+                  "data/services/rabbitmq",
+                  "data/services/nats",
+                  "data/services/minio"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Operate services",
+            "pages": [
+              "data/create-a-service",
+              "data/credentials-and-connection-strings",
+              "data/connect-locally",
+              "data/backups-and-restore",
+              "data/resize-and-upgrade",
+              "data/high-availability",
+              "data/persistent-volumes"
+            ]
+          },
+          {
+            "group": "Understand",
+            "pages": [
+              "data/services-and-persistence"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Networking & security",
+        "groups": [
+          {
+            "group": "Networking",
+            "pages": [
+              "network/index",
+              "network/domains",
+              "network/domains-and-routing",
+              "network/tls",
+              "network/beaver-edge",
+              "network/load-balancing"
+            ]
+          },
+          {
+            "group": "Security",
+            "pages": [
+              "network/firewall",
+              "network/rate-limiting",
+              "network/access-controls",
+              "network/secrets",
+              "network/security-checklist",
+              "network/shared-responsibility"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Operate",
+        "groups": [
+          {
+            "group": "Observe and respond",
+            "pages": [
+              "operate/index",
+              "operate/deployment-status",
+              "operate/logs",
+              "operate/metrics-and-traffic",
+              "operate/notifications",
+              "operate/incidents",
+              "operate/drift-and-reconcile",
+              "operate/day-two-checklist"
+            ]
+          },
+          {
+            "group": "Understand",
+            "pages": [
+              "operate/observability",
+              "operate/state-and-drift",
+              "operate/recovery-model",
+              "operate/activity-and-following"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "operate/troubleshooting"
+            ]
+          },
+          {
+            "group": "Fix: build and deploy",
+            "pages": [
+              "operate/troubleshoot-build",
+              "operate/troubleshoot-deploy-unhealthy",
+              "operate/troubleshoot-env-var",
+              "operate/troubleshoot-repository-access"
+            ]
+          },
+          {
+            "group": "Fix: reaching the app",
+            "pages": [
+              "operate/troubleshoot-502-503",
+              "operate/troubleshoot-domain",
+              "operate/troubleshoot-tls"
+            ]
+          },
+          {
+            "group": "Fix: machines and services",
+            "pages": [
+              "operate/troubleshoot-machine-offline",
+              "operate/troubleshoot-connect",
+              "operate/troubleshoot-service-connection"
+            ]
+          },
+          {
+            "group": "Fix: accounts and teams",
+            "pages": [
+              "operate/troubleshoot-production-approval",
+              "operate/troubleshoot-plan-limit",
+              "operate/troubleshoot-mfa",
+              "operate/troubleshoot-notification",
+              "operate/troubleshooting-teams",
+              "operate/troubleshooting-github",
+              "operate/troubleshooting-google"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Teams",
+        "groups": [
+          {
+            "group": "Workspaces and members",
+            "pages": [
+              "teams/index",
+              "teams/accounts-workspaces-teams",
+              "teams/create-a-team",
+              "teams/switch-workspaces",
+              "teams/invite-members",
+              "teams/working-in-a-shared-workspace",
+              "teams/removing-members-and-leaving",
+              "teams/cloud-sharing"
+            ]
+          },
+          {
+            "group": "Access and approvals",
+            "pages": [
+              "teams/roles-and-permissions",
+              "teams/production-approvals",
+              "teams/audit-history",
+              "teams/settings-and-precedence"
+            ]
+          },
+          {
+            "group": "Identity",
+            "pages": [
+              "teams/sign-in-methods",
+              "teams/signing-in-and-repository-access",
+              "teams/two-step-verification"
+            ]
+          },
+          {
+            "group": "Plans and billing",
+            "pages": [
+              "teams/plans-and-billing",
+              "teams/downgrades-and-retention"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Alie",
+        "groups": [
+          {
+            "group": "Use Alie",
+            "pages": [
+              "alie/index",
+              "alie/what-is-alie",
+              "alie/connect-an-ai-provider",
+              "alie/sessions-and-context"
+            ]
+          },
+          {
+            "group": "Control Alie",
+            "pages": [
+              "alie/approvals-and-safety",
+              "alie/spending-controls",
+              "alie/automation-policies",
+              "alie/safe-production-use"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "alie/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Interfaces",
         "groups": [
           {
             "group": "Overview",
-            "pages": ["cli"]
-          },
-          {
-            "group": "Deployments",
             "pages": [
-              "cli/init", "cli/validate", "cli/preflight", "cli/config", "cli/plan", "cli/deploy",
-              "cli/inspect", "cli/observe", "cli/status", "cli/recover", "cli/diff",
-              "cli/containers", "cli/container", "cli/deployment", "cli/promote", "cli/compose",
-              "cli/logs", "cli/metrics", "cli/traffic", "cli/state", "cli/reconcile"
+              "interfaces/index",
+              "interfaces/overview",
+              "interfaces/capability-matrix",
+              "interfaces/how-state-is-shared"
             ]
           },
           {
-            "group": "Project management",
-            "pages": ["cli/project", "cli/environment", "cli/domain", "cli/route"]
-          },
-          {
-            "group": "Infrastructure",
+            "group": "Dashboard",
             "pages": [
-              "cli/doctor", "cli/connect", "cli/server", "cli/agent", "cli/machine",
-              "cli/health", "cli/mystic",
-              "cli/cloud", "cli/service", "cli/firewall", "cli/scaling", "cli/autoscale", "cli/edge"
+              "interfaces/dashboard/tour",
+              "interfaces/dashboard/projects-and-deployments",
+              "interfaces/dashboard/nodes-clouds-edge",
+              "interfaces/dashboard/activity-notifications-billing",
+              "interfaces/dashboard/team-and-settings",
+              "interfaces/dashboard/workflows"
             ]
           },
           {
-            "group": "Account and integrations",
+            "group": "Beaver Desktop",
             "pages": [
-              "cli/login", "cli/logout", "cli/whoami", "cli/github", "cli/integrations",
-              "cli/account", "cli/two-step-login", "cli/workspace", "cli/billing", "cli/coupon", "cli/plans", "cli/ai", "cli/alie", "cli/skills"
+              "interfaces/desktop/shell-tour",
+              "interfaces/desktop/infrastructure",
+              "interfaces/desktop/networks-storage-services",
+              "interfaces/desktop/terminal-and-projects",
+              "interfaces/desktop/approvals-and-alie",
+              "interfaces/desktop/settings",
+              "interfaces/desktop/workflows"
             ]
           },
           {
-            "group": "Activity & templates",
-            "pages": ["cli/follow", "cli/profile", "cli/publish", "cli/template", "cli/activity"]
+            "group": "CLI",
+            "pages": [
+              "interfaces/cli/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "reference/index",
+              "cli",
+              "cli/shared-flags"
+            ]
+          },
+          {
+            "group": "Prepare and deploy",
+            "pages": [
+              "cli/init",
+              "cli/validate",
+              "cli/preflight",
+              "cli/config",
+              "cli/plan",
+              "cli/deploy",
+              "cli/inspect"
+            ]
+          },
+          {
+            "group": "Containers and releases",
+            "pages": [
+              "cli/containers",
+              "cli/container",
+              "cli/deployment",
+              "cli/compose",
+              "cli/promote",
+              "cli/diff",
+              "cli/recover"
+            ]
+          },
+          {
+            "group": "Observe and reconcile",
+            "pages": [
+              "cli/observe",
+              "cli/status",
+              "cli/logs",
+              "cli/metrics",
+              "cli/traffic",
+              "cli/state",
+              "cli/reconcile",
+              "cli/incidents",
+              "cli/notifications"
+            ]
+          },
+          {
+            "group": "Projects and routing",
+            "pages": [
+              "cli/project",
+              "cli/environment",
+              "cli/domain",
+              "cli/route"
+            ]
+          },
+          {
+            "group": "Machines",
+            "pages": [
+              "cli/doctor",
+              "cli/connect",
+              "cli/server",
+              "cli/agent",
+              "cli/machine",
+              "cli/health",
+              "cli/mystic"
+            ]
+          },
+          {
+            "group": "Clouds, services and edge",
+            "pages": [
+              "cli/cloud",
+              "cli/service",
+              "cli/firewall",
+              "cli/scaling",
+              "cli/autoscale",
+              "cli/edge"
+            ]
+          },
+          {
+            "group": "Sign in and account",
+            "pages": [
+              "cli/login",
+              "cli/logout",
+              "cli/whoami",
+              "cli/github",
+              "cli/integrations",
+              "cli/account",
+              "cli/two-step-login"
+            ]
+          },
+          {
+            "group": "Workspaces and billing",
+            "pages": [
+              "cli/workspace",
+              "cli/billing",
+              "cli/coupon",
+              "cli/plans",
+              "cli/settings"
+            ]
+          },
+          {
+            "group": "Alie and AI",
+            "pages": [
+              "cli/ai",
+              "cli/alie",
+              "cli/skills"
+            ]
+          },
+          {
+            "group": "Activity and templates",
+            "pages": [
+              "cli/follow",
+              "cli/profile",
+              "cli/publish",
+              "cli/template",
+              "cli/activity"
+            ]
           },
           {
             "group": "Utilities",
-            "pages": ["cli/git", "cli/docker", "cli/completion", "cli/history", "cli/update", "cli/version", "cli/shell", "cli/spec"]
+            "pages": [
+              "cli/git",
+              "cli/docker",
+              "cli/completion",
+              "cli/history",
+              "cli/update",
+              "cli/version",
+              "cli/shell",
+              "cli/spec"
+            ]
+          },
+          {
+            "group": "Configuration and limits",
+            "pages": [
+              "reference/configuration",
+              "reference/deployment-specification",
+              "reference/environment-variables",
+              "reference/exit-codes-and-output",
+              "reference/limits-and-quotas",
+              "reference/supported-versions",
+              "reference/glossary"
+            ]
           }
         ]
       }
@@ -260,15 +611,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
@@ -276,5 +627,556 @@
       "github": "https://github.com/vectorihub",
       "linkedin": "https://linkedin.com/company/vectorihub"
     }
+  },
+  "redirects": [
+    {
+      "source": "/beaver-doctor",
+      "destination": "/install/doctor"
+    },
+    {
+      "source": "/choose-your-setup",
+      "destination": "/start/choose-your-infrastructure"
+    },
+    {
+      "source": "/concepts/accounts-and-workspaces",
+      "destination": "/teams/accounts-workspaces-teams"
+    },
+    {
+      "source": "/concepts/activity-and-following",
+      "destination": "/operate/activity-and-following"
+    },
+    {
+      "source": "/concepts/ai-connections-and-alie",
+      "destination": "/alie/what-is-alie"
+    },
+    {
+      "source": "/concepts/automation",
+      "destination": "/deploy/ci-cd"
+    },
+    {
+      "source": "/concepts/backups-and-restoration",
+      "destination": "/data/backups-and-restore"
+    },
+    {
+      "source": "/concepts/beaver-cloud",
+      "destination": "/infrastructure/beaver-cloud"
+    },
+    {
+      "source": "/concepts/building-applications",
+      "destination": "/deploy/builds-and-images"
+    },
+    {
+      "source": "/concepts/cloud-sharing",
+      "destination": "/teams/cloud-sharing"
+    },
+    {
+      "source": "/concepts/compose-applications",
+      "destination": "/deploy/compose-applications"
+    },
+    {
+      "source": "/concepts/configuration",
+      "destination": "/deploy/configuration"
+    },
+    {
+      "source": "/concepts/connecting-to-services-locally",
+      "destination": "/data/connect-locally"
+    },
+    {
+      "source": "/concepts/containers-and-replicas",
+      "destination": "/deploy/containers-and-replicas"
+    },
+    {
+      "source": "/concepts/deployments",
+      "destination": "/deploy/deployment-lifecycle"
+    },
+    {
+      "source": "/concepts/domains-and-routing",
+      "destination": "/network/domains-and-routing"
+    },
+    {
+      "source": "/concepts/edge-and-performance-controls",
+      "destination": "/network/beaver-edge"
+    },
+    {
+      "source": "/concepts/firewall",
+      "destination": "/network/firewall"
+    },
+    {
+      "source": "/concepts/how-beaver-fits-together",
+      "destination": "/start/how-beaver-fits-together"
+    },
+    {
+      "source": "/concepts/integrations",
+      "destination": "/deploy/integrations"
+    },
+    {
+      "source": "/concepts/machine-and-agent-operation",
+      "destination": "/infrastructure/machine-and-agent-operation"
+    },
+    {
+      "source": "/concepts/observability",
+      "destination": "/operate/observability"
+    },
+    {
+      "source": "/concepts/persistent-storage",
+      "destination": "/data/persistent-volumes"
+    },
+    {
+      "source": "/concepts/plans-and-billing",
+      "destination": "/teams/plans-and-billing"
+    },
+    {
+      "source": "/concepts/preflight-and-planning",
+      "destination": "/deploy/preflight-and-planning"
+    },
+    {
+      "source": "/concepts/production-safety-and-approvals",
+      "destination": "/teams/production-approvals"
+    },
+    {
+      "source": "/concepts/projects",
+      "destination": "/deploy/projects"
+    },
+    {
+      "source": "/concepts/roles-and-permissions",
+      "destination": "/teams/roles-and-permissions"
+    },
+    {
+      "source": "/concepts/rollback-promotion-and-recovery",
+      "destination": "/operate/recovery-model"
+    },
+    {
+      "source": "/concepts/scaling-and-resources",
+      "destination": "/deploy/scaling-and-resources"
+    },
+    {
+      "source": "/concepts/service-clusters",
+      "destination": "/data/high-availability"
+    },
+    {
+      "source": "/concepts/service-databases-and-credentials",
+      "destination": "/data/credentials-and-connection-strings"
+    },
+    {
+      "source": "/concepts/services",
+      "destination": "/data/services-and-persistence"
+    },
+    {
+      "source": "/concepts/settings-and-precedence",
+      "destination": "/teams/settings-and-precedence"
+    },
+    {
+      "source": "/concepts/signing-in-and-repository-access",
+      "destination": "/teams/signing-in-and-repository-access"
+    },
+    {
+      "source": "/concepts/state-and-drift",
+      "destination": "/operate/state-and-drift"
+    },
+    {
+      "source": "/concepts/team-access-and-audit",
+      "destination": "/teams/audit-history"
+    },
+    {
+      "source": "/concepts/troubleshooting",
+      "destination": "/operate/troubleshooting"
+    },
+    {
+      "source": "/concepts/two-step-verification",
+      "destination": "/teams/two-step-verification"
+    },
+    {
+      "source": "/concepts/workspaces-and-teams",
+      "destination": "/teams/accounts-workspaces-teams"
+    },
+    {
+      "source": "/connect",
+      "destination": "/infrastructure/connect-a-machine"
+    },
+    {
+      "source": "/deploy/automation-and-ci",
+      "destination": "/deploy/ci-cd"
+    },
+    {
+      "source": "/deploy/frameworks",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/adonisjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/angular",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/astro",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/chi",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/echo",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/express",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/fastify",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/fiber",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/gin",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/hapi",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/koa",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/nestjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/nextjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/nuxt",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/react",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/remix",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/svelte",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/frameworks/vue",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/languages/go",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/languages/javascript",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/runtimes/go",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploy/runtimes/nodejs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/deploying/deployment-configuration",
+      "destination": "/deploy/deployment-configuration"
+    },
+    {
+      "source": "/deploying/dockerfile-requirements",
+      "destination": "/deploy/dockerfile-requirements"
+    },
+    {
+      "source": "/deploying/environment-variables",
+      "destination": "/deploy/environment-variables"
+    },
+    {
+      "source": "/development",
+      "destination": "/"
+    },
+    {
+      "source": "/documentation",
+      "destination": "/start/what-is-vectorihub"
+    },
+    {
+      "source": "/features",
+      "destination": "/start/what-is-vectorihub"
+    },
+    {
+      "source": "/frameworks",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/adonisjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/angular",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/astro",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/chi",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/echo",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/express",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/fastify",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/fiber",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/gin",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/hapi",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/koa",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/nestjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/nextjs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/nuxt",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/react",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/remix",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/svelte",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/frameworks/vue",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/guides/connect-and-machine-roles",
+      "destination": "/infrastructure/connect-and-machine-roles"
+    },
+    {
+      "source": "/guides/create-a-team",
+      "destination": "/teams/create-a-team"
+    },
+    {
+      "source": "/guides/deploy-workflow",
+      "destination": "/deploy/overview"
+    },
+    {
+      "source": "/guides/domains",
+      "destination": "/network/domains"
+    },
+    {
+      "source": "/guides/downgrading-and-what-happens",
+      "destination": "/teams/downgrades-and-retention"
+    },
+    {
+      "source": "/guides/invite-and-manage-members",
+      "destination": "/teams/invite-members"
+    },
+    {
+      "source": "/guides/publishing-a-template",
+      "destination": "/deploy/publishing-a-template"
+    },
+    {
+      "source": "/guides/removing-members-and-leaving",
+      "destination": "/teams/removing-members-and-leaving"
+    },
+    {
+      "source": "/guides/rollback-and-recovery",
+      "destination": "/deploy/rollback-and-recovery"
+    },
+    {
+      "source": "/guides/scaling",
+      "destination": "/deploy/scale"
+    },
+    {
+      "source": "/guides/troubleshooting-github",
+      "destination": "/operate/troubleshooting-github"
+    },
+    {
+      "source": "/guides/troubleshooting-google",
+      "destination": "/operate/troubleshooting-google"
+    },
+    {
+      "source": "/guides/troubleshooting-teams",
+      "destination": "/operate/troubleshooting-teams"
+    },
+    {
+      "source": "/guides/working-in-a-shared-workspace",
+      "destination": "/teams/working-in-a-shared-workspace"
+    },
+    {
+      "source": "/infrastructure-setup",
+      "destination": "/infrastructure/providers"
+    },
+    {
+      "source": "/infrastructure-setup/aws",
+      "destination": "/infrastructure/aws"
+    },
+    {
+      "source": "/infrastructure-setup/azure",
+      "destination": "/infrastructure/azure"
+    },
+    {
+      "source": "/infrastructure-setup/custom-vps-providers",
+      "destination": "/infrastructure/custom-vps-providers"
+    },
+    {
+      "source": "/infrastructure-setup/firewall-requirements",
+      "destination": "/infrastructure/firewall-requirements"
+    },
+    {
+      "source": "/infrastructure-setup/google-cloud",
+      "destination": "/infrastructure/google-cloud"
+    },
+    {
+      "source": "/installation",
+      "destination": "/install/cli"
+    },
+    {
+      "source": "/installation-windows",
+      "destination": "/install/cli-windows"
+    },
+    {
+      "source": "/languages/go",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/languages/javascript",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/laptop-builder",
+      "destination": "/infrastructure/laptop-builder"
+    },
+    {
+      "source": "/machine-roles",
+      "destination": "/infrastructure/machines-and-roles"
+    },
+    {
+      "source": "/quickstart",
+      "destination": "/start/quickstart-dashboard"
+    },
+    {
+      "source": "/runtimes/go",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/runtimes/nodejs",
+      "destination": "/deploy/bring-your-own-app"
+    },
+    {
+      "source": "/services",
+      "destination": "/data/services"
+    },
+    {
+      "source": "/services/kafka",
+      "destination": "/data/services/kafka"
+    },
+    {
+      "source": "/services/mariadb",
+      "destination": "/data/services/mariadb"
+    },
+    {
+      "source": "/services/meilisearch",
+      "destination": "/data/services/meilisearch"
+    },
+    {
+      "source": "/services/minio",
+      "destination": "/data/services/minio"
+    },
+    {
+      "source": "/services/mongodb",
+      "destination": "/data/services/mongodb"
+    },
+    {
+      "source": "/services/mysql",
+      "destination": "/data/services/mysql"
+    },
+    {
+      "source": "/services/nats",
+      "destination": "/data/services/nats"
+    },
+    {
+      "source": "/services/postgres-pgvector",
+      "destination": "/data/services/postgres-pgvector"
+    },
+    {
+      "source": "/services/postgres-postgis",
+      "destination": "/data/services/postgres-postgis"
+    },
+    {
+      "source": "/services/postgres-timescaledb",
+      "destination": "/data/services/postgres-timescaledb"
+    },
+    {
+      "source": "/services/postgresql",
+      "destination": "/data/services/postgresql"
+    },
+    {
+      "source": "/services/rabbitmq",
+      "destination": "/data/services/rabbitmq"
+    },
+    {
+      "source": "/services/redis",
+      "destination": "/data/services/redis"
+    },
+    {
+      "source": "/start/product-tour",
+      "destination": "/start/what-is-vectorihub"
+    },
+    {
+      "source": "/teams/accounts-and-workspaces",
+      "destination": "/teams/accounts-workspaces-teams"
+    },
+    {
+      "source": "/teams/workspaces-and-teams",
+      "destination": "/teams/accounts-workspaces-teams"
+    }
+  ],
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
   }
 }

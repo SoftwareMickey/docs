@@ -3,10 +3,11 @@ title: "beaver config"
 sidebarTitle: "config"
 description: "Author and validate .beaver/config.yml, tune deployment settings, and manage your saved configuration on Beaver."
 icon: "gear"
+type: reference
 ---
 
 <Info>
-  New here? [Configuration](/concepts/configuration) explains what this is and when to use it, before diving into syntax.
+  New here? [Configuration](/deploy/configuration) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -15,8 +16,8 @@ icon: "gear"
 `.beaver/config.yml` locally (from scratch or inferred from your Dockerfile/Compose file),
 tuning individual deployment settings, and syncing your project's saved configuration with
 Beaver. For the concepts behind what goes in this file, see [Deployment
-configuration](/deploying/deployment-configuration) and [Environment
-variables](/deploying/environment-variables) — this page is the command reference.
+configuration](/deploy/deployment-configuration) and [Environment
+variables](/deploy/environment-variables) — this page is the command reference.
 
 ## Authoring `.beaver/config.yml`
 
@@ -279,7 +280,7 @@ beaver config validate
 
 ## Used in
 
-- [Deployment configuration](/deploying/deployment-configuration)
-- [Environment variables](/deploying/environment-variables)
+- [Deployment configuration](/deploy/deployment-configuration)
+- [Environment variables](/deploy/environment-variables)
 - [`validate`](/cli/validate) and [`plan`](/cli/plan) — read this same saved configuration
   before a deploy.

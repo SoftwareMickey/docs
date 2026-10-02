@@ -1,0 +1,65 @@
+---
+title: "Access controls"
+sidebarTitle: "Access controls"
+description: "The layers that decide who can reach your app, who can change it, and who can sign in — and where to configure each."
+keywords: ["access controls", "beaver firewall visibility", "beaver firewall"]
+icon: "key-round"
+type: howto
+audience: [security, operator, team-lead]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+"Access" is three different questions. Each has its own control.
+
+<Tabs>
+  <Tab title="Dashboard">**Team** holds members, roles and approvals; a deployment's **Firewall** tab holds reach controls.</Tab>
+  <Tab title="CLI">The `beaver firewall` and `beaver workspace` commands below.</Tab>
+</Tabs>
+
+| Question | Control | Where |
+| --- | --- | --- |
+| Who on the internet can **reach** my app or service? | Visibility, firewall rules, bans, lockdown; your provider's port rules | [Firewall](/network/firewall), [Firewall requirements](/infrastructure/firewall-requirements) |
+| Who on my team can **change** things? | Roles, protected production and approvals | [Roles and permissions](/teams/roles-and-permissions), [Production approvals](/teams/production-approvals) |
+| Who can **sign in** as someone on my team? | 2-step verification (can be required per workspace), sign-in methods | [2-step verification](/teams/two-step-verification), [Sign-in and repository access](/teams/signing-in-and-repository-access) |
+
+## Reach: make a service public or private
+
+```bash
+beaver firewall visibility dep_abc123                    # show
+beaver firewall visibility set dep_abc123 --private      # internal-only
+beaver firewall visibility set dep_abc123 --public
+```
+
+<Warning>
+`--private` makes the service unreachable from outside your private network **immediately**. Confirm nothing external depends on it first.
+</Warning>
+
+Managed [services](/data) are never published on a public port; you reach them from your own machine through an authenticated tunnel
+([Connect locally](/data/connect-locally)). To see what is publicly reachable on a machine and whether it is protected: `beaver machine exposure <machine-id>`.
+
+## Reach: allow and block specific traffic
+
+Firewall rules match IP, path, method, query or header and `allow`, `block`, `rate-limit` or `challenge`; the first matching rule in your priority order applies
+([Rate limiting](/network/rate-limiting)). Ban a source with `beaver firewall ban`.
+
+## Change: roles and approvals
+
+A team workspace has four roles — Owner, Admin, Developer, Viewer. Developers deploy freely except into **protected** environments (production), where they ask an Owner or Admin. An
+approval is a one-time permission for that exact action and you cannot approve your own request.
+
+## Sign in: require a second factor
+
+An Owner or Admin can require 2-step verification for the workspace; see [2-step verification](/teams/two-step-verification).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Security checklist" icon="list-checks" href="/network/security-checklist">Walk every control.</Card>
+  <Card title="Audit history" icon="clipboard-list" href="/teams/audit-history">See who did what.</Card>
+</CardGroup>

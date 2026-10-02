@@ -1,0 +1,75 @@
+---
+title: "Deploy overview"
+sidebarTitle: "Overview"
+description: "How an application gets from a Dockerfile in a repository to a running, verified deployment — and the choices you make along the way."
+keywords: ["deploy overview", "overview", "beaver deploy", "beaver inspect"]
+icon: "list-checks"
+type: howto
+audience: [developer]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A deployment takes your **Dockerfile**, builds it into an image on a **Builder** machine, and runs it on a **Host** inside a
+[Beaver Cloud](/infrastructure/beaver-cloud) you own. This page is the map; each step links to the page that goes deep.
+
+## What you need first
+
+<CardGroup cols={2}>
+  <Card title="A Dockerfile" icon="docker" href="/deploy/dockerfile-requirements">At the repository root (or a path you configure). Beaver does not generate one.</Card>
+  <Card title="A machine and a cloud" icon="server" href="/start/first-cloud">Every deployment runs in a cloud, even a one-machine one.</Card>
+  <Card title="Repository access" icon="github" href="/deploy/from-github">The Builder clones your pushed commit from GitHub with its own login; Beaver sees repositories through the GitHub App.</Card>
+  <Card title="A Docker Hub login" icon="key" href="/start/first-deploy">On the Builder — the image is tagged with your username.</Card>
+</CardGroup>
+
+## The loop
+
+<Steps>
+  <Step title="Choose a source">
+    Deploy [from a connected GitHub repository](/deploy/from-github), or [from the project in your current directory](/deploy/from-local-project).
+    Either way, the Builder builds a commit that is on GitHub — nothing is uploaded from your computer. Multi-service apps use a
+    [Compose application](/deploy/compose-applications).
+  </Step>
+  <Step title="Configure">
+    Set the [port, health check and resources](/deploy/deployment-configuration), the [environment](/deploy/environments) it belongs to, and its
+    [environment variables](/deploy/environment-variables).
+  </Step>
+  <Step title="Check before you ship">
+    `beaver preflight` checks a project is ready without changing anything; `beaver deploy --dry-run` runs every check and prints the plan.
+    [Preflight and planning](/deploy/preflight-and-planning).
+  </Step>
+  <Step title="Deploy and watch the build">
+    The [build](/deploy/builds) runs on the Builder and the image starts on a Host. Watch status and logs in any interface.
+  </Step>
+  <Step title="Verify">
+    ```bash
+    beaver inspect
+    beaver status
+    ```
+    `inspect` summarizes the current release, commit, health, route and machine; `status` compares your configuration with what is running.
+  </Step>
+  <Step title="Ship changes">
+    A push to the deployed branch triggers each later release. Move an image between environments with [promote](/deploy/promote), and
+    undo with [rollback](/deploy/rollback-and-recovery). Scale with [scale](/deploy/scale).
+  </Step>
+</Steps>
+
+## By interface
+
+| | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| Deploy a repository | Deployment form | — (not available) | `beaver deploy --git` |
+| Deploy the current directory | — | **Deploy this** checks the plan, then runs `beaver deploy` in its terminal | `beaver deploy` |
+| Watch a deployment | **Deployments** → logs, status | Machine and cloud views | `beaver observe`, `beaver inspect` |
+| Script it | — | — | [`--yes --wait --json`](/deploy/ci-cd) |
+
+Every task, interface by interface: the [capability matrix](/interfaces/capability-matrix).
+
+## Understand
+
+[Deployment lifecycle](/deploy/deployment-lifecycle) · [Builds and images](/deploy/builds-and-images) · [Projects](/deploy/projects)
+· [Containers and replicas](/deploy/containers-and-replicas)

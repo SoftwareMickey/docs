@@ -1,0 +1,106 @@
+---
+title: "MySQL"
+sidebarTitle: "MySQL"
+description: "Provision a managed MySQL database and attach it to your application."
+keywords: ["mysql", "database", "cache", "beaver service catalog", "beaver service create"]
+icon: "database"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+MySQL is a widely-used relational database — a common choice for applications already built
+around the MySQL ecosystem or its tooling.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    8.0 (default), 8.4 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Logical databases" icon="table">
+    One service can host multiple isolated databases, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `mysql` — `beaver service create <name> --type mysql` |
+| Versions | 8.0 (default), 8.4 — confirm with `beaver service catalog` |
+| Default size | 1 CPU · 1024 MB memory · 20 GB storage — change with `beaver service resize` |
+| Default port | 3306 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | database — each attached app gets its own, with its own credential |
+| Variables injected on attach | `DATABASE_URL`, `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-db --type mysql
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-db --container paperclip-web --env-prefix DATABASE
+```
+
+Your application receives a connection string as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+Database names use lowercase letters, numbers and underscores, and can be up to 32 characters,
+because MySQL limits the length of the user each database gets. When Beaver picks the name for
+you, it shortens it to fit.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-db
+beaver service backup paperclip-db
+beaver service resize paperclip-db --cpu 2 --memory 2048
+```
+
+See [Service databases and credentials](/data/credentials-and-connection-strings) for
+reveal/rotate/detach behavior, and [Backups and restoration](/data/backups-and-restore)
+for scheduling and restoring.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import mysql from "mysql2/promise";
+const conn = await mysql.createConnection(process.env.DATABASE_URL);
+const [rows] = await conn.query("select 1 as ok");
+```
+```python Python
+import os, pymysql
+conn = pymysql.connect(host=os.environ["DATABASE_HOST"], port=int(os.environ["DATABASE_PORT"]),
+                       user=os.environ["DATABASE_USER"], password=os.environ["DATABASE_PASSWORD"],
+                       database=os.environ["DATABASE_NAME"])
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 3306` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** `beaver service backup <name>` takes a manual backup; see [Backups and restore](/data/backups-and-restore) for schedules, destinations and restore.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

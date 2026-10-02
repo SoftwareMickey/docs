@@ -1,0 +1,64 @@
+---
+title: "Terminal, projects and workspaces in Desktop"
+sidebarTitle: "Terminal and projects"
+description: "The embedded terminal, opening a local project folder, the project overview and the Deploy this flow — and what stays on this computer."
+icon: "terminal"
+type: interface
+audience: [developer]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## The terminal
+
+The embedded terminal docks at the bottom of the window. **Ctrl+`** shows or hides it; **⌘⇧T** (Ctrl+Shift+T) switches to **Big Terminal**, which fills the window. Choose **Open terminal here** from the command palette to start one in the current project. Terminal options — shell, font, cursor, copy on select, what Beaver highlights —
+are under **Settings → Terminal** ([Settings](/interfaces/desktop/settings)).
+
+Action sheets elsewhere in the app give you **Copy command** — paste it into this terminal. When Alie proposes a change it shows an **Equivalent command** with **Run in terminal**, which runs it after you confirm. Desktop never runs a change behind your back.
+
+## Workspaces (local projects)
+
+**Workspaces** — not to be confused with the account-side workspace you switch between — lists local projects and their recent operating context, stored **on this device**. **Open folder** adds one; each row shows the branch, link status (**Linked**, **Unlinked**, **Folder unavailable**) and lets you reopen or remove it from the list. Removing it only forgets it here; your folder is untouched.
+
+<Shot name="desktop/workspaces-list" alt="The Workspaces page listing local projects with branch, path and link status." />
+
+## The project view
+
+Opening a folder shows the project overview:
+
+| Panel | Shows |
+| --- | --- |
+| **Identity** | Runtime, framework, package manager, build and run commands |
+| **Git** | Branch, changes, revision, remote, notes (for example *Not a git repository*) |
+| **Beaver** | Whether the folder is **Linked** to a Beaver project (or *Not linked*), its builder, host, cloud and config |
+
+By default Beaver scans an opened folder for `.beaver/` configuration, Git and Compose files; **Settings → Projects & Workspace** shows what is detected and what Beaver may write back (read-only today).
+
+## Deploy this
+
+**Deploy this** asks one question at a time — for example the port — and re-checks the plan against the current working tree after every answer. **Beaver never deploys by itself:** the flow only reaches *ready*, then you press **Deploy in terminal**, which runs the equivalent of `beaver deploy` in the embedded terminal.
+Settings → Git can make the flow stop on uncommitted changes or unpushed commits. See [Deploy from a local project](/deploy/from-local-project).
+
+## What is local and what is not
+
+The terminal, workspace list, folder contents and these settings are on this computer only. Deployments, machines and services belong to your account workspace and show up everywhere — see [How state is shared](/interfaces/how-state-is-shared).
+
+## Same task in the other interfaces
+
+| Task | Dashboard | CLI |
+| --- | --- | --- |
+| Deploy a local folder | Not available | `beaver deploy` in the folder |
+| Check a deploy first | Not available | `beaver preflight` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Deploy from a local project" icon="folder-open" href="/deploy/from-local-project">The deploy flow in full.</Card>
+  <Card title="Settings" icon="settings" href="/interfaces/desktop/settings">Terminal, Git and project settings.</Card>
+</CardGroup>

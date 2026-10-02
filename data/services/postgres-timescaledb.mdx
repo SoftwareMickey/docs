@@ -1,0 +1,133 @@
+---
+title: "TimescaleDB"
+sidebarTitle: "TimescaleDB"
+description: "Provision PostgreSQL with TimescaleDB for metrics, IoT, and other time-series data."
+keywords: ["timescaledb", "database", "cache", "beaver service create", "beaver service catalog"]
+icon: "chart-line"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+TimescaleDB is a [PostgreSQL](/data/services/postgresql) flavor for time-series data: the same
+managed database, backups, credentials, and attach workflow, with hypertables, continuous
+aggregates, and compression available.
+
+<CardGroup cols={2}>
+  <Card title="PostgreSQL versions" icon="tag">
+    14, 15, 16, 17 (default) — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="TimescaleDB releases" icon="puzzle-piece">
+    2.28.3, 2.29.2, 2.30.1 (default). The release is chosen separately from the PostgreSQL version.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `timescaledb` — `beaver service create <name> --type timescaledb` |
+| Versions | PostgreSQL 14, 15, 16, 17 (default 17); TimescaleDB 2.28.3, 2.29.2, 2.30.1 (default) — confirm with `beaver service catalog` |
+| Default size | 1 CPU · 2048 MB memory · 40 GB storage — change with `beaver service resize` |
+| Default port | 5432 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | database — each attached app gets its own, with its own credential |
+| Variables injected on attach | `DATABASE_URL`, `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` (prefix changeable with `--env-prefix`) |
+| Release flag | `--distribution-version` pins the timescaledb release (the PostgreSQL version is `--version`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create metrics --type timescaledb
+```
+
+Pin the PostgreSQL version and the TimescaleDB release explicitly:
+
+```bash
+beaver service create metrics --type timescaledb --version 17 --distribution-version 2.30.1
+```
+
+`beaver service show metrics` lists the two versions as separate fields. A TimescaleDB service
+starts with more storage (40 GB) than plain PostgreSQL, since time-series data tends to grow
+quickly.
+
+## Use it
+
+TimescaleDB is already loaded and enabled — in the service's default database and in every
+database you add or attach — so there is no `CREATE EXTENSION` step.
+
+```sql
+CREATE TABLE conditions (time timestamptz NOT NULL, device text, temperature double precision);
+SELECT create_hypertable('conditions', 'time');
+INSERT INTO conditions VALUES (now(), 'sensor-1', 21.5), (now(), 'sensor-1', 22.5);
+SELECT avg(temperature) FROM (SELECT time_bucket('1 hour', time) AS hour, temperature FROM conditions) t;
+ALTER TABLE conditions SET (timescaledb.compress, timescaledb.compress_segmentby = 'device');
+```
+
+Attach it to an application exactly as you would PostgreSQL — see
+[PostgreSQL](/data/services/postgresql#attach-it).
+
+## Tuning
+
+Write-heavy ingestion is limited by WAL size, so `max_wal_size` is exposed as a setting
+(64 MB to 16 GB):
+
+```bash
+beaver service config set metrics max_wal_size=4GB
+```
+
+Changing a setting redeploys the service.
+
+## Health and overview
+
+Besides checking that the database answers, Beaver creates and queries a hypertable. A service
+whose extension has stopped working reports **degraded** even while the process is up, so a
+running container with a broken extension doesn't look healthy. The service overview also reports how many hypertables and chunks your databases hold, how many chunks are
+compressed, and the compression ratio, so you can see them without opening a SQL session.
+
+## Backups
+
+`beaver service backup metrics` and restore work as for PostgreSQL. Beaver handles the
+TimescaleDB steps a restore needs, so hypertables — including compressed chunks — come back
+intact. A backup records the PostgreSQL version and TimescaleDB release it was taken on, and a
+restore into an older PostgreSQL version, or onto a different TimescaleDB release, is refused
+before anything is changed.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import pg from "pg";
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const { rows } = await pool.query("select 1 as ok");
+```
+```python Python
+import os, psycopg
+with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
+    print(conn.execute("select 1").fetchone())
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 5432` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** `beaver service backup <name>` takes a manual backup; see [Backups and restore](/data/backups-and-restore) for schedules, destinations and restore.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

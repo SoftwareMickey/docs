@@ -1,0 +1,39 @@
+---
+title: "What is Alie?"
+sidebarTitle: "What is Alie?"
+description: "Alie is Beaver's infrastructure assistant: you ask about your infrastructure, it proposes actions, and nothing runs until the same controls a typed command would face say it can."
+icon: "bot"
+type: concept
+audience: [developer]
+interfaces: [dashboard, desktop, cli]
+---
+
+**Alie** is Beaver's infrastructure AI. You talk to it about your infrastructure — what is running, why something looks wrong — and it can **propose actions** with real effects, such as a redeploy or a scaling change.
+You can reach it from the CLI, from Beaver Desktop (an Alie panel beside whatever you are looking at) and from the Dashboard.
+
+## The one rule that matters
+
+Alie's actions go through **the same approval and policy controls a human-typed command would**. Depending on policy, an action waits for your explicit confirmation before it runs; everything waiting for you is listed in one place.
+An approval confirms that Alie may proceed with **one specific proposed action** — it does not grant broader access. Review what is proposed before approving, the same way you would before running the equivalent command yourself.
+
+## What it works with
+
+- **Your own AI provider key.** Alie uses a provider connection you set up — see [Connect an AI provider](/alie/connect-an-ai-provider).
+- **Sessions.** A chat is a session you can resume, fork, rename, archive or delete — see [Sessions and context](/alie/sessions-and-context).
+- **Workspace context.** Knowledge rules, runbooks, goals and policies your workspace defines are applied across conversations.
+
+## How much it can do on its own
+
+You decide how far Alie can act without asking, at three levels: per tool, workspace-wide (autopilot) and per area in Desktop. The default is cautious.
+See [Approvals and safety](/alie/approvals-and-safety), [Automation policies](/alie/automation-policies) and [Safe production use](/alie/safe-production-use).
+
+## What this documentation does not describe
+
+How Alie decides to use a tool, which tools are wired up internally and how approvals are resolved on the server are internal to the platform. These pages cover what you can see, ask for and configure.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Connect a provider" icon="plug" href="/alie/connect-an-ai-provider">Give Alie a model to use.</Card>
+  <Card title="Approvals and safety" icon="shield-check" href="/alie/approvals-and-safety">Who decides what runs.</Card>
+</CardGroup>

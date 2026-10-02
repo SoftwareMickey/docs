@@ -1,0 +1,64 @@
+---
+title: "Notifications"
+sidebarTitle: "Notifications"
+description: "What Beaver tells you, how severe it is, where you read it, and how digests, on-call and escalation shape who hears what."
+keywords: ["notifications", "beaver notifications", "beaver workspace digest"]
+icon: "bell"
+type: howto
+audience: [developer, team-lead, operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Beaver notifies you about things that need attention. Each notification has a **severity** — `info`, `success`, `warning`, `critical` or `security` — and you read them in one inbox across the interfaces.
+
+## Read them
+
+<Tabs>
+  <Tab title="Dashboard">Open **Notifications** in the sidebar; notification and social preferences are on the Activity settings page.</Tab>
+  <Tab title="Desktop">The notification inbox is built into the app; **Settings → Notifications** and on-call views hold your preferences.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver notifications                       # your notifications
+    beaver notifications --unread
+    beaver notifications --severity=critical   # info | success | warning | critical | security
+    beaver notifications watch                 # stream new ones as they arrive
+    ```
+  </Tab>
+</Tabs>
+
+## Digests
+
+A digest bundles non-urgent notifications into one message. In a team workspace an Owner or Admin sets the **default**; any member who chose their own digest setting — including "immediate" — keeps it.
+**Critical and security notifications are never held for a digest.**
+
+```bash
+beaver workspace digest                                    # show the default
+beaver workspace digest --schedule daily --hour 18 --timezone Africa/Nairobi
+beaver workspace digest --schedule off
+```
+
+## On-call and escalation
+
+```bash
+beaver workspace on-call        # who is on call now, per schedule — the same resolution used to page people
+beaver workspace escalation     # escalation policies for unacknowledged critical alerts
+```
+
+Both are read-only views. What `on-call` shows is who an alert would actually reach.
+
+## If you are not getting notifications
+
+See [Notification not received](/operate/troubleshoot-notification).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Incidents" icon="siren" href="/operate/incidents">Problems Beaver is tracking.</Card>
+  <Card title="beaver notifications" icon="terminal" href="/cli/notifications">Every flag.</Card>
+</CardGroup>

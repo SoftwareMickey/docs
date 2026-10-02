@@ -1,0 +1,54 @@
+---
+title: "Certificate error or certificate not issued"
+sidebarTitle: "Certificate error"
+description: "The browser warns about the certificate, or issuance stays pending."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+keywords: ["tls", "https", "certificate", "ssl", "not secure"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+HTTPS shows a warning, or `beaver route inspect` reports the certificate as anything other than active.
+
+## Check first
+
+1. `beaver route inspect <domain>` — it reports the certificate provider and state.
+2. Confirm DNS resolves to Beaver first: certificates are issued only once it does.
+
+## Causes and fixes
+
+### DNS not correct or not propagated
+
+Fix the record, wait, then `beaver domain verify <domain-id>`.
+
+### Cloudflare proxy in front
+
+Use **DNS only** (grey cloud) while the certificate is issued.
+
+### Wrong address
+
+Use the app's default address `https://<name>.vectorihub.com` or a domain attached with `beaver domain add` — not an older deployment address.
+
+## Then
+
+Once DNS is right, re-provision with `beaver domain certificate <domain-id>`.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="TLS and route checks" icon="arrow-right" href="/network/tls">The page that prevents or explains this.</Card>
+  <Card title="Domains" icon="arrow-right" href="/network/domains">The page that prevents or explains this.</Card>
+</CardGroup>

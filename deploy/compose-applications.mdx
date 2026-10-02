@@ -1,0 +1,77 @@
+---
+title: "Deploy a Docker Compose app"
+sidebarTitle: "Compose applications"
+description: "Deploy a multi-service Docker Compose stack as it is, inspect its releases, and roll one back."
+keywords: ["docker compose", "docker-compose", "compose file", "multi-container", "multiple services", "stack"]
+icon: "boxes"
+type: howto
+audience: [developer]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+If your application is several services in a `compose.yml` — an API, a worker, a cache — Beaver can deploy the whole **stack** from that file instead of
+requiring one Dockerfile per service. A stack runs in a [Beaver Cloud](/infrastructure/beaver-cloud) like any deployment.
+
+<Note>
+Compose is **explicit**. A `compose.yml` next to a `Dockerfile` never changes what `beaver deploy` does; you choose a multi-service release by using
+`beaver compose`. The Dashboard lists stacks under **Composers**.
+</Note>
+
+## Before you begin
+
+A [cloud](/start/first-cloud), a Docker Hub login on the Builder, repository access ([from GitHub](/deploy/from-github)), and a Compose file named
+`compose.yml`, `compose.yaml`, `docker-compose.yml` or `docker-compose.yaml`.
+
+## Preview, then deploy
+
+<Tabs>
+  <Tab title="Dashboard">Open **Composers** and deploy a compose file; a stack's **networks**, **volumes** and **settings** have their own pages.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop. Networks and volumes a stack creates appear under **Networks** and **Storage**.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver compose detect                       # services, networks, volumes and env vars the file would deploy
+    beaver compose deploy --cloud paperclip-prod
+    ```
+    `--file <path>` picks a compose file when there are several; `--profile <name>` activates Compose profiles (a service with no profile always deploys).
+  </Tab>
+</Tabs>
+
+## Look at a stack and its releases
+
+```bash
+beaver compose stacks                       # list stacks
+beaver compose status <stack-id>            # health of a stack
+beaver compose logs <stack-id>              # build and host logs
+beaver compose stack show <stack-id>        # latest release and services
+beaver compose stack networks <stack-id>    # and: stack volumes <stack-id>
+beaver compose release watch <release-id>   # follow a release as it rolls out
+```
+
+## Roll back, retry or cancel a release
+
+```bash
+beaver compose release rollback <release-id>
+beaver compose release retry <release-id>
+beaver compose release cancel <release-id>
+```
+
+Destroying a stack is permanent: `beaver compose destroy <stack-id>`.
+
+## Where Compose has edges
+
+Not every Compose feature has a Beaver equivalent — check the [Compose command reference](/cli/compose) for exactly what is supported before expecting
+parity with `docker compose` locally. A database defined **as a Compose service** runs as an ordinary container: it does not get the backups and credential
+management of a Beaver-managed [service](/data/services-and-persistence). Attach a managed service instead if you want those.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Compose command reference" icon="terminal" href="/cli/compose">Every subcommand and flag.</Card>
+  <Card title="Managed services" icon="database" href="/data">The managed alternative to a Compose database.</Card>
+</CardGroup>

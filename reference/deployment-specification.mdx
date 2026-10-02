@@ -1,0 +1,160 @@
+---
+title: ".beaver/config.yml reference"
+sidebarTitle: ".beaver/config.yml"
+description: "Every field you can write in a project's .beaver/config.yml — what it accepts, its range, and the command that sets it."
+icon: "file-code"
+type: reference
+audience: [developer]
+keywords: ["config.yml", ".beaver", "strategy", "replicas", "health", "resources", "schema_version", "yaml"]
+---
+
+`.beaver/config.yml` is the one file that describes how Beaver should **run and watch** your project. It sits next to your code and is committed with it. Your Dockerfile still decides how the app is **built**. This page lists what you can write; for the idea behind it, read [Deployment configuration](/deploy/deployment-configuration) and [Configuration](/deploy/configuration).
+
+<Note>
+This is the part of the project file you author. Beaver also writes and reads other fields on your behalf (for example `project_id` after a project is linked); leave those alone. The full machine-readable shape is printed by `beaver config schema`, which you can point your editor at for autocomplete.
+</Note>
+
+## A minimal file
+
+```yaml .beaver/config.yml
+schema_version: 1
+project: paperclip
+deployment:
+  - container_name: app
+    path: .
+    strategy: rolling
+    replicas: 1
+```
+
+## A fuller file
+
+```yaml .beaver/config.yml
+schema_version: 1
+project: paperclip
+environment: production
+cloud: paperclip-prod
+deployment:
+  - container_name: api
+    path: .
+    port: 8080
+    strategy: rolling
+    replicas: 3
+    restart_policy: unless-stopped
+    env_file: .env.production
+    health:
+      path: /healthz
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    domain:
+      primary: api.paperclip.example
+    resources:
+      request:
+        cpu: 0.25
+        memory: 256
+      limit:
+        cpu: 1
+        memory: 512
+```
+
+## Top-level fields
+
+| Field | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `schema_version` | integer | Yes | The file format. This build supports `1`; anything else is refused |
+| `project` | string | Yes | The project's name |
+| `project_id` | string | No | Written by Beaver when the project is linked. Do not edit |
+| `environment` | string | No | The deployment environment this file targets, such as `production` or `staging` ([Environments](/deploy/environments)) |
+| `cloud` | string | No | The [Beaver Cloud](/infrastructure/beaver-cloud) to deploy to. `--cloud` on a command overrides it |
+| `builder` | machine reference | No | The machine that builds this project's images. Set with `beaver config builder` |
+| `host` | machine reference | No | The machine that runs it. Set with `beaver config host` |
+| `deployment` | list | Yes | One entry per container or compose service. At least one |
+
+A **machine reference** has `machine_id` (required, the machine's stable id), `name` (display only) and `docker_user` (the Docker Hub user that machine is signed in as, captured when you verify it).
+
+## `deployment` entries
+
+| Field | Type | Range or values | Meaning | Set with |
+| --- | --- | --- | --- | --- |
+| `container_name` | string | | The container's name | `beaver config set deployment.container_name <name>` |
+| `service` | string | | The compose service this entry describes. With several entries, config commands take `--service` to pick one | |
+| `image` | string | | A prebuilt image to run instead of building | `beaver config set deployment.image <image>` |
+| `path` | string | | Where the Dockerfile's build context is, relative to the repository | `beaver config set deployment.path <path>` |
+| `target` | string | | A build target inside the Dockerfile | `beaver config set deployment.target <target>` |
+| `port` | integer | `0`–`65535` | The port the app listens on. `beaver init` proposes it from your Dockerfile's `EXPOSE` | `beaver config set deployment.port <n>` |
+| `strategy` | string | `rolling`, `recreate` | `rolling` keeps the old version serving until the new one is healthy; `recreate` stops it first | `beaver config set deployment.strategy <value>` |
+| `replicas` | integer | `1`–`50` | How many copies run | `beaver config replicas <service> <n>` |
+| `restart_policy` | string | `no`, `always`, `unless-stopped`, `on-failure` | What the host does if the container exits | `beaver config set deployment.restart_policy <value>` |
+| `env_file` | string | | A file of environment variables for the deploy. See [Environment variables](/deploy/environment-variables) | `beaver config set deployment.env_file <file>` |
+| `internal` | boolean | | `true` keeps the deployment off the public internet, reachable only inside your infrastructure | |
+| `health` | object | below | How Beaver decides the container is healthy | `beaver config health` |
+| `domain` | object | below | The public address | `beaver config set domain.primary <host>` |
+| `resources` | object | below | CPU and memory | `beaver config resources` |
+| `scaling` | object | below | Automatic scaling | [`beaver autoscale`](/cli/autoscale) |
+| `volumes` | list | | Persistent storage to mount | `beaver config volume` |
+| `networks` | list | | Docker networks the container joins | `beaver config network` |
+| `binds` | list | | Host folders to mount | `beaver config bind` |
+
+### `health`
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `path` | string | An absolute HTTP path, such as `/healthz`. HTTP checks are the only kind Beaver supports |
+| `interval` | duration | Time between checks, such as `10s` |
+| `timeout` | duration | How long one check may take |
+| `retries` | integer | Consecutive failures before the container is marked unhealthy; at least `1` |
+
+See [Health checks](/deploy/health-checks).
+
+### `domain`
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `primary` | string | The public hostname. Pointing DNS at Beaver and verifying it are separate steps; see [Domains and routing](/network/domains-and-routing) |
+
+### `resources`
+
+Either the flat form (`cpu`, `memory`) or the nested form (`request` and `limit`):
+
+| Field | Type | Range | Meaning |
+| --- | --- | --- | --- |
+| `cpu` | number | up to `64` | CPU cores |
+| `memory` | integer | `6`–`262144` | Memory in megabytes |
+| `limit` | object | same fields | The enforced ceiling |
+| `request` | object | same fields | The reserved day-to-day floor |
+
+### `scaling`
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `mode` | string | `fixed` or `automatic` |
+| `min`, `max` | integer | The replica range automatic scaling stays within |
+| `metric` | string | What it watches |
+| `target_up`, `target_down` | number | The thresholds that add or remove a replica |
+
+See [`beaver autoscale`](/cli/autoscale) and [Scale](/deploy/scale).
+
+### `volumes`, `networks`, `binds`
+
+| List | Entry fields |
+| --- | --- |
+| `volumes` | `name`, `target` (the path in the container), `external` (a volume that already exists) |
+| `networks` | `name`, `alias`, `external` |
+| `binds` | `source` (a folder on the host machine), `target`, `read_only` |
+
+A bind names one folder on one machine, so it only makes sense for a deployment that runs on that machine. Prefer volumes ([Persistent volumes](/data/persistent-volumes)).
+
+## Rules
+
+- **No YAML anchors or aliases** (`&name`, `*name`). The file is refused if it has any.
+- **No duplicate keys.**
+- **At most 64 KiB.**
+- `beaver validate` checks the file's frame — it parses, `schema_version` is `1`, `project` is set — on your machine. It does **not** check the values inside `deployment:`; use the schema in your editor, and run `beaver config status` to compare the file with what Beaver has saved. Field values are validated again when the file is saved to Beaver and when you deploy.
+- Configuration commands back up the file to `.beaver/config.yml.bak` before rewriting it.
+
+## See also
+
+<CardGroup cols={2}>
+  <Card title="Config commands" icon="terminal" href="/cli/config">Author, push, pull and compare the file.</Card>
+  <Card title="Limits and quotas" icon="gauge" href="/reference/limits-and-quotas">The ranges above and plan limits in one place.</Card>
+</CardGroup>

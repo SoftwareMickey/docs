@@ -1,0 +1,426 @@
+{
+  "capturedAt": "2026-10-02",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "frozenClock": "2026-10-01T09:00:00Z",
+  "shots": [
+    {
+      "file": "desktop/infrastructure-home-light.png",
+      "surface": "desktop",
+      "name": "infrastructure-home",
+      "theme": "light",
+      "alt": "Beaver Desktop's Infrastructure home: a counts strip for machines, containers, services, networks and clouds above cards for each machine with CPU and memory bars.",
+      "sha256": "404d91c3759f971c925b63c0efe193633582c40d78bc1cf4758564be15e629fa"
+    },
+    {
+      "file": "desktop/infrastructure-home-dark.png",
+      "surface": "desktop",
+      "name": "infrastructure-home",
+      "theme": "dark",
+      "alt": "Beaver Desktop's Infrastructure home: a counts strip for machines, containers, services, networks and clouds above cards for each machine with CPU and memory bars.",
+      "sha256": "8123adead9984ade833eadb718366bf622eee747649a58476f30ad3727f089b2"
+    },
+    {
+      "file": "desktop/machines-list-light.png",
+      "surface": "desktop",
+      "name": "machines-list",
+      "theme": "light",
+      "alt": "The Machines section listing four enrolled machines with their status.",
+      "sha256": "5541dcf1f8cd1c20d8ff9a46dfa5e41f0726fc0806a0862b40938b332e3a0dd5"
+    },
+    {
+      "file": "desktop/machines-list-dark.png",
+      "surface": "desktop",
+      "name": "machines-list",
+      "theme": "dark",
+      "alt": "The Machines section listing four enrolled machines with their status.",
+      "sha256": "2e8e4bb77f6013e997361859d418b3fd9057c6d13761e9ab70f82d113b08339d"
+    },
+    {
+      "file": "desktop/machine-overview-light.png",
+      "surface": "desktop",
+      "name": "machine-overview",
+      "theme": "light",
+      "alt": "A machine's detail view on the Overview tab, with the nine tabs along the top, health score, resource utilisation and an Identity card.",
+      "sha256": "d0ee92c65d125af439bd8856f46253fe1ef4aa7424d3507eff998c6eaf0593d6"
+    },
+    {
+      "file": "desktop/machine-overview-dark.png",
+      "surface": "desktop",
+      "name": "machine-overview",
+      "theme": "dark",
+      "alt": "A machine's detail view on the Overview tab, with the nine tabs along the top, health score, resource utilisation and an Identity card.",
+      "sha256": "26e1bcdb5b01ab90bb20437a73db5fea67474aa3ba8707f1ede871079e3c0a58"
+    },
+    {
+      "file": "desktop/clouds-list-light.png",
+      "surface": "desktop",
+      "name": "clouds-list",
+      "theme": "light",
+      "alt": "The Beaver Cloud section listing machine pools.",
+      "sha256": "5f49d319acfa1a756729c90c1b0baad7dc610677dd5a863a2588c6714497995a"
+    },
+    {
+      "file": "desktop/clouds-list-dark.png",
+      "surface": "desktop",
+      "name": "clouds-list",
+      "theme": "dark",
+      "alt": "The Beaver Cloud section listing machine pools.",
+      "sha256": "d275522ba99c3fd77776b855e9232f5c21ffab1e2120763e83abd50c99032a4d"
+    },
+    {
+      "file": "desktop/services-list-light.png",
+      "surface": "desktop",
+      "name": "services-list",
+      "theme": "light",
+      "alt": "The Services section listing managed services with type, status and machine.",
+      "sha256": "ffe425bb0d3dba6bdeb42f2b39b48b3181778faab2586036b7e06ca60d7a0be1"
+    },
+    {
+      "file": "desktop/services-list-dark.png",
+      "surface": "desktop",
+      "name": "services-list",
+      "theme": "dark",
+      "alt": "The Services section listing managed services with type, status and machine.",
+      "sha256": "622071a6b2925316511c45eea78b293f5f0d53b88e4d3cb0f49d3e7d14412fa7"
+    },
+    {
+      "file": "desktop/networks-list-light.png",
+      "surface": "desktop",
+      "name": "networks-list",
+      "theme": "light",
+      "alt": "The Networks section, assembled from your machines.",
+      "sha256": "9f9d9c2bcc499e3b5135b94ce8ea8ebabdbed7e632a826f6ad2527705fdf4bb6"
+    },
+    {
+      "file": "desktop/networks-list-dark.png",
+      "surface": "desktop",
+      "name": "networks-list",
+      "theme": "dark",
+      "alt": "The Networks section, assembled from your machines.",
+      "sha256": "63eac79a4334c5a8a3b8ec1f9a6521bc9bee2e4f0b0fb7b5043f159f447354a5"
+    },
+    {
+      "file": "desktop/storage-list-light.png",
+      "surface": "desktop",
+      "name": "storage-list",
+      "theme": "light",
+      "alt": "The Storage section listing volumes.",
+      "sha256": "acc20e2f4a8de0068d5c7cd60f33da97cf10aadbe70fa530637c78469deb80de"
+    },
+    {
+      "file": "desktop/storage-list-dark.png",
+      "surface": "desktop",
+      "name": "storage-list",
+      "theme": "dark",
+      "alt": "The Storage section listing volumes.",
+      "sha256": "1ec03cd3c684358ff055aebcacd0541bac38d22fc8027c730f2e6fda53543875"
+    },
+    {
+      "file": "desktop/traces-light.png",
+      "surface": "desktop",
+      "name": "traces",
+      "theme": "light",
+      "alt": "The Traces explorer with filters and a task list.",
+      "sha256": "e19778fa75b55135e79c9afef58dc96a6ed57dfbad0e61cce0540d687e111c81"
+    },
+    {
+      "file": "desktop/traces-dark.png",
+      "surface": "desktop",
+      "name": "traces",
+      "theme": "dark",
+      "alt": "The Traces explorer with filters and a task list.",
+      "sha256": "a04ce582c4711658565d8f3082081f3e5bf3c28b7b013feff3989c20f83bd502"
+    },
+    {
+      "file": "desktop/action-sheet-add-machine-light.png",
+      "surface": "desktop",
+      "name": "action-sheet-add-machine",
+      "theme": "light",
+      "alt": "The Add Machine action sheet, showing the beaver connect command with a Copy command button.",
+      "sha256": "7351b67f84bbadaa412af7973f060d8a54e74dca7c15896e026ad4fe5a87bfa6"
+    },
+    {
+      "file": "desktop/action-sheet-add-machine-dark.png",
+      "surface": "desktop",
+      "name": "action-sheet-add-machine",
+      "theme": "dark",
+      "alt": "The Add Machine action sheet, showing the beaver connect command with a Copy command button.",
+      "sha256": "aaf5609d6c3bae732cb35cbb941f56e52f77593e3df2c4be1b0d625f9604ec52"
+    },
+    {
+      "file": "desktop/command-palette-light.png",
+      "surface": "desktop",
+      "name": "command-palette",
+      "theme": "light",
+      "alt": "The command palette open over the Infrastructure home, listing pages and actions.",
+      "sha256": "1805de0ddc77f4d4ae164f03691d66fd0119d207eda715e6d7f97bd4ec4db08d"
+    },
+    {
+      "file": "desktop/command-palette-dark.png",
+      "surface": "desktop",
+      "name": "command-palette",
+      "theme": "dark",
+      "alt": "The command palette open over the Infrastructure home, listing pages and actions.",
+      "sha256": "d0886576fa7a21566c3f0530666d7397140f150fafb3a6a500f81060ead44a76"
+    },
+    {
+      "file": "desktop/settings-general-light.png",
+      "surface": "desktop",
+      "name": "settings-general",
+      "theme": "light",
+      "alt": "Settings on the General page, with the settings navigator on the left.",
+      "sha256": "98d7071756797daa225b70952f0fc76b6734b7927e2f813d51634d40a5eaa360"
+    },
+    {
+      "file": "desktop/settings-general-dark.png",
+      "surface": "desktop",
+      "name": "settings-general",
+      "theme": "dark",
+      "alt": "Settings on the General page, with the settings navigator on the left.",
+      "sha256": "3ef29c0c9534894dbd4c248814642645c58744f0327b89c949b4a8a9edd9abea"
+    },
+    {
+      "file": "desktop/cloud-overview-light.png",
+      "surface": "desktop",
+      "name": "cloud-overview",
+      "theme": "light",
+      "alt": "A Beaver Cloud's detail view on the Overview tab: nodes, applications, health, network and free CPU, memory and storage, with seven tabs along the top.",
+      "sha256": "93d96fa0713a0fc70a7c3eba34e8e22c7521ae614bd6ea4081bb3e66ad03971b"
+    },
+    {
+      "file": "desktop/cloud-overview-dark.png",
+      "surface": "desktop",
+      "name": "cloud-overview",
+      "theme": "dark",
+      "alt": "A Beaver Cloud's detail view on the Overview tab: nodes, applications, health, network and free CPU, memory and storage, with seven tabs along the top.",
+      "sha256": "94b2fb7a001803f8921c734e7838054249201818b825881815ebe9c59b08dec1"
+    },
+    {
+      "file": "desktop/service-connections-light.png",
+      "surface": "desktop",
+      "name": "service-connections",
+      "theme": "light",
+      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel.",
+      "sha256": "1bce5307757f33ab883b41222552e14b4e7e5e4904276d4d998b19c48aa6a729"
+    },
+    {
+      "file": "desktop/service-connections-dark.png",
+      "surface": "desktop",
+      "name": "service-connections",
+      "theme": "dark",
+      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel.",
+      "sha256": "545b1325d837a18a18f79083c5dda5954eb92df7b6aa4313905db3f81a7b8b62"
+    },
+    {
+      "file": "desktop/workspaces-list-light.png",
+      "surface": "desktop",
+      "name": "workspaces-list",
+      "theme": "light",
+      "alt": "The Workspaces page listing local projects with branch, path and link status.",
+      "sha256": "c9e89a0a63a6fdcde1a0115484c72083acb81cadf3cd95890421e76a85dbe088"
+    },
+    {
+      "file": "desktop/workspaces-list-dark.png",
+      "surface": "desktop",
+      "name": "workspaces-list",
+      "theme": "dark",
+      "alt": "The Workspaces page listing local projects with branch, path and link status.",
+      "sha256": "7023673e14ac71f5cb4fc9cd3fe6120d57aff9962ab5b82d25429f2d356044a6"
+    },
+    {
+      "file": "desktop/settings-security-privacy-light.png",
+      "surface": "desktop",
+      "name": "settings-security-privacy",
+      "theme": "light",
+      "alt": "Settings on the Security and Privacy page, with the AI data switches and the local data sizes.",
+      "sha256": "ab14236e28b25a1da119b7f324ab7e0ddc8b23c9d2fda8ae38e287712b11c73f"
+    },
+    {
+      "file": "desktop/settings-security-privacy-dark.png",
+      "surface": "desktop",
+      "name": "settings-security-privacy",
+      "theme": "dark",
+      "alt": "Settings on the Security and Privacy page, with the AI data switches and the local data sizes.",
+      "sha256": "a4194bbfb493abfd6f1b0a803c843c11bdb664b8f8d4b7e9b9b485338e277608"
+    },
+    {
+      "file": "dashboard/home-light.png",
+      "surface": "dashboard",
+      "name": "home",
+      "theme": "light",
+      "alt": "The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, services, requests and incidents, then panels for applications, infrastructure, managed services and edge above recent deployments.",
+      "sha256": "f4958d5fc97b8df670acefe308316bd5f8e744d89a4a833470716574ef7aeada"
+    },
+    {
+      "file": "dashboard/home-dark.png",
+      "surface": "dashboard",
+      "name": "home",
+      "theme": "dark",
+      "alt": "The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, services, requests and incidents, then panels for applications, infrastructure, managed services and edge above recent deployments.",
+      "sha256": "93b569e0dcdfd1c09d20cfe0ce9107161eb9d30db34f567acb55df22dc22f4d2"
+    },
+    {
+      "file": "dashboard/containers-light.png",
+      "surface": "dashboard",
+      "name": "containers",
+      "theme": "light",
+      "alt": "The Containers page listing every running container with its status, image, branch and domain.",
+      "sha256": "b3cb96ea7cf6f0bc07394ce48c40dd2a569b2e47722d221a41965024dd9f64de"
+    },
+    {
+      "file": "dashboard/containers-dark.png",
+      "surface": "dashboard",
+      "name": "containers",
+      "theme": "dark",
+      "alt": "The Containers page listing every running container with its status, image, branch and domain.",
+      "sha256": "6832907a47d154615e2f73573d7ac36e9f41ae9c58165e0a98aa14d868c2e414"
+    },
+    {
+      "file": "dashboard/projects-light.png",
+      "surface": "dashboard",
+      "name": "projects",
+      "theme": "light",
+      "alt": "The Projects page listing the workspace's projects with their containers and services.",
+      "sha256": "ca0ef5f6e5863f8c7bc45f4c773cb4f6f9da79aa044bc87b6e2a44bf83c805c0"
+    },
+    {
+      "file": "dashboard/projects-dark.png",
+      "surface": "dashboard",
+      "name": "projects",
+      "theme": "dark",
+      "alt": "The Projects page listing the workspace's projects with their containers and services.",
+      "sha256": "bb0e2ea9b7724e3cec29ae39d508c603266c1ba51bb733f2acd778e3045dca2c"
+    },
+    {
+      "file": "dashboard/nodes-light.png",
+      "surface": "dashboard",
+      "name": "nodes",
+      "theme": "light",
+      "alt": "The Nodes page showing infrastructure health with a card per machine and its role and status.",
+      "sha256": "9d69a1066f14a0b7f93d45f3e90fe686f08de1d7e6bc5354d656272a58ff2acc"
+    },
+    {
+      "file": "dashboard/nodes-dark.png",
+      "surface": "dashboard",
+      "name": "nodes",
+      "theme": "dark",
+      "alt": "The Nodes page showing infrastructure health with a card per machine and its role and status.",
+      "sha256": "b42b4e9df6b16c8606ee418ff2d474beba6eab942183a2e4ebfe128797edbe91"
+    },
+    {
+      "file": "dashboard/edge-light.png",
+      "surface": "dashboard",
+      "name": "edge",
+      "theme": "light",
+      "alt": "The Beaver Edge page listing connected apps and the health of their origins.",
+      "sha256": "20f0451b99ce7e2cfb0e9f4e28ce18347d74f7580abbd44be2394093bed97230"
+    },
+    {
+      "file": "dashboard/edge-dark.png",
+      "surface": "dashboard",
+      "name": "edge",
+      "theme": "dark",
+      "alt": "The Beaver Edge page listing connected apps and the health of their origins.",
+      "sha256": "7784a6bb327fc7a82f07ca019c78547276a33adb6f3cb0a93032c798e25d60a0"
+    },
+    {
+      "file": "dashboard/managed-services-light.png",
+      "surface": "dashboard",
+      "name": "managed-services",
+      "theme": "light",
+      "alt": "The Managed services page listing each database and cache with its type and status.",
+      "sha256": "71f3ff982d2f82aff7cc4dfe770e2291c7c6fc581bf0093c754c2f38b802f89c"
+    },
+    {
+      "file": "dashboard/managed-services-dark.png",
+      "surface": "dashboard",
+      "name": "managed-services",
+      "theme": "dark",
+      "alt": "The Managed services page listing each database and cache with its type and status.",
+      "sha256": "d9285336e4218e0331fe8b4e4501d89729b87aa4733ccee6220e94e193cf362a"
+    },
+    {
+      "file": "dashboard/incidents-light.png",
+      "surface": "dashboard",
+      "name": "incidents",
+      "theme": "light",
+      "alt": "The Incidents page listing open and monitored incidents with severity and affected resources.",
+      "sha256": "e91f97dc6a82bcc7b558ce5f8d3061db9ab7098df8afdba7d3102af76be34304"
+    },
+    {
+      "file": "dashboard/incidents-dark.png",
+      "surface": "dashboard",
+      "name": "incidents",
+      "theme": "dark",
+      "alt": "The Incidents page listing open and monitored incidents with severity and affected resources.",
+      "sha256": "362167a64d1f457dbdfcc3c366c0cd67a8a9806e9dbd449da8e4b89fd6b6e550"
+    },
+    {
+      "file": "dashboard/notifications-light.png",
+      "surface": "dashboard",
+      "name": "notifications",
+      "theme": "light",
+      "alt": "The Notifications inbox with an Action required section and the rest of the feed below it.",
+      "sha256": "b228286e5927fd78e53e597c369a584874fd3f0094b6e7f4c18f6474f322a72c"
+    },
+    {
+      "file": "dashboard/notifications-dark.png",
+      "surface": "dashboard",
+      "name": "notifications",
+      "theme": "dark",
+      "alt": "The Notifications inbox with an Action required section and the rest of the feed below it.",
+      "sha256": "646a7a12c97f4a15edfd177d1131647cec32194e5eb48a9c198e449bb73328e3"
+    },
+    {
+      "file": "dashboard/billing-light.png",
+      "surface": "dashboard",
+      "name": "billing",
+      "theme": "light",
+      "alt": "The Billing page with the plan summary, usage against limits and payment history.",
+      "sha256": "b2c5778eee7bdb2a2e2b8eca3d5354838b44972aaf31826b4f3326b0118a6c33"
+    },
+    {
+      "file": "dashboard/billing-dark.png",
+      "surface": "dashboard",
+      "name": "billing",
+      "theme": "dark",
+      "alt": "The Billing page with the plan summary, usage against limits and payment history.",
+      "sha256": "c88697c90af93b04714d2cc10e66a9cd8324876e56e164a2cfa4e9ef35282ed9"
+    },
+    {
+      "file": "dashboard/team-light.png",
+      "surface": "dashboard",
+      "name": "team",
+      "theme": "light",
+      "alt": "The Team settings page with the members list and an Attention required panel.",
+      "sha256": "ad10c635846b5b83de4d17fa387554021949de8a5313f9351d47fadad09a4f29"
+    },
+    {
+      "file": "dashboard/team-dark.png",
+      "surface": "dashboard",
+      "name": "team",
+      "theme": "dark",
+      "alt": "The Team settings page with the members list and an Attention required panel.",
+      "sha256": "5a2536b2b9564328f46838724c94cdd2f5c7b5bae912eaea820307217b6053d1"
+    },
+    {
+      "file": "dashboard/settings-devices-light.png",
+      "surface": "dashboard",
+      "name": "settings-devices",
+      "theme": "light",
+      "alt": "Personal Settings on the Devices tab, listing the devices signed in to the account.",
+      "sha256": "91d63344ada3bc1a1125688038c5158f75d173e70f13a91000c410dbf8bfbeb5"
+    },
+    {
+      "file": "dashboard/settings-devices-dark.png",
+      "surface": "dashboard",
+      "name": "settings-devices",
+      "theme": "dark",
+      "alt": "Personal Settings on the Devices tab, listing the devices signed in to the account.",
+      "sha256": "1f2328ead0783b85429234011871406498dbc4b37d8b10f5ad52529e1f1e6a60"
+    }
+  ]
+}

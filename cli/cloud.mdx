@@ -3,16 +3,17 @@ title: "beaver cloud"
 sidebarTitle: "cloud"
 description: "Group enrolled machines into a Beaver Cloud and manage its network, capacity, and workload placement."
 icon: "cloud"
+type: reference
 ---
 
 <Info>
-  New here? [Beaver Cloud](/concepts/beaver-cloud) explains what this is and when to use it, before diving into syntax.
+  New here? [Beaver Cloud](/infrastructure/beaver-cloud) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
 
 A **Beaver Cloud** is a named pool of your own enrolled machines (see
-[Infrastructure setup](/infrastructure-setup) for connecting individual machines). Once
+[Infrastructure setup](/infrastructure/providers) for connecting individual machines). Once
 machines are enrolled, `beaver cloud` is what you use to group them, give them a shared
 private network, set capacity reservations, and decide how applications spread across the
 pool — `beaver deploy --cloud <name>` then targets the pool instead of one machine.
@@ -72,8 +73,34 @@ move together.
   member of, without switching your session's active workspace first. See [Sharing with
   another workspace](#sharing-with-another-workspace).
 </ParamField>
+<ParamField query="--check" type="boolean" default="false">
+  On `machines add`: evaluate every requirement for joining and report which are met and which
+  are not, without adding the machine. Exits `1` when the machine cannot join. Cannot be combined
+  with `--fix`.
+</ParamField>
+<ParamField query="--fix" type="boolean" default="false">
+  On `machines add`: repair what Beaver can repair safely on the machine (missing WireGuard
+  tooling, IP forwarding, time sync), then add it. Asks first; only repairs the server marks
+  automatic and safe are run, and only on the machine being added. Anything else is printed as an
+  instruction, never run.
+</ParamField>
+<ParamField query="--explain" type="boolean" default="false">
+  On `machines add`: list every requirement that was evaluated, including the ones that were met.
+</ParamField>
 <ParamField query="--yes" type="boolean" default="false">
-  On `machines rm`/`machines reject`: skip the confirmation prompt.
+  On `machines add --fix`, `machines rm` and `machines reject`: accept the described change
+  without the confirmation prompt. Without a terminal, these commands fail and tell you to pass
+  `--yes` — they never wait for input or quietly do nothing. `--yes` never bypasses a requirement
+  that is not met.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `machines rm`: accept the one impact the refusal listed — taking running workloads down
+  (every replica of an app, a stateful workload's data node, or the cloud's last gateway). It is
+  not a general override.
+</ParamField>
+<ParamField query="--json / --output / --quiet" type="flags" default="">
+  On `machines add`: `--json` (or `--output json|yaml`) prints structured output, including
+  failures; `--quiet` hides routine status lines but never an error.
 </ParamField>
 <ParamField query="--cloud" type="string" default="">
   On `preflight`: re-check the members of this existing cloud instead of a fresh set.
@@ -97,7 +124,7 @@ until an operator approves or rejects it, instead of joining immediately.
 ## Sharing with another workspace
 
 <Info>
-  [Sharing a Beaver Cloud across workspaces](/concepts/cloud-sharing) explains grants, roles
+  [Sharing a Beaver Cloud across workspaces](/teams/cloud-sharing) explains grants, roles
   and quotas before diving into syntax.
 </Info>
 
@@ -239,6 +266,28 @@ which is the **history** of what actually happened (deploy-host picks and scalin
 already made). Replica *count* is governed by [`beaver scaling`](/cli/scaling); `workload set`
 only decides where those replicas land, not how many there are.
 
+## Recovery
+
+| Subcommand | Purpose |
+| --- | --- |
+| `impact <machine>` | Show what breaks if this node is lost — before it happens. |
+| `drain <machine>` | Take a node out of service: stop sending it **new** work. |
+| `undrain <machine>` | Restore a drained node's eligibility for new work. |
+| `evacuate <machine>` | Compute a **reviewable plan** to move every container off a node. Moves nothing by itself. |
+| `evacuate execute <plan-id>` | Run a previously generated evacuation plan. |
+| `evacuate rollback` | Undo an executed evacuation plan, moving containers back. |
+
+<ParamField query="--cloud" type="string" default="">
+  On every recovery subcommand: cloud slug or name. Interactive picker if omitted.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
+</ParamField>
+
+`drain` marks a node as draining — it is excluded from new placement decisions, but its existing containers keep running. `evacuate` is the separate step that actually moves
+them: it generates a plan without moving anything, you review it, then `evacuate execute <plan-id>` runs it. A cloud does **not** reschedule work on its own when a machine goes
+offline (there is no automatic failover), so these are the explicit recovery actions. See [Drain and evacuate a machine](/infrastructure/drain-and-evacuate).
+
 ## Services & containers
 
 | Subcommand | Purpose |
@@ -301,15 +350,19 @@ beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin srv_
 | --- | --- | --- |
 | `create` success | The new cloud with its member machines | Deploy with `--cloud <name>`. |
 | `rm` on a non-empty cloud | An error requiring an empty cloud first | Remove all members with `machines rm`, then retry. |
-| `machines add` blocked by preflight | Findings listed, with their IDs | Fix the issues, or pass `--override` with the reviewed finding IDs. |
+| `machines add` cannot join | Every requirement with ✓/✕/!, what is wrong, the repair for each, the command to retry, and "No changes were made." | Run the repair shown (`--fix` does the automatic ones), or pass `--override` with reviewed finding IDs. |
+| `machines add --check` | The same requirements, nothing changed. Exit `0` if it can join, `1` if not | Fix what is listed, then add the machine. |
+| `machines add --fix` with no terminal and no `--yes` | A failure saying it needs confirmation | Re-run with `--fix --yes`. |
+| `machines rm` would take workloads down | The workloads and gateways affected, a safe alternative, and the `--force` command | Scale the app out first, or accept the impact with `--force`. |
+| `machines rm` with no terminal and no `--yes` | A failure saying it needs confirmation (exit `1`) | Re-run with `--yes`. |
 | `workload set --policy pinned` with no `--pin` | `--pin` required error | Pass a target machine ID. |
 
 ## Used in
 
-- [Connect and machine roles](/guides/connect-and-machine-roles) — grouping connected
+- [Connect and machine roles](/infrastructure/connect-and-machine-roles) — grouping connected
   machines into a cloud.
-- [Scaling: manual vs. automatic](/guides/scaling) — workload placement within a cloud.
-- [Infrastructure setup](/infrastructure-setup) — connecting the individual machines a cloud
+- [Scaling: manual vs. automatic](/deploy/scale) — workload placement within a cloud.
+- [Infrastructure setup](/infrastructure/providers) — connecting the individual machines a cloud
   groups together.
 - [`deploy`](/cli/deploy) — `--cloud` targets a cloud instead of a single machine.
 - [`scaling`](/cli/scaling) — governs replica count; `workload` governs where those replicas

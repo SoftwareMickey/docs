@@ -1,0 +1,44 @@
+---
+title: "Deploy"
+sidebarTitle: "Overview"
+description: "Get an application onto your machines and keep it healthy: Dockerfile, environments and variables, scaling, rollback and CI."
+icon: "rocket"
+type: hub
+audience: [developer]
+---
+
+Deploying means building your Dockerfile into an image and running it in a [Beaver Cloud](/infrastructure/beaver-cloud)
+you own. This section covers the whole loop — what to prepare, how to ship, how to change settings, and how to undo.
+
+<Tip>
+**Start here:** the [deploy overview](/deploy/overview) walks the loop end to end.
+</Tip>
+
+## Do
+
+<CardGroup cols={2}>
+  <Card title="Deploy overview" icon="list-checks" href="/deploy/overview">Connect, deploy, verify, promote.</Card>
+  <Card title="Dockerfile requirements" icon="docker" href="/deploy/dockerfile-requirements">What your Dockerfile must define.</Card>
+  <Card title="Deploy a compose application" icon="boxes" href="/deploy/compose-applications">Ship a multi-service stack as it is.</Card>
+  <Card title="Environment variables" icon="key" href="/deploy/environment-variables">Keys, URLs and secrets, injected at runtime.</Card>
+  <Card title="Connect GitHub" icon="github" href="/deploy/integrations">Deploy from a repository.</Card>
+  <Card title="Scale" icon="gauge" href="/deploy/scale">Fixed replicas or automatic.</Card>
+  <Card title="Roll back and recover" icon="history" href="/deploy/rollback-and-recovery">Diagnose first, then choose a recovery path.</Card>
+  <Card title="Run in CI" icon="terminal" href="/deploy/ci-cd">Non-interactive flags for scripts and pipelines.</Card>
+</CardGroup>
+
+## Understand
+
+[Deployment lifecycle](/deploy/deployment-lifecycle) · [Projects](/deploy/projects) ·
+[Builds and images](/deploy/builds-and-images) · [Containers and replicas](/deploy/containers-and-replicas) ·
+[Preflight and planning](/deploy/preflight-and-planning) · [Configuration](/deploy/configuration)
+
+## Bring your own app
+
+Any app with a Dockerfile and a listening port runs on Beaver, whatever it is written in:
+[Bring your own app](/deploy/bring-your-own-app).
+
+## Look up and fix
+
+[`beaver deploy`](/cli/deploy) · [`beaver compose`](/cli/compose) · [Shared flags](/cli/shared-flags) ·
+[Troubleshooting](/operate/troubleshooting)

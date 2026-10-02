@@ -1,0 +1,69 @@
+---
+title: "beaver incidents"
+sidebarTitle: "incidents"
+description: "List Beaver incidents, read one's timeline, and acknowledge it."
+icon: "siren"
+type: reference
+---
+
+<Info>
+  New here? [Incidents](/operate/incidents) explains what an incident is and who gets told, before diving into syntax.
+</Info>
+
+## Purpose
+
+An **incident** is an operational problem Beaver has detected and is tracking — it has a status (`open`, `monitoring` or `resolved`) and a timeline. `beaver incidents` lists them, shows one in full, and
+acknowledges one: the same actions as the Dashboard's **Incidents** page.
+
+## Syntax
+
+```bash
+beaver incidents [flags]
+beaver incidents show <id>
+beaver incidents acknowledge <id>
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)* | List incidents. |
+| `show <id>` | Show one incident's full timeline. |
+| `acknowledge <id>` | Acknowledge an incident — the same endpoint the Dashboard uses. |
+
+## Flags
+
+<ParamField query="--status" type="string" default="">
+  Filter the list by status: `open`, `monitoring` or `resolved`.
+</ParamField>
+
+See [shared flags](/cli/shared-flags) for `--json` and `--output`, also accepted.
+
+## Consequences
+
+Listing and `show` are reads. `acknowledge` records that you have seen the incident; it does not fix anything or change what is running — for that see
+[Rollback and recovery](/deploy/rollback-and-recovery).
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Open incidents
+beaver incidents --status=open
+```
+
+```bash One incident's timeline
+beaver incidents show <id>
+```
+
+```bash Acknowledge
+beaver incidents acknowledge <id>
+```
+
+</CodeGroup>
+
+## Used in
+
+- [Incidents](/operate/incidents) · [Notifications](/operate/notifications) · [`beaver notifications`](/cli/notifications)

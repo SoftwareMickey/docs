@@ -3,24 +3,25 @@ title: "beaver deploy"
 sidebarTitle: "deploy"
 description: "Build and deploy one application from your Dockerfile or a connected GitHub repository."
 icon: "rocket"
+type: reference
 ---
 
 <Info>
-  New here? [Deployments](/concepts/deployments) explains what this is and when to use it, before diving into syntax.
+  New here? [Deployments](/deploy/deployment-lifecycle) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
 
 `beaver deploy` (or just `beaver` with no subcommand) builds and deploys the application in
 your current directory. It always requires a Dockerfile — see [Dockerfile
-requirements](/deploying/dockerfile-requirements) for what Beaver expects in it; there is no
-auto-detection or auto-dockerization of frameworks. For [deployment configuration](/deploying/deployment-configuration)
-(ports, resources, health checks) and [environment variables](/deploying/environment-variables),
+requirements](/deploy/dockerfile-requirements) for what Beaver expects in it; there is no
+auto-detection or auto-dockerization of frameworks. For [deployment configuration](/deploy/deployment-configuration)
+(ports, resources, health checks) and [environment variables](/deploy/environment-variables),
 see those guides — this page covers the command itself.
 
 ## Required deployment target
 
-Every deployment runs in a [Beaver Cloud](/concepts/beaver-cloud). Select an existing
+Every deployment runs in a [Beaver Cloud](/infrastructure/beaver-cloud). Select an existing
 cloud in the wizard, pass `--cloud production`, or save `cloud: production` in
 `.beaver/config.yml`. Beaver chooses the builder and host from that cloud.
 
@@ -112,7 +113,7 @@ redeploy`](/cli/container) instead.
 ### From a public template
 
 <ParamField query="--from-template" type="string" default="">
-  Deploy a [public template](/concepts/activity-and-following) by id instead of the local
+  Deploy a [public template](/operate/activity-and-following) by id instead of the local
   project — see [`beaver profile`](/cli/profile) or [`beaver activity`](/cli/activity) for
   template ids. When set, every other flag on this page (Dockerfile discovery, the GitHub
   wizard, preflight) is skipped — everything needed comes from the template itself.
@@ -171,7 +172,7 @@ scripted and CI deploys.
 </ParamField>
 <ParamField query="--env-file" type="string" default="">
   Path to a `.env`-style file of environment variables to set. See [environment
-  variables](/deploying/environment-variables).
+  variables](/deploy/environment-variables).
 </ParamField>
 <ParamField query="--env-var" type="string" default="">
   An environment variable to set, `KEY=value`. Repeatable. Distinct from `--env`, which is the
@@ -207,7 +208,7 @@ scripted and CI deploys.
 
 A deploy builds a new image from your Dockerfile and starts a new release; whether this
 causes downtime depends on your deployment configuration (see [deployment
-configuration](/deploying/deployment-configuration)). Preflight runs first and can block the
+configuration](/deploy/deployment-configuration)). Preflight runs first and can block the
 deploy on a finding — `--skip-preflight` overrides that block but is recorded as an audit
 row, not a silent bypass.
 
@@ -277,10 +278,10 @@ Building paperclip-web from Dockerfile...
 
 ## Used in
 
-- [Deploy workflow](/guides/deploy-workflow) — the full connect-to-promote walkthrough.
-- [Dockerfile requirements](/deploying/dockerfile-requirements)
-- [Deployment configuration](/deploying/deployment-configuration)
-- [Environment variables](/deploying/environment-variables)
+- [Deploy workflow](/deploy/overview) — the full connect-to-promote walkthrough.
+- [Dockerfile requirements](/deploy/dockerfile-requirements)
+- [Deployment configuration](/deploy/deployment-configuration)
+- [Environment variables](/deploy/environment-variables)
 - [`template fork`](/cli/template) — deploys a template AND creates a private draft you can
   customize and republish, instead of `--from-template`'s plain deploy.
 - [`activity`](/cli/activity) — prints the exact `--from-template` command for each templated

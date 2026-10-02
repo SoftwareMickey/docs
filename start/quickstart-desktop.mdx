@@ -1,0 +1,68 @@
+---
+title: "Quickstart: explore Beaver Desktop"
+sidebarTitle: "Quickstart: Desktop"
+description: "Sign in, read the Infrastructure home, drill into a machine, and see approvals — a ten-minute orientation."
+keywords: ["quickstart", "desktop", "beaver desktop", "explore", "get started"]
+icon: "monitor"
+type: tutorial
+audience: [evaluator, developer, operator]
+interfaces: [desktop]
+time: "10 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Beaver Desktop is mainly a place to **look at and understand** your infrastructure. This tutorial walks the app once so you know where
+things are. To change things you will use the CLI or the Dashboard — Desktop shows you the matching command.
+
+## Before you start
+
+- Beaver Desktop [installed and signed in](/install/desktop) (availability is limited — see that page).
+- At least one machine connected. If you have none, do the [CLI quickstart](/start/quickstart-cli) first; Desktop cannot enrol one.
+
+## Steps
+
+<Steps>
+  <Step title="Read the Infrastructure home">
+    The first screen after sign-in. It counts your machines, clouds and services, and shows a card per machine with its health.
+    An empty workspace shows a prompt to enrol your first machine.
+  </Step>
+  <Step title="Open a machine">
+    Click a machine card. The detail view has tabs for **Overview, Containers, Resources, Networks, Volumes, Logs, Events,
+    Security** and **Configuration** (which shows drift between what you asked for and what is running).
+  </Step>
+  <Step title="Look at your Beaver Cloud">
+    Open **Beaver Cloud** in the sidebar and choose a cloud: its overview, nodes, network, capacity, services and a timeline.
+  </Step>
+  <Step title="Find a service and a volume">
+    **Services** lists managed services; each has its status, connections, credentials (masked until you reveal them), attached
+    applications and storage. **Storage** and **Networks** list volumes and networks gathered from your machines and clouds.
+  </Step>
+  <Step title="See what an action would run">
+    Use the **add** actions on the Infrastructure home. Desktop shows the exact `beaver` command and does not run anything for you
+    — copy it into a terminal.
+  </Step>
+  <Step title="Check approvals">
+    **Approvals** lists actions waiting for a decision. In a team workspace you can approve or reject a request here.
+  </Step>
+</Steps>
+
+## Result
+
+You can find any machine, cloud, service, volume or network from one navigator, and you know which actions to take in the
+CLI or Dashboard.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="First machine" icon="plug" href="/start/first-machine">Enrol a machine so Desktop has something to show.</Card>
+  <Card title="Choose your interface" icon="layout-dashboard" href="/start/choose-your-interface">Dashboard, Desktop or CLI.</Card>
+  <Card title="Desktop guides" icon="monitor" href="/interfaces/desktop/shell-tour">Where everything is, section by section.</Card>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">What Desktop can and cannot do.</Card>
+</CardGroup>

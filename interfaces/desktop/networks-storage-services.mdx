@@ -1,0 +1,82 @@
+---
+title: "Networks, storage and services in Desktop"
+sidebarTitle: "Networks, storage, services"
+description: "The Networks, Storage and Services sections: how they are assembled, the service detail tabs and which of them have data today, and the sections that are not available yet."
+icon: "database"
+type: interface
+audience: [operator, developer]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Networks
+
+**Networks** lists the networks across your machines and clouds with their name, kind (**overlay**, **compose**, **host**), scope, address range and member count. Select one: a cloud's private overlay shows its **Members** (node, private address, reachable or not) and **Discovery**, and points you to the cloud's **Network** tab to manage it.
+
+<Shot name="desktop/networks-list" alt="The Networks section, a table of networks assembled from clouds, Compose stacks and machines." />
+
+<Note>
+There is no standalone network resource in Beaver yet. A network you see here is created by a Beaver Cloud (its private network) or a Compose stack, or is a Docker network on a machine — the list is **assembled from the machines you have**, so what appears depends on which machines are enrolled and reporting. **Create Network** is disabled for that reason.
+</Note>
+
+## Storage
+
+**Storage** lists volumes with their name, kind (**service** or **host**), machine, size and what mounts them. Select one for its **Overview** — kind, size, machine and the service it belongs to. Like networks, volumes are **assembled from per-machine Docker data and managed services**; there is no standalone volume command yet, so **Add Storage** is disabled.
+
+<Shot name="desktop/storage-list" alt="The Storage section listing volumes with kind, machine, size and what mounts each." />
+
+## Services
+
+**Services** lists your managed services — the count, filters by type, status and machine, and a table of health, machine, CPU, memory, storage, databases and attached applications.
+
+<Shot name="desktop/services-list" alt="The Services section listing managed services with type, status, machine, resources and attached applications." />
+
+**Add Service** opens a sheet where you choose the type (all PostgreSQL flavors sit under one *PostgreSQL* choice), a version and a distribution release when the flavor has one, and a name; it then shows the exact [`beaver service create`](/cli/service) command to copy. Desktop does not create the service itself.
+
+<Shot name="desktop/service-connections" alt="A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel." />
+
+Select a service. The header shows its status and engine; the tabs are:
+
+| Tab | Shows | Has data today? |
+| --- | --- | --- |
+| **Status** | Lifecycle state, machine, CPU and memory reserved, storage, placement, creation date, and the service's databases | Yes. *Observed usage* reads **Unavailable** until usage is reported |
+| **Connections** | The internal host and port, a hidden connection URL with **Reveal** and **Copy**, and **Connect locally** for testing from your machine | Yes |
+| **Storage** | The service's volume and its usage | Yes. Usage reads **Unavailable** until it is reported |
+| **Backups** | Backup schedules and history | Only when the service has a configured backup provider; otherwise **No backup data available** |
+| **Metrics** | Resource and engine metrics (for PostgreSQL: active connections, queries and transactions per second, cache hit ratio) | Each reads **Unavailable** until the service reports it |
+| **Logs** | A searchable log stream | Shows **No log stream is connected for this managed service yet** when there is none |
+| **Credentials** | Username, password and connection URL, hidden until you press **Reveal** | Yes |
+| **Attached Applications** | Applications using the service, with **Connect an app**, **Detach** and **Detach securely** (each shows the command) | Yes |
+
+<Warning>
+Sensitive values stay hidden until you reveal them explicitly. Taking and restoring backups, resizing and attaching are [CLI actions](/data/backups-and-restore) — see [Credentials and connection strings](/data/credentials-and-connection-strings) and [Connect locally](/data/connect-locally).
+</Warning>
+
+## Containers
+
+A container appears in two places. On a machine's **Containers** tab, **Details** expands it in place — project, domain, branch, commit, age — with links to **View container** and **Machine logs**. **View container** opens a full page with **Overview** (project, image, state, branch, commit, domain, machine, cloud), **Traffic** (requests, error rate, latency percentiles, top routes), **Logs** and **Topology**.
+
+## Not available yet
+
+The **Deployments** and **Observability** sections are hidden from the navigator in this build (the command palette still lists them, but they are not yet a supported part of the workflow). Use the Dashboard's deployment pages and [`beaver observe`](/cli/observe) for deployments, logs and metrics.
+
+## Same task in the other interfaces
+
+| Task | Dashboard | CLI |
+| --- | --- | --- |
+| List services | **Managed services** | `beaver service list` |
+| See a service's connection | Not available | `beaver service reveal` |
+| Back up a service | Not available | `beaver service backup` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Create a service" icon="plus" href="/data/create-a-service">The full flow.</Card>
+  <Card title="Services and data" icon="database" href="/data">Operate and understand services.</Card>
+</CardGroup>

@@ -1,0 +1,57 @@
+---
+title: "Common Dashboard workflows"
+sidebarTitle: "Common workflows"
+description: "A day in the Dashboard for a developer, an operator and a team lead: the tasks people do there, each linked to its how-to."
+icon: "route"
+type: interface
+audience: [developer, operator, team-lead]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+This page is a map, not a manual: each workflow names the screen to open and links the page that explains the task.
+
+## As a developer
+
+| Workflow | Where | How-to |
+| --- | --- | --- |
+| Deploy a repository | **Deploy application** on the home screen | [Deploy from a repository](/deploy/from-github) |
+| Add environment variables | Deployment → **Environments** | [Environment variables](/deploy/environment-variables) |
+| Attach a custom domain | Deployment → **Domains** | [Domains](/network/domains) |
+| Read what happened to a request | Deployment → **Logs** | [Logs](/operate/logs) |
+| Promote or roll back a release | Deployment → **Overview**, **Deployments** | [Promote](/deploy/promote), [Rollback and recovery](/deploy/rollback-and-recovery) |
+| Publish a project as a template | **Activity → Publish template** | [Publishing a template](/deploy/publishing-a-template) |
+
+## As an operator
+
+| Workflow | Where | How-to |
+| --- | --- | --- |
+| Check fleet health | **Dashboard** home, **Nodes** | [Machines and roles](/infrastructure/machines-and-roles) |
+| Triage an incident | **Incidents**, **Notifications** | [Incidents](/operate/incidents) |
+| Drain a machine before maintenance | **Clouds → Drain** | [Drain and evacuate](/infrastructure/drain-and-evacuate) |
+| Block an address or turn on lockdown | Deployment → **Firewall** | [Firewall](/network/firewall) |
+| Scale a deployment | Deployment → **Load Balancing** | [Scale](/deploy/scale) |
+| Put an existing app behind Beaver Edge | **Beaver Edge → Connect an app** | [Beaver Edge](/network/beaver-edge) |
+
+## As a team lead
+
+| Workflow | Where | How-to |
+| --- | --- | --- |
+| Invite someone | **Team → Members → Invite member** | [Invite members](/teams/invite-members) |
+| Protect production | **Team → Access policies** | [Production approvals](/teams/production-approvals) |
+| Decide an approval | **Team → Approvals** | [Production approvals](/teams/production-approvals) |
+| Review who did what | **Team → Activity** | [Audit history](/teams/audit-history) |
+| Change plan or seats | **Billing → Plan & seats** | [Plans and billing](/teams/plans-and-billing) |
+| Turn on 2-step verification | **Settings → Personal → Security** | [Two-step verification](/teams/two-step-verification) |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Tour and navigation" icon="layout-dashboard" href="/interfaces/dashboard/tour">Where everything is.</Card>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">What else can be done where.</Card>
+</CardGroup>

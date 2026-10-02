@@ -1,0 +1,46 @@
+---
+title: "Alie troubleshooting"
+sidebarTitle: "Troubleshooting"
+description: "Alie does not answer, will not use a model, was stopped by a cap, or its action did not run — what to check."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer]
+interfaces: [desktop, cli]
+keywords: ["alie not responding", "no model", "spend cap", "approval pending", "provider error"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Alie has no model or does not answer
+
+1. `beaver alie status` — connected providers and their models. None listed means no usable connection.
+2. `beaver ai providers`, then `beaver ai provider test <provider-id>` for a cloud-stored key.
+3. `beaver ai models --provider <name>` — is the model you chose available?
+
+**Fix:** connect a provider ([Connect an AI provider](/alie/connect-an-ai-provider)). Only providers shown as usable in `beaver ai connect` will work; others are listed but not enabled.
+
+## It stopped part-way, or refuses to continue
+
+A **spend cap** may have been reached: `beaver alie spend-cap` shows the limits and today's spend. Raise it or wait ([Spending controls](/alie/spending-controls)).
+
+## An action it proposed did not run
+
+It is probably **waiting for approval**. `beaver alie approvals` lists everything pending; approve or reject it. In a team workspace, a protected environment may additionally need an
+Owner or Admin ([Production approvals](/teams/production-approvals)). `beaver alie audit` shows what ran and what did not.
+
+## It did something I did not expect
+
+Check the autopilot level (`beaver alie autopilot`) and per-tool overrides (`beaver alie approval-policies`), then the audit trail. Lower the level and require approval:
+[Safe production use](/alie/safe-production-use).
+
+## An answer was wrong
+
+`beaver alie report` reports that a harness task's result was wrong.
+
+## Still stuck
+
+Collect the output of `beaver alie status` and `beaver doctor`, then contact support at support@vectorihub.com.

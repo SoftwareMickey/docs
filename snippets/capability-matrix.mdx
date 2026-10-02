@@ -1,0 +1,132 @@
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_capability_matrix.py`; source: snippets/data/capability-matrix.json. */}
+
+
+### Account
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Sign in** | ✓ **Yes.** Sign-in page: Google, GitHub or email [Guide](/teams/sign-in-methods) | ✓ **Yes.** Sign in opens a browser approval page [Guide](/install/desktop) | ✓ **Yes.** `beaver login` (browser approval) [Guide](/cli/login) |
+| **Approve a device sign-in** | ✓ **Yes.** The Connect Beaver Desktop / CLI approval page that opens in your browser [Guide](/teams/sign-in-methods) | — **No.** Start sign-in in Desktop, then approve in the Dashboard in your browser [Guide](/install/desktop) | — **No.** Start `beaver login`, then approve in the Dashboard in your browser [Guide](/cli/login) |
+| **See the devices signed in to your account** | ✓ **Yes.** Settings → Connected devices (Beaver CLI and Desktop sessions) [Guide](/interfaces/dashboard/team-and-settings) | — **No.** Use the Dashboard [Guide](/interfaces/dashboard/team-and-settings) | — **No.** Use the Dashboard; `beaver whoami` shows only the current session [Guide](/cli/whoami) |
+| **Set up 2-step verification** | ✓ **Yes.** Settings → Security → 2-step verification [Guide](/teams/two-step-verification) | ◐ **Partly.** Settings → Account shows the status and links to the web to manage it [Guide](/teams/two-step-verification) | ✓ **Yes.** `beaver account mfa` [Guide](/cli/account) |
+| **Edit your profile** | ✓ **Yes.** Profile → Edit profile [Guide](/interfaces/dashboard/team-and-settings) | — **No.** Use the Dashboard [Guide](/interfaces/dashboard/team-and-settings) | ✓ **Yes.** `beaver account profile` [Guide](/cli/account) |
+| **Connect GitHub and choose repositories** | ✓ **Yes.** Integrations → GitHub → Connect GitHub / Manage repository access [Guide](/teams/signing-in-and-repository-access) | ◐ **Partly.** Settings → Git → Repository access shows the connected accounts; connecting happens in the Dashboard [Guide](/teams/signing-in-and-repository-access) | ◐ **Partly.** `beaver github` checks the connection; connecting happens in the Dashboard [Guide](/cli/github) |
+| **Delete your account** | ✓ **Yes.** Settings → Account → Delete account [Guide](/interfaces/dashboard/team-and-settings) | — **No.** Use the Dashboard [Guide](/interfaces/dashboard/team-and-settings) | — **No.** Use the Dashboard [Guide](/interfaces/dashboard/team-and-settings) |
+
+### Machines
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Install**<br />[Choose where to start](/start/choose-your-interface) | — **No.** Nothing to install — it is the web app [Guide](/interfaces/overview) | ○ **Not yet.** No public installer yet [Guide](/install/desktop) | ✓ **Yes.** Install script (Linux and macOS) or `install.ps1` (Windows) [Guide](/install/cli) |
+| **Connect a machine**<br />[Walkthrough: first machine](/start/first-machine) | ◐ **Partly.** Nodes lists a machine once it is enrolled and shows the command to run [Guide](/infrastructure/connect-a-machine) | ◐ **Partly.** Add Machine opens a sheet that shows `beaver connect`; Desktop shows the exact command in an action sheet; run it in a terminal [Guide](/infrastructure/connect-a-machine) | ✓ **Yes.** `beaver connect` on the machine [Guide](/cli/connect) |
+| **Check this computer's setup** | — **No.** Use the CLI [Guide](/cli/doctor) | ◐ **Partly.** Settings → Beaver CLI & Agent shows whether the CLI and agent are detected [Guide](/interfaces/desktop/settings) | ✓ **Yes.** `beaver doctor` [Guide](/cli/doctor) |
+| **See a machine's health and resources** | ✓ **Yes.** Nodes → select a machine (monitoring, security posture, containers) [Guide](/interfaces/dashboard/nodes-clouds-edge) | ✓ **Yes.** Machines → select a machine (nine tabs: Overview, Containers, Resources, Networks, Volumes, Logs, Events, Security, Configuration) [Guide](/interfaces/desktop/infrastructure) | ✓ **Yes.** `beaver machine overview` and related `beaver machine` subcommands [Guide](/cli/machine) |
+| **Rename a machine or change its role** | — **No.** Use the CLI [Guide](/cli/server) | — **No.** Use the CLI [Guide](/cli/server) | ✓ **Yes.** `beaver server update` [Guide](/cli/server) |
+| **Run maintenance on a machine** | ✓ **Yes.** Nodes → machine → Maintenance actions (each confirmed first) and Maintenance windows [Guide](/interfaces/dashboard/nodes-clouds-edge) | — **No.** Read-only: Desktop shows events, not maintenance controls [Guide](/interfaces/desktop/infrastructure) | ✓ **Yes.** `beaver machine cleanup-plan`, `beaver machine cleanup`, `beaver machine maintenance-windows` [Guide](/cli/machine) |
+| **Approve what Beaver proposes on a machine** | ✓ **Yes.** Nodes → Pending approvals (in Assisted mode) [Guide](/interfaces/dashboard/nodes-clouds-edge) | — **No.** Use the Dashboard or CLI [Guide](/cli/machine) | ✓ **Yes.** `beaver machine approvals` [Guide](/cli/machine) |
+| **See networks and volumes**<br />[Storage and networks](/infrastructure/storage-and-networks) | — **No.** Use Desktop; a machine's public exposure is under Nodes [Guide](/interfaces/desktop/networks-storage-services) | ✓ **Yes.** Networks and Storage (assembled from your machines and services) [Guide](/interfaces/desktop/networks-storage-services) | ◐ **Partly.** `beaver cloud network` shows a cloud's private network; there is no standalone network or volume command [Guide](/cli/cloud) |
+
+### Beaver Cloud
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Create a Beaver Cloud**<br />[Walkthrough: first cloud](/start/first-cloud) | — **No.** Use the CLI [Guide](/infrastructure/clouds) | ◐ **Partly.** Create Cloud opens a sheet that shows `beaver cloud create`; Desktop shows the exact command in an action sheet; run it in a terminal [Guide](/infrastructure/clouds) | ✓ **Yes.** `beaver cloud create` [Guide](/cli/cloud) |
+| **See a cloud's machines, capacity and health**<br />[Capacity and placement](/infrastructure/capacity-and-placement)<br />[Walkthrough: first cloud](/start/first-cloud) | ✓ **Yes.** Clouds → select a cloud [Guide](/interfaces/dashboard/nodes-clouds-edge) | ✓ **Yes.** Beaver Cloud → select a cloud (Overview, Nodes, Network, Capacity, Services, Topology, Timeline) [Guide](/interfaces/desktop/infrastructure) | ✓ **Yes.** `beaver cloud status`, `beaver cloud capacity`, `beaver cloud inspect` [Guide](/cli/cloud) |
+| **Drain or evacuate a machine** | ✓ **Yes.** Clouds → machine row → Drain, Undrain, Evacuate [Guide](/interfaces/dashboard/nodes-clouds-edge) | — **No.** Read-only [Guide](/infrastructure/drain-and-evacuate) | ✓ **Yes.** `beaver cloud drain`, `beaver cloud undrain`, `beaver cloud evacuate` [Guide](/infrastructure/drain-and-evacuate) |
+| **Share a cloud with another workspace** | ✓ **Yes.** Clouds → Sharing → Invite workspace, Request access, Pending access requests [Guide](/teams/cloud-sharing) | — **No.** Use the Dashboard or CLI [Guide](/teams/cloud-sharing) | ✓ **Yes.** `beaver cloud workspace`, `beaver workspace cloud` [Guide](/teams/cloud-sharing) |
+
+### Deploy
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Create a project** | ✓ **Yes.** Projects → Create project [Guide](/deploy/overview) | — **No.** Use the Dashboard or CLI [Guide](/deploy/overview) | ✓ **Yes.** `beaver project create` [Guide](/cli/project) |
+| **Deploy from a Git repository**<br />[Walkthrough: first deploy](/start/first-deploy)<br />[Any app with a Dockerfile and a port](/deploy/bring-your-own-app) | ✓ **Yes.** Dashboard → Deploy application (pick repository, builder, cloud, port, variables) [Guide](/deploy/from-github) | — **No.** Use the Dashboard or CLI [Guide](/deploy/from-github) | ✓ **Yes.** `beaver deploy --git` (wizard) or `beaver deploy --repo owner/repo` [Guide](/cli/deploy) |
+| **Deploy the project in a local folder** | — **No.** Use the CLI or Desktop [Guide](/deploy/from-local-project) | ◐ **Partly.** Open the folder, then Deploy this → answer the prompts → Deploy in terminal runs `beaver deploy` [Guide](/deploy/from-local-project) | ✓ **Yes.** `beaver` or `beaver deploy` in the project folder [Guide](/deploy/from-local-project) |
+| **Deploy a Compose file** | ✓ **Yes.** Composers → deploy a compose file [Guide](/deploy/compose-applications) | — **No.** Use the Dashboard or CLI [Guide](/deploy/compose-applications) | ✓ **Yes.** `beaver compose deploy` [Guide](/cli/compose) |
+| **Check a deploy before shipping it** | — **No.** Use the CLI [Guide](/deploy/preflight-and-planning) | ◐ **Partly.** The Deploy this flow validates the plan against the working tree before it lets you deploy [Guide](/deploy/from-local-project) | ✓ **Yes.** `beaver preflight`, `beaver plan`, `beaver validate` [Guide](/deploy/preflight-and-planning) |
+| **Set environment variables**<br />[Secrets](/network/secrets) | ✓ **Yes.** Deployment → Environments → Add variable [Guide](/deploy/environment-variables) | — **No.** Use the Dashboard or CLI [Guide](/deploy/environment-variables) | ✓ **Yes.** `beaver environment vars` [Guide](/deploy/environment-variables) |
+| **Create a project environment and map a branch** | ✓ **Yes.** Project → Environments → Create environment (branch mapping) [Guide](/deploy/environments) | — **No.** Use the Dashboard or CLI [Guide](/deploy/environments) | ✓ **Yes.** `beaver environment create` [Guide](/cli/environment) |
+| **Configure a health check** | ◐ **Partly.** Deployment → Settings [Guide](/interfaces/dashboard/projects-and-deployments) | — **No.** Use the CLI [Guide](/deploy/health-checks) | ✓ **Yes.** `beaver config health` [Guide](/deploy/health-checks) |
+| **Promote a build to another environment**<br />[Walkthrough: first production promotion](/start/first-production-promotion) | ✓ **Yes.** Deployment → Promote [Guide](/interfaces/dashboard/projects-and-deployments) | — **No.** Use the Dashboard or CLI [Guide](/deploy/promote) | ✓ **Yes.** `beaver promote` [Guide](/cli/promote) |
+| **Roll back to a previous release** | ✓ **Yes.** Deployments → release → Roll back [Guide](/deploy/rollback-and-recovery) | — **No.** Use the Dashboard or CLI [Guide](/deploy/rollback-and-recovery) | ✓ **Yes.** `beaver container <name> rollback` [Guide](/deploy/rollback-and-recovery) |
+| **Redeploy the current release** | ✓ **Yes.** Deployments → Redeploy [Guide](/deploy/overview) | — **No.** Use the Dashboard or CLI [Guide](/deploy/overview) | ✓ **Yes.** `beaver container <name> redeploy` [Guide](/cli/container) |
+| **See deployment history** | ✓ **Yes.** Deployments → Deployment history [Guide](/deploy/history) | — **No.** Use the Dashboard or CLI [Guide](/deploy/history) | ✓ **Yes.** `beaver container <name> history` [Guide](/deploy/history) |
+| **Scale replicas** | ✓ **Yes.** Deployment → Load Balancing / Performance [Guide](/interfaces/dashboard/projects-and-deployments) | — **No.** Use the Dashboard or CLI [Guide](/deploy/scale) | ✓ **Yes.** `beaver scaling`, `beaver autoscale` [Guide](/deploy/scale) |
+| **Deploy from CI** | — **No.** Use the CLI [Guide](/deploy/ci-cd) | — **No.** Use the CLI [Guide](/deploy/ci-cd) | ✓ **Yes.** `beaver deploy --yes --wait` with `BEAVER_TOKEN` [Guide](/deploy/ci-cd) |
+| **Publish a project as a template** | ✓ **Yes.** Activity → Publish template [Guide](/deploy/publishing-a-template) | — **No.** Use the Dashboard [Guide](/deploy/publishing-a-template) | ✓ **Yes.** `beaver publish` [Guide](/cli/publish) |
+| **Read build logs**<br />[Builds](/deploy/builds) | ✓ **Yes.** Deployment view → build logs and build summary; Deployment history [Guide](/interfaces/dashboard/projects-and-deployments) | — **No.** Use the Dashboard or CLI [Guide](/deploy/builds) | ✓ **Yes.** `beaver deploy --logs`, `beaver compose logs` [Guide](/deploy/builds) |
+
+### Data
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Create a managed service**<br />[Walkthrough: first service](/start/first-service) | — **No.** The Managed services page lists services; creating one is a CLI action [Guide](/data/create-a-service) | ◐ **Partly.** Add Service opens a sheet that builds the exact `beaver service create` command; Desktop shows the exact command in an action sheet; run it in a terminal [Guide](/data/create-a-service) | ✓ **Yes.** `beaver service create` [Guide](/cli/service) |
+| **See a service's status, connection and storage** | ◐ **Partly.** Managed services lists every service with its type and status [Guide](/interfaces/dashboard/nodes-clouds-edge) | ✓ **Yes.** Services → select a service (Status, Connections, Storage, Backups, Metrics, Logs, Credentials, Attached Applications) [Guide](/interfaces/desktop/networks-storage-services) | ✓ **Yes.** `beaver service show`, `beaver service list` [Guide](/cli/service) |
+| **Reveal credentials and connect locally** | — **No.** Use Desktop or the CLI [Guide](/data/credentials-and-connection-strings) | ◐ **Partly.** Services → Credentials → Reveal; Connect locally shows the tunnel command [Guide](/interfaces/desktop/networks-storage-services) | ✓ **Yes.** `beaver service reveal`, `beaver service connect` [Guide](/data/connect-locally) |
+| **Back up and restore a service** | — **No.** Use the CLI [Guide](/data/backups-and-restore) | ◐ **Partly.** Services → Backups shows backup status; taking and restoring a backup is a CLI action [Guide](/interfaces/desktop/networks-storage-services) | ✓ **Yes.** `beaver service backup`, `beaver service restore` [Guide](/data/backups-and-restore) |
+| **Attach a service to an application** | — **No.** Use the CLI [Guide](/data/create-a-service) | ◐ **Partly.** Services → Attached Applications → Connect an app shows the command [Guide](/data/create-a-service) | ✓ **Yes.** `beaver service attach` [Guide](/cli/service) |
+| **Resize a service** | — **No.** Use the CLI [Guide](/data/resize-and-upgrade) | — **No.** Use the CLI [Guide](/data/resize-and-upgrade) | ✓ **Yes.** `beaver service resize` [Guide](/data/resize-and-upgrade) |
+
+### Networking
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Add a custom domain**<br />[Walkthrough: first domain](/start/first-domain) | ✓ **Yes.** Deployment → Domains → Add domain (shows the DNS record, then checks DNS and TLS) [Guide](/network/domains) | — **No.** Use the Dashboard or CLI [Guide](/network/domains) | ✓ **Yes.** `beaver domain add` [Guide](/cli/domain) |
+| **Verify a domain and its certificate** | ✓ **Yes.** Deployment → Domains (status: Checking DNS → Live over HTTPS) [Guide](/network/tls) | — **No.** Use the Dashboard or CLI [Guide](/network/tls) | ✓ **Yes.** `beaver domain verify`, `beaver domain certificate` [Guide](/network/tls) |
+| **Manage the firewall (rules, bans, WAF, lockdown)**<br />[Rate limiting](/network/rate-limiting)<br />[Access controls](/network/access-controls) | ✓ **Yes.** Deployment → Firewall [Guide](/network/firewall) | — **No.** Use the Dashboard or CLI [Guide](/network/firewall) | ✓ **Yes.** `beaver firewall` [Guide](/cli/firewall) |
+| **Put Beaver Edge in front of an app** | ✓ **Yes.** Beaver Edge → Connect app (domain, origin URL, one CNAME) [Guide](/network/beaver-edge) | — **No.** Use the Dashboard or CLI [Guide](/network/beaver-edge) | ✓ **Yes.** `beaver edge app` [Guide](/cli/edge) |
+| **Configure load balancing** | ✓ **Yes.** Deployment → Load Balancing [Guide](/network/load-balancing) | — **No.** Use the Dashboard or CLI [Guide](/network/load-balancing) | ✓ **Yes.** `beaver scaling` [Guide](/network/load-balancing) |
+
+### Operate
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Read an application's logs** | ✓ **Yes.** Deployment → Logs [Guide](/operate/logs) | ◐ **Partly.** Machines → machine → Logs reads machine log sources; the container view shows its Logs [Guide](/operate/logs) | ✓ **Yes.** `beaver logs`, `beaver container <name> logs` [Guide](/operate/logs) |
+| **See metrics and traffic** | ✓ **Yes.** Deployment → Traffic and Performance [Guide](/operate/metrics-and-traffic) | ◐ **Partly.** A machine's Resources tab and a container's Traffic panel [Guide](/operate/metrics-and-traffic) | ✓ **Yes.** `beaver metrics`, `beaver traffic` [Guide](/operate/metrics-and-traffic) |
+| **See what is running and healthy** | ✓ **Yes.** Dashboard home (applications, machines, services, edge) and Deployments [Guide](/interfaces/dashboard/tour) | ✓ **Yes.** Infrastructure home (counts strip and machine cards) [Guide](/interfaces/desktop/infrastructure) | ✓ **Yes.** `beaver inspect`, `beaver status`, `beaver containers` [Guide](/operate/deployment-status) |
+| **See and acknowledge incidents** | ✓ **Yes.** Incidents [Guide](/operate/incidents) | ◐ **Partly.** Machines → Events and Overview show open incidents [Guide](/operate/incidents) | ✓ **Yes.** `beaver incidents` [Guide](/cli/incidents) |
+| **Read notifications** | ✓ **Yes.** Notifications inbox (Unread, Read, filters) [Guide](/operate/notifications) | ◐ **Partly.** Delivers desktop alerts; Settings → Notifications chooses categories [Guide](/operate/notifications) | ✓ **Yes.** `beaver notifications` [Guide](/cli/notifications) |
+| **Set notification digest, on-call and escalation** | ◐ **Partly.** Notification and workspace preferences [Guide](/operate/notifications) | ◐ **Partly.** Settings → Notifications → On call, Escalation, Digest [Guide](/operate/notifications) | ✓ **Yes.** `beaver workspace on-call`, `beaver workspace escalation`, `beaver workspace digest` [Guide](/cli/workspace) |
+| **See and resolve configuration drift** | ◐ **Partly.** Settings explorer: Explicit overrides, Drifted from config [Guide](/operate/drift-and-reconcile) | ◐ **Partly.** Machine → Configuration shows drift [Guide](/operate/drift-and-reconcile) | ✓ **Yes.** `beaver reconcile`, `beaver state`, `beaver settings diff` [Guide](/operate/drift-and-reconcile) |
+| **Diagnose a problem and apply a safe fix** | ◐ **Partly.** Ask Alie from a deployment [Guide](/interfaces/dashboard/projects-and-deployments) | ◐ **Partly.** The Alie rail [Guide](/interfaces/desktop/approvals-and-alie) | ✓ **Yes.** `beaver recover` [Guide](/cli/recover) |
+| **Follow people and templates (Activity)** | ✓ **Yes.** Activity: Following, Explore, Saved, Workspace [Guide](/operate/activity-and-following) | ◐ **Partly.** Settings → Activity shows your profile and Following feed [Guide](/interfaces/desktop/settings) | ✓ **Yes.** `beaver follow`, `beaver activity` [Guide](/cli/activity) |
+
+### Teams
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Create a team workspace**<br />[Walkthrough: team quickstart](/start/quickstart-team) | ✓ **Yes.** Billing → plans → Team, then Team [Guide](/teams/create-a-team) | — **No.** Use the Dashboard or CLI [Guide](/teams/create-a-team) | ✓ **Yes.** `beaver workspace create` [Guide](/cli/workspace) |
+| **Switch workspace** | ✓ **Yes.** The workspace switcher at the top of the sidebar [Guide](/teams/switch-workspaces) | ✓ **Yes.** The workspace switcher; Settings → Account → Switch workspace [Guide](/teams/switch-workspaces) | ✓ **Yes.** `beaver workspace use` [Guide](/teams/switch-workspaces) |
+| **Invite a member**<br />[Working in a shared workspace](/teams/working-in-a-shared-workspace) | ✓ **Yes.** Team → Members → Invite member (email or one-use link) [Guide](/teams/invite-members) | — **No.** Use the Dashboard or CLI [Guide](/teams/invite-members) | ✓ **Yes.** `beaver workspace invite` [Guide](/teams/invite-members) |
+| **Accept an invitation** | ✓ **Yes.** Open the invitation link [Guide](/teams/invite-members) | ◐ **Partly.** Opening the link on the same computer signs Desktop in and accepts it [Guide](/interfaces/desktop/shell-tour) | ✓ **Yes.** `beaver workspace accept` [Guide](/teams/invite-members) |
+| **Change a member's role or remove them** | ✓ **Yes.** Team → Members [Guide](/teams/roles-and-permissions) | — **No.** Use the Dashboard or CLI [Guide](/teams/roles-and-permissions) | ✓ **Yes.** `beaver workspace role`, `beaver workspace remove` [Guide](/teams/roles-and-permissions) |
+| **Approve a production change** | ✓ **Yes.** Team → Approvals [Guide](/teams/production-approvals) | ✓ **Yes.** Approvals inbox (approve or reject) [Guide](/teams/production-approvals) | ✓ **Yes.** `beaver workspace approvals` [Guide](/cli/workspace) |
+| **Set access policies and protected environments** | ✓ **Yes.** Team → Access policies [Guide](/teams/production-approvals) | — **No.** Use the Dashboard or CLI [Guide](/teams/production-approvals) | ✓ **Yes.** `beaver workspace` and `beaver settings set` [Guide](/teams/settings-and-precedence) |
+| **Read the audit history** | ✓ **Yes.** Team → Activity [Guide](/teams/audit-history) | — **No.** Use the Dashboard or CLI [Guide](/teams/audit-history) | ✓ **Yes.** `beaver workspace activity` [Guide](/teams/audit-history) |
+| **Transfer or leave a workspace** | ✓ **Yes.** Team → Settings → Transfer ownership, Leave this workspace [Guide](/teams/removing-members-and-leaving) | ◐ **Partly.** Shows an ownership offer and lets you accept or decline [Guide](/interfaces/desktop/shell-tour) | ✓ **Yes.** `beaver workspace transfer`, `beaver workspace leave`, `beaver workspace accept-transfer` [Guide](/teams/removing-members-and-leaving) |
+
+### Billing
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **See and change your plan**<br />[Downgrades and retention](/teams/downgrades-and-retention) | ✓ **Yes.** Billing → Plan & seats → Change plan [Guide](/teams/plans-and-billing) | ◐ **Partly.** Account and the plan card show the plan; changes happen on the web [Guide](/teams/plans-and-billing) | ✓ **Yes.** `beaver billing plans`, `beaver billing subscription`, `beaver billing checkout` [Guide](/teams/plans-and-billing) |
+| **Buy extra seats** | ✓ **Yes.** Billing → Team seats → Add 5 seats [Guide](/teams/plans-and-billing) | — **No.** Use the Dashboard or CLI [Guide](/teams/plans-and-billing) | ✓ **Yes.** `beaver billing seats` [Guide](/teams/plans-and-billing) |
+| **See payment history** | ✓ **Yes.** Billing → Payments [Guide](/teams/plans-and-billing) | — **No.** Use the Dashboard or CLI [Guide](/teams/plans-and-billing) | ✓ **Yes.** `beaver billing payments` [Guide](/teams/plans-and-billing) |
+| **Redeem a promotional code** | ✓ **Yes.** Billing → Redeem code [Guide](/teams/plans-and-billing) | — **No.** Use the Dashboard or CLI [Guide](/teams/plans-and-billing) | ✓ **Yes.** `beaver coupon` [Guide](/cli/coupon) |
+
+### Alie
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Ask Alie about your infrastructure** | ◐ **Partly.** Alie session page [Guide](/alie/what-is-alie) | ✓ **Yes.** The Alie rail (sessions, context meter, equivalent command, Run in terminal) [Guide](/alie/sessions-and-context) | ✓ **Yes.** `beaver alie` [Guide](/cli/alie) |
+| **Connect an AI provider** | — **No.** Use Desktop or the CLI [Guide](/alie/connect-an-ai-provider) | ✓ **Yes.** Settings → AI Harnesses [Guide](/alie/connect-an-ai-provider) | ✓ **Yes.** `beaver ai` [Guide](/cli/ai) |
+| **Set Alie's automation policy and spending** | — **No.** Use Desktop or the CLI [Guide](/alie/automation-policies) | ✓ **Yes.** Settings → Automation Policy [Guide](/alie/automation-policies) | ✓ **Yes.** `beaver alie` [Guide](/alie/automation-policies) |
+| **See Alie's skills** | — **No.** Use Desktop or the CLI [Guide](/alie/what-is-alie) | ✓ **Yes.** Settings → Skills [Guide](/alie/what-is-alie) | ✓ **Yes.** `beaver skills` [Guide](/cli/skills) |
+| **Replay what Alie did** | — **No.** Use Desktop or the CLI [Guide](/alie/approvals-and-safety) | ✓ **Yes.** Traces (timeline and replay) [Guide](/alie/approvals-and-safety) | ✓ **Yes.** `beaver alie sessions` [Guide](/cli/alie) |
+
+### Local
+
+| Task | Dashboard | Desktop | CLI |
+| --- | --- | --- | --- |
+| **Use an embedded terminal** | — **No.** Not applicable to a web page [Guide](/interfaces/overview) | ✓ **Yes.** Terminal panel (⌘⇧T for Big Terminal) [Guide](/interfaces/desktop/terminal-and-projects) | — **No.** You are already in a terminal [Guide](/interfaces/overview) |
+| **Open a local project folder** | — **No.** Not applicable to a web page [Guide](/interfaces/overview) | ✓ **Yes.** Open folder → project overview (identity, Git, config, builder, host, cloud) [Guide](/interfaces/desktop/terminal-and-projects) | ◐ **Partly.** Run commands from the folder; `beaver init` writes `.beaver/config.yml` [Guide](/cli/init) |

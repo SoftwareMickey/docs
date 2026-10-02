@@ -1,0 +1,59 @@
+---
+title: "Common CLI workflows"
+sidebarTitle: "Common workflows"
+description: "The tasks people do with the Beaver CLI — connect a machine, deploy, observe, recover, script, run in CI — each linked to its how-to and command reference."
+icon: "terminal"
+type: interface
+audience: [developer, operator]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+The CLI can do nearly everything, and it is the only way to enrol a machine. Running `beaver` on its own deploys the project in the current folder; `beaver --help` lists the groups. This page maps the common jobs to the pages that explain them.
+
+## Set up
+
+| Workflow | Command | How-to |
+| --- | --- | --- |
+| Install and sign in | [`beaver login`](/cli/login) | [Install the CLI](/install/cli) |
+| Check this computer | [`beaver doctor`](/cli/doctor) | [Doctor](/install/doctor) |
+| Connect a machine | [`beaver connect`](/cli/connect) | [Connect a machine](/infrastructure/connect-a-machine) |
+| Create a Beaver Cloud | [`beaver cloud create`](/cli/cloud) | [Clouds](/infrastructure/clouds) |
+
+## Ship
+
+| Workflow | Command | How-to |
+| --- | --- | --- |
+| Deploy the current project | [`beaver deploy`](/cli/deploy) | [Deploy from a local project](/deploy/from-local-project) |
+| Rehearse a deploy | [`beaver preflight`](/cli/preflight) | [Preflight and planning](/deploy/preflight-and-planning) |
+| Roll back | [`beaver container`](/cli/container) | [Rollback and recovery](/deploy/rollback-and-recovery) |
+| Create a database | [`beaver service create`](/cli/service) | [Create a service](/data/create-a-service) |
+
+## Operate
+
+| Workflow | Command | How-to |
+| --- | --- | --- |
+| See what is running | [`beaver inspect`](/cli/inspect) | [Deployment status](/operate/deployment-status) |
+| Follow logs and traffic | [`beaver observe`](/cli/observe) | [Logs](/operate/logs) |
+| Diagnose and fix | [`beaver recover`](/cli/recover) | [Rollback and recovery](/deploy/rollback-and-recovery) |
+| Handle an incident | [`beaver incidents`](/cli/incidents) | [Incidents](/operate/incidents) |
+
+## Automate
+
+| Workflow | Command | How-to |
+| --- | --- | --- |
+| Run in CI | [`beaver deploy`](/cli/deploy) with `--yes --wait` | [Run in CI](/deploy/ci-cd) |
+| Script with JSON output | [Shared flags](/cli/shared-flags) | [Run in CI](/deploy/ci-cd) |
+| Work in another workspace for one command | `--workspace` | [Switch workspaces](/teams/switch-workspaces) |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Command reference" icon="book-open" href="/cli">Every command and flag.</Card>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">What the CLI can do that the others cannot.</Card>
+</CardGroup>

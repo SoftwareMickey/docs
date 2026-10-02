@@ -1,0 +1,51 @@
+---
+title: "Supported versions and platforms"
+sidebarTitle: "Supported versions"
+description: "Operating systems the CLI and connected machines support, the service catalog with its versions, and the runtime versions the recipes are tested with."
+icon: "layers"
+type: reference
+audience: [developer, operator]
+keywords: ["supported versions", "ubuntu", "debian", "rocky", "arm64", "postgres versions", "redis version", "node version"]
+---
+
+import ServiceVersions from "/snippets/supported-service-versions.mdx";
+
+## Operating systems
+
+| What | Supported |
+| --- | --- |
+| **Connected machines** (Builder and Host) | Linux: Ubuntu, Debian and Rocky Linux, on amd64 (x86_64) or arm64 (aarch64) |
+| **Beaver CLI** on your computer | Linux, macOS and Windows. The Windows installer supports x86, amd64 and arm64 |
+| **Dashboard** | The web app, in a current browser |
+| **Beaver Desktop** | No public installer is published yet; see [Install Beaver Desktop](/install/desktop) |
+
+A machine on another distribution may connect but `beaver connect` warns it is not supported ([Install the CLI](/install/cli#supported-environments)).
+
+## The service catalog
+
+The service types Beaver can run for you, the versions each offers (the default is marked) and the environment prefix its connection variables use. The catalog on your plan can be smaller; `beaver service catalog` marks the types your plan includes.
+
+<ServiceVersions />
+
+Beaver backs up PostgreSQL (and its flavors), MySQL, MariaDB, MongoDB, Redis and RabbitMQ. **Kafka, NATS, Meilisearch and MinIO have no Beaver backups** — plan your own ([Backups and restore](/data/backups-and-restore)).
+
+<Note>
+Versions are taken from the service registry and must be confirmed against `beaver service catalog` before a change to this table is published. The command is the source of truth for what you can create today.
+</Note>
+
+## Languages and frameworks
+
+Beaver does not restrict languages or frameworks: any app with a Dockerfile and a listening port runs ([Bring your own app](/deploy/bring-your-own-app)). The three sample apps behind that page are built and run in CI with:
+
+| Runtime | Tested version | Base image |
+| --- | --- | --- |
+| Node.js | 22 | `node:22-alpine` |
+| Go | 1.23 | `golang:1.23-alpine` build, `alpine:3.20` run |
+| nginx (static front ends) | 1.27 | `nginxinc/nginx-unprivileged:1.27-alpine` |
+
+A newer or older version works if your Dockerfile installs it; these are the versions the harness builds and runs.
+
+## Where Beaver does not apply
+
+- **Other Git hosts.** Repository integration is GitHub only today ([Deploy from GitHub](/deploy/from-github)). A local project deploys from its GitHub remote.
+- **Docker alternatives.** Deployments run as Docker containers.

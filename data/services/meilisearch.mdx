@@ -1,0 +1,97 @@
+---
+title: "Meilisearch"
+sidebarTitle: "Meilisearch"
+description: "Provision a managed Meilisearch instance and attach it to your application."
+keywords: ["meilisearch", "database", "cache", "beaver service catalog", "beaver service create"]
+icon: "magnifying-glass"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+Meilisearch is a fast, open-source search engine — a common choice for adding instant,
+typo-tolerant full-text search to an application without standing up a heavier search stack.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    1.10, 1.11 (default) — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance.
+  </Card>
+  <Card title="Indexes" icon="list">
+    One service can host multiple isolated indexes, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `meilisearch` — `beaver service create <name> --type meilisearch` |
+| Versions | 1.10, 1.11 (default) — confirm with `beaver service catalog` |
+| Default size | 0.5 CPU · 1024 MB memory · 10 GB storage — change with `beaver service resize` |
+| Default port | 7700 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | index — each attached app gets its own, with its own credential |
+| Variables injected on attach | `MEILI_URL`, `MEILI_HOST`, `MEILI_PORT`, `MEILI_NAME`, `MEILI_USER`, `MEILI_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-search --type meilisearch
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-search --container paperclip-web --env-prefix MEILI
+```
+
+Your application receives connection details (host and API key) as an environment variable
+using the prefix you choose. It's usable once the attachment takes effect — for most
+services, that's your next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-search
+beaver service resize paperclip-search --cpu 1 --memory 1024
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import { MeiliSearch } from "meilisearch";
+const client = new MeiliSearch({
+  host: `http://${process.env.MEILI_HOST}:${process.env.MEILI_PORT}`,
+  apiKey: process.env.MEILI_PASSWORD,
+});
+console.log(await client.health());
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 7700` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** Beaver backups are **not supported** for meilisearch. Protect its data another way, and see [Backups and restore](/data/backups-and-restore) for which services are covered.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

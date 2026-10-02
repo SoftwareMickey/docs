@@ -2,11 +2,12 @@
 title: "beaver workspace"
 description: "Show, switch and manage workspaces, their members, invitations, approvals and ownership."
 icon: "users"
+type: reference
 ---
 
 <Info>
-  New here? [Workspaces and teams](/concepts/workspaces-and-teams) explains what a workspace is and when you need more than one,
-  and [Roles and permissions](/concepts/roles-and-permissions) explains what each member can do, before diving into syntax.
+  New here? [Workspaces and teams](/teams/accounts-workspaces-teams) explains what a workspace is and when you need more than one,
+  and [Roles and permissions](/teams/roles-and-permissions) explains what each member can do, before diving into syntax.
 </Info>
 
 <Note>
@@ -40,6 +41,9 @@ beaver workspace <subcommand> [flags]
 | `remove <member>` | Remove a member from the workspace. |
 | `leave` | Leave the active workspace. |
 | `activity` | Show what happened in the workspace, newest first. |
+| `digest` | Show or set the workspace's default notification digest (`--schedule daily\|weekly\|off`, `--hour`, `--timezone`). |
+| `escalation` | Show the escalation policies for unacknowledged critical alerts. |
+| `on-call` | Show who is on call now, per schedule — the same resolution used to page people. |
 | `approvals` | List open approval requests; `approve` and `reject` decide them. |
 | `transfer <member>` | Offer to hand the active workspace to another member (Owner only). |
 | `transfers` | List ownership offers made to you, and this workspace's own pending offer. |
@@ -121,7 +125,7 @@ then completes the acceptance. You must sign in with the email address the invit
 ### `cloud`
 
 <Info>
-  [Sharing a Beaver Cloud across workspaces](/concepts/cloud-sharing) explains grants, quotas
+  [Sharing a Beaver Cloud across workspaces](/teams/cloud-sharing) explains grants, quotas
   and what "request" vs. "invite" means before diving into syntax. `beaver cloud workspace
   invite/ls/remove` (see [`beaver cloud`](/cli/cloud#sharing-with-another-workspace)) is the
   same lifecycle from the *administering* workspace's side; these are its counterpart from the
@@ -175,6 +179,22 @@ the same capability `beaver cloud workspace invite`/`remove` require.
 
 The feed merges audit events, deployments and operations. Owners and Admins see everyone's activity; other roles see their own.
 
+### `digest`, `escalation`, `on-call`
+
+<ParamField query="--schedule" type="string" default="">
+  On `digest`: set the workspace default — `daily`, `weekly` or `off`. Without it, `digest` shows the current default. Members who chose their own digest setting — including "immediate" — keep it;
+  **critical and security notifications are never held for a digest.**
+</ParamField>
+<ParamField query="--hour" type="integer" default="18">
+  On `digest`: the local hour (0–23) the digest is sent.
+</ParamField>
+<ParamField query="--timezone" type="string" default="UTC">
+  On `digest`: the IANA timezone for `--hour`.
+</ParamField>
+
+`escalation` lists the escalation policies for unacknowledged critical alerts, and `on-call` lists the workspace's on-call schedules and who is on call at this moment. Both are read-only.
+See [Notifications](/operate/notifications).
+
 ### `approvals`
 
 <ParamField query="--all" type="boolean" default="false">
@@ -210,7 +230,7 @@ action to the requester, who repeats their request. Nothing runs on your behalf.
 - **`invite`** sends an email and reserves a seat until the invitation is accepted, revoked or expires (7 days).
 - **`remove`** and **`leave`** take effect immediately: live connections close, API keys for the workspace stop working, and the
   next request is refused. Nothing the person created is deleted.
-  See [Access, audit and removal](/concepts/team-access-and-audit).
+  See [Access, audit and removal](/teams/audit-history).
 - **`role`** takes effect within a few seconds.
 - **`recreate`** exists as a recovery path, not routine maintenance. It does not restore plan or subscription history, only a
   fresh Free workspace.
@@ -287,12 +307,12 @@ beaver workspace accept-transfer
 | `transfer` while a payment is past due | `BILLING_UNRESOLVED` | Fix billing first. |
 | Leaving as the last Owner | `you are the only owner: transfer ownership or delete the workspace instead of leaving` | Transfer ownership first. |
 
-More messages, with fixes, are in [Troubleshooting Teams](/guides/troubleshooting-teams).
+More messages, with fixes, are in [Troubleshooting Teams](/operate/troubleshooting-teams).
 
 ## Used in
 
-- [Create a team](/guides/create-a-team) — check the workspace before and after buying Team.
-- [Invite and manage members](/guides/invite-and-manage-members) — invitations, roles and removal.
-- [Working in a shared workspace](/guides/working-in-a-shared-workspace) — switching and approvals.
-- [Removing members and leaving](/guides/removing-members-and-leaving) — removal and ownership transfer.
+- [Create a team](/teams/create-a-team) — check the workspace before and after buying Team.
+- [Invite and manage members](/teams/invite-members) — invitations, roles and removal.
+- [Working in a shared workspace](/teams/working-in-a-shared-workspace) — switching and approvals.
+- [Removing members and leaving](/teams/removing-members-and-leaving) — removal and ownership transfer.
 - [`beaver billing`](/cli/billing) — the plan and seats behind a team workspace.

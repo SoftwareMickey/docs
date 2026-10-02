@@ -1,0 +1,86 @@
+---
+title: "Your first deployment"
+sidebarTitle: "3. First deployment"
+description: "Deploy a Dockerfile app from a GitHub repository into your cloud, check it is healthy, and know how later releases happen."
+keywords: ["first deploy", "hello world", "deploy my first app", "beaver deploy", "getting started"]
+icon: "rocket"
+type: tutorial
+audience: [developer]
+interfaces: [dashboard, desktop, cli]
+time: "10 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Deploy one application — built from **your Dockerfile** — into the [cloud you created](/start/first-cloud), then confirm it is running.
+
+## Before you start
+
+- A machine and a cloud ([first machine](/start/first-machine), [first cloud](/start/first-cloud)).
+- A **GitHub repository** with a `Dockerfile` at its root, **committed and pushed**. The Builder clones what is on GitHub; nothing is uploaded
+  from your computer. The Builder uses the GitHub login **on that machine** to clone (a private repository needs `gh auth login` there; check `beaver git --auth`), and Beaver
+  must be able to *see* the repository (`beaver github install`, or **Integrations** in the Dashboard).
+- A **Docker Hub** login on the Builder (`docker login`; check with `beaver docker --auth`). The image is tagged with your Docker Hub username.
+- Your app listens on a port read from the environment (`PORT`) on `0.0.0.0`. See [Dockerfile requirements](/deploy/dockerfile-requirements).
+
+## Steps
+
+<Tabs>
+  <Tab title="Dashboard">
+    <Steps>
+      <Step title="Pick the repository">Choose the repository and branch from your repositories; the deployment form opens.</Step>
+      <Step title="Choose where it runs">Select the **Builder** machine and the cloud under *Select where your application will be deployed*.</Step>
+      <Step title="Describe the app">Set **Container Name**, the port your app listens on, **Deployment Path** if the Dockerfile is in a subfolder, your **DockerHub Username**, the **Environment**, and any environment variables.</Step>
+      <Step title="Submit">The deployment appears under **Deployments**.</Step>
+    </Steps>
+  </Tab>
+  <Tab title="Desktop">
+    <Note>Deploying is not available in Desktop. Use the Dashboard or the CLI — Desktop shows the result in **Machines**, **Beaver Cloud** and **Services**.</Note>
+  </Tab>
+  <Tab title="CLI">
+    From the repository directory (clean working tree, commits pushed):
+
+    ```bash
+    beaver deploy --cloud paperclip-prod
+    ```
+
+    Answer the prompts. Add `--dry-run` first to run every preflight check and print the plan without deploying, and `--logs` to stream raw
+    build output instead of the summary board.
+  </Tab>
+</Tabs>
+
+## Verify it worked
+
+```bash
+beaver inspect                 # release, commit, health, route and the machine it landed on
+beaver observe --logs          # the container's application log
+```
+
+In the Dashboard open the deployment for its status, logs and default address. Open the address in a browser: it is
+`https://<name>.vectorihub.com` ([how the name is chosen](/network/domains#how-the-name-is-chosen)).
+
+## How later releases happen
+
+A repository and branch are deployed **once**. After that, **a `git push` to that branch triggers each new release**. To rebuild and replace the current
+release without a push, use `beaver container <name> redeploy`. Running `beaver deploy` again for the same repository and branch is refused with a
+pointer to the existing deployment.
+
+## If it fails
+
+- Refuses to run — uncommitted changes or unpushed commits. Commit and push.
+- No cloud — create one ([first cloud](/start/first-cloud)).
+- Build or push fails — check Docker Hub login and the Dockerfile; see [Troubleshooting](/operate/troubleshooting).
+- Unhealthy after start — see [Health checks](/deploy/deployment-configuration).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="First domain" icon="globe" href="/start/first-domain">Use your own domain.</Card>
+  <Card title="First service" icon="database" href="/start/first-service">Add a database.</Card>
+</CardGroup>

@@ -1,0 +1,1 @@
+{ "name": "go-binary", "title": "Compiled binary", "port": 8080, "health": "/healthz", "expect": "ok", "port_env": true }

@@ -1,0 +1,129 @@
+---
+title: "PostgreSQL with pgvector"
+sidebarTitle: "pgvector"
+description: "Provision PostgreSQL with the pgvector extension for embeddings and similarity search."
+keywords: ["postgresql with pgvector", "pgvector", "database", "cache", "beaver service create", "beaver service catalog"]
+icon: "vector-square"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+pgvector is a [PostgreSQL](/data/services/postgresql) flavor: the same managed database, backups,
+credentials, and attach workflow, with the `vector` column type and similarity operators
+already available. Use it to keep embeddings next to your relational data instead of running a
+second database.
+
+<CardGroup cols={2}>
+  <Card title="PostgreSQL versions" icon="tag">
+    14, 15, 16, 17 (default) — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="pgvector releases" icon="puzzle-piece">
+    0.8.2, 0.8.4, 0.8.6 (default). The release is chosen separately from the PostgreSQL version.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `pgvector` — `beaver service create <name> --type pgvector` |
+| Versions | PostgreSQL 14, 15, 16, 17 (default 17); pgvector 0.8.2, 0.8.4, 0.8.6 (default) — confirm with `beaver service catalog` |
+| Default size | 1 CPU · 2048 MB memory · 20 GB storage — change with `beaver service resize` |
+| Default port | 5432 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | database — each attached app gets its own, with its own credential |
+| Variables injected on attach | `DATABASE_URL`, `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` (prefix changeable with `--env-prefix`) |
+| Release flag | `--distribution-version` pins the pgvector release (the PostgreSQL version is `--version`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create embeddings --type pgvector
+```
+
+Pin the PostgreSQL version and the pgvector release explicitly:
+
+```bash
+beaver service create embeddings --type pgvector --version 17 --distribution-version 0.8.6
+```
+
+`beaver service show embeddings` lists the two versions as separate fields.
+
+## Use it
+
+The `vector` extension is already enabled — in the service's default database and in every
+database you add or attach — so there is no `CREATE EXTENSION` step.
+
+```sql
+CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3));
+INSERT INTO items (embedding) VALUES ('[1,2,3]'), ('[4,5,6]'), ('[7,8,9]');
+CREATE INDEX ON items USING hnsw (embedding vector_l2_ops);
+SELECT id FROM items ORDER BY embedding <-> '[3,1,2]' LIMIT 1;
+```
+
+Attach it to an application exactly as you would PostgreSQL — see
+[PostgreSQL](/data/services/postgresql#attach-it).
+
+## Tuning
+
+Index builds are limited by `maintenance_work_mem`, so it is exposed as a setting (64 MB to
+4 GB):
+
+```bash
+beaver service config set embeddings maintenance_work_mem=1GB
+```
+
+Changing a setting redeploys the service.
+
+## Health
+
+Besides checking that the database answers, Beaver runs a nearest-neighbour query against the
+`vector` type. A service whose extension has stopped working reports **degraded** even while
+the process is up, so a running container with a broken extension doesn't look healthy.
+
+## Backups
+
+`beaver service backup embeddings` and restore work as for PostgreSQL. A restored database
+keeps its vectors and indexes. A backup records the PostgreSQL version and pgvector release it
+was taken on, and a restore into an older PostgreSQL version, or onto a different pgvector
+release, is refused before anything is changed.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import pg from "pg";
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const { rows } = await pool.query("select 1 as ok");
+```
+```python Python
+import os, psycopg
+with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
+    print(conn.execute("select 1").fetchone())
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 5432` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** `beaver service backup <name>` takes a manual backup; see [Backups and restore](/data/backups-and-restore) for schedules, destinations and restore.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

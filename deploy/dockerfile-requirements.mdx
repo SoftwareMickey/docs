@@ -1,0 +1,89 @@
+---
+title: "Dockerfile requirements"
+sidebarTitle: "Your Dockerfile"
+description: "What your Dockerfile must define, how Beaver uses it, and the habits that make deployments reliable."
+keywords: ["dockerfile requirements", "your dockerfile", "beaver init", "beaver preflight"]
+icon: "docker"
+type: howto
+audience: [developer]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Beaver builds directly from your `Dockerfile` — it is the single source of truth for how your application is built and run. If your project can produce a Docker
+image, Beaver can deploy it, in any language or framework.
+
+<Warning>
+A `Dockerfile` is **required**, at the repository root or at the path you give (`--dockerfile`, or `path:` in `.beaver/config.yml`). Beaver does not generate one,
+and it does not detect your framework.
+</Warning>
+
+## What it should define
+
+- A base image and runtime, dependency installation and build steps
+- A startup command (`CMD` or `ENTRYPOINT`)
+- The port your app listens on (`EXPOSE`) — `beaver init` reads it to propose your port
+- Optionally a `HEALTHCHECK` — `beaver init` reads it to propose a [health check path](/deploy/health-checks)
+
+<CodeGroup>
+```dockerfile Node.js
+FROM node:22-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+```dockerfile Go
+FROM golang:1.23 AS build
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 go build -o server .
+
+FROM gcr.io/distroless/static-debian12
+COPY --from=build /app/server /server
+EXPOSE 8080
+CMD ["/server"]
+```
+</CodeGroup>
+
+## Habits that save you a debugging session
+
+<AccordionGroup>
+  <Accordion title="Listen on 0.0.0.0 and read the port from PORT">
+    Bind to all interfaces, not `127.0.0.1`, and take the port from the environment so the same image runs anywhere. A server that binds only to localhost
+    cannot be reached and fails its health check.
+  </Accordion>
+  <Accordion title="Keep images small">
+    Slim base images and multi-stage builds build, push and start faster — every deploy pushes the image to Docker Hub.
+  </Accordion>
+  <Accordion title="Keep secrets out of the image">
+    Read them from environment variables at run time. See [Environment variables](/deploy/environment-variables).
+  </Accordion>
+  <Accordion title="Add a .dockerignore">
+    Exclude `node_modules`, `.git` and local env files so the build context stays small and clean.
+  </Accordion>
+  <Accordion title="Make the build self-contained">
+    The Builder builds a fresh clone of your pushed commit, so anything not committed (generated files, local config) is not there.
+  </Accordion>
+</AccordionGroup>
+
+## Check it before you deploy
+
+```bash
+docker build -t paperclip-check .      # builds locally
+beaver preflight --local               # repository checks only, no network
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Builds" icon="hammer" href="/deploy/builds">Where it builds and how to read a failed build.</Card>
+  <Card title="Bring your own app" icon="box" href="/deploy/bring-your-own-app">Any app with a Dockerfile and a port runs; a checklist and starting shapes.</Card>
+</CardGroup>

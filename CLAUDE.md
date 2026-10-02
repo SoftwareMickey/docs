@@ -8,7 +8,7 @@ A [Mintlify](https://mintlify.com) documentation site for **VectorIHub** (produc
 
 **Product positioning (current, as of the "Build Once. Deploy Anywhere." repositioning):** VectorIHub is a deployment platform, not a cloud hosting provider. Applications are built from a **required, user-provided `Dockerfile`** — VectorIHub does not auto-generate one or auto-detect frameworks — and deployed consistently across infrastructure providers the customer owns (VPS, AWS, Azure, DigitalOcean). Older content describing "auto-dockerization," zero-config framework detection, or VectorIHub-owned hosting infrastructure is the *previous* product model and should not be reintroduced into current (non-historical) pages. `blog/` and `changelog/` are dated historical records from the earlier model and are intentionally left as-is rather than rewritten.
 
-Every language and framework is still supported under the new model — Docker is language-agnostic — so `languages/`, `runtimes/`, and `frameworks/` still exist, just reframed: each page now shows a sample Dockerfile for that stack (bring-your-own-build) instead of describing auto-detection.
+Every language and framework is supported under the new model — Docker is language-agnostic: any app with a Dockerfile and a listening port runs. There are no per-framework, per-language or per-runtime pages; `deploy/bring-your-own-app` is the single page, and the old `frameworks/`, `languages/` and `runtimes/` URLs redirect to it.
 
 **Do not document how detection/build/deployment works internally** (matching logic, infrastructure-provisioning mechanics, or anything resembling an internal "deployment contract" schema) — these are trade secrets. Public docs describe *what* is supported and *how to use it*, never the internal mechanism.
 
@@ -28,14 +28,46 @@ There is no build/lint/test step beyond the above — content correctness is ver
 
 ## Architecture
 
-**Navigation is centrally defined in `docs.json`.** Adding, removing, or moving a page requires updating the `navigation.tabs[].groups[].pages` array here — files are not auto-discovered. `docs.json` also controls theme colors, logo, navbar links, footer socials, the `global.anchors` top-nav links, and the `contextual` AI-assistant options (copy/chatgpt/claude/cursor/etc. buttons shown on each page).
+**Navigation is centrally defined in `docs.json`** and is organised by *what the reader is trying to do*, not by page kind
+(roadmap: `beaver-desktop/features/docs-experience/`). Pages are not auto-discovered: adding, moving or removing one means
+updating `navigation.tabs[].groups[].pages` — use `scripts/docsnav.py place PAGE "Tab" "Group" [--sub "Subgroup"]` rather
+than hand-editing JSON. `docs.json` also controls theme, logo, navbar, footer, `contextual` AI options and `redirects`.
 
-**Guides nav groups, in order:** Getting started (`documentation`, `installation`, `beaver-doctor`, `cli`, `choose-your-setup`, `connect`, `machine-roles`, `quickstart`) → **Concepts** (30 pages under `concepts/`, one per product concept — what it is, why it matters, when to use it, and its limits, explicitly never command syntax; sits above task guides and below no other layer; see `features/concepts/00-architecture.docs` for the roadmap that produced it and `features/concepts/inventory/00-topics.docs` for the full topic list before adding a new concept page) → **Services** (`services.mdx` directory/overview page + one page per supported service type under `services/` — PostgreSQL, MySQL, MariaDB, MongoDB, Redis, Kafka, RabbitMQ, NATS, Meilisearch, MinIO; each covers supported versions, add/attach/manage commands, and links to `/cli/service` and the relevant `/concepts/*` pages — never internal provisioning/credential mechanics, per the disclosure rule above) → Workflows (task guides under `guides/`) → Infrastructure Setup (`infrastructure-setup`, `infrastructure-setup/aws`, `infrastructure-setup/google-cloud`, `infrastructure-setup/azure`, `infrastructure-setup/custom-vps-providers`, `infrastructure-setup/firewall-requirements`) → Deploying with Docker (`deploying/dockerfile-requirements`, `deploying/deployment-configuration`, `deploying/environment-variables`) → Languages (`languages/javascript`, `languages/go`) → Runtimes (`runtimes/nodejs`, `runtimes/go`) → Frameworks (18 pages under `frameworks/`, one per framework — never nest one framework's content inside another's page). `infrastructure-setup.mdx` at the repo root is the directory/overview page for the Infrastructure Setup group and is also the target of the `global.anchors` "Infrastructure" top-nav link. Adding a new framework means a new file under `frameworks/`, a nav entry, and a card on the relevant `languages/*.mdx` page; adding a new provider means the same pattern under `infrastructure-setup/` + a card on `infrastructure-setup.mdx`; adding a new service type means the same pattern under `services/` + a card on `services.mdx` — confirm supported versions against `beaver service catalog`'s live output (or the backend's `services/types/` catalog if you have that repo checked out) before publishing, never guess.
+**Tabs, in order** (each tab's first page is a `type: hub` page, `<tab>/index.mdx`): **Get started** (`start/`, `install/`,
+home `index.mdx`) · **Deploy** (`deploy/`: sources (incl. `bring-your-own-app`), configure, ship, understand) · **Infrastructure** (`infrastructure/`: machines, Beaver Cloud, providers) ·
+**Data** (`data/`: services catalog under `data/services/*`, operating services) · **Networking & security** (`network/`) ·
+**Operate** (`operate/`: observe, recover, the troubleshooting pages) · **Teams** (`teams/`: workspaces, access, identity,
+plans) · **Alie** (`alie/`) · **Reference** (`cli.mdx` + `cli/*` — the command reference, one page per command group,
+produced by `features/docs`). Concepts are not a tab: each concept page lives in the tab where it is used, in an
+"Understand" group; a concept explains *why*, never *how* (no command blocks).
 
+**Every page has one type** — `hub`, `tutorial`, `howto`, `concept`, `reference` or `troubleshooting` (`interface` for
+Dashboard/Desktop screen guides) — declared in frontmatter with `audience` (and `interfaces` for task pages). Task pages
+show each applicable interface in a `<Tabs>` block in the fixed order Dashboard · Desktop · CLI; an interface that cannot do
+the task says so. Templates: `features/docs-experience/templates/*.mdx.tpl`. UI wording comes from
+`features/docs-experience/inventory/terminology.csv`.
 
-Note: there used to be a separate "Infrastructure Providers" nav group (`providers/vps`, `providers/aws`, `providers/azure`, `providers/digitalocean`, directory page `infrastructure.mdx`) describing VectorIHub-provisioned dashboard deployments. It has been removed and fully replaced by the "Infrastructure Setup" group above, which reflects the current bring-your-own-machine / `beaver connect` model — do not recreate the old `providers/` pattern.
+**Moved pages keep working**: every old path is in `docs.json` `redirects` (generated by `scripts/gen_redirects.py` from
+`features/docs-experience/inventory/{migration-map,redirects-extra,redirects-later}.csv`). The product emits docs URLs
+(`scripts/product_links.py` lists them) — including heading anchors on `operate/troubleshooting-github|google` and
+`teams/signing-in-and-repository-access` — so **never change those headings** and never delete a redirect.
 
-**Every MDX page requires frontmatter** with at least `title` and `description`; most pages add `sidebarTitle` and `icon` (see any `infrastructure-setup/*.mdx` file for the pattern using Lucide/Font-Awesome-style icon names).
+**Validation** — run before every PR (CI runs the same): `mint validate`, `mint broken-links`, `python3 scripts/check-docs.py`
+(navigation budget, page contract, terminology, redirects) and `python3 scripts/test_check_docs.py` (proves each lint rule
+fires). `scripts/check-commands.py` checks every `beaver` command and flag written in the docs against the real CLI (build it first: `go build -o /tmp/beaver .` in beaver-cli, then `BEAVER_BIN=/tmp/beaver`; not in CI). `scripts/check-team-docs.py` additionally ties the Teams pages to the shipped CLI/backend. `.mintignore` keeps
+`features/`, `scripts/` and `recipes/` out of the published site.
+
+**Old structure retired**: the `Guides`/`CLI` two-tab layout, the flat 38-page `Concepts` group, `guides/`, `concepts/`,
+`deploying/`, `infrastructure-setup/`, root-level `connect.mdx`/`machine-roles.mdx`/… all moved (see the migration map).
+Do not add framework pages: the contract is a Dockerfile and a port. `recipes/` holds the sample apps CI builds (`python3 scripts/recipes/run.py`).
+Adding a provider: `infrastructure/<provider>.mdx` + a card on `infrastructure/providers.mdx`. Adding a service type:
+`data/services/<type>.mdx` + a card on `data/services.mdx` — confirm supported versions against `beaver service catalog`'s
+live output, never guess.
+
+Note: there used to be a separate "Infrastructure Providers" nav group (`providers/…`) describing VectorIHub-provisioned
+dashboard deployments. It was removed and replaced by the bring-your-own-machine / `beaver connect` model — do not recreate it.
+
+**Every MDX page requires frontmatter** with `title`, `description`, `type` and (outside `cli/`) `audience` — enforced by `scripts/check-docs.py`; most pages add `sidebarTitle` and `icon` (see any `infrastructure-setup/*.mdx` file for the pattern using Lucide/Font-Awesome-style icon names).
 
 **Content components** are Mintlify's built-in MDX components (`<Card>`, `<CardGroup>`, `<Steps>`, `<Tabs>`, `<CodeGroup>`, `<Accordion>`, `<Note>`/`<Warning>`/`<Info>`/`<Tip>`/`<Check>`/`<Error>`, `<ParamField>`/`<ResponseField>`, `<Update>`, etc.) — the reference catalog for which component to use is in `components.txt` at the repo root. Do not invent new components; use one from this catalog.
 
@@ -43,6 +75,6 @@ Note: there used to be a separate "Infrastructure Providers" nav group (`provide
 
 **Blog** (`blog/`) and **changelog** (`changelog/`) are separate content types. Blog posts reference the repo-root `authors.yml` via `authors: <key>` in frontmatter; changelog entries use their own `changelog/authors.yml` instead, plus `changelog/tags.yml` for tag metadata and the `<Update label="..." description="...">` wrapper component.
 
-`features.mdx` is reachable outside the Guides tab's page tree as the target of the `global.anchors` "Features" top-nav link (alongside `infrastructure-setup.mdx` for "Infrastructure"). `cli.mdx`, `beaver-doctor.mdx`, `connect.mdx`, `choose-your-setup.mdx`, and `machine-roles.mdx` together document the product's own `beaver` CLI and onboarding flow (install → `doctor` → `connect` → pick a role) — unrelated to the `mint` CLI used to preview this repo.
+`install/*`, `start/choose-your-infrastructure`, `infrastructure/connect-a-machine` and `infrastructure/machines-and-roles` together document the onboarding flow (install → `doctor` → `connect` → pick a role) — unrelated to the `mint` CLI used to preview this repo.
 
 **Images/logos**: light/dark logo variants live in `logo/` and are wired into `docs.json`'s `logo.light`/`logo.dark`; general content images live in `images/`.

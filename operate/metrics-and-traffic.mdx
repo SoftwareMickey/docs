@@ -1,0 +1,59 @@
+---
+title: "Metrics and traffic"
+sidebarTitle: "Metrics and traffic"
+description: "CPU, storage, data transfer and request volume; response latency, status breakdown and the busiest endpoints — and where to see each."
+keywords: ["metrics and traffic", "cpu", "memory", "traffic", "beaver observe api", "beaver metrics cpu"]
+icon: "chart-line"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Resource metrics
+
+<Tabs>
+  <Tab title="Dashboard">a deployment's **Traffic** and **Performance** tabs, and the **Usage** panel on the home screen. (A **Resource Usage** page exists but is not reachable today.)</Tab>
+  <Tab title="Desktop">A machine's **Resources** tab shows its metrics with a 1 hour / 24 hour / 7 day window and sparklines.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver metrics cpu                          # also: storage, data-transfer, requests
+    beaver observe api --metrics cpu            # cpu | storage | requests | data-transfer
+    ```
+    Metrics are bucketed by the server into a few fixed time windows — `beaver metrics` has no `--range` flag.
+  </Tab>
+</Tabs>
+
+## Traffic
+
+<Tabs>
+  <Tab title="Dashboard">A deployment's **Traffic** tab.</Tab>
+  <Tab title="Desktop">A container's **Traffic** tab: summary tiles, a requests sparkline and the top routes, over 1h, 24h or 7d.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver traffic api --range 7d               # 1h, 6h, 24h, 7d or 30d (default 24h)
+    beaver traffic latency api                  # average / P95 / P99 / max over 24h
+    beaver traffic status-breakdown api         # status codes over 24h
+    beaver traffic top-endpoints api            # the 10 most-requested endpoints
+    beaver traffic slow-endpoints api           # the slowest (needs at least 5 samples)
+    beaver traffic requests-per-minute api      # over the last hour
+    ```
+    Also `bandwidth`, `requests-per-day`, `active` (current-users estimate) and `live` (a point-in-time resource snapshot).
+  </Tab>
+</Tabs>
+
+## A one-command summary
+
+`beaver observe api --traffic --range 7d` combines a traffic summary with the project's recent evidence; plain `beaver observe` shows the most relevant recent evidence for the project.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Logs" icon="scroll-text" href="/operate/logs">The three log kinds.</Card>
+  <Card title="Machine alerts" icon="bell" href="/operate/notifications">Get told when something crosses a threshold.</Card>
+</CardGroup>

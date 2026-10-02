@@ -1,0 +1,38 @@
+name: docs-check
+# features/docs-experience V15/V113 — fast path on every pull request; full path (all sample apps, freshness) nightly.
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i -g mint
+      - run: mint validate
+      - run: mint broken-links
+      - run: python3 scripts/check-docs.py --strict
+      - run: python3 scripts/test_check_docs.py
+      - name: Generated pages are current
+        run: python3 scripts/gen_capability_matrix.py --check
+      - name: Disclosure sweep (and its leak fixture)
+        run: |
+          python3 scripts/check-disclosure.py
+          python3 scripts/check-disclosure.py --fixture
+      - name: Typo gate
+        run: |
+          python3 scripts/check-spelling.py
+          python3 scripts/check-spelling.py --fixture
+      - name: Sample apps (the Dockerfile + port contract) — pilot on PRs, all nightly
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then python3 scripts/recipes/run.py; else python3 scripts/recipes/run.py --pilot; fi
+      - run: python3 scripts/recipes/check_page.py
+      - name: Freshness (nightly fails past the SLA)
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then python3 scripts/freshness.py --strict; else python3 scripts/freshness.py; fi

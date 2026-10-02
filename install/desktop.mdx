@@ -1,0 +1,71 @@
+---
+title: "Install Beaver Desktop"
+sidebarTitle: "Desktop"
+description: "What Beaver Desktop is, how it signs in, and what to expect on first launch."
+keywords: ["install beaver desktop", "desktop", "beaver connect"]
+icon: "monitor"
+type: howto
+audience: [developer, operator]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+**Beaver Desktop** is the desktop app for seeing your infrastructure at once — machines, Beaver Clouds, services, volumes and
+networks — with a detail view for each. It works on the same workspace as the Dashboard and the CLI.
+
+<Warning>
+**Availability.** There is not yet a public installer or download page for Beaver Desktop, and the app does not update itself.
+This page will carry the download and supported-platform list when they are published. Until then, Desktop is for people who
+have been given a build. Everything else here describes what happens once you have it.
+</Warning>
+
+## Before you start
+
+- A Beaver account (Google, GitHub or email).
+- Optional: the [Beaver CLI](/install/cli) on the same computer. Desktop does not need it to run, but its Settings page shows
+  whether the CLI is detected, and Desktop's action sheets show the `beaver` command for anything that would change something.
+
+## Sign in
+
+<Steps>
+  <Step title="Open the app and choose Sign in">
+    Desktop opens your browser to a **Connect Beaver Desktop** approval page. You never type a password into the app.
+  </Step>
+  <Step title="Approve in the browser">
+    Sign in there — with Google, GitHub or your email — and approve the connection. If your account requires 2-step verification,
+    the app tells you it is waiting for it.
+  </Step>
+  <Step title="Return to the app">
+    Desktop completes the sign-in and opens the **Infrastructure** home for your active workspace.
+  </Step>
+</Steps>
+
+<Tip>
+If someone invited you to a team workspace, open the invitation link on the same computer, sign in with the email address the
+invitation was sent to, and Desktop accepts it for you.
+</Tip>
+
+## First launch
+
+With no machines enrolled, the Infrastructure home shows an empty state that points you to **enrol your first machine** —
+which you do in a terminal with [`beaver connect`](/infrastructure/connect-a-machine). Once a machine is connected it appears
+here as a card with its health and what it is running.
+
+## Updates
+
+Desktop has no automatic update mechanism today. **Settings → Updates** shows the installed version and whether the Beaver CLI
+is on your `PATH`.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Desktop quickstart" icon="rocket" href="/start/quickstart-desktop">Explore the Infrastructure home.</Card>
+  <Card title="Choose your interface" icon="layout-dashboard" href="/start/choose-your-interface">Dashboard, Desktop or CLI.</Card>
+  <Card title="Desktop shell tour" icon="monitor" href="/interfaces/desktop/shell-tour">The navigator, palette and shortcuts.</Card>
+  <Card title="How state is shared" icon="refresh-cw" href="/interfaces/how-state-is-shared">What follows you between interfaces.</Card>
+</CardGroup>

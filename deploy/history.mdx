@@ -1,0 +1,63 @@
+---
+title: "Release and deployment history"
+sidebarTitle: "History"
+description: "See what was released when, which commit is live, and which history command answers which question."
+keywords: ["release and deployment history", "history", "beaver state history", "beaver history"]
+icon: "history"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+"History" means four different things in Beaver. Pick the one that answers your question.
+
+| You want to know… | Use |
+| --- | --- |
+| Which releases of this service ran, and which is current | `beaver container <name> history` |
+| What changed in the **saved configuration**, revision by revision | `beaver state history` |
+| How a Compose stack's releases went | `beaver compose stack show <stack-id>` and `beaver compose release show <release-id>` |
+| What **you** ran recently on this computer | `beaver history` |
+
+<Warning>
+`beaver history` is a **local, personal** record of commands run from this computer. It is not a deployment history and not the workspace's audit trail.
+</Warning>
+
+## Release history
+
+<Tabs>
+  <Tab title="Dashboard">The Dashboard's deployment history page and each deployment's detail list its releases with status and commit.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop today.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver container api history
+    ```
+    Lists releases newest first, including the current release and commit context. Pass a release from this list to `beaver container api rollback <release>`.
+  </Tab>
+</Tabs>
+
+## Configuration history
+
+```bash
+beaver state history          # saved-configuration revisions
+beaver state drift            # timeline of differences between saved config and what's running
+```
+
+`beaver state rollback` restores an earlier saved revision — forward-only: the historical revision stays untouched and a new one is created.
+
+## Workspace audit trail
+
+Who did what in a team workspace — deploys, approvals, role changes — is in `beaver workspace activity` and the Dashboard's **Team → Activity**
+([Audit history](/teams/audit-history)). Retention depends on your plan.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Rollback and recovery" icon="rotate-ccw" href="/deploy/rollback-and-recovery">Use a release from history.</Card>
+  <Card title="State and drift" icon="git-compare" href="/operate/state-and-drift">Local, saved and live state.</Card>
+</CardGroup>

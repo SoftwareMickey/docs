@@ -1,0 +1,105 @@
+---
+title: "Beaver Desktop shell tour"
+sidebarTitle: "Shell tour"
+description: "First run, sign-in and the Desktop frame: the navigator, the command palette, history, the workspace switcher and the status footer."
+icon: "monitor"
+type: interface
+audience: [evaluator, developer, operator]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+<Warning>
+**Availability.** Beaver Desktop has no public installer or download page yet, and it does not update itself — see [Install Beaver Desktop](/install/desktop). These pages describe the app as it is built today and mark anything that is hidden or read-only.
+</Warning>
+
+## First run and sign-in
+
+Choose **Sign in**; Desktop opens your browser to an approval page and completes the sign-in when you approve — you never type a password into the app. Details and the team-invitation shortcut are in [Install Beaver Desktop](/install/desktop). After sign-in you land on **Infrastructure** for your active workspace.
+
+## The frame
+
+<Shot name="desktop/infrastructure-home" alt="The Desktop window: the navigator on the left, the Infrastructure home in the middle, and the status footer along the bottom." />
+
+Desktop is a window with a **navigator** on the left, the open section in the middle, an optional **Alie** rail on the right, a **terminal** that docks at the bottom, and a **status footer**.
+
+| Part | What it does |
+| --- | --- |
+| **Navigator** | Switches section. It can contract to an icon rail without losing your place |
+| **Section area** | A list (for example **Machines**), or the detail of the item you selected, with a breadcrumb back |
+| **Alie rail** | The assistant — see [Approvals, Alie and traces](/interfaces/desktop/approvals-and-alie) |
+| **Terminal** | The embedded terminal — see [Terminal and projects](/interfaces/desktop/terminal-and-projects) |
+| **Footer** | Theme buttons (light, dark, system), **Terminal**, **Alie**, **Command ⌘K** and **Settings** shortcuts, the open project, and the **Control plane** indicator — hover it for *Beaver control plane connected* |
+
+The top of the navigator holds the **workspace switcher**, showing the workspace, your plan and your role. **Alie** and **Settings** sit in a **System** group below the main sections, and your account — name, email and **Log out** — is at the bottom.
+
+## The navigator
+
+| Group | Section | Guide |
+| --- | --- | --- |
+| — | **Infrastructure** — the home | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+| Pools | **Machines**, **Beaver Cloud** | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+| Resources | **Networks**, **Storage**, **Services** | [Networks, storage and services](/interfaces/desktop/networks-storage-services) |
+| Runtime | **Traces**, and **Approvals** — shown **only in a team workspace** | [Approvals, Alie and traces](/interfaces/desktop/approvals-and-alie) |
+| System | **Alie**, **Settings** | [Approvals, Alie and traces](/interfaces/desktop/approvals-and-alie), [Settings](/interfaces/desktop/settings) |
+
+You can show the navigator flat or grouped by level (**Ownership**, **Pools**, **Resources**, **Health**, **System**).
+
+<Note>
+The **Deployments** and **Observability** sections are **hidden from the navigator** in this build. The command palette still lists **Go to Deployments** and **Go to Observability**, but they are not yet part of the supported workflow and these guides do not cover them. For deployments, logs and metrics, use the Dashboard or the CLI.
+</Note>
+
+## The command palette
+
+Press **⌘K** (Ctrl+K on Windows and Linux), or choose **Command** in the footer, to search commands, pages, machines and services — anywhere in the app. It lists **Recent** items first.
+
+<Shot name="desktop/command-palette" alt="The command palette open over the Infrastructure home, listing Go to commands for each section and the Add Machine action." />
+
+| Group | Examples |
+| --- | --- |
+| Go to | Infrastructure, Machines, Beaver Cloud, Networks, Storage, Services |
+| Do | **Add Machine**, **Create Cloud**, **Add Service** — each opens a sheet that shows the exact `beaver` command |
+| Machine and cloud views | View logs, Open metrics, View connections, View capacity, View network, View services |
+| Tools | **Open terminal here**, **Open Alie**, **Toggle Big Terminal**, **Open folder…**, **Close project** |
+| Account | Sign in to a different account; **Use light theme**, **Use dark theme**, **Use system theme** |
+
+Other shortcuts: **⌘⇧T** toggles the full-window **Big Terminal**; **Ctrl+`** shows or hides the terminal dock.
+
+## Back and forward
+
+Desktop keeps a history of where you have been, including the item you had selected, and offers **back** and **forward**. Switching workspace clears it, because a selection from one workspace means nothing in another.
+
+## The workspace switcher
+
+Choose another workspace from the switcher; the app shows **Switching to …** while it reloads everything for that workspace. A workspace that is **suspended** or gated shows a screen explaining why and what to do. Which workspace is active is remembered by Desktop only — see [How state is shared](/interfaces/how-state-is-shared).
+
+## Plan card, suspended and gated screens
+
+**Settings → Account** carries a **plan card**: the workspace's plan, seats and next charge as the server reports them, with one action for your role — an Owner opens web billing, an Admin sends a request to the Owner, and everyone else is told who to ask. The equivalent `beaver billing` command is shown under it.
+If a workspace is **suspended** or a feature is gated by the plan, Desktop shows a full screen saying so and what resolves it, instead of a broken page. Desktop never calculates prices or charges.
+
+## Updates
+
+Desktop does not update itself. **Settings → Updates** shows the installed versions and the update policy, and [Install Beaver Desktop](/install/desktop) will carry the download when one is published.
+
+## Banners and offers
+
+Team notices appear as banners at the top of the window: an automatic workspace switch, a plan-state notice, a **pending invitation** to a workspace, and an **ownership offer** to become a workspace's Owner. Invitations and ownership offers each have **Accept** and **Decline** — an accepted ownership offer switches you into that workspace.
+See [Invite members](/teams/invite-members) and [Leaving, removing and transferring](/teams/removing-members-and-leaving).
+
+## Same task in the other interfaces
+
+For the equivalent overview in the web app, see [Dashboard tour](/interfaces/dashboard/tour); for every task, the [capability matrix](/interfaces/capability-matrix).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Infrastructure, machines and clouds" icon="server" href="/interfaces/desktop/infrastructure">The home screen and the first two sections.</Card>
+  <Card title="Desktop quickstart" icon="rocket" href="/start/quickstart-desktop">Sign in and look around.</Card>
+</CardGroup>

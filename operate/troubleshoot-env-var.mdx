@@ -1,0 +1,55 @@
+---
+title: "An environment variable is missing"
+sidebarTitle: "Env var missing"
+description: "Your app does not see a variable you set — per-environment values, redeploys and promotion."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer]
+interfaces: [dashboard, cli]
+keywords: ["env var not set", "undefined environment variable", "missing config", "process.env"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+`process.env.X` (or your language's equivalent) is empty in a deployment.
+
+## Check first
+
+1. `beaver environment vars list <container>` — names set on the container.
+2. `beaver environment vars diff <container>` — compare your local `.env` with what is deployed (names only unless `--reveal`).
+3. Which **environment** is this deployment in? `beaver environment list`.
+
+## Causes and fixes
+
+### You set it after the deploy
+
+`vars push` does not redeploy. Run `beaver deploy` or `beaver container <name> redeploy`.
+
+### It was set for a different environment
+
+Each environment has its **own** variables; [promoting](/deploy/promote) does not carry them over.
+
+### Your `.env` was never pushed
+
+Beaver never reads a local `.env` implicitly. Use `beaver environment vars push` or `beaver deploy --env-file`.
+
+### A quoted value was mangled
+
+Don't pass a pulled `.env` to `docker run --env-file` — quoting rules differ.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Environment variables" icon="arrow-right" href="/deploy/environment-variables">The page that prevents or explains this.</Card>
+  <Card title="Environments" icon="arrow-right" href="/deploy/environments">The page that prevents or explains this.</Card>
+</CardGroup>

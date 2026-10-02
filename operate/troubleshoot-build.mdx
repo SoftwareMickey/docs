@@ -1,0 +1,63 @@
+---
+title: "My build fails"
+sidebarTitle: "Build fails"
+description: "The build step failed or never started — read the build log, reproduce it, and check the Builder."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer]
+interfaces: [dashboard, cli]
+keywords: ["build failed", "docker build", "push failed", "dockerfile error"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+The deployment shows **Failed** during the build stages, or stays **Queued** and never starts building.
+
+## Check first
+
+1. Read the build log: `beaver deploy --logs` (CLI) or the deployment's build history (Dashboard). The failing step is your Dockerfile's own output.
+2. Build it locally from a **fresh clone** of your branch: `docker build .` — if that fails too, it is your Dockerfile.
+3. Check the Builder: on that machine run `beaver doctor`, `beaver docker --auth` and `beaver git --auth`.
+
+## Causes and fixes
+
+### A file the build needs is not committed
+
+The Builder builds the commit you pushed. Anything generated locally or ignored by git is not there. Commit it, or generate it inside the Dockerfile.
+
+### The Builder cannot clone a private repository
+
+The Builder clones with the GitHub login **on that machine**. Run `gh auth login` there and confirm with `beaver git --auth` — it is local, Beaver never sees it.
+
+### Docker Hub login missing or expired on the Builder
+
+The image is pushed under your Docker Hub username. Run `docker login` on the Builder, then confirm with `beaver docker --auth`.
+
+### Builds stay Queued
+
+No machine with the **Builder** role is available in the cloud, or the Builder is offline. `beaver machine list`; see [Machine shows offline](/operate/troubleshoot-machine-offline).
+
+### Out of disk or memory on the Builder
+
+Clean up old images and build cache on that machine, or use a bigger Builder.
+
+## Then
+
+`beaver container <name> rebuild` proves a fixed release builds and passes health checks without sending it live; `beaver preflight --full` does the same on a throwaway candidate.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Builds" icon="arrow-right" href="/deploy/builds">The page that prevents or explains this.</Card>
+  <Card title="Your Dockerfile" icon="arrow-right" href="/deploy/dockerfile-requirements">The page that prevents or explains this.</Card>
+</CardGroup>

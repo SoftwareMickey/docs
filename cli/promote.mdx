@@ -3,10 +3,11 @@ title: "beaver promote"
 sidebarTitle: "promote"
 description: "Promote the current environment's already-built image to another environment, without rebuilding."
 icon: "arrow-up-right"
+type: reference
 ---
 
 <Info>
-  New here? [Rollback, promotion, and recovery](/concepts/rollback-promotion-and-recovery) explains what this is and when to use it, before diving into syntax.
+  New here? [Rollback, promotion, and recovery](/operate/recovery-model) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -16,7 +17,7 @@ example, staging) to another environment (for example, production) — without t
 new build. This is the reproducibility-preserving path between environments: what you tested
 is exactly what ships, because nothing is rebuilt in between.
 
-Each environment keeps its own [environment variables](/deploying/environment-variables) —
+Each environment keeps its own [environment variables](/deploy/environment-variables) —
 promoting an image doesn't carry environment-specific configuration with it; the target
 environment's own variables apply.
 
@@ -86,7 +87,7 @@ beaver promote production --yes
 
 ## Used in
 
-- [Deploy workflow](/guides/deploy-workflow) — promotion is the last step of this guide.
-- [Environment variables](/deploying/environment-variables) — each environment's own
+- [Deploy workflow](/deploy/overview) — promotion is the last step of this guide.
+- [Environment variables](/deploy/environment-variables) — each environment's own
   variables apply after promotion.
 - [`environment`](/cli/environment) — manages which branch maps to which environment.
