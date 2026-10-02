@@ -1,0 +1,47 @@
+---
+title: "CONFLICT"
+sidebarTitle: "CONFLICT"
+description: "What the CONFLICT failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["CONFLICT", "The request conflicts with an existing resource", "error", "failure", "beaver help CONFLICT"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The request conflicts with an existing resource**
+
+Another resource conflicts with this request; the response names it and a safe resolution.
+
+| | |
+| --- | --- |
+| Code | `CONFLICT` |
+| Kind | Conflict |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+The response names the resource it conflicts with. Resolve that, or choose a different name, then run the command again.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "The request conflicts with an existing resource",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The request conflicts with an existing resource"
+  }
+}
+```
+
+Look it up offline with `beaver help CONFLICT`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

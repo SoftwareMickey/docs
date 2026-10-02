@@ -137,6 +137,14 @@ def check_reference():
     for line in r.stdout.splitlines():
         if line.startswith("ERROR"): E(line.replace("ERROR  ", "", 1))
 
+def check_errors():
+    """features/cli-experience V93/V99 — every registered failure code has a generated page, and the exit-status table is the CLI's."""
+    gen = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen_errors.py")
+    if not os.path.exists(f"{ROOT}/features/docs-experience/inventory/problem-codes.json"): return
+    r = subprocess.run([sys.executable, gen, "--check"], capture_output=True, text=True, env={**os.environ, "DOCS_ROOT": ROOT})
+    for line in r.stdout.splitlines():
+        if line.startswith("ERROR"): E(line.replace("ERROR  ", "", 1))
+
 def check_shots(docs):
     man_path = f"{ROOT}/images/ui/manifest.json"
     have = set()
@@ -164,6 +172,7 @@ def main():
     check_matrix(docs)
     check_help_links()
     check_reference()
+    check_errors()
     check_findability(docs)
     check_shots(docs)
     for p in nav:

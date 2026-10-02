@@ -1,0 +1,226 @@
+[
+  {
+    "name": "AMBIGUOUS",
+    "http": 409,
+    "class": "not_found",
+    "message": "More than one resource matches",
+    "doc": "The reference matched several resources; the response lists the candidates."
+  },
+  {
+    "name": "AUTH_EXPIRED",
+    "http": 401,
+    "class": "authentication",
+    "message": "Your session has expired",
+    "doc": "The session token is expired or was revoked. Sign in again, then retry."
+  },
+  {
+    "name": "AUTH_REQUIRED",
+    "http": 401,
+    "class": "authentication",
+    "message": "You are not signed in",
+    "doc": "No session was presented. Sign in, then retry."
+  },
+  {
+    "name": "CANCELLED",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Cancelled",
+    "doc": "The person cancelled at a prompt or with Ctrl+C. Cancelling is not a failure; nothing further ran."
+  },
+  {
+    "name": "CLIENT_TOO_OLD",
+    "http": 426,
+    "class": "invalid_input",
+    "message": "This version of the Beaver CLI is too old",
+    "doc": "The server needs a newer CLI than the one making the request; update the CLI."
+  },
+  {
+    "name": "CLOUD_MACHINE_INELIGIBLE",
+    "http": 409,
+    "class": "eligibility",
+    "message": "Machine cannot join this cloud",
+    "doc": "One or more requirements for joining a cloud are not met. Each requirement is listed with its status and repair."
+  },
+  {
+    "name": "CONFLICT",
+    "http": 409,
+    "class": "conflict",
+    "message": "The request conflicts with an existing resource",
+    "doc": "Another resource conflicts with this request; the response names it and a safe resolution."
+  },
+  {
+    "name": "CONTEXT_UNRESOLVED",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Beaver could not work out which workspace or project you mean",
+    "doc": "No workspace, project or environment could be resolved from the flag, environment, config or default. The response shows each source consulted."
+  },
+  {
+    "name": "FLAG_CONFLICT",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Flags cannot be used together",
+    "doc": "Two flags that exclude each other were given."
+  },
+  {
+    "name": "FLAG_IGNORED",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "A flag has no effect on this command",
+    "doc": "The flag is not supported by this command and would have been silently ignored."
+  },
+  {
+    "name": "FLAG_INVALID_VALUE",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "A flag or argument has an invalid value",
+    "doc": "A flag value is outside the accepted values or format. The response lists the accepted values and a corrected command."
+  },
+  {
+    "name": "FLAG_REQUIRES",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "A flag needs another flag",
+    "doc": "A flag was given without the flag it depends on."
+  },
+  {
+    "name": "FORBIDDEN",
+    "http": 403,
+    "class": "authorization",
+    "message": "You are not allowed to do this",
+    "doc": "The caller is signed in but not permitted to perform the operation. A response that can name the missing capability uses FORBIDDEN_CAPABILITY instead."
+  },
+  {
+    "name": "FORBIDDEN_CAPABILITY",
+    "http": 403,
+    "class": "authorization",
+    "message": "Your workspace is missing a required capability",
+    "doc": "The acting workspace or user lacks a capability the operation needs; the response names it and the role that can grant it."
+  },
+  {
+    "name": "INTERNAL",
+    "http": 500,
+    "class": "internal",
+    "message": "Beaver could not complete the operation",
+    "doc": "An unexpected failure. Quote the request id when reporting it."
+  },
+  {
+    "name": "INVALID_REQUEST",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "The request was not valid",
+    "doc": "The server rejected the request as malformed or invalid; the message says which part."
+  },
+  {
+    "name": "LOCAL_PREREQUISITE",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Something this machine needs is missing",
+    "doc": "A local prerequisite (writable directory, git repository, reachable Docker, parseable config file) is not met. Raised before any request is sent."
+  },
+  {
+    "name": "MAINTENANCE",
+    "http": 503,
+    "class": "temporary",
+    "message": "Beaver is in maintenance",
+    "doc": "The platform is in a maintenance window. The response gives the window and the status page."
+  },
+  {
+    "name": "MFA_REQUIRED",
+    "http": 403,
+    "class": "authorization",
+    "message": "This workspace requires 2-step verification",
+    "doc": "The workspace enforces 2-step verification and the account has none."
+  },
+  {
+    "name": "NETWORK_DNS",
+    "http": 503,
+    "class": "temporary",
+    "message": "The server's name could not be resolved",
+    "doc": "DNS resolution of the server's host name failed."
+  },
+  {
+    "name": "NETWORK_PROXY",
+    "http": 503,
+    "class": "temporary",
+    "message": "A proxy blocked the request",
+    "doc": "A configured HTTP proxy refused or failed the request (for example proxy authentication)."
+  },
+  {
+    "name": "NETWORK_TIMEOUT",
+    "http": 504,
+    "class": "temporary",
+    "message": "The server did not answer in time",
+    "doc": "No response arrived before the deadline. A mutating request may have been applied anyway."
+  },
+  {
+    "name": "NETWORK_TLS",
+    "http": 503,
+    "class": "temporary",
+    "message": "The server's certificate could not be verified",
+    "doc": "The TLS handshake failed: untrusted or expired certificate, wrong host name, or a wrong system clock."
+  },
+  {
+    "name": "NETWORK_UNREACHABLE",
+    "http": 503,
+    "class": "temporary",
+    "message": "The Beaver server could not be reached",
+    "doc": "The connection to the server failed before any response arrived (refused, reset, unreachable network)."
+  },
+  {
+    "name": "NOT_FOUND",
+    "http": 404,
+    "class": "not_found",
+    "message": "Resource not found",
+    "doc": "No such resource exists in the scope the caller can see."
+  },
+  {
+    "name": "OPERATION_FAILED",
+    "http": 500,
+    "class": "async_operation",
+    "message": "The operation failed",
+    "doc": "An operation failed after it started; the response names the failed stage and what changed."
+  },
+  {
+    "name": "PRECONDITION_FAILED",
+    "http": 409,
+    "class": "eligibility",
+    "message": "Prerequisites for this operation are not met",
+    "doc": "One or more prerequisites are unmet; each is listed as a condition with its repair."
+  },
+  {
+    "name": "QUOTA_EXCEEDED",
+    "http": 409,
+    "class": "quota",
+    "message": "A plan or quota limit was reached",
+    "doc": "Current use has reached the limit; the response gives use, limit and options."
+  },
+  {
+    "name": "RATE_LIMITED",
+    "http": 429,
+    "class": "temporary",
+    "message": "Too many requests",
+    "doc": "The caller is being rate limited; retry after the stated delay."
+  },
+  {
+    "name": "STATE_INVALID",
+    "http": 409,
+    "class": "resource_state",
+    "message": "The resource is not in a state that allows this",
+    "doc": "The resource's current state does not permit the operation; the response gives the current and required state and the transition."
+  },
+  {
+    "name": "STEP_UP_REQUIRED",
+    "http": 403,
+    "class": "authorization",
+    "message": "This action needs a fresh second-factor confirmation",
+    "doc": "A sensitive action needs a single-use confirmation from a second factor. The response names the action scope and how to satisfy it."
+  },
+  {
+    "name": "TEMPORARY",
+    "http": 503,
+    "class": "temporary",
+    "message": "A temporary condition blocked the request",
+    "doc": "A transient condition (rate limit, maintenance, overload) blocked the request; retry later."
+  }
+]

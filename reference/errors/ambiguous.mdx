@@ -1,0 +1,47 @@
+---
+title: "AMBIGUOUS"
+sidebarTitle: "AMBIGUOUS"
+description: "What the AMBIGUOUS failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["AMBIGUOUS", "More than one resource matches", "error", "failure", "beaver help AMBIGUOUS"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**More than one resource matches**
+
+The reference matched several resources; the response lists the candidates.
+
+| | |
+| --- | --- |
+| Code | `AMBIGUOUS` |
+| Kind | Not found |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+Check the name or id, and that you are acting in the right workspace (`beaver workspace list`). A resource you cannot see looks the same as one that does not exist.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "AMBIGUOUS",
+    "message": "More than one resource matches",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "More than one resource matches"
+  }
+}
+```
+
+Look it up offline with `beaver help AMBIGUOUS`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

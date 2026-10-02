@@ -1,0 +1,15 @@
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/exit-status.json. */}
+
+| Status | Where | Meaning |
+| --- | --- | --- |
+| `0` | every command | Success. For --check: nothing stands in the way. |
+| `1` | every command | Failure. Every registered problem code exits 1 unless listed below; the cause is error.code in --json output and the CODE of the printed report. Cancelling at a prompt keeps the status the command had and is not a failure. |
+| `77` | any command that needs a verified account | 2-step verification is required: the workspace requires it and your account does not have it. |
+| `2` | beaver config … | Usage error: a flag or argument the command does not accept. |
+| `3` | beaver config … | Local I/O error: a file could not be read or written. |
+| `4` | beaver config … | Server error while saving or loading configuration. |
+| `3` | beaver github install | You cancelled. |
+| `4` | beaver github install | GitHub denied the request. |
+| `5` | beaver github install | The install failed. |
+| `6` | beaver github install | The approval link expired. |
+| `7` | beaver github install | Timed out waiting for the install. |

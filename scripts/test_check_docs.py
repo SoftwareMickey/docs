@@ -23,6 +23,8 @@ def edit_nav(d, fn):
     c = json.load(open(f"{d}/docs.json")); fn(c); json.dump(c, open(f"{d}/docs.json", "w"))
 def edit_reg(d, fn):
     p = f"{d}/features/docs-experience/inventory/help-links.json"; r = json.load(open(p)); fn(r); json.dump(r, open(p, "w"))
+def edit_inv(d, name, fn):
+    p = f"{d}/features/docs-experience/inventory/{name}"; r = json.load(open(p)); fn(r); json.dump(r, open(p, "w"))
 PAGE = '---\ntitle: "Seeded"\ndescription: "x"\ntype: howto\naudience: [developer]\n---\nbody\n'
 
 cases = [
@@ -43,6 +45,9 @@ cases = [
     ("help-link to a missing page", lambda d: edit_reg(d, lambda r: r["keys"].__setitem__("dashboard.zzz", {"path": "/deploy/nowhere", "surface": "dashboard", "where": "x"})), "dashboard.zzz: no page at /deploy/nowhere"),
     ("help-link to a missing anchor", lambda d: edit_reg(d, lambda r: r["keys"].__setitem__("dashboard.zzy", {"path": "/deploy/overview#no-such-heading", "surface": "dashboard", "where": "x"})), "no heading #no-such-heading"),
     ("help-link malformed key", lambda d: edit_reg(d, lambda r: r["keys"].__setitem__("Bad Key", {"path": "/deploy/overview", "surface": "dashboard", "where": "x"})), "key must look like"),
+    ("registered code without a page", lambda d: edit_inv(d, "problem-codes.json", lambda r: r.append({"name": "ZZZ_NEW_CODE", "http": 409, "class": "conflict", "message": "New", "doc": "A code added to the registry."})), "reference/errors/zzz-new-code.mdx is missing"),
+    ("exit-status table drift", lambda d: edit_inv(d, "exit-status.json", lambda r: r.append({"status": 9, "scope": "beaver zzz", "meaning": "New status"})), "snippets/exit-status-table.mdx is out of date"),
+    ("error page for a retired code", lambda d: write(d, "reference/errors/retired-code.mdx", PAGE), "no longer registered"),
     ("snippet header", lambda d: write(d, "snippets/plan-ladder.mdx", "no header\n"), "GENERATED"),
 ]
 failed = 0

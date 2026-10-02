@@ -1,0 +1,47 @@
+---
+title: "CANCELLED"
+sidebarTitle: "CANCELLED"
+description: "What the CANCELLED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["CANCELLED", "Cancelled", "error", "failure", "beaver help CANCELLED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Cancelled**
+
+The person cancelled at a prompt or with Ctrl+C. Cancelling is not a failure; nothing further ran.
+
+| | |
+| --- | --- |
+| Code | `CANCELLED` |
+| Kind | Invalid input |
+| HTTP status | `400` |
+| CLI exit status | `1` |
+
+## What to do
+
+The response names the flag or argument and shows an accepted value. Run `beaver help <command>` for the command's flags.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "CANCELLED",
+    "message": "Cancelled",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Cancelled"
+  }
+}
+```
+
+Look it up offline with `beaver help CANCELLED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

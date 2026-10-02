@@ -1,0 +1,47 @@
+---
+title: "STEP_UP_REQUIRED"
+sidebarTitle: "STEP_UP_REQUIRED"
+description: "What the STEP_UP_REQUIRED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["STEP_UP_REQUIRED", "This action needs a fresh second-factor confirmation", "error", "failure", "beaver help STEP_UP_REQUIRED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**This action needs a fresh second-factor confirmation**
+
+A sensitive action needs a single-use confirmation from a second factor. The response names the action scope and how to satisfy it.
+
+| | |
+| --- | --- |
+| Code | `STEP_UP_REQUIRED` |
+| Kind | Permission |
+| HTTP status | `403` |
+| CLI exit status | `1` |
+
+## What to do
+
+Ask an Owner or Admin of the workspace to do this or to change your role. If another workspace of yours has access, switch with `beaver workspace use`.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "STEP_UP_REQUIRED",
+    "message": "This action needs a fresh second-factor confirmation",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "This action needs a fresh second-factor confirmation"
+  }
+}
+```
+
+Look it up offline with `beaver help STEP_UP_REQUIRED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

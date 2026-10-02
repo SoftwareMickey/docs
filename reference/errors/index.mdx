@@ -1,0 +1,100 @@
+---
+title: "Error codes"
+sidebarTitle: "Error codes"
+description: "Every failure code Beaver can return, what it means and how to fix it, in one searchable reference."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["error code", "failure", "beaver help", "error.code", "troubleshooting", "request id"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+Every refusal from the CLI, the API and the Dashboard carries a stable **code**. Scripts branch on `error.code` in `--json` output; people read the conditions and repairs under it. `beaver help CODE` prints the same entry offline. For the status a command exits with, see [Exit codes and output formats](/reference/exit-codes-and-output).
+
+## Conflict
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`CONFLICT`](/reference/errors/conflict) | The request conflicts with an existing resource | `409` |
+
+## Eligibility
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`CLOUD_MACHINE_INELIGIBLE`](/reference/errors/cloud-machine-ineligible) | Machine cannot join this cloud | `409` |
+| [`PRECONDITION_FAILED`](/reference/errors/precondition-failed) | Prerequisites for this operation are not met | `409` |
+
+## Internal
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`INTERNAL`](/reference/errors/internal) | Beaver could not complete the operation | `500` |
+
+## Invalid input
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`CANCELLED`](/reference/errors/cancelled) | Cancelled | `400` |
+| [`CLIENT_TOO_OLD`](/reference/errors/client-too-old) | This version of the Beaver CLI is too old | `426` |
+| [`CONTEXT_UNRESOLVED`](/reference/errors/context-unresolved) | Beaver could not work out which workspace or project you mean | `400` |
+| [`FLAG_CONFLICT`](/reference/errors/flag-conflict) | Flags cannot be used together | `400` |
+| [`FLAG_IGNORED`](/reference/errors/flag-ignored) | A flag has no effect on this command | `400` |
+| [`FLAG_INVALID_VALUE`](/reference/errors/flag-invalid-value) | A flag or argument has an invalid value | `400` |
+| [`FLAG_REQUIRES`](/reference/errors/flag-requires) | A flag needs another flag | `400` |
+| [`INVALID_REQUEST`](/reference/errors/invalid-request) | The request was not valid | `400` |
+| [`LOCAL_PREREQUISITE`](/reference/errors/local-prerequisite) | Something this machine needs is missing | `400` |
+
+## Not found
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`AMBIGUOUS`](/reference/errors/ambiguous) | More than one resource matches | `409` |
+| [`NOT_FOUND`](/reference/errors/not-found) | Resource not found | `404` |
+
+## Permission
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`FORBIDDEN`](/reference/errors/forbidden) | You are not allowed to do this | `403` |
+| [`FORBIDDEN_CAPABILITY`](/reference/errors/forbidden-capability) | Your workspace is missing a required capability | `403` |
+| [`MFA_REQUIRED`](/reference/errors/mfa-required) | This workspace requires 2-step verification | `403` |
+| [`STEP_UP_REQUIRED`](/reference/errors/step-up-required) | This action needs a fresh second-factor confirmation | `403` |
+
+## Plan and quota
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`QUOTA_EXCEEDED`](/reference/errors/quota-exceeded) | A plan or quota limit was reached | `409` |
+
+## Sign-in
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`AUTH_EXPIRED`](/reference/errors/auth-expired) | Your session has expired | `401` |
+| [`AUTH_REQUIRED`](/reference/errors/auth-required) | You are not signed in | `401` |
+
+## Async Operation
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`OPERATION_FAILED`](/reference/errors/operation-failed) | The operation failed | `500` |
+
+## Resource State
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`STATE_INVALID`](/reference/errors/state-invalid) | The resource is not in a state that allows this | `409` |
+
+## Temporary
+
+| Code | Meaning | HTTP |
+| --- | --- | --- |
+| [`MAINTENANCE`](/reference/errors/maintenance) | Beaver is in maintenance | `503` |
+| [`NETWORK_DNS`](/reference/errors/network-dns) | The server's name could not be resolved | `503` |
+| [`NETWORK_PROXY`](/reference/errors/network-proxy) | A proxy blocked the request | `503` |
+| [`NETWORK_TIMEOUT`](/reference/errors/network-timeout) | The server did not answer in time | `504` |
+| [`NETWORK_TLS`](/reference/errors/network-tls) | The server's certificate could not be verified | `503` |
+| [`NETWORK_UNREACHABLE`](/reference/errors/network-unreachable) | The Beaver server could not be reached | `503` |
+| [`RATE_LIMITED`](/reference/errors/rate-limited) | Too many requests | `429` |
+| [`TEMPORARY`](/reference/errors/temporary) | A temporary condition blocked the request | `503` |

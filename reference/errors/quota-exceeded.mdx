@@ -1,0 +1,47 @@
+---
+title: "QUOTA_EXCEEDED"
+sidebarTitle: "QUOTA_EXCEEDED"
+description: "What the QUOTA_EXCEEDED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["QUOTA_EXCEEDED", "A plan or quota limit was reached", "error", "failure", "beaver help QUOTA_EXCEEDED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**A plan or quota limit was reached**
+
+Current use has reached the limit; the response gives use, limit and options.
+
+| | |
+| --- | --- |
+| Code | `QUOTA_EXCEEDED` |
+| Kind | Plan and quota |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+Your plan or the workspace limit stopped the operation. The response shows the limit and what you asked for.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "QUOTA_EXCEEDED",
+    "message": "A plan or quota limit was reached",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "A plan or quota limit was reached"
+  }
+}
+```
+
+Look it up offline with `beaver help QUOTA_EXCEEDED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

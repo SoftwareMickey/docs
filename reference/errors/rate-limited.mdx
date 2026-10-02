@@ -1,0 +1,47 @@
+---
+title: "RATE_LIMITED"
+sidebarTitle: "RATE_LIMITED"
+description: "What the RATE_LIMITED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["RATE_LIMITED", "Too many requests", "error", "failure", "beaver help RATE_LIMITED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Too many requests**
+
+The caller is being rate limited; retry after the stated delay.
+
+| | |
+| --- | --- |
+| Code | `RATE_LIMITED` |
+| Kind | Temporary |
+| HTTP status | `429` |
+| CLI exit status | `1` |
+
+## What to do
+
+Read the conditions in the response: each says what was checked and how to fix it.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Too many requests"
+  }
+}
+```
+
+Look it up offline with `beaver help RATE_LIMITED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

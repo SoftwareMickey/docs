@@ -1,0 +1,47 @@
+---
+title: "PRECONDITION_FAILED"
+sidebarTitle: "PRECONDITION_FAILED"
+description: "What the PRECONDITION_FAILED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["PRECONDITION_FAILED", "Prerequisites for this operation are not met", "error", "failure", "beaver help PRECONDITION_FAILED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Prerequisites for this operation are not met**
+
+One or more prerequisites are unmet; each is listed as a condition with its repair.
+
+| | |
+| --- | --- |
+| Code | `PRECONDITION_FAILED` |
+| Kind | Eligibility |
+| HTTP status | `409` |
+| CLI exit status | `1` |
+
+## What to do
+
+Every requirement is listed with its status. Fix the failed ones — each has its own repair — then run the command again, or use `--check` to see the verdict without changing anything.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "PRECONDITION_FAILED",
+    "message": "Prerequisites for this operation are not met",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Prerequisites for this operation are not met"
+  }
+}
+```
+
+Look it up offline with `beaver help PRECONDITION_FAILED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

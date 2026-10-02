@@ -210,6 +210,23 @@ No changes were made.
 - A flag a command does not act on is reported (`note: --wait has no effect on …`) rather than
   silently ignored.
 - Quote the **Request ID** when you contact support. It never contains secrets.
+- **Signed out?** The CLI tells *why* — never signed in, session expired, session revoked, or ended
+  because your 2-step verification changed — and gives `beaver login`. In CI, set `BEAVER_TOKEN`.
+- **Not allowed?** The report names the workspace you are acting in and where that came from
+  (`--workspace`, `BEAVER_WORKSPACE`, or `beaver workspace use`), and the *role* (an Owner or Admin)
+  who can grant access. A resource you cannot see and one that does not exist give the same answer.
+- **Network problems** are classified — DNS, TLS (check the clock), refused, proxy, timeout — and
+  show only the host. After a timeout on a change, the report says it may have been applied; check
+  with `beaver status` before running it again.
+- **Safe to retry** is stated on every temporary failure. Reads retry on their own (up to 3 times,
+  honouring `Retry-After`, `BEAVER_NO_RETRY=1` turns it off); changes are **never** retried for you.
+- **Several targets at once** (for example `beaver cloud gateway add a b c`) print one table —
+  `RESULT`, `TARGET`, `REASON` — then the repairs, then counts. Any failure exits `1`; under `--json`
+  each target carries its own error document in `results[]`.
+- **Unexpected server errors** show a plain sentence and the Request ID, never database or stack
+  text; `--debug` prints what the server said.
+- `beaver help CLOUD_MACHINE_INELIGIBLE` (any error code) explains a code offline. Cancelling a
+  prompt (Esc, Ctrl+C, answering no) is reported as `Cancelled.`, not as a failure.
 
 ---
 
