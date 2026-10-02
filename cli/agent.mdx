@@ -31,6 +31,19 @@ beaver agent <subcommand>
 | `restart` | Restart the service. |
 | `status` | Show the service's current status. |
 | `logs` | Follow the service's logs. |
+| `tunnels` | Show or change how this machine coexists with other VPN tunnels. |
+
+## Tunnel coexistence
+
+`beaver agent tunnels` shows two per-machine safeguards, both on by default, and `beaver agent status` prints them:
+
+| Setting | What it does |
+| --- | --- |
+| `--pin-routes=on\|off` | Keep Beaver's own WireGuard traffic out of a full-tunnel VPN with host routes. Turn off only for an unusual host; a join may then fail its verification step. |
+| `--drift-reporting=off` | Stop reporting VPNs that appear or change after the machine joined a cloud. |
+
+Changing a setting needs root. There is no setting that lets Beaver modify another VPN's interfaces, routes or firewall rules.
+See [Beaver Cloud and other VPNs](/infrastructure/beaver-cloud-and-other-vpns).
 
 ## Consequences
 

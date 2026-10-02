@@ -1,0 +1,50 @@
+---
+title: "Beaver Cloud and other VPNs"
+sidebarTitle: "Cloud and other VPNs"
+description: "A machine can run ProtonVPN, a company WireGuard tunnel or several at once and still join a Beaver Cloud — Beaver checks, works beside them and never changes them."
+icon: "shield"
+type: concept
+audience: [operator]
+---
+
+A machine that already runs other VPN tunnels — a personal VPN, a company WireGuard link, Tailscale — can join a Beaver Cloud. Another tunnel being there is **never** a reason to refuse a machine, and you are never asked to remove or stop one. Beaver adds one interface of its own, `beaver0`, and leaves everything else exactly as it found it.
+
+## Why it works this way
+
+Beaver Cloud's private network is a WireGuard mesh between your machines, carried on an interface named `beaver0`. Other tunnels use their own interfaces, addresses, routes and firewall rules. Those are different objects, so the two can sit side by side — the same way two VPN clients on one laptop can. What can go wrong is not that two tunnels exist, but that they *collide*: the same address range, the same UDP port, or a route that sends one tunnel's packets into the other.
+
+## What Beaver checks
+
+Before a machine joins, and again whenever you re-check it, Beaver reads — without changing anything — the machine's interfaces, routes, routing rules, listening UDP ports and egress filters, then looks for the four collisions that actually matter:
+
+- **The reserved name.** The interface name `beaver0` is Beaver's. If something else already uses it, that is reported (it is the only name Beaver reserves).
+- **An overlapping range.** The cloud's private range must not overlap a network the machine already uses, including one a VPN claims.
+- **A taken UDP port.** If another interface already uses the cloud's WireGuard port, Beaver gives that machine a different port. Nothing about the other tunnel changes.
+- **A route that would capture Beaver's traffic.** A full-tunnel VPN sends *all* of a machine's traffic through itself, including Beaver's own WireGuard packets to the other machines. Beaver routes its own packets around such a tunnel (see below); a plain routing rule that overrides the main table cannot be worked around and is reported.
+
+Each finding names the interface and the evidence it is based on, so a result is something you can verify on the machine.
+
+## What Beaver never touches
+
+Beaver creates and removes only what it owns: its own interface, the routes it tags as its own, its own firewall chain and its own configuration. It does not edit, restart, reorder or remove another tunnel's interface, routes, policy rules or firewall rules, and there is no setting that lets it. Removing a machine from a cloud takes Beaver's pieces away and leaves the other tunnels exactly as they were.
+
+## Full-tunnel VPNs
+
+A full-tunnel VPN would otherwise swallow Beaver's connections to its peers. When the default route belongs to another tunnel, Beaver adds a host route for each peer's public address so its own packets leave through the normal network, and it checks that the path works before it confirms the join. A machine whose VPN firewall blocks all non-tunnel traffic (a "kill switch") is reported with a warning, and the join is only confirmed once Beaver's peers actually answer; if they cannot, the join is undone and the reason is shown.
+
+## After a machine has joined
+
+Installing or changing a VPN later can still affect the mesh. Beaver notices a new or changed tunnel on a member within minutes, records it on the cloud's timeline, and re-routes its own peer traffic if a new full-tunnel VPN would have captured it.
+
+## Limits
+
+- Beaver recognises WireGuard tunnels by what they are, not by their names. A VPN that is not a kernel WireGuard interface (for example Tailscale's userspace networking) is still protected from collisions through its addresses and routes, but it is not listed as a tunnel.
+- IPv6 tunnel ranges are counted but not checked for overlap.
+- A very old agent cannot tell tunnels apart. It is told to update, never to remove the VPN.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="A machine will not join because of a VPN" icon="triangle-alert" href="/operate/troubleshoot-cloud-vpns">What each finding means and what to do about it.</Card>
+  <Card title="beaver agent" icon="book" href="/cli/agent">Per-machine switches for pin routes and change reporting.</Card>
+</CardGroup>

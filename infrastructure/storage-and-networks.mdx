@@ -58,6 +58,8 @@ permanently. A bind mount ties data to one machine: if the workload moves, the d
 | **Host network** | A Docker network on one machine | Desktop machine **Networks** tab |
 
 Turn a cloud's private network on with `beaver cloud network enable <cloud>`. Which **projects** may reach each other across it is controlled by allow rules:
+
+Machines that already run other VPN tunnels can join: Beaver works beside them and never changes them. See [Beaver Cloud and other VPNs](/infrastructure/beaver-cloud-and-other-vpns).
 `beaver cloud network allows add --project-a <id> --project-b <id>`. A **gateway** is a member that also accepts public inbound traffic for the cloud
 (`beaver cloud gateway`).
 
