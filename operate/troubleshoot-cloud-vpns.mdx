@@ -1,0 +1,95 @@
+---
+title: "A machine will not join because of a VPN"
+sidebarTitle: "Cloud and VPN findings"
+description: "What each Beaver Cloud network finding means when a machine has WireGuard or another VPN, and the exact fix — without removing your VPN."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [operator]
+interfaces: [dashboard, desktop, cli]
+keywords: ["wireguard", "vpn", "protonvpn", "tailscale", "full tunnel", "kill switch", "beaver0", "cloud.wireguard", "cloud.cidr_conflict", "machine cannot join this cloud"]
+verified: source-reviewed
+lastVerified: 2026-10-02
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-02" />
+
+## What you see
+
+Adding a machine to a cloud, or running a check, lists the machine's network findings. Findings marked **information** or **warning** do not stop the join. Only the ones marked as failed do, and each names the interface and the reason.
+
+## Check first
+
+1. Run `beaver cloud machines add <machine> --cloud <cloud> --check` (or `beaver cloud preflight <machine>`). It changes nothing and lists every requirement.
+2. Read the failed line. Its text names the interface involved and what Beaver saw.
+3. Other VPN tunnels on the machine are **not** a problem and do not need to be removed or stopped.
+
+## Causes and fixes
+
+### `cloud.wireguard_foreign_present` — other tunnels were found
+
+Information only. Beaver found WireGuard interfaces that are not its own (for example `proton0` or `wg-office`) and left them untouched. Nothing to do.
+
+### `cloud.wireguard_port_reassigned` — the cloud's port is taken here
+
+Information only. Another interface already uses the cloud's UDP port, so Beaver gave this machine its own port and told the other machines. Nothing to do; the other tunnel is unchanged.
+
+### `cloud.wireguard_name_taken` — an interface called `beaver0` already exists
+
+Beaver reserves the name `beaver0`. If an interface with that name exists and Beaver did not create it, Beaver will not touch it. Rename or remove *that interface* (not your other VPNs), then re-check. If the finding says Beaver could not verify the interface, run the agent as root and re-check.
+
+### `cloud.wireguard_port_in_use` — no free UDP port
+
+Every port in 51820–51839 is taken on the machine. Free one of them, then re-check.
+
+### `cloud.cidr_conflict` — the cloud's range overlaps a network on the machine
+
+The finding names the interface or route that already uses the range, for example a VPN that routes `10.42.0.0/16`. Choose a different range for the cloud, or renumber the overlapping network. Add `--cidr` to a check to test a specific range.
+
+### `cloud.wireguard_policy_route` — a routing rule overrides the main table
+
+A rule on the machine sends all traffic through another table before Beaver's routes are consulted, so Beaver's private network could never be reached. The finding names the rule. Change the rule so traffic for Beaver's range stays in the main table, or use the VPN's standard configuration, which keeps more specific routes working. Beaver cannot work around this one.
+
+### `cloud.wireguard_full_tunnel` — a full-tunnel VPN is active
+
+A warning. A VPN such as ProtonVPN in full-tunnel mode carries all of the machine's traffic. Beaver adds routes so its own packets to its peers bypass the VPN and checks the path before confirming the join. Nothing to do. If the join is refused with a verification failure, the message names the step that failed.
+
+### `cloud.wireguard_underlay_captured` — a full-tunnel VPN would capture Beaver's traffic
+
+Shown only for an older agent that cannot route around a full-tunnel VPN. Update Beaver on the machine with `beaver update` and re-check. As an alternative, use a split-tunnel configuration for the VPN that excludes the other machines' public addresses.
+
+### `cloud.wireguard_pin_routes_disabled` — peer routes are switched off on this machine
+
+Someone switched off Beaver's peer routes on a machine that has a full-tunnel VPN, so the join will probably fail its verification. Turn them back on with `beaver agent tunnels --pin-routes=on` on the machine, then re-check.
+
+### `cloud.wireguard_killswitch` — an egress filter may block tunnel traffic
+
+A warning. A firewall rule on the machine appears to drop outbound traffic that does not use a VPN. Beaver does not edit other firewall rules. If the other machines do not connect, allow outbound UDP from Beaver's interface in that firewall. The join is only confirmed once a peer answers, and is undone if none does.
+
+### `cloud.wireguard_inspection_incomplete` — some facts could not be read
+
+A warning. The agent could not read routing or firewall state, usually because it does not run as root. Run the agent as root and re-check.
+
+### `cloud.wireguard_agent_outdated` — the agent is too old
+
+The agent cannot tell whether a tunnel conflicts with Beaver. Run `beaver update` on the machine and re-check. The VPN does not need to be removed.
+
+### Tailscale and similar
+
+Tailscale uses `100.64.0.0/10`. If the cloud's range overlaps it, Beaver reports a range conflict (`cloud.cidr_conflict`); otherwise the two coexist. Tailscale is not listed as a WireGuard tunnel when it runs in userspace.
+
+### The join is undone with a verification message
+
+When a join cannot be confirmed — for example `verification failed at handshake` or `verification failed at route` — Beaver puts the machine back exactly as it was and says which step failed. The other tunnels are never part of that undo.
+
+## Still stuck
+
+Run `beaver cloud preflight <machine>` and `beaver doctor` on the machine, then contact support at support@vectorihub.com with the request id shown in the failure.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Beaver Cloud and other VPNs" icon="arrow-left" href="/infrastructure/beaver-cloud-and-other-vpns">Why a VPN is not a reason to refuse a machine.</Card>
+  <Card title="Machine shows offline" icon="arrow-right" href="/operate/troubleshoot-machine-offline">If the agent is not connected at all.</Card>
+</CardGroup>
