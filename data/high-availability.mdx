@@ -1,0 +1,67 @@
+---
+title: "Service clusters"
+description: "Run a service across multiple members instead of one, for availability a single instance can't provide."
+keywords: ["service clusters", "database", "cache", "beaver service cluster"]
+sidebarTitle: "Service clusters"
+icon: "circle-nodes"
+type: howto
+audience: [operator]
+interfaces: [cli]
+---
+
+A **service cluster** runs a service across multiple members instead of one, so one member
+going down doesn't take your data access down with it.
+
+```bash
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+```
+
+## When it's worth the extra members
+
+A single-instance service going down takes your application's data access down with it. If
+that's a risk you're not willing to accept, or your workload has outgrown what one instance
+can serve, a cluster is the answer — check the reference for which service types support it.
+
+## What you can see and control
+
+Each member reports its own health independently, not just as one combined cluster status.
+You can resize the cluster (add or remove members), upgrade its version, and replace a
+member that's been lost. Not every operation guarantees zero downtime — check a specific
+action's availability impact before running it against a cluster serving live traffic.
+
+## If a cluster loses members
+
+If enough members are lost at once, the cluster may only serve part of its normal operations
+until replacements are added back. Recovering from that is a supported, explicit action —
+replacing the lost member — not something that happens automatically.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Services" href="/data/services-and-persistence">
+    A cluster is a configuration of a service, not a separate concept.
+  </Card>
+  <Card title="Backups and restoration" href="/data/backups-and-restore">
+    Still needed even with a cluster — availability isn't backup.
+  </Card>
+  <Card title="Service command reference" href="/cli/service">
+    Cluster create, resize, upgrade, and replace-member — exact syntax.
+  </Card>
+</CardGroup>
+
+## Commands
+
+```bash
+beaver service cluster create paperclip-cache --type redis-cluster --replicas 3
+beaver service cluster list
+beaver service cluster show paperclip-cache              # the cluster and its members
+beaver service cluster events paperclip-cache            # event timeline
+beaver service cluster resize paperclip-cache --help     # grow or shrink the member count
+beaver service cluster upgrade paperclip-cache --help    # roll a version upgrade one member at a time
+beaver service cluster replace-member paperclip-cache --help   # replace a permanently lost member
+beaver service cluster backup paperclip-cache            # back up from the preferred source member
+beaver service cluster delete paperclip-cache            # removes containers; data volumes are kept
+beaver service cluster delete-volumes paperclip-cache    # permanently destroys a deleted cluster's volumes
+```
+
+Not every service type has a cluster form, and some cannot be backed up as a cluster; see [Backups and restore](/data/backups-and-restore) and each type's page in the [catalog](/data/services).

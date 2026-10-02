@@ -1,0 +1,81 @@
+---
+title: "Choose your interface"
+sidebarTitle: "Choose your interface"
+description: "Dashboard, Desktop or CLI — what each is best at, what each cannot do, and why you can switch at any time."
+keywords: ["choose your interface", "beaver connect", "beaver workspace"]
+icon: "layout-dashboard"
+type: howto
+audience: [evaluator, developer]
+interfaces: [dashboard, desktop, cli]
+---
+
+Beaver has three interfaces. All three act on the **same workspace**, so nothing you do in one is stranded there — start
+where you are comfortable and switch whenever it helps.
+
+## The short answer
+
+<CardGroup cols={3}>
+  <Card title="Dashboard" icon="globe">
+    The web app. Best for **deploying from a repository, managing a team, and billing** without installing anything.
+  </Card>
+  <Card title="Desktop" icon="monitor">
+    The desktop app. Best for **seeing your whole infrastructure at once** — machines, clouds, services, volumes, networks.
+  </Card>
+  <Card title="CLI" icon="terminal">
+    The `beaver` command. Best for **scripts, CI, SSH sessions** — and required to connect a machine.
+  </Card>
+</CardGroup>
+
+## Which should I start with?
+
+| If you… | Start with | Why |
+| --- | --- | --- |
+| want to try Beaver with the least setup | **CLI**, then the Dashboard | Connecting a machine runs `beaver connect` on that machine; the Dashboard cannot do it for you. |
+| prefer clicking to typing and your code is on GitHub | **Dashboard** | Pick the repository, builder and cloud, set the port and environment, deploy. |
+| run several machines or clouds and want the picture | **Desktop** | One home screen with every machine, cloud, service, volume and network, each drilling into detail. |
+| deploy from CI or a script | **CLI** | Non-interactive flags (`--yes`, `--wait`, `--json`) are made for it — see [Run in CI](/deploy/ci-cd). |
+| manage people, roles, approvals and billing | **Dashboard** | The Team and Billing pages live there; the CLI has `beaver workspace` and `beaver billing` for the same. |
+
+## What each one can and cannot do
+
+<Tabs>
+  <Tab title="Dashboard">
+    **Can:** deploy from a connected repository; see projects, deployments and containers; read logs, set environment
+    variables and domains per deployment; configure load balancing, performance and firewall settings; manage
+    compose stacks ("Composers"), nodes, Beaver Clouds, Beaver Edge, managed services and incidents; use Activity and
+    Notifications; manage your team, plan and billing; set up 2-step verification.
+
+    **Cannot:** enrol a machine. A node appears in the Dashboard only after you run `beaver connect` on it.
+  </Tab>
+  <Tab title="Desktop">
+    **Can:** show every machine, Beaver Cloud, service, volume and network in your workspace, with a detail view for each;
+    show the approvals waiting for you and let you approve or reject them; host an Alie panel; keep your settings.
+    Where an infrastructure action would change something, Desktop shows you the equivalent `beaver` command.
+
+    **Cannot (today):** most infrastructure changes — enrolling machines, creating clouds, deploying — run through the CLI
+    or the Dashboard; Desktop is mainly a place to look and to understand. The Deployments and Observability sections are not shown in the sidebar yet.
+  </Tab>
+  <Tab title="CLI">
+    **Can:** the broadest set of actions — nearly every capability is a command — plus anything non-interactive: run it in
+    CI, over SSH, or in a script. Every command works directly from your terminal.
+
+    **Cannot:** give you a picture. For topology and at-a-glance health, use the Desktop app or the Dashboard.
+  </Tab>
+</Tabs>
+
+## You can switch at any time
+
+Sign in with the same account everywhere. A project you deployed from the CLI shows up in the Dashboard; a machine you
+connected on a server shows up in Desktop.
+
+## Go deeper
+
+[Interfaces overview](/interfaces/overview) · [Capability matrix](/interfaces/capability-matrix) · [How state is shared](/interfaces/how-state-is-shared) — the full task-by-task comparison.
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="CLI quickstart" icon="terminal" href="/start/quickstart-cli">Install, connect, deploy.</Card>
+  <Card title="Dashboard quickstart" icon="globe" href="/start/quickstart-dashboard">Deploy from the web.</Card>
+  <Card title="Desktop quickstart" icon="monitor" href="/start/quickstart-desktop">Install and explore.</Card>
+</CardGroup>

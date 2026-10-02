@@ -1,0 +1,307 @@
+{
+ "passed": 19,
+ "total": 30,
+ "rate": 0.633,
+ "tasks": [
+  {
+   "n": 1,
+   "task": "Which interface should I start with?",
+   "target": "start/choose-your-interface",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 2,
+   "task": "Deploy a Dockerfile app from GitHub",
+   "target": "deploy/from-github",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 3,
+   "task": "Deploy from my laptop without GitHub",
+   "target": "deploy/from-local-project",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 4,
+   "task": "Deploy a docker-compose app",
+   "target": "deploy/compose-applications",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 5,
+   "task": "Set an environment variable",
+   "target": "deploy/environment-variables",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 2,
+   "rank_keywords": 2,
+   "pass": true
+  },
+  {
+   "n": 6,
+   "task": "My build fails",
+   "target": "operate/troubleshoot-build",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 7,
+   "task": "Add a custom domain",
+   "target": "network/domains",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 5,
+   "rank_keywords": 5,
+   "pass": false
+  },
+  {
+   "n": 8,
+   "task": "My domain doesn't resolve",
+   "target": "operate/troubleshoot-domain",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 9,
+   "task": "App returns 502/503",
+   "target": "operate/troubleshoot-502-503",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 10,
+   "task": "Roll back a bad release",
+   "target": "deploy/rollback-and-recovery",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 7,
+   "rank_keywords": 7,
+   "pass": false
+  },
+  {
+   "n": 11,
+   "task": "Promote staging to production",
+   "target": "deploy/promote",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 2,
+   "rank_keywords": 2,
+   "pass": true
+  },
+  {
+   "n": 12,
+   "task": "Scale to more replicas",
+   "target": "deploy/scale",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 2,
+   "rank_keywords": 2,
+   "pass": true
+  },
+  {
+   "n": 13,
+   "task": "Connect my first machine",
+   "target": "infrastructure/connect-a-machine",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 2,
+   "rank_keywords": 2,
+   "pass": true
+  },
+  {
+   "n": 14,
+   "task": "Machine shows offline",
+   "target": "operate/troubleshoot-machine-offline",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 15,
+   "task": "Create a Beaver Cloud",
+   "target": "infrastructure/clouds",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 16,
+   "task": "Set up an AWS machine",
+   "target": "infrastructure/aws",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 17,
+   "task": "Create a Postgres database",
+   "target": "data/create-a-service",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 18,
+   "task": "Get my database connection string",
+   "target": "data/credentials-and-connection-strings",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 19,
+   "task": "Connect to my database from my laptop",
+   "target": "data/connect-locally",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 20,
+   "task": "Back up and restore a database",
+   "target": "data/backups-and-restore",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 6,
+   "rank_keywords": 6,
+   "pass": false
+  },
+  {
+   "n": 21,
+   "task": "Invite a teammate",
+   "target": "teams/invite-members",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 22,
+   "task": "Give someone production access / approvals",
+   "target": "teams/production-approvals",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 23,
+   "task": "Turn on 2-step verification",
+   "target": "teams/two-step-verification",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 24,
+   "task": "Why can't I deploy \u2014 plan limit",
+   "target": "operate/troubleshoot-plan-limit",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 25,
+   "task": "Connect an AI provider for Alie",
+   "target": "alie/connect-an-ai-provider",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 26,
+   "task": "Use the Desktop app to see my machines",
+   "target": "interfaces/desktop/infrastructure-home-machines-clouds",
+   "in_nav": false,
+   "clicks": null,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 27,
+   "task": "Find a feature in the Dashboard (e.g. build minutes)",
+   "target": "interfaces/dashboard/activity-usage-billing",
+   "in_nav": false,
+   "clicks": null,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 28,
+   "task": "Run deploys from CI",
+   "target": "deploy/ci-cd",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": 1,
+   "rank_keywords": 1,
+   "pass": true
+  },
+  {
+   "n": 29,
+   "task": "Open ports a machine needs",
+   "target": "infrastructure/firewall-requirements",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  },
+  {
+   "n": 30,
+   "task": "Is X Dashboard/Desktop/CLI capable of Y?",
+   "target": "interfaces/capability-matrix",
+   "in_nav": true,
+   "clicks": 2,
+   "rank_full": null,
+   "rank_keywords": null,
+   "pass": false
+  }
+ ]
+}

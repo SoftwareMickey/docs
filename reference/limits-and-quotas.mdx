@@ -1,0 +1,62 @@
+---
+title: "Limits and quotas"
+sidebarTitle: "Limits and quotas"
+description: "Plan limits, the ranges a configuration value accepts, default service sizes and the time windows that apply to invitations, approvals and history."
+icon: "gauge"
+type: reference
+audience: [developer, operator, team-lead]
+keywords: ["limits", "quota", "plan limit", "retention", "max replicas", "seats", "your plan allows up to"]
+---
+
+import PlanLadder from "/snippets/plan-ladder.mdx";
+import ServiceSizes from "/snippets/service-default-sizes.mdx";
+
+Values on this page were checked against Beaver's source on **2026-10-02**. Plan numbers come from one generated table, so they are the same here as on [Plans and billing](/teams/plans-and-billing); they change when plans change, so treat that page and your workspace's own **Billing** view as authoritative for what you pay.
+
+## Plan limits
+
+<PlanLadder />
+
+When an action would pass a plan limit, Beaver refuses it with `PLAN_LIMIT_REACHED` and says which limit. See [A plan limit blocks an action](/operate/troubleshoot-plan-limit). A downgrade shows what would change before you confirm ([Downgrades and retention](/teams/downgrades-and-retention)).
+
+## Values a configuration accepts
+
+| Setting | Range |
+| --- | --- |
+| Replicas per deployment | `1`–`50` |
+| CPU per container | up to `64` cores |
+| Memory per container | `6`–`262144` MB |
+| Container port | `0`–`65535` |
+| Rollout strategy | `rolling` or `recreate` |
+| Size of `.beaver/config.yml` | 64 KiB |
+| Service env prefix | a capital letter, then `A`–`Z`, `0`–`9`, `_`; up to 64 characters |
+
+Field by field: [`.beaver/config.yml` reference](/reference/deployment-specification).
+
+## Default service allocation
+
+A managed service starts with this much CPU, memory and disk unless you resize it ([Resize and upgrade](/data/resize-and-upgrade)). Whether a type needs persistent storage is part of the type.
+
+<ServiceSizes />
+
+## Time windows
+
+| What | How long |
+| --- | --- |
+| A workspace invitation stays valid | 7 days. It uses a seat from the moment it is sent |
+| A production approval request waits for an Owner or Admin | 24 hours |
+| An approved request can be used | 1 hour, once, for that exact action |
+| The 2-step verification grace period a new rule gives members | 7 days by default; the Owner can set 0–30 |
+| Logs, traces and the activity log are kept | Per plan — see the table above |
+| `--wait` waits for an operation | 5 minutes by default (`--timeout`) |
+
+## Rate limits you set
+
+Beaver does not publish a platform request quota. The rate limits you control are firewall policies on your own deployments: `beaver firewall policy set <deployment> --rate-limit <requests-per-minute>` ([Rate limiting](/network/rate-limiting)).
+
+## When you reach one
+
+<CardGroup cols={2}>
+  <Card title="Plan limit" icon="triangle-alert" href="/operate/troubleshoot-plan-limit">Refused because of your plan.</Card>
+  <Card title="Plans and billing" icon="credit-card" href="/teams/plans-and-billing">Compare plans and change yours.</Card>
+</CardGroup>

@@ -3,10 +3,11 @@ title: "beaver compose"
 sidebarTitle: "compose"
 description: "Detect, deploy, and operate multi-service Docker Compose stacks."
 icon: "layer-group"
+type: reference
 ---
 
 <Info>
-  New here? [Compose applications](/concepts/compose-applications) explains what this is and when to use it, before diving into syntax.
+  New here? [Compose applications](/deploy/compose-applications) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -17,7 +18,7 @@ deliberately-explicit counterpart to [`beaver deploy`](/cli/deploy) — Beaver n
 that a Compose file beside a Dockerfile means you wanted a multi-service release, so use this
 command directly when that's what you want.
 
-Every Compose deployment requires a [Beaver Cloud](/concepts/beaver-cloud). The wizard
+Every Compose deployment requires a [Beaver Cloud](/infrastructure/beaver-cloud). The wizard
 selects a cloud; for CI, pass `--cloud production` or save `cloud: production` in
 `.beaver/config.yml`. Beaver chooses the builder and the host for the stack from that cloud.
 If you have no cloud, run `beaver cloud create production` and add your machines first.
@@ -171,5 +172,5 @@ beaver compose release rollback rel_xyz789 --target-release rel_prev456
 
 ## Used in
 
-- [Deployment configuration](/deploying/deployment-configuration) — compose services follow
+- [Deployment configuration](/deploy/deployment-configuration) — compose services follow
   the same configuration model as a single-service deploy.

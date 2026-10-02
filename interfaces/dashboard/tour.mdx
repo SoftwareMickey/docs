@@ -1,0 +1,105 @@
+---
+title: "Dashboard tour and navigation"
+sidebarTitle: "Tour and navigation"
+description: "The Dashboard's sidebar, workspace switcher and home screen: what each item opens and which ones depend on your plan or workspace."
+icon: "layout-dashboard"
+type: interface
+audience: [evaluator, developer, operator, team-lead]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+The Dashboard is Beaver's web app. After you sign in you land on **Dashboard**, a summary of the active workspace, with the sidebar down the left. This page says where things are; the how-to pages say how to do them.
+
+## The sidebar
+
+The top of the sidebar holds the **workspace switcher** — it shows the workspace you are acting in and lets you switch or create one (see [Switch workspaces](/teams/switch-workspaces)). Below it are two groups.
+
+| Group | Item | Opens | Learn more |
+| --- | --- | --- | --- |
+| Overview | **Dashboard** | The home summary (below) | This page |
+| Overview | **Containers** | Every container, with health and filters | [Projects, deployments and containers](/interfaces/dashboard/projects-and-deployments) |
+| Overview | **Projects** | Your projects and their environments | [Projects, deployments and containers](/interfaces/dashboard/projects-and-deployments) |
+| Overview | **Composers** | Compose stacks | [Projects, deployments and containers](/interfaces/dashboard/projects-and-deployments) |
+| Overview | **Nodes** | Your enrolled machines | [Nodes, clouds, Edge and incidents](/interfaces/dashboard/nodes-clouds-edge) |
+| Overview | **Beaver Edge** | Connected apps behind Beaver Edge | [Nodes, clouds, Edge and incidents](/interfaces/dashboard/nodes-clouds-edge) |
+| Overview | **Activity** | Following, Explore, Saved and Workspace feeds; publishing | [Activity, notifications and billing](/interfaces/dashboard/activity-notifications-billing) |
+| Overview | **Integrations** | GitHub and other connected services | [Team and settings](/interfaces/dashboard/team-and-settings) |
+| General | **Team** | Team management — **only in a team workspace** | [Team and settings](/interfaces/dashboard/team-and-settings) |
+| General | **Billing** | Plan, seats and payments | [Activity, notifications and billing](/interfaces/dashboard/activity-notifications-billing) |
+| General | **Notifications** | Your inbox | [Activity, notifications and billing](/interfaces/dashboard/activity-notifications-billing) |
+| General | **Settings** | Personal settings (profile, security, sign-in methods, devices) | [Team and settings](/interfaces/dashboard/team-and-settings) |
+
+At the bottom are the theme switcher, an **Upgrade to Developer** shortcut when your plan is lower, and **Log out**. A small badge shows the plan of the active workspace.
+
+<Note>
+**Team** appears only when the active workspace is a team workspace. On a personal workspace, **Billing** shows a card for working with a team instead.
+</Note>
+
+### Pages without a sidebar item
+
+Some screens are reached from a link on another page, not from the sidebar:
+
+| Screen | Reached from |
+| --- | --- |
+| **Incidents** | The home summary's "Open incidents", and deployment pages |
+| **Clouds** (Beaver Clouds) | Deployment details and the managed services page |
+| **Managed services** | The home summary and the **Create managed service** shortcut |
+| **Deployment history** | **Recent deployments → View all deployments** on the home screen |
+
+Other pages open from emails, links or a prompt, and have no menu entry:
+
+| Page | Opens when |
+| --- | --- |
+| **Approve this device** | The CLI or Desktop sends you to approve a sign-in; check the code shown matches, then approve |
+| **Accept invitation** | You open a team invitation link — see [Invite members](/teams/invite-members) |
+| **Onboarding: connect repositories** | After your first sign-in, to connect GitHub — see [Dashboard quickstart](/start/quickstart-dashboard) |
+| **Checkout** and **Checkout cancelled** | You return from a hosted checkout — see [Plans and billing](/teams/plans-and-billing) |
+| **Alie** (session) | You choose **Ask Alie** on a deployment — see [What is Alie](/alie/what-is-alie) |
+| **Public profile** | You open a builder's name in Activity |
+
+### Inside a deployment
+
+When you open a deployment, the sidebar collapses to icons and the deployment gets its own tab bar: **Overview**, **Deployments**, **Domains**, **Logs**, **Traffic**, **Load Balancing**, **Performance**, **Firewall**, **Environments**, **Github Branch** and **Settings**. They are described in
+[Projects, deployments and containers](/interfaces/dashboard/projects-and-deployments).
+
+<Shot name="dashboard/home" alt="The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, services, requests and incidents, then panels for applications, infrastructure, managed services and edge above recent deployments." />
+
+## The home screen
+
+The **Dashboard** page summarises the workspace. A banner at the top says **Everything operational** or **Needs your action**, with counts for **Unread notifications**, **Needs acknowledgement** and **Pending approvals**.
+
+| Panel | Shows |
+| --- | --- |
+| **Applications & workloads** | Running, Deploying, Failed and Total |
+| **Infrastructure** | Machine health: Healthy, Degraded, Offline; Firing alerts |
+| **Managed services** | Healthy and Unhealthy services |
+| **Edge** | Connected apps, Healthy origins, Unverified |
+| **Recent activity** | The latest workspace activity, with **View all activity** |
+| **Recent deployments** | The latest deployments, with **View all deployments** |
+| **Usage** | Plan usage, with **View billing** |
+
+The header offers **Deploy application**, **Create project**, **Connect machine** and **Create managed service**. In an empty workspace the screen guides you through *Connect GitHub*, *Connect a machine* and *Deploy your first application*.
+
+<Warning>
+**Connect machine** does not enrol a machine from the browser: enrolment is done with [`beaver connect`](/infrastructure/connect-a-machine) on the machine, and **Create managed service** opens the Managed services list — creating a service is a [CLI action](/data/create-a-service).
+</Warning>
+
+When the live connection to Beaver drops, a **Reconnecting — live updates are paused** notice appears; the numbers refresh once it is back.
+
+## Same task in the other interfaces
+
+See the [capability matrix](/interfaces/capability-matrix). For the same overview in Desktop, open **Infrastructure** — [Desktop shell tour](/interfaces/desktop/shell-tour).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Dashboard quickstart" icon="rocket" href="/start/quickstart-dashboard">Deploy your first app from the web.</Card>
+  <Card title="Common Dashboard workflows" icon="route" href="/interfaces/dashboard/workflows">A map of the things people do here.</Card>
+</CardGroup>

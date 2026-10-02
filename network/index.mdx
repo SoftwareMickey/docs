@@ -1,0 +1,42 @@
+---
+title: "Networking and security"
+sidebarTitle: "Overview"
+description: "Domains and routing, Beaver Edge, and the firewall — how traffic reaches your app and what is allowed."
+icon: "shield"
+type: hub
+audience: [developer, operator, security]
+---
+
+How traffic reaches your application, and what is allowed to. The first sections cover domains and routing; the rest
+cover Beaver Edge and the firewall.
+
+<Tip>
+**Start here:** [Domains](/network/domains) — the default address, attaching your own domain, and certificates.
+</Tip>
+
+## Do
+
+<CardGroup cols={2}>
+  <Card title="Domains" icon="globe" href="/network/domains">Default address and your own domain.</Card>
+  <Card title="TLS and route checks" icon="lock" href="/network/tls">Certificates, and DNS-to-backend health in one command.</Card>
+  <Card title="Beaver Edge" icon="zap" href="/network/beaver-edge">Front an existing server with Beaver's proxy, firewall and Speed Insights.</Card>
+  <Card title="Load balancing and rollouts" icon="split" href="/network/load-balancing">Spread across replicas; blue/green and canary.</Card>
+  <Card title="Firewall" icon="shield" href="/network/firewall">Priority rules — the first match wins.</Card>
+  <Card title="Rate limiting" icon="gauge" href="/network/rate-limiting">Caps, per-path limits, login protection.</Card>
+  <Card title="Access controls" icon="key-round" href="/network/access-controls">Reach, change, sign in — three controls.</Card>
+  <Card title="Secrets" icon="key" href="/network/secrets">What is stored where, and when it is revealed.</Card>
+</CardGroup>
+
+## Security
+
+[Security checklist](/network/security-checklist) · [Shared responsibility](/network/shared-responsibility) ·
+[Firewall requirements on your servers](/infrastructure/firewall-requirements) · [2-step verification](/teams/two-step-verification)
+
+## Understand
+
+[Domains and routing](/network/domains-and-routing)
+
+## Look up
+
+[`beaver firewall`](/cli/firewall) · [`beaver edge`](/cli/edge) · [`beaver domain`](/cli/domain) ·
+[`beaver route`](/cli/route)

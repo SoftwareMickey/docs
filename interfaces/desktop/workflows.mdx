@@ -1,0 +1,52 @@
+---
+title: "Common Desktop workflows"
+sidebarTitle: "Common workflows"
+description: "What people do in Beaver Desktop — survey the fleet, inspect a machine, check a service, decide an approval, deploy a local project, ask Alie — each linked to its guide."
+icon: "route"
+type: interface
+audience: [developer, operator, team-lead]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Desktop is where you look, understand and decide; where something has to change it hands you the exact command. Each workflow below names where to start and where to read more.
+
+## As an operator
+
+| Workflow | Where | Guide |
+| --- | --- | --- |
+| Survey everything you run | **Infrastructure** | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+| Find out why a machine is unhealthy | **Machines → machine → Overview, Events, Logs** | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+| See how much room a cloud has left | **Beaver Cloud → Capacity** | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+| Check a service's health and connection | **Services → service** | [Networks, storage and services](/interfaces/desktop/networks-storage-services) |
+| Know what is publicly exposed | **Machines → machine → Networks, Security** | [Infrastructure, machines and clouds](/interfaces/desktop/infrastructure) |
+
+## As a developer
+
+| Workflow | Where | Guide |
+| --- | --- | --- |
+| Open a project and see how Beaver reads it | **Open folder…** | [Terminal and projects](/interfaces/desktop/terminal-and-projects) |
+| Deploy a local project | **Deploy this → Deploy in terminal** | [Deploy from a local project](/deploy/from-local-project) |
+| Get the right command for a task | **Add Machine**, **Create Cloud**, **Add Service** | [Shell tour](/interfaces/desktop/shell-tour) |
+| Ask Alie to diagnose something | **Alie** | [Approvals, Alie and traces](/interfaces/desktop/approvals-and-alie) |
+| Replay what Alie did | **Traces** | [Approvals, Alie and traces](/interfaces/desktop/approvals-and-alie) |
+
+## As a team lead
+
+| Workflow | Where | Guide |
+| --- | --- | --- |
+| Decide a production approval | **Approvals** | [Production approvals](/teams/production-approvals) |
+| Switch between workspaces | The workspace switcher | [Switch workspaces](/teams/switch-workspaces) |
+| Limit what Alie can do | **Settings → Automation Policy** | [Desktop settings](/interfaces/desktop/settings) |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Shell tour" icon="monitor" href="/interfaces/desktop/shell-tour">The frame and shortcuts.</Card>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">What else can be done where.</Card>
+</CardGroup>

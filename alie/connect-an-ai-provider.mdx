@@ -1,0 +1,65 @@
+---
+title: "Connect an AI provider"
+sidebarTitle: "Connect a provider"
+description: "Give Alie a model by connecting your own provider API key — either kept on one machine or stored encrypted in Beaver."
+keywords: ["connect an ai provider", "connect a provider", "ai assistant", "beaver ai provider", "beaver ai connect"]
+icon: "plug"
+type: howto
+audience: [developer]
+interfaces: [desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Alie runs on a provider key **you** supply. There are two ways to connect one, and they differ in where the key lives.
+
+| Path | Where the key lives | Use it when |
+| --- | --- | --- |
+| `beaver ai connect` | **Only on this machine**, used by the local background agent. It never leaves the machine. | The normal case, and the interactive one |
+| `beaver ai provider add` | **Encrypted at rest in Beaver**; used only when no machine-local connection exists for that provider | CI or non-interactive setup, or when the connection must not depend on one machine being online |
+
+<Note>
+Not every provider that is listed is usable yet. `beaver ai connect`'s menu currently lists OpenAI and Anthropic as usable; others are shown but not enabled. Read the menu's own status when you run it — it can change.
+</Note>
+
+## Connect
+
+<Tabs>
+  <Tab title="Dashboard"><Note>Provider connections are managed from the CLI and Desktop.</Note></Tab>
+  <Tab title="Desktop">**Settings → AI Harnesses** lists connections and their status; **Settings → Alie** holds Alie's own settings.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver ai connect                  # interactive; pick a provider and paste its key
+    beaver ai providers                # every connected provider
+    beaver ai models --provider openai # models available for a connected provider
+    beaver alie status                 # connected providers and their available models
+    ```
+    Cloud-stored fallback, for scripts: `beaver ai provider add --provider openai --api-key-stdin` (then `beaver ai provider test <provider-id>`). Remove a connection with `beaver ai disconnect <provider>`
+    or `beaver ai provider remove <provider-id>`.
+  </Tab>
+</Tabs>
+
+## Choose the model
+
+```bash
+beaver alie model-profile                                    # the workspace default provider and model
+beaver alie model-profile set --provider openai --model <model-id> --latency balanced
+beaver alie model --model <model-id> --effort medium         # change one session's model
+```
+
+`--latency` is `fast`, `balanced` or `quality`; `--effort` is the reasoning effort where the model supports it.
+
+## If it fails
+
+See [Alie troubleshooting](/alie/troubleshooting).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Sessions and context" icon="messages-square" href="/alie/sessions-and-context">Start, resume and manage chats.</Card>
+  <Card title="Spending controls" icon="wallet" href="/alie/spending-controls">Cap what Alie can spend.</Card>
+</CardGroup>

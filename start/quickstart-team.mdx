@@ -1,0 +1,82 @@
+---
+title: "Quickstart: set up a team workspace"
+sidebarTitle: "Quickstart: Team"
+description: "Turn your workspace into a team, invite someone, and see how production approvals work."
+keywords: ["quickstart", "team", "invite", "workspace", "roles", "get started"]
+icon: "users"
+type: tutorial
+audience: [team-lead]
+interfaces: [dashboard, desktop, cli]
+time: "15 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Make your workspace a **team workspace**, invite a teammate with a role, and watch the production safeguard work. Nothing you
+already have moves — projects, machines, services and secrets stay where they are.
+
+<Note>
+Only the workspace **Owner** can buy a plan, and Team is a paid plan. If you are not the Owner, ask them with
+`beaver billing request-upgrade --plan team`; nothing is charged by a request. See [Plans and billing](/teams/plans-and-billing).
+</Note>
+
+## Steps
+
+<Steps>
+  <Step title="Confirm the workspace">
+    ```bash
+    beaver workspace show
+    ```
+    Shows the active workspace, your role, its plan and seats. Switch with `beaver workspace use <name>` if you belong to several.
+  </Step>
+  <Step title="Get Team">
+    Follow [Create a team](/teams/create-a-team) — price it with `beaver billing quote`, then check out. Your workspace converts
+    in place with you as Owner.
+  </Step>
+  <Step title="Invite a teammate">
+    <Tabs>
+      <Tab title="Dashboard">Open **Team → Members** and invite by email with a role.</Tab>
+      <Tab title="Desktop"><Note>Inviting is not available in Desktop — use the Dashboard or the CLI.</Note></Tab>
+      <Tab title="CLI">
+        ```bash
+        beaver workspace invite ada@example.com --role developer
+        ```
+      </Tab>
+    </Tabs>
+    They receive an email with a link. See [Invite members](/teams/invite-members).
+  </Step>
+  <Step title="Watch the safeguard">
+    A **Developer** can deploy freely everywhere except **protected environments** (production), where they must ask an Owner or
+    Admin. The request waits up to 24 hours; **you cannot approve your own request**. See
+    [Production approvals](/teams/production-approvals).
+  </Step>
+  <Step title="Decide a request">
+    <Tabs>
+      <Tab title="Dashboard">**Team → Approvals** lists requests; approve or reject with an optional note.</Tab>
+      <Tab title="Desktop">**Approvals** lists requests; approve or reject there.</Tab>
+      <Tab title="CLI">
+        ```bash
+        beaver workspace approvals
+        beaver workspace approvals approve <id> --note "ship it"
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>
+
+## Result
+
+Your team has an Owner, a Developer and a working approval path for production.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Roles and permissions" icon="key-round" href="/teams/roles-and-permissions">What each role can do.</Card>
+  <Card title="Working in a shared workspace" icon="layout-grid" href="/teams/working-in-a-shared-workspace">Switching and approvals day to day.</Card>
+</CardGroup>

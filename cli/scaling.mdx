@@ -3,10 +3,11 @@ title: "beaver scaling"
 sidebarTitle: "scaling"
 description: "Configure replica count and autoscaling, and manage staged/canary rollout traffic."
 icon: "gauge"
+type: reference
 ---
 
 <Info>
-  New here? [Scaling and resources](/concepts/scaling-and-resources) explains what this is and when to use it, before diving into syntax.
+  New here? [Scaling and resources](/deploy/scaling-and-resources) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -180,7 +181,7 @@ beaver scaling canary api --steps 5,25,75,100 --step-interval 10m --error-band 2
 
 ## Used in
 
-- [Scaling: manual vs. automatic](/guides/scaling) — the full guide this page is the
+- [Scaling: manual vs. automatic](/deploy/scale) — the full guide this page is the
   reference for.
 - [`cloud` workload placement](/cli/cloud#workload-placement) — governs *where* replicas
   land; this page governs *how many* there are.

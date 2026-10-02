@@ -1,0 +1,98 @@
+---
+title: "RabbitMQ"
+sidebarTitle: "RabbitMQ"
+description: "Provision a managed RabbitMQ message broker and attach it to your application."
+keywords: ["rabbitmq", "database", "cache", "beaver service catalog", "beaver service create"]
+icon: "right-left"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+RabbitMQ is a message broker — used for task queues, work distribution, and decoupling
+services via publish/subscribe or point-to-point messaging.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    3.13 (default), 4.0 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance by default; check `beaver service cluster create` for clustered setups.
+  </Card>
+  <Card title="Messaging areas" icon="table">
+    One service can host multiple isolated vhosts, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `rabbitmq` — `beaver service create <name> --type rabbitmq` |
+| Versions | 3.13 (default), 4.0 — confirm with `beaver service catalog` |
+| Default size | 1 CPU · 1024 MB memory · 10 GB storage — change with `beaver service resize` |
+| Default port | 5672 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | vhost — each attached app gets its own, with its own credential |
+| Variables injected on attach | `RABBITMQ_URL`, `RABBITMQ_HOST`, `RABBITMQ_PORT`, `RABBITMQ_NAME`, `RABBITMQ_USER`, `RABBITMQ_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-queue --type rabbitmq
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-queue --container paperclip-web --env-prefix RABBITMQ
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-queue
+beaver service resize paperclip-queue --cpu 1 --memory 512
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import amqp from "amqplib";
+const conn = await amqp.connect(process.env.RABBITMQ_URL);
+const ch = await conn.createChannel();
+```
+```python Python
+import os, pika
+conn = pika.BlockingConnection(pika.URLParameters(os.environ["RABBITMQ_URL"]))
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 5672` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** `beaver service backup <name>` takes a manual backup; see [Backups and restore](/data/backups-and-restore) for schedules, destinations and restore.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

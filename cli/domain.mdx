@@ -3,10 +3,11 @@ title: "beaver domain"
 sidebarTitle: "domain"
 description: "Attach, verify, and remove custom domains for a deployed container."
 icon: "at"
+type: reference
 ---
 
 <Info>
-  New here? [Domains and routing](/concepts/domains-and-routing) explains what this is and when to use it, before diving into syntax.
+  New here? [Domains and routing](/network/domains-and-routing) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -52,7 +53,7 @@ still control those at your registrar.
 
 `repoint` keeps the domain, its certificate and its history; only the record you must create
 changes. Domains attached with an A record, and domains attached to a cloud, are not affected. See
-[Domains](/guides/domains) for background.
+[Domains](/network/domains) for background.
 
 ## Examples
 
@@ -91,5 +92,5 @@ beaver domain certificate dom_abc123
 
 ## Used in
 
-- [Deployment configuration](/deploying/deployment-configuration) — domains are part of a
+- [Deployment configuration](/deploy/deployment-configuration) — domains are part of a
   service's public routing configuration.

@@ -1,0 +1,87 @@
+---
+title: "Your first machine"
+sidebarTitle: "1. First machine"
+description: "Connect a Linux machine you own, give it a role, and confirm it shows up in Beaver."
+keywords: ["connect a machine", "beaver connect", "first server", "enroll a machine", "getting started"]
+icon: "plug"
+type: tutorial
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+time: "10 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Enrol one machine so Beaver can build and run applications on it. Enrolling is done **on the machine**, in a terminal — the Dashboard
+and Desktop show the machine afterwards but cannot enrol it for you.
+
+## Before you start
+
+- A Linux machine you own: Ubuntu, Debian or Rocky Linux, amd64 or arm64, with Docker and Git and outbound internet access.
+  Connected Builder and Host machines must be Linux. Prepare a provider machine first if needed:
+  [providers](/infrastructure/providers), and check [the ports it must allow](/infrastructure/firewall-requirements).
+- The [Beaver CLI installed](/install/cli) on it, and a Beaver account.
+
+## Steps
+
+<Steps>
+  <Step title="Check the machine">
+    ```bash
+    beaver doctor
+    ```
+    Read-only. Fix anything it reports before continuing — it catches missing Docker or Git early. See [Beaver doctor](/install/doctor).
+  </Step>
+  <Step title="Sign in">
+    ```bash
+    beaver login            # on a server with no browser: beaver login --no-browser
+    ```
+  </Step>
+  <Step title="Connect it">
+    ```bash
+    beaver connect
+    ```
+    Choose a role when asked: **Builder + Host** for a first setup (one machine that builds and runs your app). If something is
+    missing, `connect` says what instead of letting you continue. Interrupted? Run it again — it resumes.
+  </Step>
+</Steps>
+
+## Verify it worked
+
+<Tabs>
+  <Tab title="Dashboard">
+    The machine appears under **Nodes**. A node that has not been enrolled shows a message to run `beaver connect`.
+  </Tab>
+  <Tab title="Desktop">
+    The machine appears as a card on the **Infrastructure** home and in **Machines**, with its health, containers and resources.
+  </Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver machine list
+    beaver server --list
+    ```
+  </Tab>
+</Tabs>
+
+## If it fails
+
+- Docker missing or not running, or a permission error using Docker (add your user to the `docker` group) — see
+  [the connect troubleshooting](/infrastructure/connect-a-machine#troubleshooting).
+- The machine cannot reach the internet — check outbound rules and any proxy.
+- Already enrolled under another account — remove it from that account first, or use a different machine.
+
+## Clean up
+
+`beaver machine remove <machine-id>` makes Beaver forget the machine (permanent, no undo). The machine itself is never touched.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="First cloud" icon="cloud" href="/start/first-cloud">Put the machine in a Beaver Cloud.</Card>
+  <Card title="Machines and roles" icon="hammer" href="/infrastructure/machines-and-roles">Split Builder and Host later.</Card>
+</CardGroup>

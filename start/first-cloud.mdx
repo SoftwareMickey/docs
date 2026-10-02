@@ -1,0 +1,85 @@
+---
+title: "Your first Beaver Cloud"
+sidebarTitle: "2. First cloud"
+description: "Group your machine into a Beaver Cloud — the destination every deployment runs in."
+keywords: ["create a cloud", "first cloud", "beaver cloud create", "add machine to cloud", "getting started"]
+icon: "cloud"
+type: tutorial
+audience: [operator, developer]
+interfaces: [dashboard, desktop, cli]
+time: "5 min"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Create a **Beaver Cloud** — a named group of your machines — containing the machine you connected. Every application deployment runs in a
+cloud, **including a one-machine setup**. A cloud is an organizing layer on your own infrastructure; Beaver does not provision or bill for
+anything beneath it.
+
+<Note>
+Creating a cloud is a CLI action. The Dashboard and Desktop show clouds once they exist, but neither creates one.
+</Note>
+
+## Before you start
+
+[Connect a machine](/start/first-machine) with the **Builder + Host** role (or at least one Builder and one Host).
+
+## Steps
+
+<Steps>
+  <Step title="Check eligibility (optional)">
+    ```bash
+    beaver cloud preflight
+    ```
+    Checks whether your machines are eligible to form or join a cloud.
+  </Step>
+  <Step title="Create it">
+    ```bash
+    beaver cloud create paperclip-prod --machines <machine-name>
+    ```
+    Use any cloud name. List machine names with `beaver machine list`. Omit `--machines` to pick interactively.
+  </Step>
+  <Step title="Look at it">
+    ```bash
+    beaver cloud status paperclip-prod
+    beaver cloud capacity paperclip-prod
+    ```
+  </Step>
+</Steps>
+
+## Verify it worked
+
+<Tabs>
+  <Tab title="Dashboard">
+    **Clouds** lists it; opening it shows its health, machines, capacity and network.
+  </Tab>
+  <Tab title="Desktop">
+    **Beaver Cloud** lists it. The detail view has Overview, Nodes, Network, Capacity, Services and a Timeline.
+  </Tab>
+  <Tab title="CLI">
+    `beaver cloud list` shows it; `beaver cloud machines paperclip-prod` lists members and their health.
+  </Tab>
+</Tabs>
+
+## Good to know
+
+A cloud gives you room to place **new** work. If a machine in it goes offline, what was running there does **not** move on its own —
+recovery is an action you take. See [Beaver Cloud](/infrastructure/beaver-cloud).
+
+## If it fails
+
+`cloud create` needs enrolled machines that are eligible — run `beaver cloud preflight` to see why not, and
+`beaver machine list` to confirm the machine is online.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="First deployment" icon="rocket" href="/start/first-deploy">Deploy an app into it.</Card>
+  <Card title="Beaver Cloud in depth" icon="book-open" href="/infrastructure/beaver-cloud">Capacity, network, sharing.</Card>
+</CardGroup>

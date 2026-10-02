@@ -107,7 +107,7 @@ I'm thinking should I explain beaver cloud and services in the docs for the user
    Environments and variables           Separating development/staging/production, overrides and precedence, .env files, remote variables, handling secrets, and when
                                         changes require a redeploy.
   ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   Building applications                Supported runtimes and frameworks, Dockerfile requirements, build context and paths, image naming, private images, builder
+   Building applications                Any app with a Dockerfile and a port, Dockerfile requirements, build context and paths, image naming, private images, builder
                                         selection, and diagnosing build failures.
   ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
    Preflight and planning               What validation, planning, inspection, rehearsal, build checks, and security checks each establish; warnings versus blockers;

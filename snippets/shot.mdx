@@ -1,0 +1,8 @@
+import { capturedAt } from "/snippets/screenshots.mdx";
+
+export const Shot = ({ name, alt }) => (
+  <Frame caption={`Seeded demo data, captured ${capturedAt}.`}>
+    <img className="block dark:hidden" src={`/images/ui/${name}-light.png`} alt={alt} />
+    <img className="hidden dark:block" src={`/images/ui/${name}-dark.png`} alt={alt} />
+  </Frame>
+);

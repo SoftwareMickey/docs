@@ -1,0 +1,48 @@
+---
+title: "Safe production use"
+sidebarTitle: "Safe production use"
+description: "A cautious configuration for using Alie near production: what to leave off, what to require, and how to watch it."
+keywords: ["safe production use", "ai assistant", "beaver alie autopilot", "beaver alie approval-policies"]
+icon: "shield"
+type: howto
+audience: [team-lead, security, developer]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Alie's actions face the same controls a typed command would. These habits keep it that way and keep you able to see what it did.
+
+## Start cautious
+
+- [ ] **Leave autopilot `off`** until you have watched Alie propose and succeed for a while: `beaver alie autopilot`. Raise it one level at a time, never straight to `destructive`.
+- [ ] **Keep approvals on for anything that changes production.** Check overrides with `beaver alie approval-policies`; set a tool back with `beaver alie approval-policy set --tool <tool> --mode approval`.
+- [ ] **Use Observe or Assist** for deployment and machine areas in [Automation policies](/alie/automation-policies); use Operate only with Requires checks (such as checking staging first).
+
+## Cap the cost
+
+- [ ] **Set a spend cap** — [Spending controls](/alie/spending-controls).
+
+## Know who can approve
+
+In a team workspace, protected environments still need an Owner or Admin to approve ([Production approvals](/teams/production-approvals)). Decide **who** reviews Alie's proposals, and read each one: an approval is for one specific action.
+
+## Watch it
+
+- [ ] **Read the audit trail** regularly: `beaver alie audit`.
+- [ ] **Know how to undo** what it might do: [Rollback and recovery](/deploy/rollback-and-recovery), and `beaver recover` for a read-only diagnosis first.
+
+## What not to do
+
+- Don't approve a proposal you have not read because it came from an assistant.
+- Don't share a session or API key that can act in your workspace; revoke keys you no longer use (`beaver alie revoke <id>`).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Approvals and safety" icon="shield-check" href="/alie/approvals-and-safety">The controls.</Card>
+  <Card title="Alie troubleshooting" icon="triangle-alert" href="/alie/troubleshooting">When it does not behave.</Card>
+</CardGroup>

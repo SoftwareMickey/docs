@@ -1,0 +1,164 @@
+surface,area,capability,source_ref,interfaces,doc_target,status,evidence,note
+dashboard,home,Dashboard home (needs attention / health / usage / recent),vhb-client pages/dashboard,dashboard,interfaces/dashboard/tour,covered,interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour,
+dashboard,projects,Projects list and detail,vhb-client /projects /project,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/from-local-project;deploy/integrations;deploy/overview;deploy/projects,
+dashboard,projects,Project environments,vhb-client /project/environments,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,data/services-and-persistence;deploy/environment-variables;deploy/environments;deploy/from-github,
+dashboard,deployments,Deployments list and detail,vhb-client /deployments /deployment/:id,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,alie/what-is-alie;data/credentials-and-connection-strings;data/services-and-persistence;deploy/builds,
+dashboard,deployments,Deployment logs tab,vhb-client /deployment/logs,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;deploy/compose-applications;deploy/containers-and-replicas;deploy/from-local-project,
+dashboard,deployments,Deployment environment variables tab,vhb-client /deployment/environment,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,data/services-and-persistence;deploy/environment-variables;deploy/environments;deploy/from-github,
+dashboard,deployments,Deployment domains tab,vhb-client /deployment/domains,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/deployment-configuration;interfaces/dashboard/nodes-clouds-edge;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour,
+dashboard,deployments,Deployment port/route mapping tab,vhb-client /deployment/mapping,dashboard,interfaces/dashboard/projects-and-deployments,covered,deploy/from-github;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour,
+dashboard,deployments,Deployment observability tab,vhb-client /deployment/observability,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/deployment-configuration;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour;interfaces/desktop/networks-storage-services,
+dashboard,deployments,Deployment traffic tab,vhb-client /deployment/traffic,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;infrastructure/connect-a-machine;infrastructure/custom-vps-providers;infrastructure/machines-and-roles,
+dashboard,deployments,Deployment load balancing tab,vhb-client /deployment/load_balancing,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/deployment-configuration;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour;interfaces/dashboard/workflows,
+dashboard,deployments,Deployment performance (edge) tab,vhb-client /deployment/performance,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/deployment-configuration;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour;network/beaver-edge,
+dashboard,deployments,Deployment firewall tab,vhb-client /deployment/firewall,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/deployment-configuration;infrastructure/connect-a-machine;infrastructure/custom-vps-providers;infrastructure/storage-and-networks,
+dashboard,deployments,Deployment settings tab,vhb-client /deployment/settings,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,alie/automation-policies;alie/connect-an-ai-provider;alie/sessions-and-context;deploy/compose-applications,
+dashboard,deployments,Builds and build logs,vhb-client pages/deployments/builds,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;operate/logs,
+dashboard,deployments,Migrate a deployment,vhb-client pages/deployments/migrate,dashboard,interfaces/dashboard/projects-and-deployments,unreleased,,Runs on mock data and the old provider model; deliberately not documented
+dashboard,deployments,Deployment history,vhb-client /deployment-history,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;deploy/history;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour,
+dashboard,deployments,Roll back / promote from the UI,vhb-client pages/deployments,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/ci-cd;deploy/compose-applications;deploy/environment-variables;deploy/environments,
+dashboard,deployments,Deploy from a repository (repos/clone/scout),vhb-client /repos /clone /scout,dashboard,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;deploy/ci-cd;deploy/compose-applications;deploy/environment-variables,
+dashboard,compose,Composers (stacks) list and detail,vhb-client /stacks /stacks/:id,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/compose-applications;infrastructure/storage-and-networks;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour,
+dashboard,compose,Stack networks and volumes,vhb-client /stacks/:id/networks /volumes,dashboard,interfaces/dashboard/projects-and-deployments,covered,data/services-and-persistence;deploy/compose-applications;deploy/configuration;deploy/containers-and-replicas,
+dashboard,compose,Deploy a compose file,vhb-client /compose/deploy,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/builds;deploy/compose-applications;deploy/configuration;deploy/from-local-project,
+dashboard,containers,Containers list and detail,vhb-client /containers,dashboard;cli,interfaces/dashboard/projects-and-deployments,covered,deploy/containers-and-replicas;deploy/environments;deploy/overview;deploy/projects,
+dashboard,infrastructure,Nodes list and node detail,vhb-client /nodes /nodes/:machineId,dashboard;cli,interfaces/dashboard/nodes-clouds-edge,covered,infrastructure/beaver-cloud;infrastructure/capacity-and-placement;infrastructure/clouds;install/cli,
+dashboard,infrastructure,Add a node (connect wizard),vhb-client pages/nodes,dashboard;cli,interfaces/dashboard/nodes-clouds-edge,covered,infrastructure/beaver-cloud;infrastructure/connect-a-machine;install/desktop;interfaces/dashboard/nodes-clouds-edge,
+dashboard,infrastructure,Beaver Clouds list and manage,vhb-client /clouds,dashboard;cli,interfaces/dashboard/nodes-clouds-edge,covered,deploy/compose-applications;deploy/deployment-configuration;deploy/overview;index,
+dashboard,infrastructure,Beaver Edge apps,vhb-client /edge /edge/:appId,dashboard;cli,interfaces/dashboard/nodes-clouds-edge,covered,interfaces/dashboard/nodes-clouds-edge;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour;interfaces/dashboard/workflows,
+dashboard,infrastructure,Managed services,vhb-client /managed-services,dashboard;cli,interfaces/dashboard/nodes-clouds-edge,covered,data/create-a-service;deploy/compose-applications;deploy/environment-variables;infrastructure/storage-and-networks,
+dashboard,infrastructure,Incidents,vhb-client /incidents,dashboard,interfaces/dashboard/nodes-clouds-edge,covered,interfaces/dashboard/nodes-clouds-edge;interfaces/dashboard/projects-and-deployments;interfaces/dashboard/tour;interfaces/dashboard/workflows,
+dashboard,infrastructure,Provider flows (aws/* vps/*),vhb-client aws/* vps/*,dashboard,infrastructure/aws,internal,,Legacy /aws/* and /vps/* routes redirect to Integrations
+dashboard,collaboration,Activity feed (Following / Explore / Workspace),vhb-client /activity,dashboard;cli,interfaces/dashboard/activity-notifications-billing,covered,deploy/publishing-a-template;install/desktop;interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/tour,
+dashboard,collaboration,Publish and deploy a template,vhb-client /activity/publish /activity/templates,dashboard;cli,interfaces/dashboard/activity-notifications-billing,covered,deploy/publishing-a-template;interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/workflows;operate/activity-and-following,
+dashboard,collaboration,Public profile and badges,vhb-client /u/:username /me/:user/badges,dashboard,interfaces/dashboard/activity-notifications-billing,covered,infrastructure/beaver-cloud;interfaces/dashboard/tour;interfaces/desktop/approvals-and-alie;operate/activity-and-following,
+dashboard,collaboration,Notifications inbox,vhb-client /notifications,dashboard;desktop;cli,interfaces/dashboard/activity-notifications-billing,covered,interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/tour;interfaces/dashboard/workflows;interfaces/desktop/settings,
+dashboard,collaboration,Notification and social preferences,vhb-client /activity/settings/notifications,dashboard;cli,interfaces/dashboard/activity-notifications-billing,covered,interfaces/dashboard/activity-notifications-billing;operate/notifications,
+dashboard,usage,Resource usage,vhb-client /resourceusage,dashboard;cli,interfaces/dashboard/activity-notifications-billing,unreleased,,Page route is commented out of the router and sidebar (vhb-client DashboardLinks/App) — not reachable; the Usage panel on the home screen and Billing show plan usage
+dashboard,usage,Build minutes,vhb-client /buildsminutes,dashboard,deploy/builds,unreleased,,Page route is commented out of the router and sidebar (vhb-client DashboardLinks/App) — not reachable; the Usage panel on the home screen and Billing show plan usage
+dashboard,billing,Billing overview,vhb-client /billing,dashboard;cli,interfaces/dashboard/activity-notifications-billing,covered,deploy/overview;index;infrastructure/clouds;infrastructure/connect-a-machine,
+dashboard,billing,Choose / review / change a plan,vhb-client /plans /plans/review,dashboard;cli,interfaces/dashboard/activity-notifications-billing,covered,interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/workflows,
+dashboard,billing,Subscriptions and payment history,vhb-client /subscriptions /payment-history,dashboard,interfaces/dashboard/activity-notifications-billing,covered,interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/tour;interfaces/dashboard/workflows;teams/cloud-sharing,
+dashboard,billing,Checkout and cancelled-checkout screens,vhb-client /billing/checkout/*,dashboard,interfaces/dashboard/activity-notifications-billing,covered,deploy/ci-cd;interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/tour;operate/troubleshooting-teams,
+dashboard,teams,Team overview,vhb-client /settings/team OverviewPanel,dashboard;cli,interfaces/dashboard/team-and-settings,covered,deploy/environment-variables;deploy/environments;deploy/history;deploy/projects,
+dashboard,teams,Members and invitations,vhb-client MembersPanel InviteModal,dashboard;cli,interfaces/dashboard/team-and-settings,covered,deploy/builds;deploy/projects;infrastructure/beaver-cloud;infrastructure/clouds,
+dashboard,teams,Team policies,vhb-client PoliciesPanel,dashboard;cli,interfaces/dashboard/team-and-settings,covered,alie/approvals-and-safety;alie/automation-policies;alie/sessions-and-context;alie/what-is-alie,
+dashboard,teams,Approvals inbox,vhb-client ApprovalsPanel,dashboard;desktop;cli,interfaces/dashboard/team-and-settings,covered,alie/approvals-and-safety;alie/automation-policies;alie/sessions-and-context;alie/what-is-alie,
+dashboard,teams,Team activity / audit,vhb-client ActivityPanel,dashboard;cli,interfaces/dashboard/team-and-settings,covered,alie/approvals-and-safety;data/credentials-and-connection-strings;deploy/from-local-project;deploy/history,
+dashboard,teams,Team settings and ownership transfer,vhb-client SettingsPanel TransferModal,dashboard;cli,interfaces/dashboard/team-and-settings,covered,interfaces/dashboard/team-and-settings;interfaces/desktop/shell-tour;operate/metrics-and-traffic;operate/troubleshooting-teams,
+dashboard,teams,Accept an invitation,vhb-client /accept-invite,dashboard;cli,interfaces/dashboard/team-and-settings,thin,interfaces/dashboard/tour,
+dashboard,teams,Workspace switcher,vhb-client /workspace,dashboard;desktop;cli,interfaces/dashboard/team-and-settings,covered,interfaces/dashboard/tour;interfaces/desktop/shell-tour;interfaces/how-state-is-shared;operate/troubleshooting-teams,
+dashboard,account,Personal settings hub,vhb-client /settings,dashboard,interfaces/dashboard/team-and-settings,covered,alie/automation-policies;alie/connect-an-ai-provider;alie/sessions-and-context;deploy/compose-applications,
+dashboard,account,Profile and account settings,vhb-client /me/:user/accountsettings,dashboard;cli,interfaces/dashboard/team-and-settings,covered,alie/connect-an-ai-provider;deploy/compose-applications;install/cli;interfaces/dashboard/activity-notifications-billing,
+dashboard,account,Security settings and 2-step setup,vhb-client /settings/security /settings/security/mfa/setup,dashboard;desktop;cli,interfaces/dashboard/team-and-settings,covered,install/desktop;interfaces/dashboard/team-and-settings;interfaces/dashboard/workflows;interfaces/desktop/settings,
+dashboard,account,Recovery codes and MFA recovery,vhb-client /login/mfa/recover,dashboard;cli,interfaces/dashboard/team-and-settings,covered,interfaces/dashboard/team-and-settings;operate/troubleshoot-mfa;teams/two-step-verification,
+dashboard,account,Passkeys,vhb-client /me/:user/mfa,dashboard,teams/two-step-verification,unreleased,,off until the RP-ID owner step lands (MFA Phase 6)
+dashboard,account,Sign in with Google / GitHub / email,vhb-client /login /oauth/complete /auth/link/confirm,dashboard;desktop;cli,interfaces/dashboard/team-and-settings,covered,deploy/from-github;interfaces/dashboard/team-and-settings;interfaces/dashboard/tour;interfaces/desktop/settings,
+dashboard,account,Approve a device sign-in,vhb-client /oauth/approve,dashboard;desktop;cli,interfaces/dashboard/team-and-settings,covered,interfaces/dashboard/tour;teams/sign-in-methods,
+dashboard,account,Integrations (GitHub and providers),vhb-client /integrations,dashboard;cli,interfaces/dashboard/team-and-settings,covered,deploy/from-github;deploy/integrations;deploy/projects;interfaces/dashboard/team-and-settings,
+dashboard,account,Onboarding: connect repositories,vhb-client /onboarding/connect,dashboard,interfaces/dashboard/team-and-settings,thin,interfaces/dashboard/tour,
+dashboard,alie,Alie in the Dashboard (session),vhb-client alie alie/session,dashboard,interfaces/dashboard/tour,covered,alie/approvals-and-safety;alie/automation-policies;alie/connect-an-ai-provider;alie/sessions-and-context,
+dashboard,marketing,Pricing / legal / beta / marketing pages,vhb-client /pricing /legal/* /beta /waitlist /frameworks /cloud /services /platform/*,dashboard,,internal,,marketing and legal pages are not product UI
+desktop,shell,Infrastructure home (counts and machine cards),desktop infra/sections/InfrastructureHome,desktop,interfaces/desktop/infrastructure,covered,install/desktop;interfaces/desktop/infrastructure;start/quickstart-desktop,
+desktop,shell,Navigator and command palette,desktop infra/nav ⌘K,desktop,interfaces/desktop/shell-tour,covered,interfaces/desktop/approvals-and-alie;interfaces/desktop/networks-storage-services;interfaces/desktop/settings;interfaces/desktop/shell-tour,
+desktop,shell,Action sheet (shows the beaver equivalent),desktop infra ActionSheet,desktop,interfaces/desktop/infrastructure,covered,install/desktop;interfaces/desktop/infrastructure;interfaces/desktop/terminal-and-projects;interfaces/overview,
+desktop,shell,Sign in with device authorization,desktop auth,desktop;cli,interfaces/desktop/shell-tour,covered,alie/approvals-and-safety;alie/automation-policies;alie/index;alie/sessions-and-context,
+desktop,shell,Auto-update,desktop settings Updates,desktop,interfaces/desktop/shell-tour,covered,index;install/desktop;interfaces/dashboard/nodes-clouds-edge;interfaces/dashboard/tour,
+desktop,machines,Machines list,desktop MachinesList,desktop,interfaces/desktop/infrastructure,covered,alie/automation-policies;data/create-a-service;deploy/projects;index,
+desktop,machines,Machine detail: Overview Containers Resources,desktop MachineDetail,desktop,interfaces/desktop/infrastructure,covered,alie/index;data/persistent-volumes;data/services-and-persistence;deploy/containers-and-replicas,
+desktop,machines,Machine detail: Networks Volumes Logs Events,desktop MachineDetail,desktop,interfaces/desktop/infrastructure,covered,data/persistent-volumes;data/services-and-persistence;deploy/compose-applications;deploy/containers-and-replicas,
+desktop,machines,Machine detail: Security and Configuration (drift),desktop MachineDetail,desktop;cli,interfaces/desktop/infrastructure,covered,deploy/history;interfaces/dashboard/team-and-settings;interfaces/desktop/infrastructure;operate/drift-and-reconcile,
+desktop,machines,Machine backups tab,desktop MachineDetail backups,desktop,interfaces/desktop/infrastructure,unreleased,,"Not in the shipped nine-tab machine detail (Overview, Containers, Resources, Networks, Volumes, Logs, Events, Security, Configuration)"
+desktop,clouds,Beaver Cloud list and detail,desktop CloudsList CloudDetail,desktop;cli,interfaces/desktop/infrastructure,covered,data/resize-and-upgrade;deploy/compose-applications;deploy/overview;index,
+desktop,networks,Networks list and detail,desktop NetworksList NetworkDetail,desktop,interfaces/desktop/networks-storage-services,covered,deploy/builds;deploy/compose-applications;deploy/projects;infrastructure/beaver-cloud,
+desktop,storage,Storage list and volume detail,desktop StorageList VolumeDetail,desktop,interfaces/desktop/networks-storage-services,covered,data/persistent-volumes;data/services-and-persistence;data/services/postgresql;deploy/compose-applications,
+desktop,services,Services list and detail,desktop ServicesList ServiceDetail,desktop;cli,interfaces/desktop/networks-storage-services,covered,data/create-a-service;data/persistent-volumes;data/resize-and-upgrade;data/services-and-persistence,
+desktop,services,Create a service (sheet),desktop ServiceCreateSheet,desktop;cli,interfaces/desktop/networks-storage-services,covered,data/create-a-service;interfaces/desktop/networks-storage-services;start/first-service,
+desktop,containers,Container detail,desktop ContainerDetail,desktop;cli,interfaces/desktop/networks-storage-services,covered,data/persistent-volumes;deploy/builds;deploy/containers-and-replicas;deploy/environments,
+desktop,runtime,Traces explorer,desktop traces,desktop,interfaces/desktop/approvals-and-alie,covered,interfaces/desktop/approvals-and-alie;interfaces/desktop/shell-tour;interfaces/desktop/workflows;interfaces/index,
+desktop,runtime,Approvals inbox,desktop team ApprovalsInbox,desktop;dashboard;cli,interfaces/desktop/approvals-and-alie,covered,interfaces/dashboard/activity-notifications-billing;interfaces/desktop/approvals-and-alie;teams/working-in-a-shared-workspace,
+desktop,runtime,Deployments section (project workspace),desktop DeploymentsList,desktop,interfaces/desktop/terminal-and-projects,unreleased,,hidden from the sidebar at last check (Runtime/Health temporarily hidden)
+desktop,runtime,Observability section,desktop ObservabilitySection,desktop,interfaces/desktop/networks-storage-services,unreleased,,hidden from the sidebar at last check
+desktop,alie,Alie rail and sessions,desktop beaver alie,desktop;cli,interfaces/desktop/approvals-and-alie,covered,alie/sessions-and-context;interfaces/desktop/approvals-and-alie;interfaces/desktop/shell-tour,
+desktop,workspace,Embedded terminal,desktop workspace/terminal,desktop,interfaces/desktop/terminal-and-projects,covered,alie/sessions-and-context;deploy/ci-cd;deploy/compose-applications;deploy/from-local-project,
+desktop,workspace,Open a local project folder,desktop project workspace,desktop,interfaces/desktop/terminal-and-projects,covered,interfaces/desktop/terminal-and-projects;interfaces/how-state-is-shared,
+desktop,team,Workspace switcher and plan card,desktop team WorkspaceSwitcher PlanCard,desktop;dashboard;cli,interfaces/desktop/shell-tour,covered,interfaces/dashboard/tour;interfaces/desktop/settings;interfaces/desktop/shell-tour;interfaces/desktop/workflows,
+desktop,team,Suspended / gated team screens,desktop team SuspendedScreen Gated,desktop,interfaces/desktop/shell-tour,covered,interfaces/desktop/shell-tour;operate/troubleshooting-github;teams/downgrades-and-retention;teams/invite-members,
+desktop,settings,General,desktop settings General,desktop,interfaces/desktop/settings,covered,interfaces/desktop/settings;interfaces/desktop/workflows;interfaces/how-state-is-shared,
+desktop,settings,Account,desktop settings Account,desktop,interfaces/desktop/settings,covered,interfaces/dashboard/team-and-settings;operate/troubleshooting-github;teams/signing-in-and-repository-access,
+desktop,settings,Git and repository access,desktop settings Git RepositoryAccess,desktop;cli,interfaces/desktop/settings,covered,deploy/compose-applications;deploy/from-github;deploy/overview;interfaces/dashboard/team-and-settings,
+desktop,settings,Terminal,desktop settings Terminal,desktop,interfaces/desktop/settings,covered,alie/sessions-and-context;deploy/ci-cd;deploy/compose-applications;deploy/from-local-project,
+desktop,settings,Projects and workspace,desktop settings ProjectsWorkspace,desktop,interfaces/desktop/settings,covered,interfaces/desktop/settings;interfaces/desktop/terminal-and-projects,
+desktop,settings,Notifications and on-call,desktop settings Notifications,desktop;cli,interfaces/desktop/settings,covered,interfaces/desktop/settings;operate/notifications,
+desktop,settings,Appearance,desktop settings Appearance,desktop,interfaces/desktop/settings,covered,interfaces/desktop/settings;interfaces/how-state-is-shared,
+desktop,settings,Security and privacy,desktop settings SecurityPrivacy,desktop,interfaces/desktop/settings,covered,infrastructure/laptop-builder;interfaces/desktop/settings,
+desktop,settings,Beaver CLI and agent,desktop settings CliAndAgent,desktop;cli,interfaces/desktop/settings,thin,interfaces/desktop/settings,
+desktop,settings,Activity,desktop settings Activity,desktop,interfaces/desktop/settings,covered,deploy/history;interfaces/dashboard/activity-notifications-billing;interfaces/dashboard/nodes-clouds-edge;interfaces/dashboard/projects-and-deployments,
+desktop,settings,Alie: General Memory Context Permissions Tools and Routing,desktop settings alie,desktop;cli,interfaces/desktop/settings,covered,alie/sessions-and-context;interfaces/desktop/approvals-and-alie;interfaces/desktop/settings;interfaces/how-state-is-shared,
+desktop,settings,AI harnesses,desktop settings AiHarnessesList,desktop;cli,interfaces/desktop/settings,covered,alie/connect-an-ai-provider;alie/troubleshooting;interfaces/desktop/approvals-and-alie;interfaces/desktop/settings,
+desktop,settings,Skills,desktop settings SkillsList,desktop;cli,interfaces/desktop/settings,covered,alie/index;interfaces/desktop/settings,
+desktop,settings,Automation policy,desktop settings automation-policy,desktop,interfaces/desktop/settings,covered,alie/automation-policies;interfaces/desktop/approvals-and-alie;interfaces/desktop/settings;interfaces/desktop/workflows,
+desktop,settings,Advanced and About,desktop settings Advanced About,desktop,interfaces/desktop/settings,covered,alie/index;alie/sessions-and-context;alie/what-is-alie;data/resize-and-upgrade,
+backend,limits,Plan limits and what happens at a limit,vhb-server billing/plan gates,dashboard;desktop;cli,reference/limits-and-quotas,covered,data/create-a-service;interfaces/dashboard/activity-notifications-billing;operate/troubleshoot-plan-limit;operate/troubleshooting,
+backend,approvals,Production approval gates,vhb-server approvals,dashboard;desktop;cli,teams/production-approvals,covered,alie/approvals-and-safety;alie/automation-policies;alie/index;alie/safe-production-use,
+backend,retention,Activity and audit retention,vhb-server activity,dashboard;cli,teams/downgrades-and-retention,covered,data/backups-and-restore;deploy/history;operate/logs;operate/troubleshoot-plan-limit,
+backend,status,Status vocabulary (machine/cloud/service/deployment),vhb-server + desktop status.ts,dashboard;desktop;cli,operate/deployment-status,covered,alie/connect-an-ai-provider;alie/troubleshooting;data/backups-and-restore;data/create-a-service,
+backend,rate-limits,Credential reveal and API rate limits,vhb-server rate limiting,dashboard;cli,data/credentials-and-connection-strings,covered,data/connect-locally;data/credentials-and-connection-strings;data/services;data/services/kafka,
+backend,errors,Error messages users can hit,vhb-server + cli errors,dashboard;desktop;cli,operate/troubleshooting,covered,alie/connect-an-ai-provider;alie/index;alie/safe-production-use;alie/troubleshooting,
+backend,orchestration,Placement / scheduling / orchestration internals,vhb-server,,,internal,,mechanism — Invariant 3
+backend,storage,Storage models and schemas,vhb-server,,,internal,,mechanism — Invariant 3
+admin,admin,Admin dashboard (operator tooling),admin-dashboard,,,internal,,private operator docs only — Invariant 4
+cli,command group,beaver account,beaver-cli/commands,cli,account,covered,account,documented
+cli,command group,beaver admin,beaver-cli/commands,cli,,internal,,"operator command group, excluded (features/docs Era 10)"
+cli,command group,beaver agent,beaver-cli/commands,cli,agent,covered,agent,documented
+cli,command group,beaver ai,beaver-cli/commands,cli,ai,covered,ai,documented
+cli,command group,beaver alie,beaver-cli/commands,cli,alie,covered,alie,documented
+cli,command group,beaver auth,beaver-cli/commands,cli,login;logout;whoami,covered,login;logout;whoami,documented-under-different-name
+cli,command group,beaver autoscale,beaver-cli/commands,cli,autoscale,covered,autoscale,documented
+cli,command group,beaver billing,beaver-cli/commands,cli,billing;plans,covered,billing;plans,documented
+cli,command group,beaver cloud,beaver-cli/commands,cli,cloud,covered,cloud,documented
+cli,command group,beaver completion,beaver-cli/commands,cli,completion,covered,completion,documented
+cli,command group,beaver compose,beaver-cli/commands,cli,compose,covered,compose,documented
+cli,command group,beaver config,beaver-cli/commands,cli,config;validate,covered,config;validate,documented
+cli,command group,beaver connect,beaver-cli/commands,cli,connect,covered,connect,documented
+cli,command group,beaver container,beaver-cli/commands,cli,container;containers,covered,container;containers,documented
+cli,command group,beaver coupon,beaver-cli/commands,cli,coupon,covered,coupon,documented
+cli,command group,beaver deploy,beaver-cli/commands,cli,deploy,covered,deploy,documented
+cli,command group,beaver deployment,beaver-cli/commands,cli,deployment,covered,deployment,documented
+cli,command group,beaver diff,beaver-cli/commands,cli,diff,covered,diff,documented
+cli,command group,beaver docker,beaver-cli/commands,cli,docker,covered,docker,documented
+cli,command group,beaver doctor,beaver-cli/commands,cli,doctor,covered,doctor,documented
+cli,command group,beaver domain,beaver-cli/commands,cli,domain,covered,domain,documented
+cli,command group,beaver edge,beaver-cli/commands,cli,edge,covered,edge,documented
+cli,command group,beaver environment,beaver-cli/commands,cli,environment,covered,environment,documented
+cli,command group,beaver firewall,beaver-cli/commands,cli,firewall,covered,firewall,documented
+cli,command group,beaver git,beaver-cli/commands,cli,git,covered,git,documented
+cli,command group,beaver github,beaver-cli/commands,cli,github,covered,github,documented
+cli,command group,beaver health,beaver-cli/commands,cli,health,covered,health,documented
+cli,command group,beaver history,beaver-cli/commands,cli,history,covered,history,documented
+cli,command group,beaver initcmd,beaver-cli/commands,cli,init,covered,init,documented-under-different-name
+cli,command group,beaver inspect,beaver-cli/commands,cli,inspect,covered,inspect,documented
+cli,command group,beaver integration,beaver-cli/commands,cli,integrations,covered,integrations,documented-under-different-name
+cli,command group,beaver machine,beaver-cli/commands,cli,machine,covered,machine,documented
+cli,command group,beaver mcpcmd,beaver-cli/commands,cli,,internal,,"MCP wiring, excluded (features/docs Era 11)"
+cli,command group,beaver mystic,beaver-cli/commands,cli,mystic,covered,mystic,documented
+cli,command group,beaver observability,beaver-cli/commands,cli,logs;metrics;traffic,covered,logs;metrics;traffic,documented-under-different-name
+cli,command group,beaver observe,beaver-cli/commands,cli,observe,covered,observe,documented
+cli,command group,beaver preflight,beaver-cli/commands,cli,preflight,covered,preflight,documented
+cli,command group,beaver project,beaver-cli/commands,cli,project,covered,project,documented
+cli,command group,beaver projectcontract,beaver-cli/commands,cli,config;plan;validate,covered,config;plan;validate,documented-under-different-name
+cli,command group,beaver promote,beaver-cli/commands,cli,promote,covered,promote,documented
+cli,command group,beaver reconcilecmd,beaver-cli/commands,cli,reconcile,covered,reconcile,documented-under-different-name
+cli,command group,beaver recover,beaver-cli/commands,cli,recover,covered,recover,documented
+cli,command group,beaver root,beaver-cli/commands,cli,shell,covered,shell,documented-under-different-name
+cli,command group,beaver route,beaver-cli/commands,cli,route,covered,route,documented
+cli,command group,beaver scaling,beaver-cli/commands,cli,scaling,covered,scaling,documented
+cli,command group,beaver server,beaver-cli/commands,cli,server,covered,server,documented
+cli,command group,beaver service,beaver-cli/commands,cli,service,covered,service,documented
+cli,command group,beaver skillscmd,beaver-cli/commands,cli,skills,covered,skills,documented-under-different-name
+cli,command group,beaver speccmd,beaver-cli/commands,cli,spec,covered,spec,documented-under-different-name
+cli,command group,beaver statecmd,beaver-cli/commands,cli,state,covered,state,documented-under-different-name
+cli,command group,beaver status,beaver-cli/commands,cli,status,covered,status,documented
+cli,command group,beaver update,beaver-cli/commands,cli,update,covered,update,documented
+cli,command group,beaver version,beaver-cli/commands,cli,version,covered,version,documented
+cli,command group,beaver workspace,beaver-cli/commands,cli,workspace,covered,workspace,documented

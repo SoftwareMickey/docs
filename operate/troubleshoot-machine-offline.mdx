@@ -1,0 +1,55 @@
+---
+title: "Machine shows offline"
+sidebarTitle: "Machine offline"
+description: "Beaver has lost contact with a machine — what offline means, and how to bring the agent back."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [operator]
+interfaces: [dashboard, desktop, cli]
+keywords: ["offline", "agent not connecting", "machine unreachable", "beaverd"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+The machine's status is **Offline** (Dashboard Nodes, Desktop Machines, `beaver machine list`).
+
+## Check first
+
+1. Remember what **offline** means: Beaver has lost visibility and control. **Your containers keep running** — it does not mean your app stopped.
+2. SSH to the machine and run `beaver agent status`, then `beaver agent logs`.
+3. Run `beaver doctor` on the machine.
+
+## Causes and fixes
+
+### The agent is stopped
+
+`beaver agent start` (or `beaver agent restart`).
+
+### The machine cannot reach the internet
+
+Check outbound rules, DNS and any proxy ([Firewall requirements](/infrastructure/firewall-requirements)).
+
+### The machine is down
+
+Power it on or replace it. A cloud does **not** move work off a lost machine by itself — see [Drain and evacuate](/infrastructure/drain-and-evacuate).
+
+### The machine was removed or re-enrolled elsewhere
+
+`beaver machine list`; reconnect with `beaver connect` if needed.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Machine and agent operation" icon="arrow-right" href="/infrastructure/machine-and-agent-operation">The page that prevents or explains this.</Card>
+  <Card title="Status words" icon="arrow-right" href="/operate/deployment-status">The page that prevents or explains this.</Card>
+</CardGroup>

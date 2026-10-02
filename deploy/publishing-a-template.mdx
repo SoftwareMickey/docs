@@ -1,0 +1,82 @@
+---
+title: "Publishing a template"
+description: "Exactly what becomes public when you publish a project — and what Beaver can't see to scrub for you."
+keywords: ["publishing a template", "beaver publish", "beaver template"]
+sidebarTitle: "Publishing a template"
+type: howto
+audience: [developer]
+interfaces: [dashboard, cli]
+---
+
+Publishing turns a private project into a public (or unlisted) template anyone can deploy or
+fork. Every publish — from [`beaver publish`](/cli/publish) or the web app — shows you a
+preview of exactly what becomes public before anything commits. This page explains what's in
+that preview, and, just as importantly, what isn't checked automatically.
+
+## What's included
+
+A published template carries only these fields, read from your project's deployment
+configuration:
+
+- **Source coordinates**: repository URL, git branch, git username, folder, deployment path,
+  and the Dockerfile's path (not its contents — see below).
+- **Service shape**: framework, runtime, container port, host port.
+- **Health check**: path, interval, timeout, retry count.
+- **Resource requests**: CPU and memory requests/limits.
+- **Environment variable names** — the *names* Beaver knows your project declares (e.g.
+  `DATABASE_URL`), so a deployer knows what to supply.
+
+None of the above is treated as secret — a repository URL, a branch name, and a health-check
+path are exactly what already appear in your own deploy logs.
+
+## What's automatically scrubbed
+
+**Environment variable values are never included — not scrubbed after the fact, never
+selected in the first place.** The publish pipeline reads variable *names* only; there is no
+code path by which a value could reach a published template, whether or not you remember to
+remove it yourself.
+
+## What's NOT automatically checked
+
+This is the part to read carefully before publishing:
+
+**Beaver does not read your Dockerfile's contents, or any other file in your repository.**
+Only the Dockerfile's *path* is included in the preview — if you've hardcoded a credential,
+an API key, or any other secret directly into your Dockerfile, a build script, or any
+committed file, publishing does **not** catch it, redact it, or warn you about it. That
+secret is exactly as public as the rest of your repository already is.
+
+Before publishing, double-check:
+
+- Your Dockerfile and any build scripts for hardcoded values that should have been
+  environment variables instead.
+- Any file your Dockerfile `COPY`s or `ADD`s into the image for the same thing.
+- That your repository itself doesn't need reviewing for history containing a secret that
+  was later removed but is still in git history — publishing a template doesn't touch your
+  repository, but a public template does point people at it.
+
+Automatic scrubbing covers exactly what's listed above — env var *values* — and nothing
+beyond it. Everything else is on you to check before confirming.
+
+## Reliability stats
+
+A template can opt in to showing reliability/uptime stats on its detail page. This is off by
+default, and stays off unless you explicitly turn it on when publishing — it's never computed
+or shown for a template that hasn't opted in.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Activity, following, and Explore" href="/operate/activity-and-following">
+    The three-feed model this all fits into.
+  </Card>
+  <Card title="beaver publish" href="/cli/publish">
+    Publish from the terminal, with the same preview-first guarantee.
+  </Card>
+  <Card title="beaver template" href="/cli/template">
+    Fork someone else's template into your own draft.
+  </Card>
+  <Card title="Environment variables" href="/deploy/environment-variables">
+    How Beaver handles env vars generally.
+  </Card>
+</CardGroup>

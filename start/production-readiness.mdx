@@ -1,0 +1,51 @@
+---
+title: "Production readiness checklist"
+sidebarTitle: "Production checklist"
+description: "A checklist to work through before real traffic arrives — each line links the page that shows how."
+keywords: ["production readiness checklist", "production checklist", "beaver machine list", "beaver cloud impact"]
+icon: "list-checks"
+type: howto
+audience: [developer, team-lead, operator, security]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+Work down the list. Each item says how to **verify** it, not just do it.
+
+## Infrastructure
+
+- [ ] **Builders and Hosts are separate** for production, so builds never compete with live traffic —
+  [Machines and roles](/infrastructure/machines-and-roles). *Verify:* `beaver machine list` shows the roles you intend.
+- [ ] **You know what happens if a Host dies.** A cloud does not move running work by itself —
+  [Beaver Cloud](/infrastructure/beaver-cloud). *Verify:* try `beaver cloud impact <machine>` on a non-critical one.
+- [ ] **The firewall allows only what is needed** — [Firewall requirements](/infrastructure/firewall-requirements).
+
+## The application
+
+- [ ] **Health check path** that your app answers — [Deployment configuration](/deploy/deployment-configuration).
+- [ ] **Configuration committed** in `.beaver/config.yml` and in agreement with what is saved — `beaver config status`
+  ([Configuration](/deploy/configuration)).
+- [ ] **Production environment variables set** separately from staging — [Environment variables](/deploy/environment-variables).
+- [ ] **Your own domain with a certificate** — [First domain](/start/first-domain). *Verify:* `beaver domain list --container <name>`.
+- [ ] **Replica count and resources chosen** — [Scale](/deploy/scale).
+
+## Data
+
+- [ ] **A managed service for your database** — [Services](/data).
+- [ ] **Backups on, and a restore tried once** — [Backups and restore](/data/backups-and-restore). *Verify:* restore into a *new* service.
+
+## People and access
+
+- [ ] **Roles assigned deliberately** — [Roles and permissions](/teams/roles-and-permissions).
+- [ ] **Production is protected** and you have tried an approval — [Production approvals](/teams/production-approvals).
+- [ ] **2-step verification** on, or required for the workspace — [2-step verification](/teams/two-step-verification).
+
+## Operations
+
+- [ ] **You can read logs, metrics and traffic** — [Observability](/operate/observability).
+- [ ] **Rollback rehearsed** — [Rollback and recovery](/deploy/rollback-and-recovery). *Verify:* `beaver recover` runs read-only.
+- [ ] **Plan limits fit** machines, services and retention — [Plans and billing](/teams/plans-and-billing).
+
+## When something is wrong
+
+[Troubleshooting](/operate/troubleshooting) starts from what you see.

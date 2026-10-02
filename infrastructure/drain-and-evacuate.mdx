@@ -1,0 +1,74 @@
+---
+title: "Drain and evacuate a machine"
+sidebarTitle: "Drain and evacuate"
+description: "Take a machine out of service safely: see what a loss would break, stop new work, move what runs there, and reboot or retire it."
+keywords: ["drain and evacuate a machine", "drain and evacuate", "server", "vps", "host", "beaver cloud evacuate", "beaver cloud machines"]
+icon: "log-out"
+type: howto
+audience: [operator]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A Beaver Cloud places **new** work; it does **not** move existing work when a machine goes offline. Taking a machine out of service is therefore something you do on purpose, in
+four steps. All of them are CLI commands.
+
+<Warning>
+There is no automatic failover. If a machine is lost, what ran on it stays down until you redeploy or evacuate it. Plan with `impact` **before** it happens.
+</Warning>
+
+## Steps
+
+<Steps>
+  <Step title="See what would break">
+    ```bash
+    beaver cloud impact srv_web02 --cloud paperclip-prod
+    ```
+    Shows what breaks if this node is lost. Read-only.
+  </Step>
+  <Step title="Stop sending it new work">
+    ```bash
+    beaver cloud drain srv_web02 --cloud paperclip-prod
+    ```
+    The node is excluded from new placement. Its **existing containers keep running**.
+  </Step>
+  <Step title="Move what runs there">
+    ```bash
+    beaver cloud evacuate srv_web02 --cloud paperclip-prod
+    ```
+    Generates a **reviewable plan** and moves nothing. Read it, then run it:
+    ```bash
+    beaver cloud evacuate execute <plan-id>
+    ```
+    Changed your mind? `beaver cloud evacuate rollback` moves containers back.
+  </Step>
+  <Step title="Do the maintenance">
+    Reboot with `beaver machine reboot <machine>` — first check `beaver machine reboot-impact <machine>` to see what it would interrupt. Or retire it with
+    `beaver cloud machines rm srv_web02` and `beaver machine remove <machine-id>`.
+  </Step>
+</Steps>
+
+## Bring it back
+
+`beaver cloud undrain srv_web02 --cloud paperclip-prod` makes the node eligible for new work again.
+
+## What this does not protect
+
+Read the evacuation plan carefully before you execute it, especially for anything that stores data, and have [backups](/data/backups-and-restore) in place first.
+
+## If it fails
+
+`impact` or `evacuate` need the cloud and machine names — list them with `beaver cloud list` and `beaver cloud machines <cloud>`. If the machine is already offline, see
+[Machine shows offline](/operate/troubleshoot-machine-offline).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Recovery model" icon="history" href="/operate/recovery-model">What each recovery action restores.</Card>
+  <Card title="Capacity and placement" icon="gauge" href="/infrastructure/capacity-and-placement">Check there is room to receive work.</Card>
+</CardGroup>

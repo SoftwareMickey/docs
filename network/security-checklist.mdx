@@ -1,0 +1,47 @@
+---
+title: "Security checklist"
+sidebarTitle: "Security checklist"
+description: "The security controls you configure yourself, in one pass — each with how to verify it."
+keywords: ["security checklist", "beaver workspace members", "beaver firewall visibility"]
+icon: "list-checks"
+type: howto
+audience: [security, team-lead, operator]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+This lists the controls **you** set. What Beaver does and what you do is in [Shared responsibility](/network/shared-responsibility).
+
+## People
+
+- [ ] **2-step verification** on for every Owner and Admin, and required for the workspace if you can — [2-step verification](/teams/two-step-verification). *Verify:* the workspace setting and each member's status.
+- [ ] **Roles are least-privilege** — most people Developer or Viewer — [Roles and permissions](/teams/roles-and-permissions). *Verify:* `beaver workspace members`.
+- [ ] **Production is protected** and `developer_production` is off unless you chose otherwise — [Production approvals](/teams/production-approvals).
+- [ ] **Removed people lose access at once** — removal takes effect immediately, closes their live connections and stops their API keys ([Audit history](/teams/audit-history)). *Verify:* remove a test member.
+
+## Applications
+
+- [ ] **No secrets in the repository or image** — [Secrets](/network/secrets).
+- [ ] **Public only what must be** — [Access controls](/network/access-controls). *Verify:* `beaver firewall visibility <deployment-id>`.
+- [ ] **Rate limits and login protection** on public endpoints — [Rate limiting](/network/rate-limiting). *Verify:* `beaver firewall events <deployment-id>`.
+- [ ] **HTTPS on your domain** — [TLS](/network/tls). *Verify:* `beaver route inspect <domain>`.
+
+## Machines
+
+- [ ] **Only the ports you need are open** at the provider and OS — [Firewall requirements](/infrastructure/firewall-requirements). *Verify:* `beaver machine exposure <machine-id>`.
+- [ ] **The OS is patched** — Beaver can apply pending package updates (`beaver machine package-update`), you decide when ([machine maintenance](/cli/machine)).
+- [ ] **Docker Hub and GitHub access are scoped** — [Secrets](/network/secrets).
+
+## Data
+
+- [ ] **Backups on, with an off-node copy, and one restore tried** — [Backups and restore](/data/backups-and-restore).
+- [ ] **Services private** — never expose a database port; use the tunnel ([Connect locally](/data/connect-locally)).
+
+## Visibility
+
+- [ ] **You can read the audit trail** — `beaver workspace activity`, Dashboard **Team → Activity**.
+- [ ] **Alerts reach someone** — [Notifications](/operate/notifications).

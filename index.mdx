@@ -1,67 +1,85 @@
 ---
-title: "Introduction to VectorIHub"
-description: "Build once. Deploy anywhere. A consistent deployment experience across any infrastructure."
+title: "Beaver documentation"
+description: "Deploy a Dockerfile to machines you own, from the Dashboard, the Desktop app or the CLI. Start here, then follow the path that matches your job."
+type: hub
+audience: [evaluator, developer, team-lead, operator, security]
+interfaces: [dashboard, desktop, cli]
 ---
 
-## Overview
+**Beaver** deploys your Dockerized application to infrastructure you own — a VPS, AWS, Google Cloud,
+Azure or any Linux machine. You describe how the app is built with a **Dockerfile**; Beaver builds it, runs it
+on your machines, and gives you one place to deploy, observe, secure and recover it. Beaver is the product;
+**VectorIHub** is the platform behind it ([what that means](/start/what-is-vectorihub)).
 
-**VectorIHub** is a deployment platform built around a simple idea: an application should be defined once and deployed consistently to any infrastructure.
+<Tip>
+**New here?** [Choose your infrastructure](/start/choose-your-infrastructure), then follow the
+[quickstart](/start/quickstart-dashboard). Most people have an app running in about fifteen minutes.
+</Tip>
 
-Rather than another cloud hosting provider, VectorIHub sits between your application and your infrastructure. You describe how your app is built with a **Dockerfile**, and VectorIHub deploys it — consistently — to the infrastructure you choose.
+## I want to…
 
 <CardGroup cols={2}>
-  <Card title="Bring Your Own Dockerfile" icon="docker" href="/deploying/dockerfile-requirements">
-    Your Dockerfile is the single source of truth for how your app is built and run.
+  <Card title="Try Beaver" icon="rocket" href="/start/what-is-vectorihub">
+    See what it is, how the pieces fit, and get a first deployment running.
   </Card>
-  <Card title="Deploy Anywhere" icon="globe" href="/infrastructure-setup">
-    The same deployment targets a VPS, AWS, Azure, DigitalOcean, or another provider — without changing your app.
+  <Card title="Ship an application" icon="upload" href="/deploy">
+    Dockerfile requirements, environments and variables, scaling, rollback, CI.
+  </Card>
+  <Card title="Run my machines" icon="server" href="/infrastructure">
+    Connect machines, choose roles, group them into a Beaver Cloud, prepare a provider.
+  </Card>
+  <Card title="Add a database or broker" icon="database" href="/data">
+    PostgreSQL, MySQL, MongoDB, Redis, Kafka and more — create, attach, back up.
+  </Card>
+  <Card title="Work with a team" icon="users" href="/teams">
+    Workspaces, roles, production approvals, sign-in security, plans and billing.
+  </Card>
+  <Card title="Fix something" icon="triangle-alert" href="/operate/troubleshooting">
+    Start from what you see — a stuck deploy, an offline machine, a sign-in message.
   </Card>
 </CardGroup>
 
----
-
-## How It Works
+## How it works
 
 <Steps>
   <Step title="Add a Dockerfile">
-    Your Dockerfile describes your dependencies, build process, runtime, startup command, and exposed ports.
+    Your Dockerfile is the single source of truth for how the app is built and run. Beaver does not generate one or
+    detect your framework — see [Dockerfile requirements](/deploy/dockerfile-requirements).
   </Step>
-  <Step title="Connect your Repository">
-    Link your GitHub or GitLab account to VectorIHub.
+  <Step title="Connect a machine">
+    Run `beaver connect` on a machine you own and choose its role. [Connect a machine](/infrastructure/connect-a-machine).
   </Step>
-  <Step title="Configure Your Deployment">
-    Set your port, environment variables, and health checks once in the dashboard.
+  <Step title="Group machines into a Beaver Cloud">
+    A deployment runs in a [Beaver Cloud](/infrastructure/beaver-cloud) — a group of your machines.
   </Step>
-  <Step title="Choose Your Infrastructure & Deploy">
-    Pick where your app runs — VectorIHub handles building your image and deploying it there.
+  <Step title="Deploy and watch it">
+    Deploy from a local project or a connected GitHub repository, then follow it through status, logs and
+    metrics. [Deploy overview](/deploy/overview).
   </Step>
 </Steps>
 
----
+## Three ways to work, one workspace
 
-## Frequently Asked Questions
+Beaver has a web **Dashboard**, a **Desktop** app and a **CLI**. They act on the same workspace, so you can start in
+one and continue in another. The [CLI reference](/cli) documents every command.
+
+## Questions
 
 <AccordionGroup>
-  <Accordion title="Do I need a Dockerfile to use VectorIHub?">
-    Yes. Your Dockerfile is how VectorIHub knows how to build and run your application — this keeps builds predictable and works for any language or framework that can produce a Docker image.
+  <Accordion title="Do I need a Dockerfile?">
+    Yes. Your Dockerfile defines the build, runtime and startup command, which keeps builds predictable and works
+    for any language that can produce a Docker image.
   </Accordion>
-  <Accordion title="What happens during production updates?">
-    We use blue-green deployments by default. Your previous version stays live until the new container passes its health check, so updates ship with zero downtime.
+  <Accordion title="Does Beaver host my app?">
+    No. Beaver deploys to machines you own and pay your provider for; Beaver's plan covers Beaver itself.
+    See [Plans and billing](/teams/plans-and-billing).
   </Accordion>
-  <Accordion title="Can I move my app to a different infrastructure provider later?">
-    Yes — that's the point. Your application definition doesn't change when your target infrastructure does.
+  <Accordion title="How do updates reach production?">
+    You choose how the switch happens: a rolling strategy keeps the previous version running until the new one
+    passes its health check; a recreate strategy stops it first. See the
+    [deployment lifecycle](/deploy/deployment-lifecycle).
+  </Accordion>
+  <Accordion title="Can I move to another provider later?">
+    The application definition does not change when the machines do. See [Providers](/infrastructure/providers).
   </Accordion>
 </AccordionGroup>
-
----
-
-## Next Steps
-
-<CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Deploy your first Dockerized app in under 5 minutes.
-  </Card>
-  <Card title="Features" icon="layers" href="/features">
-    See the full list of what VectorIHub handles for you.
-  </Card>
-</CardGroup>

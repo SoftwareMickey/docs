@@ -1,0 +1,31 @@
+---
+title: "Shared responsibility"
+sidebarTitle: "Shared responsibility"
+description: "What Beaver is responsible for, what you are, and where your infrastructure provider fits — because the machines are yours."
+icon: "handshake"
+type: concept
+audience: [security, team-lead, evaluator]
+---
+
+Beaver runs on machines **you** own, at a provider **you** chose. That changes who is responsible for what compared with a hosting platform. This page states it plainly, as the product works today.
+
+<Note>
+This describes responsibilities, not a compliance or certification statement. It is only as strong as the controls you configure — see the [Security checklist](/network/security-checklist).
+</Note>
+
+| Area | Beaver | You | Your provider |
+| --- | --- | --- | --- |
+| **Machines** (hardware, OS, patches, power, disk) | Connects to them; can report health and apply OS package updates when you ask | Choose, patch, secure and keep them reachable; replace failed ones | Physical host, network, their own firewall and billing for the machine |
+| **Application** (Dockerfile, code, dependencies) | Builds the Dockerfile you give it and runs the image | Everything inside the image, including its vulnerabilities | — |
+| **Deploys** | Builds from a commit you pushed; keeps releases, rollback and promotion | Decide what to ship, test it, and approve production changes | — |
+| **Traffic** | Issues and renews TLS for your addresses; firewall, rate limits and Edge are available | Configure them; point your DNS correctly | DNS and network paths outside Beaver |
+| **Managed services** | Provisions them on your machines; takes backups you schedule; isolates one login per attached app | Size them, schedule and **verify** backups, keep an off-node copy, rotate credentials | Disk durability |
+| **Failure** | Gives you drain, evacuate, rollback and recovery tools | Use them — a cloud does not move work by itself when a machine fails | — |
+| **Access** | Roles, protected production, approvals, 2-step verification and an audit trail | Assign roles sensibly and require a second factor | — |
+| **Cost** | Beaver's plan covers Beaver | The provider bills you separately for machines | Their charges |
+
+## What this means in practice
+
+- A **backup stays on the same node's disk** unless you ship it elsewhere, so it protects you from bad data, not from losing the machine ([Backups and restore](/data/backups-and-restore)).
+- **No automatic failover**: if a machine goes offline, what ran on it stays down until you act ([Drain and evacuate](/infrastructure/drain-and-evacuate)).
+- **Your repository** is read only through the Beaver GitHub App on the repositories you choose; granting access is separate from signing in ([Sign-in and repository access](/teams/signing-in-and-repository-access)).

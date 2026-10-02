@@ -1,0 +1,76 @@
+---
+title: "Create and manage a Beaver Cloud"
+sidebarTitle: "Manage a cloud"
+description: "Create a cloud, add and remove machines, read its health and events, and delete it."
+keywords: ["create and manage a beaver cloud", "manage a cloud", "pool of machines", "beaver cloud machines", "beaver cloud preflight"]
+icon: "cloud"
+type: howto
+audience: [operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+A **Beaver Cloud** groups machines you have connected so deployments target the pool, not one machine. The model is in [Beaver Cloud](/infrastructure/beaver-cloud); this page is the day-to-day.
+
+## Create a cloud
+
+Creating is a CLI action — the Dashboard and Desktop show clouds once they exist.
+
+```bash
+beaver cloud preflight <machine>...                       # are these machines eligible?
+beaver cloud create paperclip-prod --machines srv_web01,srv_web02
+```
+
+## Look at it
+
+<Tabs>
+  <Tab title="Dashboard">**Clouds** lists your clouds; a cloud's page shows **Health**, **Machines**, **Capacity** and **Network**, plus sharing and billing attribution.</Tab>
+  <Tab title="Desktop">**Beaver Cloud** lists clouds. The detail view has **Overview, Nodes, Network, Capacity, Services** and a **Timeline** of events.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud list
+    beaver cloud status paperclip-prod       # capacity, applications and health
+    beaver cloud inspect paperclip-prod      # per-node breakdown
+    beaver cloud events paperclip-prod --category membership --limit 30
+    ```
+    `--category` is one of `membership`, `network`, `capacity`, `placement`, `recovery`.
+  </Tab>
+</Tabs>
+
+A cloud's own `status` and its network reachability are **separate axes** — a cloud can be up while one node's connectivity is degraded. Check both.
+
+## Add or remove machines
+
+```bash
+beaver cloud machines paperclip-prod                          # list members
+beaver cloud preflight srv_web03 --cloud paperclip-prod       # check readiness first
+beaver cloud machines add srv_web03 --cloud paperclip-prod
+beaver cloud machines rm srv_web03 --cloud paperclip-prod
+```
+
+Adding or removing a machine changes what is schedulable going forward; it does **not** move or restart anything already running elsewhere. If preflight blocks a machine,
+fix the finding — or pass `--override <finding-id>` for a finding you have reviewed and accept. `preflight --fix` installs missing prerequisites.
+
+<Note>
+When a cloud is shared with another workspace or its private network is active, a contributed machine waits in `beaver cloud machines pending` until an operator runs
+`beaver cloud machines approve <machine-id>` (or `reject`). See [Sharing a cloud](/teams/cloud-sharing).
+</Note>
+
+## Rename and delete
+
+```bash
+beaver cloud rename paperclip-prod production
+beaver cloud rm production        # only succeeds on a cloud with no machines
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Capacity and placement" icon="gauge" href="/infrastructure/capacity-and-placement">Room for new work, and where it lands.</Card>
+  <Card title="Drain and evacuate" icon="log-out" href="/infrastructure/drain-and-evacuate">Take a machine out of service safely.</Card>
+</CardGroup>

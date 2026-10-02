@@ -3,10 +3,11 @@ title: "beaver state"
 sidebarTitle: "state"
 description: "Compare your local config file, what Beaver has saved, and what's actually running — and bring them back in sync."
 icon: "list-tree"
+type: reference
 ---
 
 <Info>
-  New here? [State and drift](/concepts/state-and-drift) explains what this is and when to use it, before diving into syntax.
+  New here? [State and drift](/operate/state-and-drift) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -142,7 +143,7 @@ recorded vs live     drifted — replicas: recorded 3, live 2
 
 ## Used in
 
-- [Rollback and recovery](/guides/rollback-and-recovery) — checking drift and rolling back
+- [Rollback and recovery](/deploy/rollback-and-recovery) — checking drift and rolling back
   as part of recovering from a bad change.
 - [`config`](/cli/config#saved-configuration-server-sync) — `config push`/`pull` are the
   same saved-configuration model, scoped to authoring; `state` is the operator-facing

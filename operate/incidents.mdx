@@ -1,0 +1,39 @@
+---
+title: "Incidents"
+sidebarTitle: "Incidents"
+description: "Operational problems Beaver is tracking — open, monitoring or resolved — how to read one's timeline and acknowledge it."
+keywords: ["incidents", "outage", "alert", "beaver incidents", "beaver incidents show"]
+icon: "siren"
+type: howto
+audience: [operator]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+An **incident** is an operational problem Beaver has detected and is tracking. It has a **status** — `open`, `monitoring` or `resolved` — and a timeline of what happened.
+
+<Tabs>
+  <Tab title="Dashboard">Open **Incidents** to see them, open one for its timeline, and acknowledge it.</Tab>
+  <Tab title="Desktop"><Note>Not a separate section in Desktop. Machine alerts and events appear on a machine's **Events** and **Security** tabs.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver incidents --status=open
+    beaver incidents show <id>               # full timeline
+    beaver incidents acknowledge <id>        # the same action as the Dashboard
+    ```
+  </Tab>
+</Tabs>
+
+**Acknowledging** records that you have seen it; it does not fix anything. To act, use the [recovery](/deploy/rollback-and-recovery) tools, and `beaver recover` for a read-only diagnosis first.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Notifications" icon="bell" href="/operate/notifications">How you hear about incidents.</Card>
+  <Card title="Troubleshooting" icon="triangle-alert" href="/operate/troubleshooting">Start from the symptom.</Card>
+</CardGroup>

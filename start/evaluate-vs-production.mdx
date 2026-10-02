@@ -1,0 +1,33 @@
+---
+title: "From trial to production"
+sidebarTitle: "Trial vs production"
+description: "What changes between a first deployment on one machine and a setup you would trust with real traffic."
+keywords: ["from trial to production", "trial vs production"]
+icon: "scale"
+type: howto
+audience: [evaluator, team-lead, operator]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+A trial and a production setup use the same product; what differs is how much you rely on a single thing. Use this as the bridge between
+your [first deployment](/start/quickstart-cli) and the [production-readiness checklist](/start/production-readiness).
+
+| Area | Trial | Production |
+| --- | --- | --- |
+| **Machines** | One machine, **Builder + Host** | Hosts separate from the Builder, so builds never compete with live traffic — [roles](/infrastructure/machines-and-roles) |
+| **If a machine fails** | You redeploy | Plan for it: a cloud does not move running work by itself; know `drain`, `evacuate` and your [recovery options](/operate/recovery-model) |
+| **Address** | Default address | Your own [domain](/network/domains) with a certificate |
+| **Configuration** | Prompts at deploy time | A committed [`.beaver/config.yml`](/deploy/configuration) and [environment variables](/deploy/environment-variables) per environment |
+| **Health** | None | A health path your app answers, so rollouts wait for it — [deployment configuration](/deploy/deployment-configuration) |
+| **Data** | Whatever the container wrote | A [managed service](/data) with [backups](/data/backups-and-restore) you have actually restored once |
+| **Access** | Just you | Roles, [2-step verification](/teams/two-step-verification) and [production approvals](/teams/production-approvals) |
+| **Visibility** | You watch the terminal | [Logs, metrics and traffic](/operate/observability), notifications, and a plan whose retention fits how far back you need to look |
+| **Limits** | Free plan | A plan whose machine, service and retention limits fit — [Plans and billing](/teams/plans-and-billing) |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Production readiness checklist" icon="list-checks" href="/start/production-readiness">Each line links its how-to.</Card>
+  <Card title="Choose your infrastructure" icon="compass" href="/start/choose-your-infrastructure">Revisit the machine layout.</Card>
+</CardGroup>

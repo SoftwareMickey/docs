@@ -1,0 +1,76 @@
+---
+title: "Capacity and placement"
+sidebarTitle: "Capacity and placement"
+description: "Read how much room a cloud has, hold some back, and control where an application's replicas land."
+keywords: ["capacity and placement", "beaver cloud workload", "beaver cloud reserve"]
+icon: "gauge"
+type: howto
+audience: [operator]
+interfaces: [desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Before you deploy more, check how much room your cloud has. When you deploy to a cloud by name, Beaver places the workload on a member with room for it; you can see where it
+landed and steer where replicas go.
+
+## Read capacity
+
+<Tabs>
+  <Tab title="Dashboard">A cloud's page shows a **Capacity** card.</Tab>
+  <Tab title="Desktop">The cloud's **Capacity** tab shows system reserve, reserved, observed use and free as stacked bars, with the schedulable-node count and the largest free node.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud capacity paperclip-prod            # schedulable vs in-use vs reserved
+    beaver cloud capacity node paperclip-prod       # per node
+    beaver cloud capacity trend paperclip-prod      # over time
+    ```
+  </Tab>
+</Tabs>
+
+## Hold capacity back
+
+A **reservation** is held back from scheduling. It lowers what is available for new deployments without touching what is already running.
+
+```bash
+beaver cloud reserve paperclip-prod                              # show reservations
+beaver cloud reserve set paperclip-prod --cpu 1 --memory 1024    # cloud-wide
+beaver cloud reserve set paperclip-prod --node srv_web01 --cpu 0.5
+beaver cloud reserve clear paperclip-prod
+```
+
+## See and steer placement
+
+`beaver cloud workload` describes **intent** — how each application is asked to spread across nodes. `beaver cloud placements` is the **history** of where replicas actually landed.
+
+```bash
+beaver cloud workload paperclip-prod
+beaver cloud placements paperclip-prod
+beaver cloud containers paperclip-prod       # every replica with the node and subnet it runs in
+```
+
+Choose a placement policy for an application:
+
+```bash
+beaver cloud workload set paperclip-prod paperclip-web --policy spread     # one replica per node where possible (default)
+beaver cloud workload set paperclip-prod paperclip-web --policy pack       # consolidate onto the fewest nodes
+beaver cloud workload set paperclip-prod paperclip-db  --policy pinned --pin srv_db01
+```
+
+`workload set` decides *where* replicas land, not *how many* — replica count is governed by [scaling](/deploy/scale). `--lb dns` or `--lb proxy` chooses the internal load-balancing mode.
+
+## Find an app by name inside the cloud
+
+Each app resolves cloud-wide by its short name (`api`) and by `api.<slug>.beaver.internal` to every healthy replica's address on the private network — use that, not a specific
+machine's address. `beaver cloud services paperclip-prod` lists them.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Scale" icon="gauge" href="/deploy/scale">Replica counts.</Card>
+  <Card title="Cloud command reference" icon="terminal" href="/cli/cloud">Every subcommand.</Card>
+</CardGroup>

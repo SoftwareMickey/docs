@@ -1,0 +1,70 @@
+---
+title: "beaver notifications"
+sidebarTitle: "notifications"
+description: "List your Beaver notifications, filter by severity, and stream new ones as they arrive."
+icon: "bell"
+type: reference
+---
+
+<Info>
+  New here? [Notifications](/operate/notifications) explains the kinds, severities and delivery before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver notifications` lists the notifications Beaver has sent you — the same ones that appear in the Dashboard's Notifications inbox and in Beaver Desktop — so you can read them, filter them,
+or watch for new ones from a terminal.
+
+## Syntax
+
+```bash
+beaver notifications [flags]
+beaver notifications watch
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| *(none)* | List your notifications. |
+| `watch` | Stream new notifications as they arrive. |
+
+## Flags
+
+<ParamField query="--severity" type="string" default="">
+  Filter by severity: `info`, `success`, `warning`, `critical` or `security`.
+</ParamField>
+<ParamField query="--unread" type="boolean" default="false">
+  Only unread notifications.
+</ParamField>
+
+See [shared flags](/cli/shared-flags) for `--json` and `--output`, also accepted.
+
+## Consequences
+
+Purely a read: listing and watching do not change or acknowledge anything. To acknowledge an incident use [`beaver incidents acknowledge`](/cli/incidents).
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash Unread only
+beaver notifications --unread
+```
+
+```bash Critical only
+beaver notifications --severity=critical
+```
+
+```bash Stream new ones
+beaver notifications watch
+```
+
+</CodeGroup>
+
+## Used in
+
+- [Notifications](/operate/notifications) — kinds, severities, digests and on-call.
+- [`beaver workspace`](/cli/workspace) — `digest`, `escalation` and `on-call` set the workspace defaults.

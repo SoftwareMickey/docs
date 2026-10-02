@@ -1,0 +1,22 @@
+---
+title: "Reference"
+sidebarTitle: "Reference overview"
+description: "Look-up pages for what you write and read: the project file, configuration, environment variables, exit codes, limits, supported versions and the glossary."
+icon: "book"
+type: hub
+audience: [developer, operator, team-lead]
+keywords: ["reference", "config.yml", "environment variables", "exit codes", "limits", "glossary"]
+---
+
+These pages answer "what exactly does this accept?" and "what is the limit?". They list facts; to learn how to do something, start from [Deploy](/deploy/overview) or [Operate](/operate). Every `beaver` command has its own page under [CLI reference](/cli).
+
+<CardGroup cols={2}>
+  <Card title="Configuration" icon="sliders" href="/reference/configuration">Where each setting lives and which one wins.</Card>
+  <Card title=".beaver/config.yml" icon="file-code" href="/reference/deployment-specification">Every field you can write in the project file.</Card>
+  <Card title="Environment variables" icon="key" href="/reference/environment-variables">What the CLI reads and what Beaver puts in your containers.</Card>
+  <Card title="Exit codes and output" icon="terminal" href="/reference/exit-codes-and-output">Branch on a result in a script; read JSON output.</Card>
+  <Card title="Limits and quotas" icon="gauge" href="/reference/limits-and-quotas">Plan limits, ranges and time windows.</Card>
+  <Card title="Supported versions" icon="layers" href="/reference/supported-versions">Operating systems and the service catalog.</Card>
+  <Card title="Glossary" icon="book-open" href="/reference/glossary">Every term the products use.</Card>
+  <Card title="CLI commands" icon="square-terminal" href="/cli">One page per command, and the shared flags.</Card>
+</CardGroup>

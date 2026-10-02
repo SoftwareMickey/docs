@@ -3,6 +3,7 @@ title: "beaver init"
 sidebarTitle: "init"
 description: "Prepare the current directory for Beaver by generating .beaver/config.yml."
 icon: "sparkles"
+type: reference
 ---
 
 ## Purpose
@@ -75,7 +76,7 @@ beaver init --propose
 | --- | --- | --- |
 | Success | `.beaver/config.yml` written, a summary of what was inferred | Run `beaver validate`, then `beaver deploy`. |
 | Config file already exists | A prompt or refusal, depending on flags | Use `beaver config sync` to update an existing file instead. |
-| Nothing to infer from (no deployment, no Dockerfile/Compose) | An error naming what's missing | Add a Dockerfile (see [Dockerfile requirements](/deploying/dockerfile-requirements)) or deploy first, then re-run. |
+| Nothing to infer from (no deployment, no Dockerfile/Compose) | An error naming what's missing | Add a Dockerfile (see [Dockerfile requirements](/deploy/dockerfile-requirements)) or deploy first, then re-run. |
 
 ## Used in
 

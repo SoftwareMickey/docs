@@ -1,0 +1,53 @@
+---
+title: "Check for drift and reconcile"
+sidebarTitle: "Drift and reconcile"
+description: "Compare your local file, Beaver's saved configuration and what is running, and bring them back in line without a new build."
+keywords: ["check for drift and reconcile", "drift and reconcile", "beaver reconcile", "beaver state status"]
+icon: "git-compare"
+type: howto
+audience: [developer, operator]
+interfaces: [desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Three views of a project can disagree: the **local** `.beaver/config.yml`, the **saved** configuration Beaver has on record, and what is **live**. The idea is in [State and drift](/operate/state-and-drift).
+
+## See where they differ
+
+<Tabs>
+  <Tab title="Dashboard"><Note>Not available as a single view in the Dashboard.</Note></Tab>
+  <Tab title="Desktop">A machine's **Configuration** tab shows desired-state fields and a table of drift, with a note on how to reconcile.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver state status        # local vs saved vs live, at once
+    beaver state drift         # timeline of differences between saved and running
+    beaver state history       # saved-configuration revisions
+    beaver config diff         # exactly which fields differ between local and saved
+    ```
+  </Tab>
+</Tabs>
+
+## Bring them back in line
+
+Pick the direction:
+
+| You want… | Run |
+| --- | --- |
+| Local file to match what Beaver has saved | `beaver state pull` (or `beaver config pull`) |
+| Saved configuration (and the running deployment) to match your local file | `beaver state apply` (or `beaver config push` to save without applying) |
+| What is **running** to match what is **saved**, without a new build | `beaver reconcile --plan`, then `beaver reconcile` |
+| An earlier saved revision back | `beaver state rollback` — forward-only: a new revision is created |
+
+`beaver reconcile` updates replica counts, the health-check path and the scaling policy to match what is saved; `--plan` always previews first.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Configuration" icon="sliders" href="/deploy/configuration">Local versus saved.</Card>
+  <Card title="Recovery model" icon="history" href="/operate/recovery-model">Which action restores what.</Card>
+</CardGroup>

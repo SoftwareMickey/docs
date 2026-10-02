@@ -1,0 +1,34 @@
+ok   /blog   <- vhb-client:navigation/menuData.ts
+ok   /changelog   <- vhb-client:navigation/menuData.ts
+ok   /cli/alie   <- vhb-client:pages/platformAlie/index.tsx
+ok   /cli/cloud   <- vhb-client:pages/cloud/index.tsx
+ok   /cli/connect   <- vhb-client:pages/cli/index.tsx
+ok   /cli/deploy   <- vhb-client:pages/cli/index.tsx
+ok   /cli/edge   <- vhb-client:pages/platformEdge/index.tsx
+ok   /cli/firewall   <- vhb-client:pages/firewall/index.tsx
+ok   /cli/git   <- vhb-client:pages/cli/index.tsx
+ok   /cli/login   <- vhb-client:pages/cli/index.tsx
+ok   /cli/project   <- vhb-client:pages/cli/index.tsx
+ok   /cli/service   <- vhb-client:pages/services/index.tsx
+ok   /concepts/ai-connections-and-alie   <- vhb-client:pages/platformAlie/index.tsx
+ok   /concepts/backups-and-restoration   <- vhb-client:pages/services/index.tsx
+ok   /concepts/beaver-cloud   <- vhb-client:pages/cloud/index.tsx
+ok   /concepts/deployments   <- vhb-client:navigation/menuData.ts
+ok   /concepts/domains-and-routing   <- vhb-client:navigation/menuData.ts, vhb-client:pages/platformEdge/index.tsx
+ok   /concepts/firewall   <- vhb-client:pages/firewall/index.tsx
+ok   /concepts/observability   <- vhb-client:navigation/menuData.ts, vhb-client:pages/platformEdge/index.tsx
+ok   /concepts/persistent-storage   <- vhb-client:pages/services/index.tsx
+ok   /concepts/plans-and-billing   <- vhb-client:pages/platformAlie/index.tsx
+ok   /concepts/scaling-and-resources   <- vhb-client:navigation/menuData.ts
+ok   /concepts/service-databases-and-credentials   <- vhb-client:pages/services/index.tsx
+ok   /concepts/services   <- vhb-client:pages/services/index.tsx
+ok   /concepts/signing-in-and-repository-access   <- vhb-client:app/githubDocs.ts
+ok   /deploying/dockerfile-requirements   <- vhb-client:navigation/menuData.ts
+ok   /documentation   <- vhb-server:proxy/platform.yml, vhb-server:traefik/platform.yml
+MISS /frameworks   <- vhb-client:pages/frameworks/Frameworks.tsx
+ok   /guides/troubleshooting-github   <- vhb-client:app/githubDocs.ts
+ok   /guides/troubleshooting-google   <- vhb-client:app/githubDocs.ts
+ok   /infrastructure-setup   <- vhb-client:navigation/menuData.ts, vhb-client:pages/cloud/index.tsx
+ok   /installation   <- vhb-client:navigation/menuData.ts
+ok   /quickstart   <- vhb-client:navigation/menuData.ts, vhb-client:pages/cli/index.tsx
+ok   /services   <- vhb-client:pages/services/index.tsx

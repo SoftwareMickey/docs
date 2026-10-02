@@ -1,0 +1,60 @@
+---
+title: "My app returns 502 or 503"
+sidebarTitle: "502 / 503"
+description: "Requests reach Beaver but your app does not answer — find out whether it is unhealthy, unreachable or blocked."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+keywords: ["502", "503", "bad gateway", "service unavailable", "app down"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+Your address answers with a 502 or 503 (or another gateway error) instead of your app.
+
+## Check first
+
+1. `beaver inspect` — is the release healthy, and where is it running?
+2. `beaver observe --logs` — is your app crashing or erroring?
+3. `beaver route inspect <domain>` — does it report the backend as healthy?
+4. `beaver firewall overview <deployment-id>` — has a rule, ban or **lockdown** been applied?
+
+## Causes and fixes
+
+### No healthy replica
+
+The health check is failing. See [Deployment is stuck or unhealthy](/operate/troubleshoot-deploy-unhealthy).
+
+### Wrong port, or bound to localhost
+
+The app must listen on the configured port on `0.0.0.0`.
+
+### The machine is offline
+
+If the Host is offline, see [Machine shows offline](/operate/troubleshoot-machine-offline).
+
+### Firewall lockdown or private visibility
+
+`beaver firewall lockdown` blocks **all** traffic until `beaver firewall unlock`; `visibility set --private` makes a service unreachable from outside immediately.
+
+### Scaled to zero capacity
+
+`beaver scaling replicas <container>` shows the running replica slots.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Observability" icon="arrow-right" href="/operate/observability">The page that prevents or explains this.</Card>
+  <Card title="Firewall" icon="arrow-right" href="/network/firewall">The page that prevents or explains this.</Card>
+</CardGroup>

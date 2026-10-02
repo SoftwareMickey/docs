@@ -1,0 +1,12 @@
+# regex<TAB>reason — Era 22 V114 disclosure sweep. Scanned in prose AND code blocks of every published page (not blog/changelog/features/snippets data).
+# Names a user never sees: internal packages/services, private paths, repo names, internal heuristics. Allowlist: disclosure-allowlist.txt (owner-reviewed).
+(?i)\b(agenthub|socketrelay|activityguard|prodguard|platformverify|platformsettings|agentjob|stageb|teamrollout|teamtest|dashlink|speedtest)\b	internal package or service name
+(?i)\bvhb-(server|client)\b	internal repository name
+(?i)\badmin-dashboard\b	operator tooling is never documented publicly (Gap 004)
+(?i)/api/admin\b|/internal/	private endpoint path
+(?i)\basynq\b|\bgorm\b|\bgolang-migrate\b	internal implementation library
+(?i)\b(abuse|risk|spam|fraud) (score|scoring|model|heuristic)s?\b	detection and abuse-defence logic
+(?i)\bplacement (score|scoring|ranking|heuristic)s?\b	why-the-platform-chose logic
+(?i)\bban (list|heuristic|threshold)s?\b	detection and abuse-defence logic
+(?i)\b(AES_SECRET_KEY|JWT_SECRET|DB_PASSWORD|STRIPE_SECRET_KEY)\b	server secret name
+(?i)\bsupport (tooling|console)\b|\bimpersonat(e|ion) (a )?(user|account)\b	operator flows

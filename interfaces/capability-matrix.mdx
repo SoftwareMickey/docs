@@ -1,0 +1,29 @@
+---
+title: "Capability matrix: what each interface can do"
+sidebarTitle: "Capability matrix"
+description: "Every task against Dashboard, Desktop and the CLI: whether you can do it there, the exact path or command, and a link to the guide."
+keywords: ["capable", "can the dashboard", "can the desktop", "which interface", "feature parity", "compare dashboard desktop cli", "is it available in"]
+icon: "table"
+type: reference
+audience: [evaluator, developer, operator, team-lead]
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import CapabilityMatrix from "/snippets/capability-matrix.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Find a task, then read across. **✓ Yes** means you can do the whole task there; **◐ Partly** means you can do part of it or the interface shows you the command to run;
+**— No** means that interface cannot do it, and the cell says where to go instead; **○ Not yet** means it is planned and not available.
+
+<Info>
+Desktop is mostly a place to look. Where an action would change something it opens a sheet with the exact `beaver` command to run — those cells read **Partly**.
+The [overview](/interfaces/overview) explains why.
+</Info>
+
+<CapabilityMatrix />
+
+## Reading the guides
+
+Every cell links to the page that explains the task. The interface guides — [Dashboard](/interfaces/dashboard/tour) and [Desktop](/interfaces/desktop/shell-tour) — say where each screen is;
+the how-to pages say how to do the task itself. State that follows you between interfaces is covered in [How state is shared](/interfaces/how-state-is-shared).

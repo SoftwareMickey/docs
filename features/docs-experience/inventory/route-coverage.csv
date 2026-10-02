@@ -1,0 +1,138 @@
+surface,id,disposition,guide,term,reason
+dashboard,,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/pricing,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/beta/apply,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/waitlist,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/frameworks,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/cloud,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/services,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/platform/edge,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/firewall,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/platform/alie,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/cli,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/legal/terms,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/legal/privacy,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/legal/acceptable-use,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/docs/cli-dashboard-workflow,excluded,,,"marketing, legal or pre-sign-in page — not product UI"
+dashboard,/login,guide,teams/sign-in-methods,Sign-in,
+dashboard,/createaccount,guide,teams/sign-in-methods,Sign-in,
+dashboard,/verification,excluded,,,email-verification interstitial shown until the address is confirmed
+dashboard,/oauth/complete,guide,interfaces/dashboard/tour,sign-in,
+dashboard,/auth/link/confirm,guide,teams/sign-in-methods,Sign-in,
+dashboard,/login/mfa/recover,guide,teams/two-step-verification,recover,
+dashboard,/login/mfa/recover/cancel,guide,teams/two-step-verification,recover,
+dashboard,/oauth/approve,guide,interfaces/dashboard/tour,Approve this device,
+dashboard,/oauth/approve/:kind,guide,interfaces/dashboard/tour,Approve this device,
+dashboard,/accept-invite,guide,interfaces/dashboard/tour,Accept invitation,
+dashboard,/f/:token,guide,interfaces/dashboard/activity-notifications-billing,Share,
+dashboard,/onboarding/connect,guide,interfaces/dashboard/tour,Onboarding,
+dashboard,/payment,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/payment-success,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/payment-cancel,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/pricing-selection,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/plans,excluded,,,legacy path that redirects to a screen already documented
+dashboard,plans,excluded,,,legacy path that redirects to a screen already documented
+dashboard,payment-history,excluded,,,legacy path that redirects to a screen already documented
+dashboard,subscription,excluded,,,legacy path that redirects to a screen already documented
+dashboard,subscriptions,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/me/:user/accountsettings,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/me/:user/mfa,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/multi-factor-auth,excluded,,,legacy path that redirects to a screen already documented
+dashboard,/settings/security,excluded,,,legacy path that redirects to a screen already documented
+dashboard,integrations/:provider,excluded,,,legacy path that redirects to a screen already documented
+dashboard,aws/*,excluded,,,legacy path that redirects to a screen already documented
+dashboard,vps/*,excluded,,,legacy path that redirects to a screen already documented
+dashboard,*,excluded,,,404 page
+dashboard,/dashboard,guide,interfaces/dashboard/tour,Everything operational,
+dashboard,/containers,guide,interfaces/dashboard/projects-and-deployments,Containers,
+dashboard,/projects,guide,interfaces/dashboard/projects-and-deployments,Create project,
+dashboard,/project,guide,interfaces/dashboard/projects-and-deployments,Create project,
+dashboard,/project/environment,guide,interfaces/dashboard/projects-and-deployments,Create environment,
+dashboard,/project/environments,guide,interfaces/dashboard/projects-and-deployments,Create environment,
+dashboard,/project/settings,guide,interfaces/dashboard/projects-and-deployments,Delete Project,
+dashboard,/stacks,guide,interfaces/dashboard/projects-and-deployments,Composers,
+dashboard,/stacks/:stack_id,guide,interfaces/dashboard/projects-and-deployments,Composers,
+dashboard,/stacks/:stack_id/networks,guide,interfaces/dashboard/projects-and-deployments,Composers,
+dashboard,/stacks/:stack_id/settings,guide,interfaces/dashboard/projects-and-deployments,Composers,
+dashboard,/stacks/:stack_id/volumes,guide,interfaces/dashboard/projects-and-deployments,Composers,
+dashboard,/compose/deploy,guide,interfaces/dashboard/projects-and-deployments,Compose,
+dashboard,/repos,guide,interfaces/dashboard/projects-and-deployments,Deploy application,
+dashboard,/clone,guide,interfaces/dashboard/projects-and-deployments,Deploy application,
+dashboard,/scout,guide,interfaces/dashboard/projects-and-deployments,Deploy application,
+dashboard,/deployment,guide,interfaces/dashboard/projects-and-deployments,Overview,
+dashboard,/deployment/:deployment_id,guide,interfaces/dashboard/projects-and-deployments,Overview,
+dashboard,/deployments,guide,interfaces/dashboard/projects-and-deployments,Deployments,
+dashboard,/deployment-history,guide,interfaces/dashboard/projects-and-deployments,Deployment history,
+dashboard,/deployment/domains,guide,interfaces/dashboard/projects-and-deployments,Domains,
+dashboard,/deployment/environment,guide,interfaces/dashboard/projects-and-deployments,Environments,
+dashboard,/deployment/firewall,guide,interfaces/dashboard/projects-and-deployments,Firewall,
+dashboard,/deployment/load_balancing,guide,interfaces/dashboard/projects-and-deployments,Load Balancing,
+dashboard,/deployment/logs,guide,interfaces/dashboard/projects-and-deployments,Logs,
+dashboard,/deployment/mapping,guide,interfaces/dashboard/projects-and-deployments,Github Branch,
+dashboard,/deployment/observability,excluded,,,the route exists but its tab link is commented out in the deployment tab bar — not reachable from the UI (Gap 024)
+dashboard,/deployment/performance,guide,interfaces/dashboard/projects-and-deployments,Performance,
+dashboard,/deployment/settings,guide,interfaces/dashboard/projects-and-deployments,Delete Container,
+dashboard,/deployment/traffic,guide,interfaces/dashboard/projects-and-deployments,Traffic,
+dashboard,/nodes,guide,interfaces/dashboard/nodes-clouds-edge,Management mode,
+dashboard,/nodes/:machineId,guide,interfaces/dashboard/nodes-clouds-edge,Security posture,
+dashboard,/clouds,guide,interfaces/dashboard/nodes-clouds-edge,Drain,
+dashboard,/edge,guide,interfaces/dashboard/nodes-clouds-edge,Connect an app,
+dashboard,/edge/:appId,guide,interfaces/dashboard/nodes-clouds-edge,backends,
+dashboard,/incidents,guide,interfaces/dashboard/nodes-clouds-edge,Incidents,
+dashboard,/managed-services,guide,interfaces/dashboard/nodes-clouds-edge,Managed services,
+dashboard,/activity,guide,interfaces/dashboard/activity-notifications-billing,Explore,
+dashboard,/activity/publish,guide,interfaces/dashboard/activity-notifications-billing,Publish template,
+dashboard,/activity/publish/:projectId,guide,interfaces/dashboard/activity-notifications-billing,Publish template,
+dashboard,/activity/settings/notifications,guide,interfaces/dashboard/activity-notifications-billing,Preferences,
+dashboard,/activity/templates/:templateId,guide,interfaces/dashboard/activity-notifications-billing,Fork,
+dashboard,/u/:username,guide,interfaces/dashboard/activity-notifications-billing,profile,
+dashboard,notifications,guide,interfaces/dashboard/activity-notifications-billing,Unread,
+dashboard,billing,guide,interfaces/dashboard/activity-notifications-billing,Plan & seats,
+dashboard,plans/review,guide,interfaces/dashboard/activity-notifications-billing,Review plan change,
+dashboard,/billing/checkout/callback,guide,interfaces/dashboard/activity-notifications-billing,Checkout,
+dashboard,/billing/checkout/cancelled,guide,interfaces/dashboard/activity-notifications-billing,Checkout cancelled,
+dashboard,/me/:user,guide,interfaces/dashboard/team-and-settings,Edit profile,
+dashboard,/me/:user/edit,guide,interfaces/dashboard/team-and-settings,Edit profile,
+dashboard,/me/:user/badges,guide,interfaces/dashboard/team-and-settings,Edit profile,
+dashboard,/settings,guide,interfaces/dashboard/team-and-settings,Current workspace,
+dashboard,/settings/team,guide,interfaces/dashboard/team-and-settings,Access policies,
+dashboard,/settings/security/mfa/setup,guide,interfaces/dashboard/team-and-settings,Set up 2-step verification,
+dashboard,/integrations,guide,interfaces/dashboard/team-and-settings,Integrations,
+dashboard,integrations/github,guide,interfaces/dashboard/team-and-settings,Manage repository access,
+dashboard,/workspace,guide,interfaces/dashboard/team-and-settings,workspace page,
+dashboard,alie,guide,interfaces/dashboard/tour,Alie,
+dashboard,alie/session,guide,interfaces/dashboard/tour,Alie,
+desktop,section:workspace,guide,interfaces/desktop/terminal-and-projects,Open folder,
+desktop,section:infrastructure,guide,interfaces/desktop/infrastructure,Infrastructure home,
+desktop,section:machines,guide,interfaces/desktop/infrastructure,Machines,
+desktop,section:clouds,guide,interfaces/desktop/infrastructure,Beaver Cloud,
+desktop,section:networks,guide,interfaces/desktop/networks-storage-services,Networks,
+desktop,section:storage,guide,interfaces/desktop/networks-storage-services,Storage,
+desktop,section:services,guide,interfaces/desktop/networks-storage-services,Services,
+desktop,section:traces,guide,interfaces/desktop/approvals-and-alie,Traces,
+desktop,section:approvals,guide,interfaces/desktop/approvals-and-alie,Approvals,
+desktop,section:alie,guide,interfaces/desktop/approvals-and-alie,Alie,
+desktop,section:settings,guide,interfaces/desktop/settings,Settings,
+desktop,section:deployments,excluded,,,hidden from the navigator in this build (Gap 011)
+desktop,section:observability,excluded,,,hidden from the navigator in this build (Gap 011)
+desktop,settings:general,guide,interfaces/desktop/settings,General,
+desktop,settings:alie-general,guide,interfaces/desktop/settings,Alie,
+desktop,settings:alie-memory,guide,interfaces/desktop/settings,Memory,
+desktop,settings:alie-context,guide,interfaces/desktop/settings,Context Permissions,
+desktop,settings:alie-tools,guide,interfaces/desktop/settings,Tools & Routing,
+desktop,settings:ai-harnesses,guide,interfaces/desktop/settings,AI Harnesses,
+desktop,settings:skills,guide,interfaces/desktop/settings,Skills,
+desktop,settings:automation-policy,guide,interfaces/desktop/settings,Automation Policy,
+desktop,settings:projects-workspace,guide,interfaces/desktop/settings,Projects & Workspace,
+desktop,settings:terminal,guide,interfaces/desktop/settings,Terminal,
+desktop,settings:git,guide,interfaces/desktop/settings,Git,
+desktop,settings:cli-agent,guide,interfaces/desktop/settings,Beaver CLI & Agent,
+desktop,settings:activity,guide,interfaces/desktop/settings,Activity,
+desktop,settings:notifications,guide,interfaces/desktop/settings,Notifications,
+desktop,settings:appearance,guide,interfaces/desktop/settings,Appearance,
+desktop,settings:security-privacy,guide,interfaces/desktop/settings,Security & Privacy,
+desktop,settings:updates,guide,interfaces/desktop/settings,Updates,
+desktop,settings:account,guide,interfaces/desktop/settings,Account,
+desktop,settings:advanced,guide,interfaces/desktop/settings,Advanced,
+desktop,settings:about,guide,interfaces/desktop/settings,About,
+dashboard,/settings/notifications,guide,interfaces/dashboard/activity-notifications-billing,Settings → Notifications,

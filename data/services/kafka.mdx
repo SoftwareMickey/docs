@@ -1,0 +1,100 @@
+---
+title: "Kafka"
+sidebarTitle: "Kafka"
+description: "Provision a managed Kafka cluster for event streaming."
+keywords: ["kafka", "database", "cache", "beaver service cluster", "beaver service catalog"]
+icon: "right-left"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+Kafka is a distributed event-streaming platform — used for high-throughput messaging,
+event pipelines, and decoupling services that need to publish and subscribe to streams of
+events.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    Run `beaver service catalog` for the current supported version.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Provisioned as a multi-member cluster — see below.
+  </Card>
+  <Card title="Topic prefixes" icon="hashtag">
+    One service can host multiple isolated topic prefixes, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `kafka` — `beaver service create <name> --type kafka` |
+| Versions | 3.8.0 — confirm with `beaver service catalog` |
+| Default size | 2 CPU · 2048 MB memory · 20 GB storage — change with `beaver service resize` |
+| Default port | 9092 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | topic prefix — each attached app gets its own, with its own credential |
+| Variables injected on attach | `KAFKA_URL`, `KAFKA_HOST`, `KAFKA_PORT`, `KAFKA_NAME`, `KAFKA_USER`, `KAFKA_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-queue --type kafka
+```
+
+For a multi-broker setup, provision it as a cluster instead:
+
+```bash
+beaver service cluster create paperclip-queue --type kafka --replicas 3
+```
+
+Replica count must be odd and at least 3.
+
+## Attach it
+
+```bash
+beaver service attach paperclip-queue --container paperclip-web --env-prefix KAFKA
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service cluster show paperclip-queue
+beaver service cluster resize paperclip-queue --replicas 5
+beaver service cluster upgrade paperclip-queue --version 3.8
+```
+
+`cluster upgrade` upgrades every member in index order, waiting for each to become healthy
+before moving to the next. See [Service clusters](/data/high-availability) for member
+health, resizing, and replacing a lost member.
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`/`beaver service cluster`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+Read `KAFKA_URL` — for kafka it is the broker address (`host:port`) — and `beaver service reveal <name>` shows the credential. See your Kafka client's documentation for how to supply it.
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 9092` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** Beaver backups are **not supported** for kafka. Protect its data another way, and see [Backups and restore](/data/backups-and-restore) for which services are covered.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

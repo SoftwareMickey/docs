@@ -3,6 +3,7 @@ title: "beaver login"
 sidebarTitle: "login"
 description: "Authenticate this CLI against your Beaver account."
 icon: "right-to-bracket"
+type: reference
 ---
 
 Part of the session family: **login** (this page) → [`whoami`](/cli/whoami) to check who
@@ -22,7 +23,7 @@ non-interactive session (CI, scripts, headless machines).
   Signing in with Google or GitHub proves who you are; it does not give Beaver access to your
   Google account or your repositories (that is [`beaver github install`](/cli/github)) and it is
   unrelated to [`beaver git --auth`](/cli/git). See
-  [Signing in vs. connecting repositories](/concepts/signing-in-and-repository-access).
+  [Signing in vs. connecting repositories](/teams/signing-in-and-repository-access).
 </Note>
 
 ## Syntax
@@ -112,10 +113,10 @@ SIGNED IN
 | --- | --- | --- |
 | Success | `✓ Login successful` with account and workspace | You're signed in; other commands no longer prompt for auth. |
 | Browser approval not completed in time | `browser login expired; run beaver login again` | Re-run `beaver login`; approve the browser prompt promptly this time. |
-| Browser shows *Sign-in cancelled* or *That sign-in link expired* | A sign-in message in the browser; the CLI keeps waiting until the login times out | Start the sign-in again from the printed URL — see [Troubleshooting GitHub](/guides/troubleshooting-github). |
+| Browser shows *Sign-in cancelled* or *That sign-in link expired* | A sign-in message in the browser; the CLI keeps waiting until the login times out | Start the sign-in again from the printed URL — see [Troubleshooting GitHub](/operate/troubleshooting-github). |
 | `BEAVER_TOKEN is not valid` | Error naming the invalid token | Check the token value, or unset `BEAVER_TOKEN` and sign in interactively instead. |
 
 ## Used in
 
-- [Deploy workflow](/guides/deploy-workflow) — signing in is the first step before connecting
+- [Deploy workflow](/deploy/overview) — signing in is the first step before connecting
   and deploying.

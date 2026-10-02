@@ -1,0 +1,64 @@
+---
+title: "Status words"
+sidebarTitle: "Status words"
+description: "What each status in the Dashboard, Desktop and CLI means for deployments, machines, clouds and services — and what to do about it."
+icon: "circle-dot"
+type: reference
+audience: [developer, operator]
+---
+
+The same words appear in every interface. This is the one place that defines them.
+
+## Deployment progress
+
+While a deployment is being built and started it moves through these stages (shown in the Dashboard's deployment view):
+
+| Status | Meaning |
+| --- | --- |
+| **Queued** | Accepted, waiting for a Builder or Host to pick it up |
+| **Starting** · **Preparing** | Getting ready to build |
+| **Pulling image** | A Host is fetching the image the Builder pushed |
+| **Verifying** | Checking the build or the running candidate |
+| **Provisioning** · **Creating** · **Configuring** | Setting up the container, network and settings |
+| **Deploying** | Starting the new version |
+| **Switching traffic** | Moving traffic to the new version once it is healthy |
+| **Success** | Running |
+| **Failed** | It did not come up — nothing changes further until you act ([Rollback and recovery](/deploy/rollback-and-recovery)) |
+
+A stage that stays put for a long time is worth a look: `beaver inspect`, `beaver observe --logs`, then [Troubleshooting](/operate/troubleshooting).
+
+## Machines
+
+| Status | Meaning |
+| --- | --- |
+| **Online** | Healthy and reporting |
+| **Degraded** | Reporting, but something needs attention |
+| **Offline** | Beaver has lost visibility and control. **Your containers keep running** — offline means the agent is not reporting, not that your app stopped. See [Machine shows offline](/operate/troubleshoot-machine-offline) |
+| **Unknown** | No recent report |
+
+A machine's **health score** is separate from availability: a machine can be Online and still score poorly.
+
+## Beaver Clouds
+
+A cloud's own status and its **network** status are **separate axes** — check both.
+
+| Cloud status | Network status |
+| --- | --- |
+| **Healthy** · **Degraded** · **Unhealthy** · **Provisioning** | **Network active** · **Network degraded** · **Network provisioning** · **No network** (a cloud with no private network is normal) |
+
+## Services
+
+| Status | Meaning |
+| --- | --- |
+| **Running** · **Healthy** | Up |
+| **Degraded** | Up, with a problem |
+| **Provisioning** | Being created or started |
+| **Stopped** | You stopped it |
+| **Failed** | Could not be brought up — `beaver service retry <name>` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Troubleshooting" icon="triangle-alert" href="/operate/troubleshooting">Start from what you see.</Card>
+  <Card title="Observability" icon="activity" href="/operate/observability">Which log answers which question.</Card>
+</CardGroup>

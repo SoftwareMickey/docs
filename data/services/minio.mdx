@@ -1,0 +1,110 @@
+---
+title: "MinIO"
+sidebarTitle: "MinIO"
+description: "Provision managed, S3-compatible object storage and attach it to your application."
+keywords: ["minio", "database", "cache", "beaver service catalog", "beaver service create"]
+icon: "box-archive"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+MinIO is S3-compatible object storage — a common choice for applications that need file or
+blob storage with an API compatible with the S3 ecosystem, without using an external cloud
+provider's storage service.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    Run `beaver service catalog` for the current supported version.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance.
+  </Card>
+  <Card title="Buckets" icon="box">
+    One service can host multiple isolated buckets, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `minio` — `beaver service create <name> --type minio` |
+| Versions | RELEASE.2024-11-07T00-52-20Z (default), RELEASE.2024-08-26T15-33-07Z — confirm with `beaver service catalog` |
+| Default size | 0.5 CPU · 1024 MB memory · 20 GB storage — change with `beaver service resize` |
+| Default port | 9000 (on the service's private address; never published publicly) |
+| Persistence | Optional — `--no-persistence` gives a cache-style service with no data volume |
+| Isolated resource per application | bucket — each attached app gets its own, with its own credential |
+| Variables injected on attach | `MINIO_URL`, `MINIO_HOST`, `MINIO_PORT`, `MINIO_NAME`, `MINIO_USER`, `MINIO_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-storage --type minio
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-storage --container paperclip-web --env-prefix S3
+```
+
+Your application receives connection details (endpoint, access key, secret key) as an
+environment variable using the prefix you choose. It's usable once the attachment takes
+effect — for most services, that's your next deployment.
+
+### Bucket names
+
+Beaver names may contain underscores, but S3 bucket names can't. Beaver stores the bucket
+under the same name with each `_` replaced by `-`, so `user_uploads` becomes the bucket
+`user-uploads`. The name must be 3 to 63 characters and can't end in an underscore. When
+Beaver picks the name for you (from your container's name), it already follows these rules.
+
+Deleting a bucket removes the objects inside it. Beaver asks you to confirm first, and there
+is no undo.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-storage
+beaver service resize paperclip-storage --cpu 1 --memory 1024
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import * as Minio from "minio";
+const client = new Minio.Client({
+  endPoint: process.env.MINIO_HOST,
+  port: Number(process.env.MINIO_PORT),
+  useSSL: false,
+  accessKey: process.env.MINIO_USER,
+  secretKey: process.env.MINIO_PASSWORD,
+});
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 9000` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** Beaver backups are **not supported** for minio. Protect its data another way, and see [Backups and restore](/data/backups-and-restore) for which services are covered.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

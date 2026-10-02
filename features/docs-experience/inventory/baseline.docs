@@ -1,0 +1,46 @@
+# Docs Experience — Baseline (measured 2026-10-01, before Era 3)
+
+Reproduce: `scripts/build_page_inventory.py`, `scripts/build_surfaces.py`, `scripts/product_links.py`,
+`mint broken-links`, `mint validate`.
+
+## Pages
+176 public MDX pages (excl. blog/changelog/snippets). Nav: 2 tabs (Guides, CLI); Guides sidebar has 9
+groups; **Concepts = 38 pages in one flat group**. 37 pages are `thin` (< 300 words and a how-to/tutorial/
+troubleshooting type). 4 pages are orphans (`cli/shared-flags`, `development`, `features`, `index`).
+`stale` detector flags 2 pages; both reviewed and are false positives (`cli/deploy` negates auto-
+dockerization across a line break; `cli/edge` uses "auto-detected services" as a product term).
+`development.mdx` is unmodified Mintlify boilerplate (retired in Era 3).
+
+## Surfaces (`surfaces.csv`, 163 rows)
+Floor measure (keyword + interface-name evidence in public pages):
+- Dashboard: 17 covered · 10 thin · **31 missing** · 1 unreleased (passkeys) · 1 internal (marketing)
+- Desktop: 3 covered · 5 thin · **30 missing** · 2 unreleased (Deployments + Observability sections are hidden
+  from the sidebar at last check)
+- Backend-only behaviors: 6 covered · 2 internal (mechanism)
+- CLI: 52 covered · 2 internal (`admin`, `mcpcmd`, decided in features/docs)
+
+## Validation
+`mint broken-links`: 2 failures, both in `features/*/templates` placeholders (the build was scanning the
+internal `features/` tree) → fixed with `.mintignore` (features/, scripts/, recipes/): **0 failures**.
+`mint validate`: pass. `mint a11y`: failures only in `blog/` (historical, left as-is, Invariant 7).
+
+## Product-emitted docs URLs (34, `product-emitted-urls.txt`)
+All resolve today except **`/frameworks`** (emitted by the Dashboard's Frameworks marketing page; no such
+docs page — a pre-existing 404, fixed by the frameworks hub in Era 3 V13). Several emit heading
+anchors (`/guides/troubleshooting-github#<heading-slug>`, `/concepts/signing-in-and-repository-access#…`):
+**heading text on those pages must not change during the move**, and redirects must preserve the fragment.
+The server's Traefik rule redirects `docs.vectorihub.com/documentation*` — `/documentation` must keep resolving.
+Also: `scripts/check-team-docs.py` hard-codes `guides/troubleshooting-teams.mdx` and must be updated with the move.
+
+## Scorecard baseline (owner, 2026-10-01)
+IA 4 · workflows 4.5 · Dashboard 3 · Desktop 1 · discoverability 4 · reference 8.5 · polish 5 · overall ~5.
+Find test: 30 tasks in `find-test.md`; 8 have no answering page at all, 14 are answered only by a concept
+essay, a CLI reference page, or a page in the wrong group, 8 reach a task page directly.
+
+## Journey walk (read-only, against current docs)
+Could not execute on a clean VM from this session (no second machine / provider accounts — Gap 018). Done as
+a read-through of the seven First-steps journeys: dead ends found —
+(1) `quickstart` teaches dashboard-only; no CLI-first or Desktop path; (2) no page says which interface to
+pick; (3) `connect` and `machine-roles` and `guides/connect-and-machine-roles` overlap; (4) "domain doesn't
+resolve" and "502/503" have no page; (5) Desktop absent entirely; (6) Services pages lack connect/verify/
+backup/failure sections; (7) three landing pages overlap (`index`, `documentation`, `features`).

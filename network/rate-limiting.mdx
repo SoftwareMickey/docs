@@ -1,0 +1,75 @@
+---
+title: "Rate limiting and login protection"
+sidebarTitle: "Rate limiting"
+description: "Cap how fast a deployment can be hit, rate-limit a path, and ban sources that hammer a login page."
+keywords: ["rate limiting and login protection", "rate limiting", "beaver firewall policy", "beaver firewall rule"]
+icon: "gauge"
+type: howto
+audience: [developer, operator, security]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Rate limiting is part of the deployment's [firewall](/network/firewall): a policy-wide cap, **rules** that rate-limit specific traffic, and **login protection** for repeated failed attempts.
+It is addressed by **deployment ID**, which is stable across redeploys.
+
+<Tabs>
+  <Tab title="Dashboard">A deployment's **Firewall** tab is where its firewall is managed in the web app.</Tab>
+  <Tab title="CLI">Every option on this page is a `beaver firewall` command, addressed by deployment ID — shown below.</Tab>
+</Tabs>
+
+## Cap overall traffic
+
+```bash
+beaver firewall policy dep_abc123                                   # show the current policy
+beaver firewall policy set dep_abc123 --rate-limit 600              # requests per minute
+beaver firewall policy set dep_abc123 --concurrency 50              # concurrent requests
+beaver firewall policy set dep_abc123 --max-body-bytes 1048576      # largest request body
+```
+
+## Rate-limit one path
+
+A rule pairs a condition (IP, path, method, query or header) with an action (`allow`, `block`, `rate-limit` or `challenge`). The first matching rule in your priority order applies.
+
+```bash
+beaver firewall rule add dep_abc123 --type path --value /api/search --action rate-limit
+beaver firewall rules dep_abc123
+```
+
+## Protect a login page
+
+```bash
+beaver firewall login-protect dep_abc123 --path /login --threshold 5
+```
+
+Watches that path for repeated failed attempts and bans the source after the threshold you set. For a Compose stack that shares a deployment ID add `--service <name>`.
+
+## Check that it works
+
+```bash
+beaver firewall events dep_abc123 --grouped       # what was blocked or allowed, grouped by rule or IP
+beaver firewall bans dep_abc123                   # currently banned IPs
+```
+
+Don't assume a rule works — read the events after adding it.
+
+## Undo an accidental block
+
+`beaver firewall rule delete` removes a rule and `beaver firewall unban dep_abc123 <ip>` reverses a ban; both take effect immediately. `beaver firewall rollback dep_abc123 <revision-id>` replaces the current configuration with a
+previous revision (`beaver firewall revisions` lists them) — what is set now is overwritten, not merged.
+
+<Warning>
+`beaver firewall lockdown` blocks **all** traffic to the deployment. It is for an active incident; `beaver firewall unlock` restores normal traffic.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Firewall" icon="shield" href="/network/firewall">The rule model.</Card>
+  <Card title="Firewall command reference" icon="terminal" href="/cli/firewall">Every flag.</Card>
+</CardGroup>

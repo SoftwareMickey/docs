@@ -3,10 +3,11 @@ title: "beaver service"
 sidebarTitle: "service"
 description: "Provision and operate Beaver-managed stateful services (Postgres, Redis, and more)."
 icon: "database"
+type: reference
 ---
 
 <Info>
-  New here? [Services](/concepts/services) explains what this is and when to use it, before diving into syntax.
+  New here? [Services](/data/services-and-persistence) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -393,5 +394,5 @@ beaver service connect paperclip-db --local-port 5433
 ## Used in
 
 - [`cloud`](/cli/cloud) — services run on machines that may be grouped into a cloud.
-- [Environment variables](/deploying/environment-variables) — `attach` injects connection
+- [Environment variables](/deploy/environment-variables) — `attach` injects connection
   details the same way.

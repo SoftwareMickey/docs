@@ -1,0 +1,94 @@
+---
+title: "NATS"
+sidebarTitle: "NATS"
+description: "Provision a managed NATS server and attach it to your application."
+keywords: ["nats", "database", "cache", "beaver service catalog", "beaver service create"]
+icon: "right-left"
+type: howto
+audience: [developer, operator]
+interfaces: [cli]
+---
+
+NATS is a lightweight, high-performance messaging system — a simpler alternative to Kafka or
+RabbitMQ for services that need fast pub/sub or request/reply messaging without heavier
+broker overhead.
+
+<CardGroup cols={2}>
+  <Card title="Supported versions" icon="tag">
+    2.10 (default), 2.11 — run `beaver service catalog` for the current list.
+  </Card>
+  <Card title="Deployment shape" icon="circle-nodes">
+    Single instance by default; check `beaver service cluster create` for clustered setups.
+  </Card>
+  <Card title="Subject prefixes" icon="hashtag">
+    One service can host multiple isolated subject prefixes, one per attached application.
+  </Card>
+</CardGroup>
+
+{/* BEGIN GENERATED service-facts (scripts/gen_service_facts.py) */}
+
+## At a glance
+
+| | |
+| --- | --- |
+| Type | `nats` — `beaver service create <name> --type nats` |
+| Versions | 2.10 (default), 2.11 — confirm with `beaver service catalog` |
+| Default size | 0.5 CPU · 512 MB memory · 10 GB storage — change with `beaver service resize` |
+| Default port | 4222 (on the service's private address; never published publicly) |
+| Persistence | A data volume is always provisioned |
+| Isolated resource per application | subject prefix — each attached app gets its own, with its own credential |
+| Variables injected on attach | `NATS_URL`, `NATS_HOST`, `NATS_PORT`, `NATS_NAME`, `NATS_USER`, `NATS_PASSWORD` (prefix changeable with `--env-prefix`) |
+
+{/* END GENERATED service-facts */}
+
+## Add it
+
+```bash
+beaver service create paperclip-bus --type nats
+```
+
+## Attach it
+
+```bash
+beaver service attach paperclip-bus --container paperclip-web --env-prefix NATS
+```
+
+Your application receives connection details as an environment variable using the prefix
+you choose. It's usable once the attachment takes effect — for most services, that's your
+next deployment.
+
+## Manage it
+
+```bash
+beaver service reveal paperclip-bus
+beaver service resize paperclip-bus --cpu 1 --memory 512
+```
+
+<Card title="Service command reference" href="/cli/service">
+  Every subcommand and flag for `beaver service`, exact syntax.
+</Card>
+
+{/* BEGIN GENERATED service-connect (scripts/gen_service_facts.py) */}
+
+## Connect from your application
+
+[Attach the service](/start/first-service) to your application, then redeploy so the injected variables reach the container. Your app reads the connection from the environment.
+
+<CodeGroup>
+```js Node.js
+import { connect } from "nats";
+const nc = await connect({ servers: process.env.NATS_URL });
+```
+</CodeGroup>
+
+<Note>These snippets are illustrative; check your driver's documentation for options such as TLS and pooling.</Note>
+
+## Verify, back up and troubleshoot
+
+- **Healthy?** `beaver service show <name>` shows status, placement and attached applications. An unhealthy service: `beaver service retry <name>`.
+- **From your laptop:** `beaver service connect <name> --local-port 4222` opens a tunnel on `127.0.0.1` ([Connect locally](/data/connect-locally)).
+- **Back up:** Beaver backups are **not supported** for nats. Protect its data another way, and see [Backups and restore](/data/backups-and-restore) for which services are covered.
+- **Credentials:** `beaver service reveal <name>` prints the live connection string and records an audit event; rotate one database's credential with `beaver service database rotate <db-name> <service>`.
+- **Detach vs delete:** detaching an app ends only its own access. `beaver service delete` keeps the data volume; `beaver service delete-volume` destroys it permanently.
+
+{/* END GENERATED service-connect */}

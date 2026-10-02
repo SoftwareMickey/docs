@@ -1,0 +1,97 @@
+---
+title: "Projects, deployments and containers in the Dashboard"
+sidebarTitle: "Projects and deployments"
+description: "Where projects, environments, deployments, releases, containers and Compose stacks are in the Dashboard, what each screen shows, and what you can do there."
+icon: "boxes"
+type: interface
+audience: [developer, operator]
+interfaces: [dashboard]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## Projects
+
+**Projects** lists your projects, with a search box and **Create project** (a name and an optional description). Open one to see its **Overview**, **Environments** and **Settings**.
+
+| Area | Shows | Actions | How-to |
+| --- | --- | --- | --- |
+| **Environments** | Each environment, its branch, and its services | **Create environment** (name, branch mapping, description) | [Environments](/deploy/environments) |
+| **Environment variables** | Keys and values for the environment, with a visibility toggle | Filter, add, edit, delete, upload a `.env` file | [Environment variables](/deploy/environment-variables) |
+| **Settings** | The project name and general details | **Delete Project** under the *Danger Zone* — you must type the project name | [Projects](/deploy/projects) |
+
+A project's name is required and appears in listings; keep related deployments, environments and resources together.
+
+<Shot name="dashboard/projects" alt="The Projects page listing the workspace's projects with their containers and services." />
+
+## Deploying
+
+**Deploy application** (from the home screen) starts a *New Deployment*: pick the **Repository** and branch, the **Builder** machine, set the **Docker Configuration** (Docker Hub username, image name, container port, app port) and the **Environment**, add environment variables manually or from `.env` files, and
+confirm the deployment path. A **Release checklist** shows what is still missing. The full walk-through is [Deploy from a repository](/deploy/from-github).
+
+<Note>
+You need a connected GitHub account and at least one enrolled Builder machine. Without a Builder, the page says **No builder machines enrolled yet** and shows the command to enrol one.
+</Note>
+
+<Shot name="dashboard/containers" alt="The Containers page listing every running container with its status, image, branch and domain." />
+
+## Deployments and containers
+
+| Screen | Shows | Notes |
+| --- | --- | --- |
+| **Deployments** | Every deployment with status (**Running**, **Deploying**, **Exited**), search and filters | Open a row for its detail page |
+| **Deployment history** | Past deployments, with the build logs and build summary in each deployment's view; search by image name, branch or commit; filter by **Success** or **Failed** | Reached from **Recent deployments → View all** on the home screen |
+| **Containers** | Every container with **Total**, **Healthy** and **Needs attention**, a search box, and filters by kind (**Standalone**) and framework | See [Containers and replicas](/deploy/containers-and-replicas) |
+
+### A deployment's tabs
+
+Open a deployment to get these tabs. Some depend on where the deployment runs: **Load Balancing** and **Firewall** are available on deployments hosted by an enrolled machine's agent.
+
+| Tab | What it is for | How-to |
+| --- | --- | --- |
+| **Overview** | Summary: framework, package manager, runtime, time to deploy, source, changed files, the live URL (**Visit**); **Promote**, **Ask Alie** and **Cancel** while a workflow runs | [Deployment status](/operate/deployment-status), [Promote](/deploy/promote) |
+| **Deployments** | The deployment's releases; **Redeploy** and **Roll back** | [Rollback and recovery](/deploy/rollback-and-recovery) |
+| **Domains** | Primary domain, custom domains, the DNS record to add, and status (**Checking DNS** → **DNS verified** → **Issuing SSL & propagating** → **Live over HTTPS**) | [Domains](/network/domains), [TLS](/network/tls) |
+| **Logs** | Request log: filters by time, status, method and container; a request inspector with timing, headers and the container's CPU, memory and restarts | [Logs](/operate/logs) |
+| **Traffic** | Requests, request rate, success rate, P95 latency, 5xx errors; most failing and top routes; recent requests | [Metrics and traffic](/operate/metrics-and-traffic) |
+| **Load Balancing** | Desired replicas, replica health, autoscaling, blue/green and canary rollout controls | [Scale](/deploy/scale), [Load balancing](/network/load-balancing) |
+| **Performance** | Core Web Vitals from real visits, slowest pages, and breakdowns by region, device, browser and source; shows **Waiting for real-user data** until visits arrive | [Beaver Edge](/network/beaver-edge) |
+| **Firewall** | Protection level, rules, bans, scanner candidates, web application firewall mode, emergency lockdown, and revision history with restore | [Firewall](/network/firewall) |
+| **Environments** | The deployment's environment variables — add, filter, update, delete | [Environment variables](/deploy/environment-variables) |
+| **Github Branch** | Which branch is mapped to this deployment | [Environments](/deploy/environments) |
+| **Settings** | Container name and port; **Delete Container** (type the name to confirm) | [Deployment configuration](/deploy/deployment-configuration) |
+
+<Warning>
+**Delete container** and **Delete Project** are permanent. Each asks you to type the name before it proceeds.
+</Warning>
+
+## Composers (Compose stacks)
+
+**Composers** lists your Compose stacks (**All stacks**, **Healthy**, **Needs attention**) with their services, frameworks and runtimes. Open a stack to see its services, then **Networks** (the networks the stack's services share), **Volumes** (the persistent volumes it uses) and **Settings**, where
+**Delete compose stack** is isolated in a *Danger zone*. To deploy a Compose file see [Compose applications](/deploy/compose-applications).
+
+## Not documented
+
+The Dashboard also contains a **Migrate** window on a deployment (to AWS or to your own server). It is not described here because it is not yet part of the supported workflow.
+
+## Same task in the other interfaces
+
+| Task | CLI | Desktop |
+| --- | --- | --- |
+| List containers | `beaver containers` | **Machines → machine → Containers**; **Services** for managed services |
+| Inspect a deployment | `beaver inspect` | A container's **Overview** |
+| Roll back | `beaver container <name> rollback` | Not available — use the Dashboard or CLI |
+
+The [capability matrix](/interfaces/capability-matrix) has every task.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Deploy from a repository" icon="github" href="/deploy/from-github">The deploy flow in full.</Card>
+  <Card title="Operate" icon="activity" href="/operate">Status, logs, metrics and incidents.</Card>
+</CardGroup>

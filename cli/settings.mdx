@@ -1,0 +1,95 @@
+---
+title: "beaver settings"
+sidebarTitle: "settings"
+description: "Read, explain, compare and change platform settings at workspace, project, environment or service scope."
+icon: "sliders-horizontal"
+type: reference
+---
+
+<Info>
+  New here? [Settings and precedence](/teams/settings-and-precedence) explains who wins when a setting is set in several places, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver settings` is the command-line view of the **same settings registry** behind the Dashboard's Settings pages, Beaver Desktop's Settings, and every resource's own Settings tab. A setting can hold a value at
+several **scopes**; `beaver settings` reads, explains, compares and changes them.
+
+## Syntax
+
+```bash
+beaver settings <subcommand> [key] [flags]
+```
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | List every setting applicable at a scope. |
+| `get <key>` | Show one setting's full effective value. |
+| `explain <key>` | Show where a setting's effective value comes from, scope by scope. |
+| `set <key> <value>` | Set a setting's value at a scope. |
+| `unset <key>` | Reset a setting to its inherited value (removes the explicit override at that scope). |
+| `diff <key>` | Compare a setting's effective value between two scopes. |
+| `history <key>` | Show the change history for a setting at a scope. |
+| `export` | Export every explicitly-set value at a scope. |
+
+## Scopes
+
+A scope is written `workspace`, `project[:id]`, `environment:<id>` or `service:<id>`. The chain from most specific to least is **service → environment → project → workspace**; the first scope with an explicit value wins.
+
+## Flags
+
+<ParamField query="--scope" type="string" default="">
+  On `list`, `get`, `explain`, `set`, `unset`, `history` and `export`: the scope to read from or write at.
+</ParamField>
+<ParamField query="--reason" type="string" default="">
+  On `set`: an optional reason recorded with the change.
+</ParamField>
+<ParamField query="--from" type="string" default="" required>
+  On `diff`: the scope to compare from. Required.
+</ParamField>
+<ParamField query="--to" type="string" default="" required>
+  On `diff`: the scope to compare to. Required.
+</ParamField>
+<ParamField query="--limit" type="integer" default="0">
+  On `history`: maximum entries (default: the server's default).
+</ParamField>
+<ParamField query="--format" type="string" default="yaml">
+  On `export`: `yaml` or `json`.
+</ParamField>
+
+See [shared flags](/cli/shared-flags) for `--json` and `--output`, also accepted.
+
+## Consequences
+
+`list`, `get`, `explain`, `diff`, `history` and `export` are reads. `set` writes an explicit value at the scope you name, with who changed it and when recorded in `history`. `unset` is a real delete — the key falls back to the next scope up;
+it is never a re-write that happens to match the parent's value. A workspace's **enforced policy** sits above every scope: a project, environment or service can make a setting stricter than the workspace, never looser.
+
+## Examples
+
+<Info>
+  **Reviewed against source**: examples on this page were checked against `beaver-cli` source and its own `--help` output, not executed end-to-end against a live workspace.
+</Info>
+
+<CodeGroup>
+
+```bash What can I set here?
+beaver settings list --scope workspace
+```
+
+```bash Why does it have this value?
+beaver settings explain <key> --scope service:<id>
+```
+
+```bash Change it at one scope, with a reason
+beaver settings set <key> <value> --scope project --reason "tighten for launch"
+```
+
+```bash Compare two scopes
+beaver settings diff <key> --from workspace --to environment:<id>
+```
+
+</CodeGroup>
+
+## Used in
+
+- [Settings and precedence](/teams/settings-and-precedence) — the model behind these commands.

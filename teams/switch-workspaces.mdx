@@ -1,0 +1,65 @@
+---
+title: "Switch workspaces"
+sidebarTitle: "Switch workspaces"
+description: "Choose which workspace your commands and screens act in, and how the choice is resolved when it is set in several places."
+keywords: ["switch workspaces", "beaver workspace use", "beaver workspace show"]
+icon: "arrow-left-right"
+type: howto
+audience: [developer, team-lead]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+If you belong to more than one workspace — your personal one and a team's, say — everything you do acts in exactly one of them: the **active workspace**. Choosing a workspace never
+gives you access to it; membership is checked on **every request**.
+
+## Switch
+
+<Tabs>
+  <Tab title="Dashboard">Use the **workspace switcher** to pick another workspace; the Dashboard shows which one you are in whenever it is not your personal one.</Tab>
+  <Tab title="Desktop">The **workspace switcher** in the app chrome. Switching resets back and forward history, because a selection from one workspace means nothing in another.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver workspace list            # every workspace you belong to, with your role and its plan
+    beaver workspace use acme-team   # make it the active one for every later command
+    beaver workspace use personal    # back to your personal workspace
+    beaver workspace show            # the active workspace: plan, role, seats, limits
+    ```
+  </Tab>
+</Tabs>
+
+## Act in another workspace for one command
+
+```bash
+beaver workspace show --workspace acme-team
+BEAVER_WORKSPACE=acme-team beaver workspace show
+```
+
+When more than one is set, the most specific wins:
+
+| Order | Source |
+| --- | --- |
+| 1 | `--workspace <name or id>` on the command |
+| 2 | The `BEAVER_WORKSPACE` environment variable |
+| 3 | The workspace you chose with `beaver workspace use` |
+| 4 | Your personal workspace |
+
+## Stay oriented
+
+Whenever the active workspace is not your personal one, the interactive shell prompt shows it (for example `beaver [acme-team] ▸`), so a production command is not run in the wrong workspace by accident.
+
+<Note>
+If someone removes you from the workspace you had selected, your next command says `You are no longer a member of <name>; run beaver workspace use to pick another workspace.` and forgets the selection.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Working in a shared workspace" icon="layout-grid" href="/teams/working-in-a-shared-workspace">Roles and approvals day to day.</Card>
+  <Card title="Accounts, workspaces and teams" icon="users" href="/teams/accounts-workspaces-teams">The model.</Card>
+</CardGroup>

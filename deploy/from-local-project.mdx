@@ -1,0 +1,89 @@
+---
+title: "Deploy from your laptop or a local project directory"
+sidebarTitle: "From a local project"
+description: "Use beaver deploy from a repository on your machine — init, validate, preview, deploy — and what it does and does not upload."
+keywords: ["deploy from my laptop", "deploy from laptop without github", "local project", "from my machine", "working directory", "no dashboard", "beaver deploy"]
+icon: "folder-git-2"
+type: howto
+audience: [developer]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+`beaver deploy` in a project directory deploys the repository you are standing in. It discovers the git remote, branch and exact commit from your working
+tree and deploys **that precise revision**. It **never uploads your files**: the Builder clones the commit from GitHub and builds it itself. Only the
+reference travels from your machine.
+
+<Note>
+This is a CLI workflow; the Dashboard deploys from a repository through its form ([from GitHub](/deploy/from-github)), and Desktop does not deploy.
+</Note>
+
+## Before you begin
+
+- A [cloud](/start/first-cloud), a Docker Hub login on the Builder, and a way for the Builder to clone the repository — for a private one, a GitHub login on that machine (`gh auth login`; check with `beaver git --auth`). See [Deploy from GitHub](/deploy/from-github).
+- A `Dockerfile` in the repository.
+- **A clean working tree with every commit pushed.** The command refuses to run with uncommitted changes or unpushed commits, because the Builder can only
+  build what it can fetch.
+
+## Steps
+
+<Steps>
+  <Step title="Generate the configuration (first time)">
+    ```bash
+    cd paperclip/
+    beaver init
+    ```
+    Writes `.beaver/config.yml`, inferred from your Dockerfile (or from what is already deployed, if anything is). Edit it, commit it, and push.
+    `beaver init --propose` prints the proposal without writing it.
+  </Step>
+  <Step title="Validate and check">
+    ```bash
+    beaver validate           # parses .beaver/config.yml locally — nothing deployed
+    beaver preflight          # is the project ready to deploy? changes nothing
+    ```
+    `beaver preflight --full` goes further: it builds a throwaway candidate off-routing, health-checks it and tears it down, streaming each step.
+  </Step>
+  <Step title="Preview the plan">
+    ```bash
+    beaver deploy --dry-run --cloud paperclip-prod
+    ```
+    Runs every preflight check and prints the plan without deploying.
+  </Step>
+  <Step title="Deploy">
+    ```bash
+    beaver deploy --cloud paperclip-prod
+    ```
+    `--cloud` can be saved as `cloud: paperclip-prod` in `.beaver/config.yml`. `--dockerfile <path>` deploys a Dockerfile elsewhere in the repository. Add
+    `--logs` to stream raw build output instead of the summary board.
+  </Step>
+</Steps>
+
+<Warning>
+**Compose projects are deliberate.** A `compose.yml` beside a Dockerfile does not change what `beaver deploy` does. Use
+[`beaver compose deploy`](/deploy/compose-applications) for a multi-service release.
+</Warning>
+
+## Verify
+
+```bash
+beaver inspect
+beaver observe --logs
+```
+
+## If it fails
+
+- **"uncommitted changes" or "unpushed commits"** — commit and push first.
+- **A blocking preflight finding** — fix it; `--skip-preflight` exists but is recorded as an audit row.
+- **Refused: already deployed** — this repository and branch already has a deployment; use `beaver container <name> redeploy` or push to the branch.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Configuration" icon="sliders" href="/deploy/configuration">`.beaver/config.yml` versus what Beaver has saved.</Card>
+  <Card title="Run in CI" icon="terminal" href="/deploy/ci-cd">The non-interactive form.</Card>
+</CardGroup>

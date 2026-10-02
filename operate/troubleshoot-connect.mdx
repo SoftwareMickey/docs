@@ -1,0 +1,54 @@
+---
+title: "beaver connect fails"
+sidebarTitle: "Connect fails"
+description: "Connecting a machine stops partway — the usual causes and fixes."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [operator, developer]
+interfaces: [cli]
+keywords: ["connect failed", "docker not found", "permission denied docker", "already enrolled"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+`beaver connect` reports something missing, or stops before the machine appears in Beaver.
+
+## Check first
+
+1. Run `beaver doctor` — it checks the system, network, Docker, Git, authentication and agent, and changes nothing.
+2. Re-run `beaver connect`. It saves its progress and resumes.
+
+## Causes and fixes
+
+### Docker is not installed or not running
+
+Install Docker Engine and start it; `docker --version` should work.
+
+### Permission errors using Docker
+
+Add your user to the `docker` group (`sudo usermod -aG docker $USER`) and start a new shell.
+
+### No internet
+
+The machine needs outbound access to reach Beaver.
+
+### Already enrolled under a different account
+
+Remove it from that account first, or use a different machine.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Connect a machine" icon="arrow-right" href="/infrastructure/connect-a-machine">The page that prevents or explains this.</Card>
+  <Card title="Beaver doctor" icon="arrow-right" href="/install/doctor">The page that prevents or explains this.</Card>
+</CardGroup>

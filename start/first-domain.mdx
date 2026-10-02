@@ -1,0 +1,81 @@
+---
+title: "Your first domain"
+sidebarTitle: "4. First domain"
+description: "Attach a domain you own to a deployment, create the DNS record Beaver tells you to, and confirm HTTPS works."
+keywords: ["first domain", "custom domain", "dns", "cname", "https", "getting started"]
+icon: "globe"
+type: tutorial
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+time: "10 min (plus DNS)"
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you'll do
+
+Every deployed app already has a default address, `https://<name>.vectorihub.com`, with a certificate. Here you add **your own** domain next
+to it. The default address keeps working.
+
+## Before you start
+
+- A running [deployment](/start/first-deploy) and its container name (`beaver containers`).
+- A domain you control and access to its DNS settings. (Examples use `app.example.com`.)
+
+## Steps
+
+<Steps>
+  <Step title="Attach the domain">
+    <Tabs>
+      <Tab title="Dashboard">Open the deployment's **Domains** tab and add the hostname.</Tab>
+      <Tab title="Desktop"><Note>Not available in Desktop — use the Dashboard or the CLI.</Note></Tab>
+      <Tab title="CLI">
+        ```bash
+        beaver domain add --container <name> --domain app.example.com
+        ```
+      </Tab>
+    </Tabs>
+    Beaver prints the DNS record to create. This queues DNS verification and certificate issuance in the background; it does not wait for them.
+  </Step>
+  <Step title="Create the DNS record">
+    | You attach | Record you create at your DNS provider |
+    | --- | --- |
+    | A subdomain such as `app.example.com` | A **CNAME** pointing at the target Beaver gives you |
+    | A bare domain such as `example.com` | **A** record(s) pointing at the address(es) Beaver gives you |
+
+    On Cloudflare, set the record to **DNS only** (grey cloud) so verification and certificate issuance can see it.
+  </Step>
+  <Step title="Verify">
+    ```bash
+    beaver domain verify <domain-id>
+    beaver domain list --container <name>
+    ```
+    DNS changes can take up to a few hours to become visible. Once DNS resolves, verification passes and the certificate is issued automatically.
+  </Step>
+</Steps>
+
+## Verify it worked
+
+Open `https://app.example.com`. It should answer over HTTPS with your app. `beaver domain list --container <name>` shows the domain's state.
+
+## If it fails
+
+- **Verification stays pending** — the record is wrong or not propagated yet; re-check it and run `beaver domain verify` again.
+- **Certificate not issued** — `beaver domain certificate` re-provisions it once DNS resolves.
+- **`repoint DNS` in the ACTION column** — see [Domains](/network/domains#if-beaver-domain-list-says-repoint-dns).
+- More: [Domains and routing](/network/domains-and-routing) explains each stage.
+
+## Clean up
+
+`beaver domain remove` detaches the domain. It never touches your DNS records or your app.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Domains in depth" icon="book-open" href="/network/domains">Default address, naming, the vectorihub.com move.</Card>
+  <Card title="First service" icon="database" href="/start/first-service">Add a database.</Card>
+</CardGroup>

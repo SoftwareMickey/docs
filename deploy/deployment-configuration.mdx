@@ -1,0 +1,83 @@
+---
+title: "Deployment configuration"
+sidebarTitle: "Deployment configuration"
+description: "Port, health check, strategy, replicas and resources — where each is set, in .beaver/config.yml or from the CLI."
+keywords: ["deployment configuration", "beaver validate", "beaver init"]
+icon: "sliders"
+type: howto
+audience: [developer]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Your Dockerfile describes how your app is **built**. How Beaver should **run and watch** it — port, health check, rollout strategy, replicas and
+resources — lives in `.beaver/config.yml`, committed with your code. Separating the two lets you change run-time behaviour without touching the build.
+
+## What the file looks like
+
+`beaver init` writes it from your Dockerfile. For a Node app that exposes port 3000 and declares a health check:
+
+```yaml .beaver/config.yml
+schema_version: 1
+project: paperclip
+project_id: 3f9c1a2b-0000-4000-8000-000000000001
+cloud: paperclip-prod
+deployment:
+  - container_name: app
+    path: .
+    strategy: rolling
+    replicas: 1
+    health:
+      path: /health
+```
+
+<Note>
+The generated values are *suggestions read from your Dockerfile* (for example the `EXPOSE`d port and a declared `HEALTHCHECK`). They never change how Beaver builds:
+the Dockerfile you provide is always the build source. Print the exact schema for editor autocomplete with `beaver config schema`.
+</Note>
+
+## The settings
+
+| Setting | What it controls | Set it |
+| --- | --- | --- |
+| **Strategy** | `rolling` keeps the old version serving until the new one passes its health check; `recreate` stops the old one first | `strategy:` in the file, or `--strategy` on `beaver config init`/`sync` |
+| **Health check** | An HTTP path Beaver polls to decide a container is healthy ([health checks](/deploy/health-checks)) | `beaver config health --http /health --interval 10s --retries 3` |
+| **Replicas** | How many copies run (1–50) ([scale](/deploy/scale)) | `beaver config replicas <service> <count>` |
+| **Resources** | CPU and memory each container gets; `limit` is enforced, `request` is reserved | `beaver config resources --cpu 1 --memory 512` |
+| **Cloud** | Where it deploys ([Beaver Cloud](/infrastructure/beaver-cloud)) | `cloud:` in the file, or `--cloud` on `beaver deploy` |
+
+## Keeping the file and Beaver in agreement
+
+Beaver keeps a **saved copy** of each container's configuration alongside your local file, and the saved copy is what is applied when someone deploys. Config
+commands write your file and, unless you pass `--no-push`, save it to Beaver too.
+
+```bash
+beaver validate            # parse the local file; nothing deployed
+beaver config status       # compare local file, saved copy and what is live
+beaver config diff         # show exactly which fields differ
+beaver config pull         # rewrite local entries from the saved copy
+beaver config push         # validate and save your local bundle
+```
+
+See [Configuration](/deploy/configuration) for why they can disagree and [State and drift](/operate/state-and-drift).
+
+## In the Dashboard
+
+Each deployment has a **Settings** tab and tabs for **Environment**, **Domains**, **Load balancing**, **Performance** and **Firewall**; the CLI is the complete way to author
+`.beaver/config.yml`.
+
+## If it fails
+
+`beaver validate` reports the first problem it finds — a file that does not parse, a duplicate key, a missing `schema_version` or `project`, an unsupported `schema_version`, or YAML anchors (which are never allowed). It checks the file's frame, not the values inside `deployment:`; see the [`.beaver/config.yml` reference](/reference/deployment-specification) for what each field accepts.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Health checks" icon="heart-pulse" href="/deploy/health-checks">What "healthy" means here.</Card>
+  <Card title="Environment variables" icon="key" href="/deploy/environment-variables">Values per environment.</Card>
+</CardGroup>

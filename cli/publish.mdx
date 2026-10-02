@@ -3,10 +3,11 @@ title: "beaver publish"
 sidebarTitle: "publish"
 description: "Publish a project as a deployable public template, from the terminal."
 icon: "upload"
+type: reference
 ---
 
 <Info>
-  New here? [Publishing a template](/guides/publishing-a-template) walks the full guarantee this command gives you, before diving into syntax.
+  New here? [Publishing a template](/deploy/publishing-a-template) walks the full guarantee this command gives you, before diving into syntax.
 </Info>
 
 ## Purpose
@@ -46,7 +47,7 @@ beaver publish template --project <name> [flags]
 ## Consequences
 
 The command prints a preview of every field that becomes public, before anything is
-committed — this is the same information [Publishing a template](/guides/publishing-a-template)
+committed — this is the same information [Publishing a template](/deploy/publishing-a-template)
 covers in full: source coordinates, service shape, and the *names* (never values) of
 required environment variables. Publishing again after the first time uses [`beaver
 template`](/cli/template)'s release mechanism instead — this command refuses a project

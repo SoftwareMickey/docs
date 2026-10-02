@@ -1,0 +1,85 @@
+---
+title: "Storage and networks"
+sidebarTitle: "Storage and networks"
+description: "Where your data lives and which things can talk to which — volumes, bind mounts, the cloud's private network, and what is reachable from the internet."
+keywords: ["storage and networks", "beaver cloud network", "beaver compose stack"]
+icon: "network"
+type: howto
+audience: [operator, developer]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Two questions come up constantly: **will my data survive** and **what can reach what**. This page shows where to look for each in every interface. The ideas are in
+[Persistent volumes](/data/persistent-volumes) and [Beaver Cloud](/infrastructure/beaver-cloud).
+
+<Note>
+Beaver has no `beaver network` or `beaver storage` command group. Networks and volumes come from other things — a cloud's private network, a Compose stack, a managed service, or a
+machine's own Docker — and are viewed and authored through those.
+</Note>
+
+## Storage
+
+| Kind | What it is | Where you see it |
+| --- | --- | --- |
+| **Service volume** | The data volume of a managed service | `beaver service show`; Desktop **Storage** and the service's Storage tab |
+| **Compose stack volume** | Named volumes declared by a stack | `beaver compose stack volumes <stack-id>`; Dashboard **Composers → volumes** |
+| **Host volume / bind mount** | A named volume, or a host path mapped into a container, on one machine | Desktop machine **Volumes** tab; `beaver config volume` and `beaver config bind` author them |
+
+<Warning>
+Deleting a container or deployment does **not** delete its volumes — they stay until you remove them, so a redeploy never wipes data silently. Deleting a volume destroys its contents
+permanently. A bind mount ties data to one machine: if the workload moves, the data does not follow.
+</Warning>
+
+<Tabs>
+  <Tab title="Dashboard">Compose volumes are on a stack's **volumes** page; a service's storage is on its page under **Managed services**.</Tab>
+  <Tab title="Desktop">**Storage** lists volumes assembled from your managed services and machines; open one to see whether it belongs to a service or a host and to jump to its machine or service. Desktop never deletes a volume.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver service show paperclip-db                # includes its storage
+    beaver compose stack volumes <stack-id>
+    beaver config volume --help                     # author a required volume in .beaver/config.yml
+    beaver service delete-volume paperclip-db       # permanently destroys a *deleted* service's data
+    ```
+  </Tab>
+</Tabs>
+
+## Networks
+
+| Kind | What it is | Where you see it |
+| --- | --- | --- |
+| **Cloud private network** | A private network among a cloud's members; apps resolve each other by name | `beaver cloud network <cloud>` (add `--matrix` for node-to-node connectivity) |
+| **Compose stack network** | Networks a Compose stack creates | `beaver compose stack networks <stack-id>` |
+| **Host network** | A Docker network on one machine | Desktop machine **Networks** tab |
+
+Turn a cloud's private network on with `beaver cloud network enable <cloud>`. Which **projects** may reach each other across it is controlled by allow rules:
+`beaver cloud network allows add --project-a <id> --project-b <id>`. A **gateway** is a member that also accepts public inbound traffic for the cloud
+(`beaver cloud gateway`).
+
+<Tabs>
+  <Tab title="Dashboard">A cloud's **Network** card shows its network status; stacks have a **networks** page.</Tab>
+  <Tab title="Desktop">**Networks** lists networks assembled from cloud networks, Compose stacks and each machine's Docker. The page tells you how many machines and stacks it was assembled from; a network seen through two machines is shown once.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud network paperclip-prod --matrix
+    beaver machine exposure <machine-id>        # what is reachable from outside, and whether it is protected
+    ```
+  </Tab>
+</Tabs>
+
+## What is reachable from the internet
+
+A machine's **Networks** tab in Desktop labels each exposure: **Public**, **Cloud peers** or **Internal only**. `beaver machine exposure` gives the same answer on the command line. Public
+reachability is also governed by the [firewall](/network/firewall) and your provider's [port rules](/infrastructure/firewall-requirements).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Persistent volumes" icon="hard-drive" href="/data/persistent-volumes">Volume or bind mount?</Card>
+  <Card title="Firewall" icon="shield" href="/network/firewall">Rules and priority.</Card>
+</CardGroup>

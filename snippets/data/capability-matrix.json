@@ -1,0 +1,1908 @@
+{
+  "version": 1,
+  "generated_by": "hand-authored; rendered by scripts/gen_capability_matrix.py",
+  "tasks": [
+    {
+      "id": "sign-in",
+      "group": "Account",
+      "task": "Sign in",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Sign-in page: Google, GitHub or email",
+          "page": "/teams/sign-in-methods"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Sign in opens a browser approval page",
+          "page": "/install/desktop"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver login` (browser approval)",
+          "page": "/cli/login"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "approve-device",
+      "group": "Account",
+      "task": "Approve a device sign-in",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "The Connect Beaver Desktop / CLI approval page that opens in your browser",
+          "page": "/teams/sign-in-methods"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Start sign-in in Desktop, then approve in the Dashboard in your browser",
+          "page": "/install/desktop"
+        },
+        "cli": {
+          "status": "none",
+          "how": "Start `beaver login`, then approve in the Dashboard in your browser",
+          "page": "/cli/login"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "connected-devices",
+      "group": "Account",
+      "task": "See the devices signed in to your account",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Settings → Connected devices (Beaver CLI and Desktop sessions)",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "cli": {
+          "status": "none",
+          "how": "Use the Dashboard; `beaver whoami` shows only the current session",
+          "page": "/cli/whoami"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "two-step",
+      "group": "Account",
+      "task": "Set up 2-step verification",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Settings → Security → 2-step verification",
+          "page": "/teams/two-step-verification"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Settings → Account shows the status and links to the web to manage it",
+          "page": "/teams/two-step-verification"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver account mfa`",
+          "page": "/cli/account"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "profile",
+      "group": "Account",
+      "task": "Edit your profile",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Profile → Edit profile",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver account profile`",
+          "page": "/cli/account"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "repo-access",
+      "group": "Account",
+      "task": "Connect GitHub and choose repositories",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Integrations → GitHub → Connect GitHub / Manage repository access",
+          "page": "/teams/signing-in-and-repository-access"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Settings → Git → Repository access shows the connected accounts; connecting happens in the Dashboard",
+          "page": "/teams/signing-in-and-repository-access"
+        },
+        "cli": {
+          "status": "partial",
+          "how": "`beaver github` checks the connection; connecting happens in the Dashboard",
+          "page": "/cli/github"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "delete-account",
+      "group": "Account",
+      "task": "Delete your account",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Settings → Account → Delete account",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard",
+          "page": "/interfaces/dashboard/team-and-settings"
+        },
+        "cli": {
+          "status": "none",
+          "how": "Use the Dashboard",
+          "page": "/interfaces/dashboard/team-and-settings"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "install",
+      "group": "Machines",
+      "task": "Install",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Nothing to install — it is the web app",
+          "page": "/interfaces/overview"
+        },
+        "desktop": {
+          "status": "planned",
+          "how": "No public installer yet",
+          "page": "/install/desktop"
+        },
+        "cli": {
+          "status": "full",
+          "how": "Install script (Linux and macOS) or `install.ps1` (Windows)",
+          "page": "/install/cli"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Choose where to start",
+          "page": "/start/choose-your-interface"
+        }
+      ]
+    },
+    {
+      "id": "connect-machine",
+      "group": "Machines",
+      "task": "Connect a machine",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Nodes lists a machine once it is enrolled and shows the command to run",
+          "page": "/infrastructure/connect-a-machine"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Add Machine opens a sheet that shows `beaver connect`; Desktop shows the exact command in an action sheet; run it in a terminal",
+          "page": "/infrastructure/connect-a-machine"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver connect` on the machine",
+          "page": "/cli/connect"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first machine",
+          "page": "/start/first-machine"
+        }
+      ]
+    },
+    {
+      "id": "diagnose-setup",
+      "group": "Machines",
+      "task": "Check this computer's setup",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/cli/doctor"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Settings → Beaver CLI & Agent shows whether the CLI and agent are detected",
+          "page": "/interfaces/desktop/settings"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver doctor`",
+          "page": "/cli/doctor"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "machine-health",
+      "group": "Machines",
+      "task": "See a machine's health and resources",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Nodes → select a machine (monitoring, security posture, containers)",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Machines → select a machine (nine tabs: Overview, Containers, Resources, Networks, Volumes, Logs, Events, Security, Configuration)",
+          "page": "/interfaces/desktop/infrastructure"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver machine overview` and related `beaver machine` subcommands",
+          "page": "/cli/machine"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "machine-role",
+      "group": "Machines",
+      "task": "Rename a machine or change its role",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/cli/server"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/cli/server"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver server update`",
+          "page": "/cli/server"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "machine-maintenance",
+      "group": "Machines",
+      "task": "Run maintenance on a machine",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Nodes → machine → Maintenance actions (each confirmed first) and Maintenance windows",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Read-only: Desktop shows events, not maintenance controls",
+          "page": "/interfaces/desktop/infrastructure"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver machine cleanup-plan`, `beaver machine cleanup`, `beaver machine maintenance-windows`",
+          "page": "/cli/machine"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "machine-approvals",
+      "group": "Machines",
+      "task": "Approve what Beaver proposes on a machine",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Nodes → Pending approvals (in Assisted mode)",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/cli/machine"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver machine approvals`",
+          "page": "/cli/machine"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "create-cloud",
+      "group": "Beaver Cloud",
+      "task": "Create a Beaver Cloud",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/infrastructure/clouds"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Create Cloud opens a sheet that shows `beaver cloud create`; Desktop shows the exact command in an action sheet; run it in a terminal",
+          "page": "/infrastructure/clouds"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud create`",
+          "page": "/cli/cloud"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first cloud",
+          "page": "/start/first-cloud"
+        }
+      ]
+    },
+    {
+      "id": "cloud-overview",
+      "group": "Beaver Cloud",
+      "task": "See a cloud's machines, capacity and health",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Clouds → select a cloud",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Beaver Cloud → select a cloud (Overview, Nodes, Network, Capacity, Services, Topology, Timeline)",
+          "page": "/interfaces/desktop/infrastructure"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud status`, `beaver cloud capacity`, `beaver cloud inspect`",
+          "page": "/cli/cloud"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Capacity and placement",
+          "page": "/infrastructure/capacity-and-placement"
+        },
+        {
+          "title": "Walkthrough: first cloud",
+          "page": "/start/first-cloud"
+        }
+      ]
+    },
+    {
+      "id": "drain-evacuate",
+      "group": "Beaver Cloud",
+      "task": "Drain or evacuate a machine",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Clouds → machine row → Drain, Undrain, Evacuate",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Read-only",
+          "page": "/infrastructure/drain-and-evacuate"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud drain`, `beaver cloud undrain`, `beaver cloud evacuate`",
+          "page": "/infrastructure/drain-and-evacuate"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "cloud-sharing",
+      "group": "Beaver Cloud",
+      "task": "Share a cloud with another workspace",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Clouds → Sharing → Invite workspace, Request access, Pending access requests",
+          "page": "/teams/cloud-sharing"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/cloud-sharing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud workspace`, `beaver workspace cloud`",
+          "page": "/teams/cloud-sharing"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "create-project",
+      "group": "Deploy",
+      "task": "Create a project",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Projects → Create project",
+          "page": "/deploy/overview"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/overview"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver project create`",
+          "page": "/cli/project"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "deploy-repo",
+      "group": "Deploy",
+      "task": "Deploy from a Git repository",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Dashboard → Deploy application (pick repository, builder, cloud, port, variables)",
+          "page": "/deploy/from-github"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/from-github"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver deploy --git` (wizard) or `beaver deploy --repo owner/repo`",
+          "page": "/cli/deploy"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first deploy",
+          "page": "/start/first-deploy"
+        },
+        {
+          "title": "Any app with a Dockerfile and a port",
+          "page": "/deploy/bring-your-own-app"
+        }
+      ]
+    },
+    {
+      "id": "deploy-local",
+      "group": "Deploy",
+      "task": "Deploy the project in a local folder",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI or Desktop",
+          "page": "/deploy/from-local-project"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Open the folder, then Deploy this → answer the prompts → Deploy in terminal runs `beaver deploy`",
+          "page": "/deploy/from-local-project"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver` or `beaver deploy` in the project folder",
+          "page": "/deploy/from-local-project"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "deploy-compose",
+      "group": "Deploy",
+      "task": "Deploy a Compose file",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Composers → deploy a compose file",
+          "page": "/deploy/compose-applications"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/compose-applications"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver compose deploy`",
+          "page": "/cli/compose"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "preflight",
+      "group": "Deploy",
+      "task": "Check a deploy before shipping it",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/deploy/preflight-and-planning"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "The Deploy this flow validates the plan against the working tree before it lets you deploy",
+          "page": "/deploy/from-local-project"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver preflight`, `beaver plan`, `beaver validate`",
+          "page": "/deploy/preflight-and-planning"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "env-vars",
+      "group": "Deploy",
+      "task": "Set environment variables",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Environments → Add variable",
+          "page": "/deploy/environment-variables"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/environment-variables"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver environment vars`",
+          "page": "/deploy/environment-variables"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Secrets",
+          "page": "/network/secrets"
+        }
+      ]
+    },
+    {
+      "id": "environments",
+      "group": "Deploy",
+      "task": "Create a project environment and map a branch",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Project → Environments → Create environment (branch mapping)",
+          "page": "/deploy/environments"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/environments"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver environment create`",
+          "page": "/cli/environment"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "health-check",
+      "group": "Deploy",
+      "task": "Configure a health check",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Deployment → Settings",
+          "page": "/interfaces/dashboard/projects-and-deployments"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/deploy/health-checks"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver config health`",
+          "page": "/deploy/health-checks"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "promote",
+      "group": "Deploy",
+      "task": "Promote a build to another environment",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Promote",
+          "page": "/interfaces/dashboard/projects-and-deployments"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/promote"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver promote`",
+          "page": "/cli/promote"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first production promotion",
+          "page": "/start/first-production-promotion"
+        }
+      ]
+    },
+    {
+      "id": "rollback",
+      "group": "Deploy",
+      "task": "Roll back to a previous release",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployments → release → Roll back",
+          "page": "/deploy/rollback-and-recovery"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/rollback-and-recovery"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver container <name> rollback`",
+          "page": "/deploy/rollback-and-recovery"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "redeploy",
+      "group": "Deploy",
+      "task": "Redeploy the current release",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployments → Redeploy",
+          "page": "/deploy/overview"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/overview"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver container <name> redeploy`",
+          "page": "/cli/container"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "deploy-history",
+      "group": "Deploy",
+      "task": "See deployment history",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployments → Deployment history",
+          "page": "/deploy/history"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/history"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver container <name> history`",
+          "page": "/deploy/history"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "scale",
+      "group": "Deploy",
+      "task": "Scale replicas",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Load Balancing / Performance",
+          "page": "/interfaces/dashboard/projects-and-deployments"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/scale"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver scaling`, `beaver autoscale`",
+          "page": "/deploy/scale"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "ci",
+      "group": "Deploy",
+      "task": "Deploy from CI",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/deploy/ci-cd"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/deploy/ci-cd"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver deploy --yes --wait` with `BEAVER_TOKEN`",
+          "page": "/deploy/ci-cd"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "template-publish",
+      "group": "Deploy",
+      "task": "Publish a project as a template",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Activity → Publish template",
+          "page": "/deploy/publishing-a-template"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard",
+          "page": "/deploy/publishing-a-template"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver publish`",
+          "page": "/cli/publish"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "service-create",
+      "group": "Data",
+      "task": "Create a managed service",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "The Managed services page lists services; creating one is a CLI action",
+          "page": "/data/create-a-service"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Add Service opens a sheet that builds the exact `beaver service create` command; Desktop shows the exact command in an action sheet; run it in a terminal",
+          "page": "/data/create-a-service"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service create`",
+          "page": "/cli/service"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first service",
+          "page": "/start/first-service"
+        }
+      ]
+    },
+    {
+      "id": "service-view",
+      "group": "Data",
+      "task": "See a service's status, connection and storage",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Managed services lists every service with its type and status",
+          "page": "/interfaces/dashboard/nodes-clouds-edge"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Services → select a service (Status, Connections, Storage, Backups, Metrics, Logs, Credentials, Attached Applications)",
+          "page": "/interfaces/desktop/networks-storage-services"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service show`, `beaver service list`",
+          "page": "/cli/service"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "service-credentials",
+      "group": "Data",
+      "task": "Reveal credentials and connect locally",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop or the CLI",
+          "page": "/data/credentials-and-connection-strings"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Services → Credentials → Reveal; Connect locally shows the tunnel command",
+          "page": "/interfaces/desktop/networks-storage-services"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service reveal`, `beaver service connect`",
+          "page": "/data/connect-locally"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "service-backup",
+      "group": "Data",
+      "task": "Back up and restore a service",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/data/backups-and-restore"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Services → Backups shows backup status; taking and restoring a backup is a CLI action",
+          "page": "/interfaces/desktop/networks-storage-services"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service backup`, `beaver service restore`",
+          "page": "/data/backups-and-restore"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "service-attach",
+      "group": "Data",
+      "task": "Attach a service to an application",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/data/create-a-service"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Services → Attached Applications → Connect an app shows the command",
+          "page": "/data/create-a-service"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service attach`",
+          "page": "/cli/service"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "service-resize",
+      "group": "Data",
+      "task": "Resize a service",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/data/resize-and-upgrade"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the CLI",
+          "page": "/data/resize-and-upgrade"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver service resize`",
+          "page": "/data/resize-and-upgrade"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "domain",
+      "group": "Networking",
+      "task": "Add a custom domain",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Domains → Add domain (shows the DNS record, then checks DNS and TLS)",
+          "page": "/network/domains"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/network/domains"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver domain add`",
+          "page": "/cli/domain"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: first domain",
+          "page": "/start/first-domain"
+        }
+      ]
+    },
+    {
+      "id": "verify-domain",
+      "group": "Networking",
+      "task": "Verify a domain and its certificate",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Domains (status: Checking DNS → Live over HTTPS)",
+          "page": "/network/tls"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/network/tls"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver domain verify`, `beaver domain certificate`",
+          "page": "/network/tls"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "firewall",
+      "group": "Networking",
+      "task": "Manage the firewall (rules, bans, WAF, lockdown)",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Firewall",
+          "page": "/network/firewall"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/network/firewall"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver firewall`",
+          "page": "/cli/firewall"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Rate limiting",
+          "page": "/network/rate-limiting"
+        },
+        {
+          "title": "Access controls",
+          "page": "/network/access-controls"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "group": "Networking",
+      "task": "Put Beaver Edge in front of an app",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Beaver Edge → Connect app (domain, origin URL, one CNAME)",
+          "page": "/network/beaver-edge"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/network/beaver-edge"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver edge app`",
+          "page": "/cli/edge"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "load-balancing",
+      "group": "Networking",
+      "task": "Configure load balancing",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Load Balancing",
+          "page": "/network/load-balancing"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/network/load-balancing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver scaling`",
+          "page": "/network/load-balancing"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "logs",
+      "group": "Operate",
+      "task": "Read an application's logs",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Logs",
+          "page": "/operate/logs"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Machines → machine → Logs reads machine log sources; the container view shows its Logs",
+          "page": "/operate/logs"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver logs`, `beaver container <name> logs`",
+          "page": "/operate/logs"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "metrics",
+      "group": "Operate",
+      "task": "See metrics and traffic",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment → Traffic and Performance",
+          "page": "/operate/metrics-and-traffic"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "A machine's Resources tab and a container's Traffic panel",
+          "page": "/operate/metrics-and-traffic"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver metrics`, `beaver traffic`",
+          "page": "/operate/metrics-and-traffic"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "status",
+      "group": "Operate",
+      "task": "See what is running and healthy",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Dashboard home (applications, machines, services, edge) and Deployments",
+          "page": "/interfaces/dashboard/tour"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Infrastructure home (counts strip and machine cards)",
+          "page": "/interfaces/desktop/infrastructure"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver inspect`, `beaver status`, `beaver containers`",
+          "page": "/operate/deployment-status"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "incidents",
+      "group": "Operate",
+      "task": "See and acknowledge incidents",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Incidents",
+          "page": "/operate/incidents"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Machines → Events and Overview show open incidents",
+          "page": "/operate/incidents"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver incidents`",
+          "page": "/cli/incidents"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "notifications",
+      "group": "Operate",
+      "task": "Read notifications",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Notifications inbox (Unread, Read, filters)",
+          "page": "/operate/notifications"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Delivers desktop alerts; Settings → Notifications chooses categories",
+          "page": "/operate/notifications"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver notifications`",
+          "page": "/cli/notifications"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "on-call",
+      "group": "Operate",
+      "task": "Set notification digest, on-call and escalation",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Notification and workspace preferences",
+          "page": "/operate/notifications"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Settings → Notifications → On call, Escalation, Digest",
+          "page": "/operate/notifications"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace on-call`, `beaver workspace escalation`, `beaver workspace digest`",
+          "page": "/cli/workspace"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "drift",
+      "group": "Operate",
+      "task": "See and resolve configuration drift",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Settings explorer: Explicit overrides, Drifted from config",
+          "page": "/operate/drift-and-reconcile"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Machine → Configuration shows drift",
+          "page": "/operate/drift-and-reconcile"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver reconcile`, `beaver state`, `beaver settings diff`",
+          "page": "/operate/drift-and-reconcile"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "recover",
+      "group": "Operate",
+      "task": "Diagnose a problem and apply a safe fix",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Ask Alie from a deployment",
+          "page": "/interfaces/dashboard/projects-and-deployments"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "The Alie rail",
+          "page": "/interfaces/desktop/approvals-and-alie"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver recover`",
+          "page": "/cli/recover"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "activity",
+      "group": "Operate",
+      "task": "Follow people and templates (Activity)",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Activity: Following, Explore, Saved, Workspace",
+          "page": "/operate/activity-and-following"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Settings → Activity shows your profile and Following feed",
+          "page": "/interfaces/desktop/settings"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver follow`, `beaver activity`",
+          "page": "/cli/activity"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "create-team",
+      "group": "Teams",
+      "task": "Create a team workspace",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Billing → plans → Team, then Team",
+          "page": "/teams/create-a-team"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/create-a-team"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace create`",
+          "page": "/cli/workspace"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Walkthrough: team quickstart",
+          "page": "/start/quickstart-team"
+        }
+      ]
+    },
+    {
+      "id": "switch-workspace",
+      "group": "Teams",
+      "task": "Switch workspace",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "The workspace switcher at the top of the sidebar",
+          "page": "/teams/switch-workspaces"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "The workspace switcher; Settings → Account → Switch workspace",
+          "page": "/teams/switch-workspaces"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace use`",
+          "page": "/teams/switch-workspaces"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "invite",
+      "group": "Teams",
+      "task": "Invite a member",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Members → Invite member (email or one-use link)",
+          "page": "/teams/invite-members"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/invite-members"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace invite`",
+          "page": "/teams/invite-members"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Working in a shared workspace",
+          "page": "/teams/working-in-a-shared-workspace"
+        }
+      ]
+    },
+    {
+      "id": "accept-invite",
+      "group": "Teams",
+      "task": "Accept an invitation",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Open the invitation link",
+          "page": "/teams/invite-members"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Opening the link on the same computer signs Desktop in and accepts it",
+          "page": "/interfaces/desktop/shell-tour"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace accept`",
+          "page": "/teams/invite-members"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "roles",
+      "group": "Teams",
+      "task": "Change a member's role or remove them",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Members",
+          "page": "/teams/roles-and-permissions"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/roles-and-permissions"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace role`, `beaver workspace remove`",
+          "page": "/teams/roles-and-permissions"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "approvals",
+      "group": "Teams",
+      "task": "Approve a production change",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Approvals",
+          "page": "/teams/production-approvals"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Approvals inbox (approve or reject)",
+          "page": "/teams/production-approvals"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace approvals`",
+          "page": "/cli/workspace"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "policies",
+      "group": "Teams",
+      "task": "Set access policies and protected environments",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Access policies",
+          "page": "/teams/production-approvals"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/production-approvals"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace` and `beaver settings set`",
+          "page": "/teams/settings-and-precedence"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "audit",
+      "group": "Teams",
+      "task": "Read the audit history",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Activity",
+          "page": "/teams/audit-history"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/audit-history"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace activity`",
+          "page": "/teams/audit-history"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "transfer",
+      "group": "Teams",
+      "task": "Transfer or leave a workspace",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Team → Settings → Transfer ownership, Leave this workspace",
+          "page": "/teams/removing-members-and-leaving"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Shows an ownership offer and lets you accept or decline",
+          "page": "/interfaces/desktop/shell-tour"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver workspace transfer`, `beaver workspace leave`, `beaver workspace accept-transfer`",
+          "page": "/teams/removing-members-and-leaving"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "plan",
+      "group": "Billing",
+      "task": "See and change your plan",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Billing → Plan & seats → Change plan",
+          "page": "/teams/plans-and-billing"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Account and the plan card show the plan; changes happen on the web",
+          "page": "/teams/plans-and-billing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver billing plans`, `beaver billing subscription`, `beaver billing checkout`",
+          "page": "/teams/plans-and-billing"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Downgrades and retention",
+          "page": "/teams/downgrades-and-retention"
+        }
+      ]
+    },
+    {
+      "id": "seats",
+      "group": "Billing",
+      "task": "Buy extra seats",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Billing → Team seats → Add 5 seats",
+          "page": "/teams/plans-and-billing"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/plans-and-billing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver billing seats`",
+          "page": "/teams/plans-and-billing"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "payments",
+      "group": "Billing",
+      "task": "See payment history",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Billing → Payments",
+          "page": "/teams/plans-and-billing"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/plans-and-billing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver billing payments`",
+          "page": "/teams/plans-and-billing"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "coupon",
+      "group": "Billing",
+      "task": "Redeem a promotional code",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Billing → Redeem code",
+          "page": "/teams/plans-and-billing"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/teams/plans-and-billing"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver coupon`",
+          "page": "/cli/coupon"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "alie-chat",
+      "group": "Alie",
+      "task": "Ask Alie about your infrastructure",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Alie session page",
+          "page": "/alie/what-is-alie"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "The Alie rail (sessions, context meter, equivalent command, Run in terminal)",
+          "page": "/alie/sessions-and-context"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver alie`",
+          "page": "/cli/alie"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "alie-provider",
+      "group": "Alie",
+      "task": "Connect an AI provider",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop or the CLI",
+          "page": "/alie/connect-an-ai-provider"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Settings → AI Harnesses",
+          "page": "/alie/connect-an-ai-provider"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver ai`",
+          "page": "/cli/ai"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "alie-policy",
+      "group": "Alie",
+      "task": "Set Alie's automation policy and spending",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop or the CLI",
+          "page": "/alie/automation-policies"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Settings → Automation Policy",
+          "page": "/alie/automation-policies"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver alie`",
+          "page": "/alie/automation-policies"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "alie-skills",
+      "group": "Alie",
+      "task": "See Alie's skills",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop or the CLI",
+          "page": "/alie/what-is-alie"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Settings → Skills",
+          "page": "/alie/what-is-alie"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver skills`",
+          "page": "/cli/skills"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "alie-traces",
+      "group": "Alie",
+      "task": "Replay what Alie did",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop or the CLI",
+          "page": "/alie/approvals-and-safety"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Traces (timeline and replay)",
+          "page": "/alie/approvals-and-safety"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver alie sessions`",
+          "page": "/cli/alie"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "networks-storage",
+      "group": "Machines",
+      "task": "See networks and volumes",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Use Desktop; a machine's public exposure is under Nodes",
+          "page": "/interfaces/desktop/networks-storage-services"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Networks and Storage (assembled from your machines and services)",
+          "page": "/interfaces/desktop/networks-storage-services"
+        },
+        "cli": {
+          "status": "partial",
+          "how": "`beaver cloud network` shows a cloud's private network; there is no standalone network or volume command",
+          "page": "/cli/cloud"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Storage and networks",
+          "page": "/infrastructure/storage-and-networks"
+        }
+      ]
+    },
+    {
+      "id": "build-logs",
+      "group": "Deploy",
+      "task": "Read build logs",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Deployment view → build logs and build summary; Deployment history",
+          "page": "/interfaces/dashboard/projects-and-deployments"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/deploy/builds"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver deploy --logs`, `beaver compose logs`",
+          "page": "/deploy/builds"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01",
+      "related": [
+        {
+          "title": "Builds",
+          "page": "/deploy/builds"
+        }
+      ]
+    },
+    {
+      "id": "terminal",
+      "group": "Local",
+      "task": "Use an embedded terminal",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Not applicable to a web page",
+          "page": "/interfaces/overview"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Terminal panel (⌘⇧T for Big Terminal)",
+          "page": "/interfaces/desktop/terminal-and-projects"
+        },
+        "cli": {
+          "status": "none",
+          "how": "You are already in a terminal",
+          "page": "/interfaces/overview"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    },
+    {
+      "id": "local-project",
+      "group": "Local",
+      "task": "Open a local project folder",
+      "interfaces": {
+        "dashboard": {
+          "status": "none",
+          "how": "Not applicable to a web page",
+          "page": "/interfaces/overview"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Open folder → project overview (identity, Git, config, builder, host, cloud)",
+          "page": "/interfaces/desktop/terminal-and-projects"
+        },
+        "cli": {
+          "status": "partial",
+          "how": "Run commands from the folder; `beaver init` writes `.beaver/config.yml`",
+          "page": "/cli/init"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-01"
+    }
+  ]
+}

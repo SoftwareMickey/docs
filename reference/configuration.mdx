@@ -1,0 +1,59 @@
+---
+title: "Configuration reference"
+sidebarTitle: "Configuration"
+description: "Where each kind of setting lives — project file, saved copy, workspace, CLI session and environment — and which one wins when more than one applies."
+icon: "sliders"
+type: reference
+audience: [developer, operator, team-lead]
+keywords: ["config", "precedence", "settings", "BEAVER_WORKSPACE", "config.yml", "where is my setting"]
+---
+
+Beaver settings live in five places. Each has an owner and a way to change it.
+
+| Layer | What it holds | Where it lives | Change it with |
+| --- | --- | --- | --- |
+| **Project file** | How this project builds, runs and is watched: strategy, replicas, resources, health, domain, cloud | `.beaver/config.yml`, committed with your code | Edit the file, or `beaver config set`, `health`, `replicas`, `resources`. Fields: [the project file](/reference/deployment-specification) |
+| **Saved copy** | The same configuration as Beaver stores it per container — what a deploy applies | Beaver, per container | `beaver config push` and `pull`; compare with `beaver config status` and `diff`. See [Configuration](/deploy/configuration) |
+| **Environment variables of your app** | Secrets and values your app reads | Beaver, per [environment](/deploy/environments) | Dashboard **Environment** tab, `beaver environment vars`, or `--env-file` on deploy. See [Environment variables](/deploy/environment-variables) |
+| **Workspace and account settings** | Members, roles, policies, notification routing, plan | Beaver, per workspace or account | Dashboard **Settings**, `beaver workspace`, `beaver settings`. See [Settings and precedence](/teams/settings-and-precedence) |
+| **CLI session on your computer** | Who you are signed in as, the active workspace | Files in your home folder (`~/.beaver_config.json`, `~/.beaver_workspace.json`) | `beaver login`, `beaver logout`, `beaver workspace use` |
+
+## Which value wins
+
+For the project file, a command-line flag beats the file for that one run:
+
+1. A **flag** on the command (`--cloud`, `--strategy`, `--env-file` …)
+2. The **project file** (`.beaver/config.yml`)
+3. What Beaver **infers** from your Dockerfile when the file does not say (for example the `EXPOSE`d port)
+
+For the workspace a command acts in, the first match wins:
+
+1. `--workspace <id|name>`
+2. The `BEAVER_WORKSPACE` environment variable
+3. The workspace chosen with `beaver workspace use`
+4. Your personal workspace
+
+Local file against saved copy is not a precedence: both exist, the **saved copy is what a deploy applies**, and Beaver shows exactly which fields differ rather than picking one for you ([State and drift](/operate/state-and-drift)).
+
+## Files the CLI writes in your home folder
+
+| File | Holds |
+| --- | --- |
+| `~/.beaver_config.json` | Your signed-in session. `beaver logout` removes it. Treat it like a password |
+| `~/.beaver_workspace.json` | The workspace chosen with `beaver workspace use` |
+| `~/.beaver_history` | The interactive shell's command history |
+
+<Warning>
+`~/.beaver_config.json` is a live session. Do not commit it, copy it to shared machines or paste it into a ticket. To sign a script in, use `BEAVER_TOKEN` with `beaver login`, as described in [Environment variables](/reference/environment-variables#read-by-the-cli).
+</Warning>
+
+## Backups the CLI makes
+
+`beaver config` commands that rewrite `.beaver/config.yml` first copy it to `.beaver/config.yml.bak` (skip with `--no-backup`). Add `config.yml.bak` to your `.gitignore`; the CLI reminds you each time.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="The project file" icon="file-code" href="/reference/deployment-specification">Every field in `.beaver/config.yml`.</Card>
+  <Card title="Config command reference" icon="terminal" href="/cli/config">Authoring, syncing and comparing the file.</Card>
+</CardGroup>

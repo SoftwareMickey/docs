@@ -1,0 +1,56 @@
+---
+title: "Troubleshooting"
+sidebarTitle: "Troubleshooting"
+description: "Start from what you see. Each symptom links to a page that checks first, ranks the likely causes and tells you how to fix each."
+icon: "triangle-alert"
+type: hub
+audience: [developer, operator, team-lead]
+---
+
+Find the thing you are looking at, not the thing you think is wrong. Every page starts with the fastest checks and ends with where to send what you collected.
+
+<Tip>
+**Not sure where to start?** Run `beaver doctor` on the affected machine — it checks the system, network, Docker, Git, sign-in, workspace, registration and agent, and changes nothing —
+and `beaver inspect` in the project.
+</Tip>
+
+## Building and deploying
+
+| What you see | Page |
+| --- | --- |
+| The build fails, or never starts | [My build fails](/operate/troubleshoot-build) |
+| A deployment is stuck, **Failed**, or restarting | [Deployment is stuck or unhealthy](/operate/troubleshoot-deploy-unhealthy) |
+| A variable is empty in my app | [An environment variable is missing](/operate/troubleshoot-env-var) |
+| Beaver cannot see or fetch my repository | [Repository access](/operate/troubleshoot-repository-access) |
+
+## Reaching the app
+
+| What you see | Page |
+| --- | --- |
+| My app returns 502 or 503 | [502 / 503](/operate/troubleshoot-502-503) |
+| My domain does not resolve | [Domain does not resolve](/operate/troubleshoot-domain) |
+| A certificate warning, or issuance is pending | [Certificate error](/operate/troubleshoot-tls) |
+
+## Machines and services
+
+| What you see | Page |
+| --- | --- |
+| A machine shows **Offline** | [Machine offline](/operate/troubleshoot-machine-offline) |
+| `beaver connect` fails | [Connect fails](/operate/troubleshoot-connect) |
+| My app or laptop cannot reach a service | [Service connection fails](/operate/troubleshoot-service-connection) |
+
+## Accounts, teams and billing
+
+| What you see | Page |
+| --- | --- |
+| A production action is refused or needs approval | [Production approval](/operate/troubleshoot-production-approval) |
+| `Your plan allows up to …` | [Plan limit](/operate/troubleshoot-plan-limit) |
+| I am locked out of 2-step verification | [2-step lockout](/operate/troubleshoot-mfa) |
+| A notification did not arrive | [Notification not received](/operate/troubleshoot-notification) |
+| Any message when signing in with GitHub | [Troubleshooting GitHub](/operate/troubleshooting-github) |
+| Any message when signing in with Google | [Troubleshooting Google](/operate/troubleshooting-google) |
+| `workspace not found`, `membership suspended`, invitations, roles | [Troubleshooting Teams](/operate/troubleshooting-teams) |
+
+## Understand what you are seeing
+
+[Status words](/operate/deployment-status) · [Which log answers which question](/operate/logs) · [Observability](/operate/observability) · [State and drift](/operate/state-and-drift)

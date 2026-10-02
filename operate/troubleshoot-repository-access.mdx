@@ -1,0 +1,58 @@
+---
+title: "Beaver cannot see or fetch my repository"
+sidebarTitle: "Repository access"
+description: "The repository is missing from the list, or the Builder cannot fetch it."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer]
+interfaces: [dashboard, cli]
+keywords: ["repository not listed", "github app", "cannot clone", "beaver cannot see your repositories"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+The Dashboard says *Beaver cannot see your repositories yet*, a repository is missing, or a deploy cannot fetch the commit.
+
+## Check first
+
+1. `beaver github` — your sign-in methods and each connected GitHub account's health (connected, suspended, disconnected).
+2. Was the repository included when you installed the Beaver GitHub App?
+
+## Causes and fixes
+
+### Signing in with GitHub is not repository access
+
+They are separate. Grant access with `beaver github install` or **Integrations** in the Dashboard ([why](/teams/signing-in-and-repository-access)).
+
+### The repository was not selected, or the connection is suspended
+
+Re-run `beaver github install` and include it.
+
+### Beaver sees it, but the Builder cannot clone it
+
+The Builder uses the GitHub login on **its own machine**. For a private repository run `gh auth login` there and check `beaver git --auth`.
+
+### The commit is not pushed
+
+The Builder builds what is on GitHub. Push first.
+
+## Then
+
+Every message you can see when signing in with GitHub or connecting repositories has its own entry: [Troubleshooting GitHub](/operate/troubleshooting-github). Google sign-in: [Troubleshooting Google](/operate/troubleshooting-google).
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Deploy from GitHub" icon="arrow-right" href="/deploy/from-github">The page that prevents or explains this.</Card>
+  <Card title="Troubleshooting GitHub" icon="arrow-right" href="/operate/troubleshooting-github">The page that prevents or explains this.</Card>
+</CardGroup>

@@ -1,0 +1,79 @@
+---
+title: "Concepts"
+sidebarTitle: "Concepts"
+description: "The ideas behind Beaver, in one place — what each thing is and why it behaves as it does. Each concept also sits beside the how-tos that use it."
+icon: "book-open"
+type: hub
+audience: [evaluator, developer, team-lead, operator, security]
+---
+
+A **concept** page explains *why*; it never tells you which button to press or command to run. Each one lives in the section where you need it — under **Deploy**, **Infrastructure**,
+**Data**, **Networking & security**, **Operate**, **Teams** or **Alie** — and every how-to links to its concept. Read these first if you are new:
+
+1. [How Beaver fits together](/start/how-beaver-fits-together) — workspaces, projects, environments, machines, clouds, deployments and services in one picture.
+2. [What is Beaver?](/start/what-is-vectorihub) — what it handles for you, and what it does not.
+
+## Start here
+
+<CardGroup cols={2}>
+  <Card title="What is Beaver?" icon="book-open" href="/start/what-is-vectorihub">Beaver deploys your Dockerfile to machines you own. What it handles for you, how VectorIHub and Beaver relate, and what it deliberately does not do.</Card>
+  <Card title="How Beaver fits together" icon="book-open" href="/start/how-beaver-fits-together">The relationship between workspaces, projects, environments, machines, clouds, deployments, containers, and services — read this first.</Card>
+</CardGroup>
+
+## Deploy
+
+<CardGroup cols={2}>
+  <Card title="Integrations" icon="rocket" href="/deploy/integrations">Connect GitHub so Beaver can see your repositories, deploy from them, and keep pulling new commits.</Card>
+  <Card title="Configuration" icon="rocket" href="/deploy/configuration">Your deployment settings live in one local file, and Beaver keeps a saved copy per container — the two can drift, and Beaver shows you exactly how.</Card>
+  <Card title="Deployments" icon="rocket" href="/deploy/deployment-lifecycle">A deployment is one service running in one environment — deploying is shipping a new build to it, with your choice of how the switch happens.</Card>
+  <Card title="Projects" icon="rocket" href="/deploy/projects">A project groups one application's environments, deployments, and services — the unit almost everything else nests inside.</Card>
+  <Card title="Building applications" icon="rocket" href="/deploy/builds-and-images">Beaver builds and deploys from a Dockerfile you provide — every language and framework works the same way.</Card>
+  <Card title="Containers and replicas" icon="rocket" href="/deploy/containers-and-replicas">A deployment is the definition; a container is one running copy of it. Replica count is how many copies exist.</Card>
+  <Card title="Scaling and resources" icon="rocket" href="/deploy/scaling-and-resources">Two separate levers control capacity: how many copies run, and how much each one gets. Fixed mode holds a count; automatic mode holds a range.</Card>
+</CardGroup>
+
+## Infrastructure
+
+<CardGroup cols={2}>
+  <Card title="Machine Roles" icon="server" href="/infrastructure/machines-and-roles">Understand Builder, Host, and Builder + Host before connecting a machine to VectorIHub.</Card>
+  <Card title="Beaver Cloud" icon="server" href="/infrastructure/beaver-cloud">Group your connected machines into one pool, share capacity and a private network across them, and deploy without naming a specific machine.</Card>
+</CardGroup>
+
+## Services and data
+
+<CardGroup cols={2}>
+  <Card title="Persistent storage" icon="database" href="/data/persistent-volumes">By default, anything a container writes is lost when it's replaced. Volumes and bind mounts are the two ways to make specific paths survive that.</Card>
+  <Card title="Services" icon="database" href="/data/services-and-persistence">Attach a managed database, cache, or similar backing component to your application instead of running and maintaining it yourself.</Card>
+</CardGroup>
+
+## Networking and security
+
+<CardGroup cols={2}>
+  <Card title="Domains and routing" icon="shield" href="/network/domains-and-routing">Point a domain at a deployment and Beaver handles the certificate — here's how to tell what stage it's at when something's not resolving.</Card>
+  <Card title="Shared responsibility" icon="shield" href="/network/shared-responsibility">What Beaver is responsible for, what you are, and where your infrastructure provider fits — because the machines are yours.</Card>
+</CardGroup>
+
+## Operate
+
+<CardGroup cols={2}>
+  <Card title="Observability" icon="activity" href="/operate/observability">Three distinct log types answer different questions — knowing which one you need is half the battle.</Card>
+  <Card title="State and drift" icon="activity" href="/operate/state-and-drift">Local, saved, and running state can disagree — one command compares all three and tells you exactly where.</Card>
+  <Card title="Rollback, promotion, and recovery" icon="activity" href="/operate/recovery-model">Release rollback, configuration rollback, and promotion all restore or move something different — knowing which one you need is the first step.</Card>
+  <Card title="Activity, following, and Explore" icon="activity" href="/operate/activity-and-following">Three separate feeds — Following, Explore, and your Workspace — and what following, publishing, and reporting actually do.</Card>
+</CardGroup>
+
+## Teams and governance
+
+<CardGroup cols={2}>
+  <Card title="Accounts, workspaces and teams" icon="users" href="/teams/accounts-workspaces-teams">Your account is one login; a workspace owns your projects, machines, secrets and plan; a team workspace lets several people work in it, each with a role.</Card>
+  <Card title="Production safety and approvals" icon="users" href="/teams/production-approvals">A team workspace protects production by default: Developers ask before they deploy there, and an Owner or Admin decides.</Card>
+  <Card title="Access, audit and removal" icon="users" href="/teams/audit-history">How removing someone takes effect, what the activity log records, and what admins can and cannot see.</Card>
+  <Card title="Settings and who wins" icon="users" href="/teams/settings-and-precedence">The same setting can be set in your repository, on a project, in a workspace or for one deploy — Beaver applies a fixed order, tells you where each value came from, and refuses changes that would be silently ignored.</Card>
+  <Card title="Signing in vs. connecting repositories" icon="users" href="/teams/signing-in-and-repository-access">Signing in with Google or GitHub proves who you are. Connecting repositories is a separate, explicit choice about what Beaver may read.</Card>
+</CardGroup>
+
+## Alie
+
+<CardGroup cols={2}>
+  <Card title="What is Alie?" icon="bot" href="/alie/what-is-alie">Alie is Beaver's infrastructure assistant: you ask about your infrastructure, it proposes actions, and nothing runs until the same controls a typed command would face say it can.</Card>
+</CardGroup>

@@ -1,0 +1,2 @@
+# path<TAB>pattern-substring<TAB>owner-reviewed reason (one line per exception)
+cli/edge.mdx	admin-dashboard	`admin-dashboard` is a public firewall preset name, not the operator tool

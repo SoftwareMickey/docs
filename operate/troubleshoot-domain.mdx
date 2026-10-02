@@ -1,0 +1,60 @@
+---
+title: "My domain does not resolve"
+sidebarTitle: "Domain does not resolve"
+description: "Your custom domain does not reach your app — check DNS, verification and the route in one command."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+keywords: ["domain not working", "dns", "cname", "verification pending", "repoint dns"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+`app.example.com` does not load, or `beaver domain list` shows the domain pending or **repoint DNS**.
+
+## Check first
+
+1. `beaver route inspect app.example.com` — live DNS, certificate and backend health in one place.
+2. `beaver domain list --container <name>` — the domain's state and any action needed.
+3. Compare the record at your DNS provider with the one `beaver domain add` printed.
+
+## Causes and fixes
+
+### Wrong record type or target
+
+A subdomain needs a **CNAME** to the target Beaver gave you; a bare domain needs **A** record(s) to the addresses it gave you.
+
+### Not propagated yet
+
+DNS changes can take up to a few hours. Run `beaver domain verify <domain-id>` again later.
+
+### Cloudflare proxying is on
+
+Set the record to **DNS only** (grey cloud) so verification and certificate issuance can see it.
+
+### `repoint DNS` in the ACTION column
+
+A CNAME still points at an old Beaver target that no longer resolves. See [Domains](/network/domains#if-beaver-domain-list-says-repoint-dns).
+
+### You are visiting an old deployment address
+
+Only the app's default address and your attached domains route. Older per-deployment addresses stop answering.
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Domains" icon="arrow-right" href="/network/domains">The page that prevents or explains this.</Card>
+  <Card title="TLS and route checks" icon="arrow-right" href="/network/tls">The page that prevents or explains this.</Card>
+  <Card title="First domain" icon="arrow-right" href="/start/first-domain">The page that prevents or explains this.</Card>
+</CardGroup>

@@ -1,0 +1,54 @@
+---
+title: "A production action is refused or needs approval"
+sidebarTitle: "Production approval"
+description: "You are told you cannot do this in a protected environment — ask, wait, and repeat within the hour."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, team-lead]
+interfaces: [dashboard, desktop, cli]
+keywords: ["PRODUCTION_RESTRICTED", "protected environment", "approval required", "cannot deploy to production"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+`you do not have permission to do this in a protected environment` (`PRODUCTION_RESTRICTED`).
+
+## Check first
+
+1. You are a **Developer** and the environment is **protected** (production by default). Ask an Owner or Admin.
+2. `beaver workspace approvals` — see whether a request is already open.
+
+## Causes and fixes
+
+### No request yet
+
+The message says how to ask. The request waits up to **24 hours**.
+
+### The approval was already used, expired or was for another action
+
+An approval is one-time, valid for **one hour**, for that exact action: `the approval is not valid for this request (already used, expired, or for a different operation)`.
+
+### You are the approver
+
+`you cannot decide your own request` — ask another Owner or Admin. If nobody else can approve, `nobody else in this workspace can approve this request`.
+
+## Then
+
+Full list of messages and fixes: [Troubleshooting Teams](/operate/troubleshooting-teams#production-and-approvals).
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Production approvals" icon="arrow-right" href="/teams/production-approvals">The page that prevents or explains this.</Card>
+  <Card title="Troubleshooting Teams" icon="arrow-right" href="/operate/troubleshooting-teams">The page that prevents or explains this.</Card>
+</CardGroup>

@@ -1,0 +1,15 @@
+# Audiences and reading paths (Era 2 V6)
+
+Frontmatter `audience:` values: `evaluator` `developer` `team-lead` `operator` `security`.
+Each persona has an entry page, top goals, and an ordered path of ≤ 8 pages that ends in a working outcome.
+Every find-test task (inventory/find-test.md) maps to exactly one persona (column "Persona", codes ev/dev/lead/ops/sec).
+
+| Persona | Who | Top goals | Entry | Reading path (new paths) |
+| --- | --- | --- | --- | --- |
+| evaluator | Deciding whether Beaver fits; has an hour | See it work; understand the model; know the limits | `start/what-is-vectorihub` | what-is-vectorihub → how-beaver-fits-together → choose-your-interface → quickstart (their interface) → first-deploy → evaluate-vs-production |
+| developer | Ships applications | Deploy, configure, connect a database, debug | `deploy/overview` | choose-your-interface → first-deploy → from-github / from-local-project → env-vars-and-secrets → create-a-service → first-domain → troubleshooting center |
+| team-lead | Owns a workspace, people and spend | Invite, roles, approvals, billing, safe production | `teams/accounts-workspaces-teams` | quickstart-team → create-a-team → invite-members → roles-and-permissions → production-approvals → plans-and-billing → audit-history |
+| operator | Owns machines, clouds, reliability | Connect machines, group into clouds, observe, recover | `infrastructure/overview` | choose-your-infrastructure → first-machine → machines-and-roles → provider page → clouds → operations-overview → recovery |
+| security | Reviews posture | Identity, access, secrets, shared responsibility | `network/security-checklist` | shared-responsibility → security-checklist → two-step-verification → roles-and-permissions → firewall → secrets → audit-history |
+
+Home-page rule: the home shows these five paths as cards ("I want to…"), not a feature list.

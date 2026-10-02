@@ -1,0 +1,51 @@
+---
+title: "Automation policies"
+sidebarTitle: "Automation policies"
+description: "Set how much each area — deployments, machines, clouds, Git — may run on its own, from observe-only to autonomous."
+keywords: ["automation policies", "ai assistant", "beaver alie", "beaver alie autopilot"]
+icon: "sliders-horizontal"
+type: howto
+audience: [team-lead, developer, security]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Automation policies decide how much work in each **area** (a *namespace* such as deployment, git, machine or cloud) may run **without asking you**. They are managed in Beaver Desktop under
+**Settings → Automation Policy**.
+
+<Note>
+This is separate from, and in addition to, the per-tool approval modes and the workspace **autopilot** level you set with `beaver alie` ([Approvals and safety](/alie/approvals-and-safety)).
+</Note>
+
+## The four levels
+
+| Level | What it means |
+| --- | --- |
+| **Observe** | Nothing in this area runs without your explicit go-ahead. |
+| **Assist** | Read and low-risk actions run on their own; anything riskier still asks. |
+| **Operate** | Runs on its own once its **Requires** checks are satisfied (for example *checked staging first*). |
+| **Autonomous** | Runs on its own by default for this area. |
+
+## Set one
+
+<Tabs>
+  <Tab title="Dashboard"><Note>Not available in the Dashboard.</Note></Tab>
+  <Tab title="Desktop">Open **Settings → Automation Policy**, choose an area, pick its level and, for Operate, the checks it requires.</Tab>
+  <Tab title="CLI"><Note>Not available as a CLI command — use Desktop. The workspace-wide `beaver alie autopilot` and `beaver alie approval-policy` commands are different controls.</Note></Tab>
+</Tabs>
+
+## Lessons
+
+Desktop also shows **lessons** — suggestions drawn from runs that needed correction, such as a guardrail to add — and lets you review them. Whether your workspace opts in to shared learning is its own setting.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Safe production use" icon="shield" href="/alie/safe-production-use">A sensible starting configuration.</Card>
+  <Card title="Approvals and safety" icon="shield-check" href="/alie/approvals-and-safety">The CLI controls.</Card>
+</CardGroup>

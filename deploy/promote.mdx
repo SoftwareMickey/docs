@@ -1,0 +1,66 @@
+---
+title: "Promote between environments"
+sidebarTitle: "Promote"
+description: "Ship the exact image you tested in one environment to another, without rebuilding."
+keywords: ["promote between environments", "promote", "env", "staging", "production", "beaver environment list", "beaver promote production"]
+icon: "arrow-up-right"
+type: howto
+audience: [developer, team-lead]
+interfaces: [cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+**Promoting** moves an **already-built image** from your current [environment](/deploy/environments) (say `staging`) to another (say `production`) and starts a new
+deployment of it there. **Nothing is rebuilt**, so what you tested is exactly what ships.
+
+<Note>
+Promote is a CLI action. Other interfaces show the resulting deployment and any approval request.
+</Note>
+
+## Before you begin
+
+- The branch you are on is already assigned to a source environment — deploy it first, or assign one ([Environments](/deploy/environments)).
+- The target environment exists in the project: `beaver environment list`.
+- The target has **its own** [environment variables](/deploy/environment-variables). Promotion does not carry the source's variables.
+- In a team workspace production is protected; a Developer needs an approval ([production approvals](/teams/production-approvals)).
+
+## Promote
+
+From a directory linked to exactly one Beaver project:
+
+```bash
+beaver promote production
+```
+
+A production-like target shows a warning banner before the confirmation prompt. **Once you confirm, production deploys immediately** — there is no separate staging step
+for the promotion itself. `--yes` skips the prompt (for scripts).
+
+## If approval is required
+
+The command is refused with `PRODUCTION_RESTRICTED` and says how to ask. An Owner or Admin approves with `beaver workspace approvals approve <id>`; the approval is a
+one-time permission for that exact action, valid for one hour, and you cannot approve your own request. Then run the same `beaver promote` again.
+
+## Verify
+
+```bash
+beaver inspect
+beaver container <name> history      # releases, newest first
+```
+
+## Undo
+
+If production misbehaves, start with `beaver recover` (read-only diagnosis), then [roll back](/deploy/rollback-and-recovery). A rollback restores the release,
+not your data.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Command reference" icon="terminal" href="/cli/promote">Flags and results.</Card>
+  <Card title="Recovery model" icon="history" href="/operate/recovery-model">How promote, rollback and configuration rollback differ.</Card>
+  <Card title="Capability matrix" icon="table" href="/interfaces/capability-matrix">Promote from the Dashboard or the CLI — what each can do.</Card>
+</CardGroup>

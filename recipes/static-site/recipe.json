@@ -1,0 +1,1 @@
+{ "name": "static-site", "title": "Static site", "port": 8080, "health": "/healthz", "expect": "ok" }

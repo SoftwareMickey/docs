@@ -1,0 +1,51 @@
+---
+title: "Read logs"
+sidebarTitle: "Logs"
+description: "Build logs, application logs and request logs answer different questions — which command and screen shows each."
+keywords: ["read logs", "logs", "debug output", "beaver observe api", "beaver deploy"]
+icon: "scroll-text"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Beaver keeps three kinds of log. Reaching for the wrong one is the usual reason "the logs show nothing". The idea behind them is in [Observability](/operate/observability).
+
+| You want to know… | Log | CLI |
+| --- | --- | --- |
+| Why did the **build** fail? | Build log | `beaver deploy --logs`, `beaver compose logs <stack-id>` |
+| What is my **app** printing? | Application log | `beaver observe --logs`, `beaver container <name> logs --follow` |
+| Which **requests** hit it, with status and latency? | Request (access) log | `beaver logs <container>` |
+
+## Steps
+
+<Tabs>
+  <Tab title="Dashboard">Open the deployment: **Logs** shows application output, **Traffic** the requests, and the build history carries build logs.</Tab>
+  <Tab title="Desktop">A machine's **Logs** tab lists the machine's log sources (`beaver machine log-inventory` shows the same). Live tailing is not available there yet — use the CLI.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver observe api --logs --follow          # application log, polling for new output
+    beaver observe api --logs --tail 500        # last 500 lines
+    beaver container api logs --follow          # logs of an agent-hosted container
+    beaver logs api --limit 50 --page 2         # HTTP request log: method, path, status, latency
+    beaver machine logs <machine-id> --help     # a machine's own log sources
+    ```
+  </Tab>
+</Tabs>
+
+## How far back
+
+Log retention depends on your plan — see [Plans and billing](/teams/plans-and-billing).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Metrics and traffic" icon="chart-line" href="/operate/metrics-and-traffic">Numbers over time.</Card>
+  <Card title="Troubleshooting" icon="triangle-alert" href="/operate/troubleshooting">Start from the symptom.</Card>
+</CardGroup>

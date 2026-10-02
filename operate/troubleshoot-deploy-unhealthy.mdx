@@ -1,0 +1,59 @@
+---
+title: "Deployment is stuck or unhealthy"
+sidebarTitle: "Deployment unhealthy"
+description: "A release will not become healthy, or a stage never finishes — what to check and how to recover."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+keywords: ["deployment stuck", "unhealthy", "health check failing", "rollout"]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+## What you see
+
+A deployment stays in one stage ([status words](/operate/deployment-status)), shows **Failed**, or the container keeps restarting.
+
+## Check first
+
+1. `beaver inspect` — current release, commit, health and the machine it landed on.
+2. `beaver observe --logs` — your app's own output. Look for a crash or a bind error.
+3. `beaver recover` — a read-only diagnosis with a Finding, Evidence and a suggested safe next step.
+
+## Causes and fixes
+
+### The app binds to 127.0.0.1 or the wrong port
+
+Listen on `0.0.0.0` and on the port your configuration says. Read the port from the `PORT` environment variable.
+
+### The health check path does not answer
+
+Beaver waits for the configured HTTP path. Test it from inside the container, or change it: [Health checks](/deploy/health-checks).
+
+### A required environment variable is missing for this environment
+
+See [Environment variable is missing](/operate/troubleshoot-env-var).
+
+### Not enough capacity on the cloud
+
+`beaver cloud capacity <cloud>`; add a machine or lower the replica count ([Capacity and placement](/infrastructure/capacity-and-placement)).
+
+## Then
+
+A failed deployment does **not** roll back on its own. Under `rolling` the previous version keeps running; under `recreate` it stays down. To recover: `beaver recover --rollback` (last healthy release) or `beaver recover --restart`. See [Rollback and recovery](/deploy/rollback-and-recovery).
+
+## Still stuck
+
+Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Rollback and recovery" icon="arrow-right" href="/deploy/rollback-and-recovery">The page that prevents or explains this.</Card>
+  <Card title="Health checks" icon="arrow-right" href="/deploy/health-checks">The page that prevents or explains this.</Card>
+</CardGroup>

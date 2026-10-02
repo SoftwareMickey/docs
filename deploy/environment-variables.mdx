@@ -1,0 +1,78 @@
+---
+title: "Environment variables"
+sidebarTitle: "Environment variables"
+description: "Set, sync and review the KEY=value variables your container runs with — per environment, without committing secrets."
+keywords: ["environment variables", "env", "staging", "production", "beaver deploy", "beaver environment vars"]
+icon: "key"
+type: howto
+audience: [developer]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Environment variables carry API keys, database URLs and other configuration into your container **without** putting them in your repository or image. Your app
+reads them the usual way (`process.env.DATABASE_URL`, `os.Getenv("DATABASE_URL")`, `os.environ["DATABASE_URL"]`).
+
+<Warning>
+Never `COPY` a `.env` file with secrets into your image and never commit secrets. Beaver also never reads or uploads a local `.env` file **implicitly** — you move
+variables explicitly, as below.
+</Warning>
+
+## Set variables
+
+<Tabs>
+  <Tab title="Dashboard">Open the deployment and its **Environment** tab, then add or edit the key–value pairs.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop.</Note></Tab>
+  <Tab title="CLI">
+    Set variables when you deploy:
+    ```bash
+    beaver deploy --cloud paperclip-prod --env-file .env.production
+    beaver deploy --cloud paperclip-prod --env-var API_BASE=https://api.example.com
+    ```
+    Or sync a container's variables with a local file:
+    ```bash
+    beaver environment vars list <container>             # names only
+    beaver environment vars pull <container>             # write them to ./.env
+    beaver environment vars diff <container>             # compare ./.env with what is deployed
+    beaver environment vars push <container> --yes       # import ./.env
+    ```
+    `--file <path>` chooses a file other than `.env`.
+  </Tab>
+</Tabs>
+
+<Note>
+`beaver deploy --env` selects the **deployment environment** (production, staging, development); `--env-var KEY=value` sets a single variable. They are different flags.
+</Note>
+
+## Changing a value takes a new release
+
+`vars push` does **not** redeploy. After changing variables, ship them with `beaver deploy` or `beaver container <name> redeploy`. The values are applied as part of
+the deploy.
+
+## Safe by default
+
+- `vars diff` prints **names only** until you pass `--reveal`, and asks again before printing secret values.
+- `vars push` re-confirms and prints what it will import first; scripts pass `--yes`.
+- Values containing spaces, quotes, `$` or line breaks are quoted in the pulled file. Don't hand that file to `docker run --env-file`, which would pass the quotes into the value — use `beaver deploy --env-file`.
+- In a team workspace, revealing secret values in a protected environment needs approval unless an Owner or Admin enabled `developer_secrets`
+  ([Production approvals](/teams/production-approvals)).
+
+## One set per environment
+
+Each [environment](/deploy/environments) keeps **its own** variables. [Promoting](/deploy/promote) an image does not carry them across — set production's separately.
+
+## Variables injected by services
+
+Attaching a [managed service](/data/credentials-and-connection-strings) injects its connection variables into your app (use `--env-prefix` to namespace them).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Environments" icon="layers" href="/deploy/environments">Targets and branch bindings.</Card>
+  <Card title="Settings and precedence" icon="sliders" href="/teams/settings-and-precedence">Who wins when a setting is set in several places.</Card>
+</CardGroup>

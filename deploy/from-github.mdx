@@ -1,0 +1,83 @@
+---
+title: "Deploy from GitHub"
+sidebarTitle: "From GitHub"
+description: "Connect a repository, deploy a branch, and understand how pushes trigger later releases."
+keywords: ["deploy from github", "from github", "beaver git", "beaver deploy"]
+icon: "github"
+type: howto
+audience: [developer]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Beaver builds the exact commit you pushed: the **Builder** machine clones the repository from GitHub and builds its Dockerfile. Your computer
+only sends a reference (repository, branch, commit). Two separate things make that work:
+
+- **Beaver sees your repository** through the Beaver GitHub App — that is how it lists repositories and branches and follows pushes.
+- **The Builder clones it** using the GitHub login **on that machine** (the GitHub CLI). For a private repository run `gh auth login` there and check it with `beaver git --auth`. Beaver never sees this login.
+
+## Before you begin
+
+- A [machine and a cloud](/start/first-cloud) and a Docker Hub login on the Builder ([first deployment](/start/first-deploy)).
+- A repository with a `Dockerfile` ([requirements](/deploy/dockerfile-requirements)).
+- **Repository visibility.** Signing in with GitHub only proves who you are. Letting Beaver see repositories is a separate step
+  ([why](/teams/signing-in-and-repository-access)); the Builder's own GitHub login is a third, local one.
+
+## Let Beaver see your repositories
+
+<Tabs>
+  <Tab title="Dashboard">Open **Integrations** and connect GitHub, choosing the repositories Beaver may read. Until you do, the repository list says Beaver cannot see your repositories yet.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop. Desktop's Settings → Repository access shows the connection state; connect from the Dashboard or CLI.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver github install      # opens the GitHub App install page; waits for the result
+    beaver github              # shows your sign-in methods and each connected account's health
+    ```
+    On a server, add `--no-browser` and open the printed URL on any device signed in to the same Beaver account.
+  </Tab>
+</Tabs>
+
+## Deploy a branch
+
+<Tabs>
+  <Tab title="Dashboard">Choose the repository and branch, then complete the deployment form — Builder, cloud, container name, port, environment. See [Your first deployment](/start/first-deploy).</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop — use the Dashboard or the CLI.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver deploy --git --cloud paperclip-prod
+    ```
+    `--git` opens the repository wizard so you can pick any repository your connected GitHub account can see, not only the one you are standing in.
+    For a monorepo add `--deployment-path <subdirectory>`. To list a repository's branches for scripting: `beaver github branches --repo owner/repo`.
+  </Tab>
+</Tabs>
+
+## How later releases happen
+
+**A repository and branch are deployed once.** The first deploy registers them; after that, **a `git push` to that branch triggers every release**. To
+rebuild and replace the current release without a push, use `beaver container <name> redeploy`. Running `beaver deploy` again for the same
+repository and branch is refused with a pointer to the existing deployment.
+
+A branch can be bound to an [environment](/deploy/environments) — for example `main` to production and `staging` to staging — so a push deploys to the
+environment that branch belongs to.
+
+## Verify
+
+`beaver inspect` shows the release and commit now running. In the Dashboard the deployment shows its source repository and branch.
+
+## If it fails
+
+- **Repository not listed** — reconnect GitHub; check it was included when you installed the app. See [GitHub troubleshooting](/operate/troubleshooting-github).
+- **The Builder cannot fetch the repository** — the commit must be pushed, and for a private repository the Builder needs a GitHub login (`gh auth login`, then `beaver git --auth`).
+- **Container name taken** — pick another.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Environments" icon="layers" href="/deploy/environments">Bind branches to targets.</Card>
+  <Card title="Roll back" icon="history" href="/deploy/rollback-and-recovery">If a release goes wrong.</Card>
+</CardGroup>

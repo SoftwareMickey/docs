@@ -3,6 +3,9 @@ title: "Beaver CLI reference"
 sidebarTitle: "CLI reference"
 description: "Install Beaver CLI and use the public command surface for deployment, operations, and account management."
 icon: "terminal"
+type: hub
+audience: [developer, operator]
+interfaces: [cli]
 ---
 
 VectorIHub gives you a command-line interface — `beaver` — for interacting with your VectorIHub account and infrastructure from a terminal or an automated environment like CI, instead of the [dashboard](https://vectorihub.com).
@@ -20,7 +23,7 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 ## Installing the CLI
 
 <Info>
-  New to Beaver? [Install Beaver CLI on Linux](/installation) walks through connecting a Linux machine, while [Windows installation](/installation-windows) covers installing the CLI on Windows.
+  New to Beaver? [Install Beaver CLI on Linux](/install/cli) walks through connecting a Linux machine, while [Windows installation](/install/cli-windows) covers installing the CLI on Windows.
 </Info>
 
 <Tabs>
@@ -50,7 +53,7 @@ VectorIHub gives you a command-line interface — `beaver` — for interacting w
 
     Run this in PowerShell, not Command Prompt. From Command Prompt, use `powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cli.vectorihub.com/install.ps1 | iex"`.
 
-    See [Install Beaver CLI on Windows](/installation-windows) for verification, custom installation directories, and troubleshooting.
+    See [Install Beaver CLI on Windows](/install/cli-windows) for verification, custom installation directories, and troubleshooting.
   </Tab>
 </Tabs>
 
@@ -173,6 +176,40 @@ beaver connect
 <Note>
   Use `beaver --help` to discover commands, `beaver help <command>` or `beaver <command> --help` for detailed usage, `beaver --cwd <path>` to run from another project directory, and `beaver --no-color` for plain output.
 </Note>
+
+### When a command refuses or fails
+
+A refusal says what Beaver checked, what is not met, whether anything changed, how to repair
+it, and the exact command to run again:
+
+```text
+✕ Machine cannot join this cloud
+
+REQUIREMENTS
+  ✓ 6 requirements met
+  ✕ WireGuard tooling is missing
+
+REPAIR
+  • Beaver can fix this — WireGuard tooling is missing
+    beaver cloud preflight prod-03 --cloud production --fix
+
+RETRY
+  beaver cloud machines add prod-03 --cloud production
+
+No changes were made.
+```
+
+- The report goes to **stderr**, so piped output stays clean. `--no-color` (or `NO_COLOR`) removes
+  colour; a terminal that is not UTF-8 gets plain ASCII symbols.
+- `--explain` also lists every requirement that was met or skipped, not just the unmet ones.
+- With `--json` or `--output yaml`, a failure is **one document on stdout** and nothing else:
+  `{"ok": false, "error": {"code": "…", "message": "…", "changed": false, "conditions": […], "repairs": […], "retry": {"command": "…"}, "request_id": "…"}}`.
+  Branch on `error.code`, never on the English text. `changed` is `false`, `true`, `"partial"` or
+  `"unknown"` — a timed-out change is `"unknown"`, because the server may have finished it.
+- Exit statuses are unchanged: `1` for a failure, `77` when a workspace requires 2-step verification.
+- A flag a command does not act on is reported (`note: --wait has no effect on …`) rather than
+  silently ignored.
+- Quote the **Request ID** when you contact support. It never contains secrets.
 
 ---
 

@@ -1,0 +1,283 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "frozenClock": "2026-10-01T09:00:00Z",
+  "settleMs": 2500,
+  "shots": [
+    {
+      "surface": "desktop",
+      "name": "infrastructure-home",
+      "url": "/",
+      "expectText": "What you own, what is running",
+      "alt": "Beaver Desktop's Infrastructure home: a counts strip for machines, containers, services, networks and clouds above cards for each machine with CPU and memory bars."
+    },
+    {
+      "surface": "desktop",
+      "name": "machines-list",
+      "steps": [
+        {
+          "click": "Machines",
+          "maxY": 850
+        }
+      ],
+      "expectText": "prod-01",
+      "alt": "The Machines section listing four enrolled machines with their status."
+    },
+    {
+      "surface": "desktop",
+      "name": "machine-overview",
+      "steps": [
+        {
+          "click": "Machines",
+          "maxY": 850
+        },
+        {
+          "click": "prod-01",
+          "maxY": 850
+        }
+      ],
+      "expectText": "Identity",
+      "alt": "A machine's detail view on the Overview tab, with the nine tabs along the top, health score, resource utilisation and an Identity card."
+    },
+    {
+      "surface": "desktop",
+      "name": "clouds-list",
+      "steps": [
+        {
+          "click": "Beaver Cloud",
+          "maxY": 850
+        }
+      ],
+      "alt": "The Beaver Cloud section listing machine pools.",
+      "expectText": "Machines joined into private"
+    },
+    {
+      "surface": "desktop",
+      "name": "services-list",
+      "steps": [
+        {
+          "click": "Services"
+        }
+      ],
+      "alt": "The Services section listing managed services with type, status and machine."
+    },
+    {
+      "surface": "desktop",
+      "name": "networks-list",
+      "steps": [
+        {
+          "click": "Networks"
+        }
+      ],
+      "alt": "The Networks section, assembled from your machines."
+    },
+    {
+      "surface": "desktop",
+      "name": "storage-list",
+      "steps": [
+        {
+          "click": "Storage"
+        }
+      ],
+      "alt": "The Storage section listing volumes."
+    },
+    {
+      "surface": "desktop",
+      "name": "traces",
+      "steps": [
+        {
+          "click": "Traces"
+        }
+      ],
+      "alt": "The Traces explorer with filters and a task list."
+    },
+    {
+      "surface": "desktop",
+      "name": "action-sheet-add-machine",
+      "steps": [
+        {
+          "click": "Add Machine"
+        }
+      ],
+      "expectText": "beaver connect",
+      "alt": "The Add Machine action sheet, showing the beaver connect command with a Copy command button."
+    },
+    {
+      "surface": "desktop",
+      "name": "command-palette",
+      "steps": [
+        {
+          "click": "Command"
+        }
+      ],
+      "expectText": "Go to Infrastructure",
+      "alt": "The command palette open over the Infrastructure home, listing pages and actions."
+    },
+    {
+      "surface": "desktop",
+      "name": "settings-general",
+      "steps": [
+        {
+          "click": "Settings",
+          "maxY": 850
+        }
+      ],
+      "expectText": "Startup",
+      "alt": "Settings on the General page, with the settings navigator on the left."
+    },
+    {
+      "surface": "desktop",
+      "name": "cloud-overview",
+      "steps": [
+        {
+          "click": "Beaver Cloud",
+          "maxY": 850
+        },
+        {
+          "click": "Open \u2192",
+          "maxY": 850
+        }
+      ],
+      "expectText": "Capacity",
+      "alt": "A Beaver Cloud's detail view on the Overview tab: nodes, applications, health, network and free CPU, memory and storage, with seven tabs along the top."
+    },
+    {
+      "surface": "desktop",
+      "name": "service-connections",
+      "steps": [
+        {
+          "click": "Services",
+          "maxY": 850
+        },
+        {
+          "click": "payments-db",
+          "maxY": 850
+        },
+        {
+          "click": "Connections",
+          "maxY": 850
+        }
+      ],
+      "expectText": "Connect locally",
+      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel."
+    },
+    {
+      "surface": "desktop",
+      "name": "workspaces-list",
+      "steps": [
+        {
+          "click": "Workspace",
+          "maxY": 850
+        }
+      ],
+      "expectText": "Local projects and their recent operating context",
+      "alt": "The Workspaces page listing local projects with branch, path and link status."
+    },
+    {
+      "surface": "desktop",
+      "name": "settings-security-privacy",
+      "steps": [
+        {
+          "click": "Settings",
+          "maxY": 850
+        },
+        {
+          "click": "Security & Privacy",
+          "maxY": 850
+        }
+      ],
+      "expectText": "AI data",
+      "alt": "Settings on the Security and Privacy page, with the AI data switches and the local data sizes."
+    },
+    {
+      "surface": "dashboard",
+      "name": "home",
+      "url": "/dashboard",
+      "settleMs": 7000,
+      "expectText": "Applications & workloads",
+      "alt": "The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, services, requests and incidents, then panels for applications, infrastructure, managed services and edge above recent deployments."
+    },
+    {
+      "surface": "dashboard",
+      "name": "containers",
+      "url": "/containers",
+      "settleMs": 7000,
+      "expectText": "Every container running",
+      "alt": "The Containers page listing every running container with its status, image, branch and domain."
+    },
+    {
+      "surface": "dashboard",
+      "name": "projects",
+      "url": "/projects",
+      "settleMs": 7000,
+      "expectText": "Projects in Paperclip",
+      "alt": "The Projects page listing the workspace's projects with their containers and services."
+    },
+    {
+      "surface": "dashboard",
+      "name": "nodes",
+      "url": "/nodes",
+      "settleMs": 7000,
+      "expectText": "Infrastructure health",
+      "alt": "The Nodes page showing infrastructure health with a card per machine and its role and status."
+    },
+    {
+      "surface": "dashboard",
+      "name": "edge",
+      "url": "/edge",
+      "settleMs": 7000,
+      "expectText": "Connected apps",
+      "alt": "The Beaver Edge page listing connected apps and the health of their origins."
+    },
+    {
+      "surface": "dashboard",
+      "name": "managed-services",
+      "url": "/managed-services",
+      "settleMs": 7000,
+      "expectText": "paperclip-db",
+      "alt": "The Managed services page listing each database and cache with its type and status."
+    },
+    {
+      "surface": "dashboard",
+      "name": "incidents",
+      "url": "/incidents",
+      "settleMs": 7000,
+      "expectText": "Disk pressure",
+      "alt": "The Incidents page listing open and monitored incidents with severity and affected resources."
+    },
+    {
+      "surface": "dashboard",
+      "name": "notifications",
+      "url": "/notifications",
+      "settleMs": 7000,
+      "expectText": "Action required",
+      "alt": "The Notifications inbox with an Action required section and the rest of the feed below it."
+    },
+    {
+      "surface": "dashboard",
+      "name": "billing",
+      "url": "/billing",
+      "settleMs": 7000,
+      "expectText": "Billing summary",
+      "alt": "The Billing page with the plan summary, usage against limits and payment history."
+    },
+    {
+      "surface": "dashboard",
+      "name": "team",
+      "url": "/settings/team",
+      "settleMs": 7000,
+      "expectText": "Attention required",
+      "alt": "The Team settings page with the members list and an Attention required panel."
+    },
+    {
+      "surface": "dashboard",
+      "name": "settings-devices",
+      "url": "/settings?scope=personal&tab=devices",
+      "settleMs": 7000,
+      "expectText": "ada-laptop",
+      "alt": "Personal Settings on the Devices tab, listing the devices signed in to the account."
+    }
+  ]
+}

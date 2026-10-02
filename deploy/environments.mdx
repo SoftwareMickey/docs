@@ -1,0 +1,71 @@
+---
+title: "Environments"
+sidebarTitle: "Environments"
+description: "Named deploy targets such as staging and production, how a branch maps to one, and how to create and list them."
+keywords: ["environments", "env", "staging", "production", "beaver environment create", "beaver deploy"]
+icon: "layers"
+type: howto
+audience: [developer, team-lead]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+An **environment** is a named binding on a project — `development`, `staging`, `production` or any lowercase slug you choose — optionally paired with a git branch.
+Deploying a branch deploys to the environment bound to it. In a team workspace, `production` is **protected** by default
+([production approvals](/teams/production-approvals)).
+
+<Note>
+Don't confuse this with `beaver environment vars`, which manages one container's `KEY=value` variables ([Environment variables](/deploy/environment-variables)).
+</Note>
+
+## List environments
+
+<Tabs>
+  <Tab title="Dashboard">Open a project and its **Environments**.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver environment list
+    ```
+  </Tab>
+</Tabs>
+
+## Create one
+
+<Tabs>
+  <Tab title="Dashboard">In the project's **Environments** page, add an environment and, optionally, a branch.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver environment create --name staging --project-id <project-id> --branch staging
+    beaver environment create --name production --project-id <project-id> --branch main
+    ```
+    `--name` is any slug — `testing`, `development`, `staging` and `production` are suggestions, not an enforced list. Deploying a branch that has no
+    environment can create one: `beaver deploy --auto-create-environment` (for CI) or accept the prompt.
+  </Tab>
+</Tabs>
+
+## Choose which one you deploy to
+
+`beaver deploy --env production` selects the deployment environment (`production`, `staging` or `development`), and `--environment-id` targets one by id,
+skipping branch-based resolution. `beaver status --env production` compares your configuration against that environment's override.
+
+## What belongs to an environment
+
+Each environment keeps **its own environment variables** — promoting an image never carries them over ([promote](/deploy/promote)).
+
+## Delete one
+
+`beaver environment delete <environment-id>` removes the environment and its branch mapping. Containers already deployed under it keep running.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Promote between environments" icon="arrow-up-right" href="/deploy/promote">Ship the tested image.</Card>
+  <Card title="Environment variables" icon="key" href="/deploy/environment-variables">Per-environment values.</Card>
+</CardGroup>

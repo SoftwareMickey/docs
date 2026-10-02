@@ -1,0 +1,88 @@
+---
+title: "Settings and who wins"
+description: "A setting can come from your repository, a project, a workspace or one deploy. Beaver applies a fixed order, shows where a value came from and refuses changes that would be silently ignored."
+sidebarTitle: "Settings and precedence"
+icon: "sliders"
+type: concept
+audience: [developer, team-lead]
+interfaces: [cli]
+---
+
+Most behavior you can tune in Beaver — which cloud a deploy uses, health-check timing, how long a
+graceful shutdown lasts, who may deploy to production — is a **setting** with a value at one or
+more levels. When several levels set the same thing, Beaver always answers the same way, and
+always tells you which level won.
+
+## The order
+
+From most specific to least:
+
+1. **A flag on one deploy** — applies to that deployment only and is never remembered.
+2. **`.beaver/config.yml`** — the configuration you commit with your code.
+3. **A service, then its environment, then its project, then your workspace** — the first one that
+   set a value wins.
+4. **Beaver's own default.**
+
+A workspace's **enforced policy** sits above all of it: a project, a config file or a flag can
+make a policy stricter, never looser.
+
+## Ask Beaver where a value comes from
+
+In the CLI: `beaver settings explain <key> --scope service:<id>` (the value at every scope in the chain, and who last changed the winner); `beaver settings get <key> --scope project` (the full effective value); `beaver settings diff <key> --from workspace --to environment:<id>`; `beaver settings history <key> --scope project` (change history).
+
+`beaver settings set` writes a value at a scope you name (with an optional `--reason`), and `beaver settings unset` removes it so the key falls back to the next scope up. See the
+[`beaver settings` reference](/cli/settings).
+
+## The repository owns what it declares
+
+If `.beaver/config.yml` declares a value, that value wins — and Beaver will not let you change
+it from the dashboard, because the change would be ignored on the next deploy. Instead the
+setting shows **Managed by `.beaver/config.yml`**, with:
+
+- **View source** — the exact lines of the file that declare it.
+- **Create proposed change** — the edit to the file your new value implies, as a diff you can
+  apply and commit. Nothing is saved behind your back.
+- **Drift**, when the running service no longer matches the file: reconcile the service back to
+  the file, or update the file to match the service.
+
+## Defaults for new deployments
+
+A workspace or project can set the defaults a deploy uses when you don't say otherwise: the
+Beaver Cloud, builder and host machines, the environment, the image namespace, health-check
+settings, restart policy and resources. `beaver deploy` and the dashboard both use them, so a
+choice made once — including in Beaver Desktop — is the one your next deployment actually uses.
+Changing a default affects **new** deployments; an existing deployment keeps what it was
+deployed with until you redeploy it.
+
+A workspace can also restrict which **image registries** a Compose release may pull from, and
+require every deploy to **name the exact commit** it ships.
+
+## Environments as policy
+
+Any environment — not only one named `production` — can require a **minimum role** to deploy or
+to reveal its secrets, restrict deploys to a **weekly schedule**, block them during
+**maintenance windows**, and set how long an **approval request** stays open. An environment can
+raise the workspace's bar but never lower it.
+
+## Workspace security
+
+Owners can restrict the workspace to **allowed IP addresses**, **require two-factor
+authentication** for every member, set a **maximum session age**, and require a **recent
+sign-in** for sensitive actions such as deploying to production. Loosening any of these needs an
+Owner, and Beaver refuses a change that would lock you out.
+
+<Note>
+Behind a reverse proxy, tell Beaver how many proxies sit in front of it so the IP allow-list
+trusts the address your proxy saw rather than a header the caller could have written.
+</Note>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Configuration" href="/deploy/configuration">
+    The `.beaver/config.yml` file and its saved copy.
+  </Card>
+  <Card title="Production safety and approvals" href="/teams/production-approvals">
+    Protected environments and second-person approval.
+  </Card>
+</CardGroup>

@@ -3,18 +3,21 @@ title: "beaver validate"
 sidebarTitle: "validate"
 description: "Check .beaver/config.yml for errors, locally, without deploying anything."
 icon: "circle-check"
+type: reference
 ---
 
 <Info>
-  New here? [Preflight and planning](/concepts/preflight-and-planning) explains what this is and when to use it, before diving into syntax.
+  New here? [Preflight and planning](/deploy/preflight-and-planning) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 ## Purpose
 
 Run `beaver validate` before [`beaver plan`](/cli/plan) or [`beaver deploy`](/cli/deploy) to
 catch configuration mistakes early. It parses and checks the current directory's
-`.beaver/config.yml` — schema version, required fields, unknown keys, duplicate keys, and
-YAML anchors/aliases (never allowed) — entirely on your machine.
+`.beaver/config.yml` — the file is not empty or oversized, it parses as YAML, it has no duplicate keys and no YAML anchors or
+aliases (never allowed), `schema_version` is the supported version (`1`), and `project` is set — entirely on your machine. It does **not** check the values of the `deployment:` fields (strategy, replicas, resources, port, and so on) or reject keys it does not
+know; for editor-side checking of those, use the schema from [`beaver config schema`](/cli/config), and see the
+[`.beaver/config.yml` reference](/reference/deployment-specification).
 
 ## Syntax
 

@@ -1,0 +1,62 @@
+---
+title: "TLS certificates and route checks"
+sidebarTitle: "TLS and routes"
+description: "How certificates are issued for your addresses, how to re-issue one, and how to see DNS, certificate and backend health for a domain in one command."
+keywords: ["tls certificates and route checks", "tls and routes", "https", "certificate", "ssl", "beaver route inspect", "beaver domain verify"]
+icon: "lock"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Every deployed app's default address, `https://<name>.vectorihub.com`, has a TLS certificate issued and renewed for you. For your **own domain**, the certificate is issued
+automatically once its DNS resolves to Beaver ([First domain](/start/first-domain)). You do not upload certificates.
+
+<Tabs>
+  <Tab title="Dashboard">A deployment's **Domains** tab shows each domain and its state.</Tab>
+  <Tab title="CLI">`beaver route inspect` and `beaver domain` re-check and re-issue — shown below.</Tab>
+</Tabs>
+
+## Check a domain in one command
+
+```bash
+beaver route inspect app.example.com
+beaver route inspect app.example.com --json
+```
+
+Read-only. It reports the domain's live **DNS**, **TLS certificate** status (provider and state, for example `letsencrypt` and `active`) and whether the **backend** is reachable and
+healthy — the first thing to run when a domain misbehaves.
+
+## Re-issue a certificate
+
+```bash
+beaver domain verify <domain-id>          # re-check DNS and re-trigger verification
+beaver domain certificate <domain-id>     # (re)provision the TLS certificate
+```
+
+Certificate issuance needs DNS to resolve first. If you use Cloudflare, set the record to **DNS only** (grey cloud) so verification and issuance can see it.
+
+## Beaver Edge origins
+
+For an app fronted by [Beaver Edge](/network/beaver-edge), the connection from Beaver to your origin can be `https://` (encrypted) or `http://`; Edge asks you to acknowledge an `http://` origin
+with `--allow-insecure-origin` because that leg is not encrypted.
+
+## If it fails
+
+- **Certificate stays pending** — DNS is wrong or has not propagated; run `beaver route inspect`, fix the record, then `beaver domain verify`.
+- **Browser warns about the certificate** — confirm you are visiting the address attached to the app, not an older deployment address that has stopped routing
+  ([Domains](/network/domains)).
+- More: [Domains and routing](/network/domains-and-routing).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Domains" icon="globe" href="/network/domains">Default address and your own domain.</Card>
+  <Card title="Route command reference" icon="terminal" href="/cli/route">Flags and output.</Card>
+</CardGroup>

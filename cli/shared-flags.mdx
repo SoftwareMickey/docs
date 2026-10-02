@@ -3,10 +3,11 @@ title: "Shared flags"
 sidebarTitle: "Shared flags"
 description: "Flags available on many beaver commands: --json, --output, --quiet, --yes, --wait, and --timeout."
 icon: "flag"
+type: reference
 ---
 
 <Info>
-  New here? [Automation](/concepts/automation) explains what this is and when to use it, before diving into syntax.
+  New here? [Automation](/deploy/ci-cd) explains what this is and when to use it, before diving into syntax.
 </Info>
 
 These six flags behave the same way everywhere they appear, so they're documented once here
@@ -34,7 +35,12 @@ Continue? [y/N]
 
 With `--yes`, that confirmation is skipped and the action runs immediately — use it for
 scripts and automation, not as a default habit interactively. `--yes` only ever skips the
-prompt; it never changes what the command does.
+prompt; it never changes what the command does, and it never overrides a requirement that is
+not met.
+
+Without a terminal (CI, a pipe), a command that needs confirmation does not wait for input and
+does not quietly cancel: it fails with exit status `1`, says it needs confirmation, and prints
+the same command with `--yes` added.
 
 ## `--wait`
 
@@ -52,6 +58,10 @@ below), the command exits with a timeout error. This does **not** cancel the ope
 itself — it only stops the CLI from waiting. The operation may still finish on its own; check
 its status afterward (for example `beaver deployment status <deployment-id>`) rather than
 assuming a timeout means failure.
+
+Only commands that start an asynchronous operation honour `--wait`. On any other command it has no
+effect, and Beaver says so (`note: --wait has no effect on …`, plus the commands where it does
+work) instead of silently ignoring it. The same applies to `--timeout`.
 
 ## `--timeout`
 
@@ -108,7 +118,7 @@ See [`beaver workspace`](/cli/workspace#choosing-the-workspace-a-command-acts-in
 
 ```bash
 cd paperclip/
-beaver deploy --machine srv_web01 --wait --timeout 10m --json
+beaver deploy --cloud paperclip-prod --wait --timeout 10m --json
 ```
 
 Deploys the current directory (`paperclip`) to `srv_web01`, blocks until the deployment

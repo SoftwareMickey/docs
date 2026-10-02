@@ -1,0 +1,3 @@
+source,destination,reason
+/frameworks,/deploy/bring-your-own-app,"emitted by the Dashboard Frameworks page; was a 404 before the migration"
+/development,/,"retired Mintlify boilerplate page"

@@ -1,0 +1,40 @@
+term,ui_string,where_in_product,short_definition,avoid,note
+VectorIHub,VectorIHub,site and company name; Dashboard footer/marketing,The platform and company behind Beaver,"Vectorihub, Vector iHub, VIH","D1: platform/company name only; say ""Beaver"" for the product"
+Beaver,Beaver,every interface and the binary,The product family (CLI + Desktop + Dashboard + Cloud + Edge + Services),"BeaverCLI, the VectorIHub CLI",D1
+Beaver CLI,Beaver CLI,Desktop Settings > Beaver CLI & Agent; install pages,The `beaver` command-line tool,"the vectorihub CLI, bvr",
+Beaver Desktop,Beaver Desktop,desktop app,The desktop application,"Beaver app, the GUI",
+Dashboard,Dashboard,Dashboard sidebar,The web application at the product domain,"web app, console, control panel (control-panel is a separate repo)",Capital D when naming the product surface
+Beaver Cloud,Beaver Cloud,Dashboard Clouds; Desktop navigator,A group of your machines managed together,"cluster, pool (except in a pools nav group name)",
+Beaver Edge,Beaver Edge,Dashboard Edge,Edge routing/performance product,"Edge network, CDN","docs previously wrote ""Edge""; use ""Beaver Edge"" on first mention per page"
+Alie,Alie,Dashboard + Desktop,Beaver's infrastructure AI assistant,"ALIE, the AI, the agent (agent = machine agent)",Casing follows the UI (docs 39 / client 36 use Alie; ALIE appears only in one eyebrow)
+machine,Machine,Desktop navigator; docs,A computer enrolled in Beaver that can run workloads,"server (legacy), host, box","Dashboard sidebar still says Nodes; docs say machine and note ""shown as Node in the Dashboard"""
+node,Nodes,Dashboard sidebar,Dashboard's name for a machine,,Use only when quoting the Dashboard label
+workspace,Workspace,Dashboard + Desktop switcher,The scope that owns projects clouds and services; personal or team,"account (an account owns workspaces), org, organisation",
+team workspace,Team,Dashboard Team,A workspace shared by several members,"organisation, company account",
+project,Project,Dashboard Projects,The thing you deploy: a repo or folder plus its configuration,"app, site",
+deployment,Deployment,Dashboard Deployments,One running (or past) release of a project,"release (a release is a compose stack revision), build",
+environment,Environment,Dashboard Project environments,A named target such as staging or production,"stage, tier",
+service,Service,Dashboard Services; Desktop Services,A managed database or broker Beaver runs for you,"add-on, resource, managed database (use for a specific kind only)",
+Composer,Composers,Dashboard sidebar,Dashboard's name for compose stacks,,"Docs say compose application and note ""shown as Composers in the Dashboard"""
+compose application,Stack,Dashboard Composers detail; CLI compose,An application defined by a Docker Compose file,stack (only when quoting),
+container,Containers,Dashboard + CLI,A running instance of an image,pod,
+replica,Replicas,Dashboard Containers,One of several running copies of a container,"instance, pod",
+build minutes,Build Minutes,Dashboard sidebar,The plan allowance for building images,CI minutes,
+resource usage,Resource Usage,Dashboard sidebar,CPU memory and bandwidth consumption view,metrics page,
+approval,Approvals,Dashboard Team + Desktop Approvals,A human confirmation required before a protected action,"sign-off, review",
+role,Role,Dashboard Members,A member's permission level in a workspace,permission set,Owner Admin Developer Viewer (from the generated permission matrix)
+activity,Activity,Dashboard + Desktop,Feed of published items and workspace events,timeline,Three feeds: Following Explore Workspace activity
+template,Template,Dashboard Activity,A published project others can deploy,"starter, boilerplate",
+2-step verification,2-step verification,Dashboard Security,Second sign-in factor,MFA/2FA (use only when matching a UI string),UI says 2-step; the code and plans say MFA
+passkey,Passkey,Dashboard Security,A WebAuthn credential for sign-in,security key (a hardware key is one kind),Off until the RP-ID owner step lands
+sign-in method,Sign-in method,Dashboard Settings,Email Google or GitHub used to sign in,"login provider, SSO",Sign-in is separate from repository access
+repository access,Repository access,Desktop Settings; Dashboard Integrations,Permission for Beaver to read your repositories,git integration,
+device authorization,Approve this device,Dashboard /oauth/approve; CLI login; Desktop sign-in,Signing a CLI or Desktop in via the browser,"device login, OAuth flow",
+Builder,Builder,machine role chosen in beaver connect; Dashboard add-node,A machine role that builds your images,build server,"Roles are Builder, Host, Builder + Host (infrastructure/machines-and-roles)"
+Host,Host,machine role chosen in beaver connect,A machine role that runs your containers,"runtime node, worker, app server","Do not write ""runtime node""; Host is the role name"
+gateway,Gateway,Beaver Cloud,A Beaver Cloud member machine that also accepts public inbound traffic for the cloud,"proxy, load balancer (load balancing is a separate feature)","A cloud designation (beaver cloud gateway), not a machine role at connect time"
+drift,Drift,Desktop Configuration; CLI state,Difference between desired and actual state,skew,
+reconcile,Reconcile,CLI,Bring actual state back to desired,sync,
+firewall,Firewall,Dashboard deployment tab,Rules and posture controlling inbound traffic,WAF (not offered),
+incident,Incidents,Dashboard Incidents,A detected operational problem,"outage, ticket",
+plan,Plan,Dashboard Billing,Subscription tier and its limits,"package, tier",

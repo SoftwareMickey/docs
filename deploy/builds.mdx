@@ -1,0 +1,65 @@
+---
+title: "Builds"
+sidebarTitle: "Builds"
+description: "Where your image is built, how to watch a build, how to read a failed one, and how to prove a fix before it goes live."
+keywords: ["builds", "beaver deploy", "beaver compose logs"]
+icon: "hammer"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Every deployment starts with a **build**: a **Builder** machine in your cloud clones your pushed commit, builds the Dockerfile into an image, and pushes it (tagged with your
+Docker Hub username) so a **Host** can run it. You choose the cloud; from the CLI Beaver picks the builder and host from its members, and the Dashboard form lets you choose the Builder. See
+[Builds and images](/deploy/builds-and-images) for the model.
+
+## Watch a build
+
+<Tabs>
+  <Tab title="Dashboard">Open the deployment — its build logs and build summary are in the deployment view, and **Deployment history** lists past builds with their status. (The **Build Minutes** page is not reachable in the Dashboard today.)</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver deploy --cloud paperclip-prod --logs     # stream raw build and host output
+    beaver compose logs <stack-id>                  # build and host logs for a Compose stack
+    ```
+    Without `--logs` you get the live summary board.
+  </Tab>
+</Tabs>
+
+## When a build fails
+
+1. Read the failing step in the build log — it is your Dockerfile's output.
+2. Reproduce it locally: `docker build .` in a fresh clone of your branch.
+3. Check what the Builder can see: only committed, pushed files exist there — and for a private repository the Builder needs its own GitHub login (`beaver git --auth`).
+4. Check the Builder itself: `beaver doctor` and `beaver docker --auth` on that machine (Docker running, Docker Hub login valid, enough disk).
+5. Fix, commit and push — a push to the branch triggers the next release.
+
+## Prove a fix without sending it live
+
+```bash
+beaver container <name> rebuild        # proves a failed release builds and passes health checks, without routing traffic
+beaver preflight --full                # builds a throwaway candidate off-routing: build, health, teardown
+```
+
+## Common causes
+
+| Symptom | Likely cause |
+| --- | --- |
+| Works locally, fails on the Builder | A file is not committed, or the build depends on your local environment |
+| Push to the registry fails | Docker Hub login missing or expired on the Builder |
+| Out of space | The Builder's disk is full of images and cache |
+| Builds never start | No machine with the **Builder** role is available in the cloud |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Your Dockerfile" icon="docker" href="/deploy/dockerfile-requirements">What it must define.</Card>
+  <Card title="Troubleshooting" icon="triangle-alert" href="/operate/troubleshooting">Start from what you see.</Card>
+</CardGroup>

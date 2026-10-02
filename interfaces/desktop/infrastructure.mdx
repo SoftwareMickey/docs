@@ -1,0 +1,86 @@
+---
+title: "Infrastructure, machines and clouds in Desktop"
+sidebarTitle: "Infrastructure and machines"
+description: "The Infrastructure home, the Machines list and its nine-tab detail, and Beaver Cloud with its seven detail tabs: what each shows and what is read-only."
+icon: "server"
+type: interface
+audience: [operator, developer]
+interfaces: [desktop]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+import { Shot } from "/snippets/shot.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+Everything on these screens is **read-only**. Where an action would change something, Desktop opens an **action sheet** with the exact `beaver` command and a **Copy command** button; you run it in a terminal. Machine, cloud and service pages also have an **Open Terminal** button in the header that opens the embedded terminal.
+
+## Infrastructure home
+
+<Shot name="desktop/infrastructure-home" alt="Beaver Desktop's Infrastructure home: a counts strip for machines, containers, services, networks and clouds above cards for each machine with CPU and memory bars." />
+
+A counts strip — **Machines**, **Containers**, **Services**, **Networks**, **Clouds**, each with a health summary such as *2 healthy* — sits above one card per machine, showing its status (**Online**, **Degraded**, **Offline**), role, CPU and memory. **View →** opens the machine. With no machines, the page shows **No machines enrolled** and the first action.
+
+The header offers **Add Machine**, **Create Cloud**, **Add Service** and **Create Network**. The first three open an action sheet: a short explanation and the command to copy — [`beaver connect`](/cli/connect), [`beaver cloud create`](/cli/cloud) and [`beaver service create`](/cli/service).
+**Create Network** is shown disabled — there is no standalone command for networks (or for storage) yet: a network is created by a cloud or a Compose stack, and a volume by a service or a Compose stack.
+
+<Shot name="desktop/action-sheet-add-machine" alt="The Add Machine action sheet, showing the beaver connect command with a Copy command button." />
+
+## Machines
+
+**Machines** lists every enrolled machine, grouped by machine group (and **Ungrouped**), with the count enrolled and an **Add Machine** button. Each card shows status, CPU and RAM use, and **View →**. Select one to open its detail; the header shows its status, health score and hostname.
+
+<Shot name="desktop/machines-list" alt="The Machines section listing four enrolled machines, grouped, each with status and CPU and RAM bars." />
+
+| Tab | Shows |
+| --- | --- |
+| **Overview** | Health score, availability and when it was last seen, uptime, load, CPU, memory and disk, utilisation, an **Identity** card (hostname, role, operating system, kernel, architecture, public and private address), recent events and containers |
+| **Containers** | Counts of running and stopped containers, a state filter, and one row per container with health, restarts, image, CPU and memory. **Details** expands a row (project, domain, branch, commit, age) with **View container** and **Machine logs** |
+| **Resources** | CPU, memory and disk used against capacity with headroom; history over **1h**, **24h** or **7d**; the top container consumers; and containers that **Need attention**. A note says when network use is not reported |
+| **Networks** | The Docker networks on the machine and a **Port exposure** view — what is public, what is reachable by cloud peers, and what is internal only |
+| **Volumes** | Named volumes: count, size on disk, reclaimable space, and a table of name, driver, size and references |
+| **Logs** | The machine's log sources with their state (**Available**, **Inaccessible**, **Unsupported**), size, freshness and retention; open one to read it — filter by level (**Error+**, **Warning+**, **Info+**, **Debug+**), search, and switch **Live** on |
+| **Events** | Counts of open, critical, warning and recovered incidents, filters by severity, type and state, and a timeline of events. Open events show the reason where one is known and shortcuts such as **Open container**, **View related logs** and **View resource trend** |
+| **Security** | A security score, the findings that lost points — for example password authentication enabled or security updates pending — and the suggested fix. Applying a fix means running a `beaver machine` command |
+| **Configuration** | The policy mode, drift (**in sync** or the fields that differ), managed fields and the desired state — firewall, SSH root login, automatic security updates |
+
+<Shot name="desktop/machine-overview" alt="A machine's detail view on the Overview tab, with the nine tabs along the top, health score, resource utilisation and an Identity card." />
+
+Values come from the machine's last report; a tab says when a value is unavailable (for example *not reported by this machine*) rather than guessing. See [Machines and roles](/infrastructure/machines-and-roles) and [Drift and reconcile](/operate/drift-and-reconcile).
+
+## Beaver Cloud
+
+**Beaver Cloud** lists clouds — machines joined into private, deployable pools. Each card shows health (**Healthy**, **Degraded**), network state, node count and how many are schedulable, free CPU and memory, the private network range and how many nodes are connected, and a note when some nodes have not reported and capacity is therefore a lower bound. **Open →** opens the cloud.
+
+<Shot name="desktop/clouds-list" alt="The Beaver Cloud section listing machine pools, each with health, node counts and free CPU and memory." />
+
+<Shot name="desktop/cloud-overview" alt="A Beaver Cloud's detail view on the Overview tab: nodes, applications, health, network and free CPU, memory and storage, with seven tabs along the top." />
+
+| Tab | Shows |
+| --- | --- |
+| **Overview** | Nodes, applications, health, network and free CPU, memory and storage; capacity broken into system, reserved and allocatable; the private network summary; recent activity; services |
+| **Nodes** | Machines in the cloud with filters by role and by whether they accept new work; role, status, private-network address, free CPU and memory, and workload count |
+| **Network** | The private node network (range, encryption, average latency), the container network, node connectivity, container subnets, **Cross-project access** (by default only the same project) and **Gateways** |
+| **Capacity** | Free CPU, memory and storage against totals, the schedulable nodes, the largest workload that fits right now, and per-node capacity |
+| **Services** | The managed services in the cloud, as in the Services section |
+| **Topology** | A graph from the internet through ingress and applications to services, machines and the cloud, with a **Networking** / **Services** switch and zoom |
+| **Timeline** | Membership, deployment, network and capacity events, filtered by type and time, each with a one-line reason |
+
+Capacity figures marked *advisory* are observed use and are not subtracted from what is free. Draining or evacuating a machine is not available in Desktop — see [Drain and evacuate](/infrastructure/drain-and-evacuate).
+
+## Same task in the other interfaces
+
+| Task | Dashboard | CLI |
+| --- | --- | --- |
+| See a machine | **Nodes → machine** | `beaver machine overview` |
+| See a cloud | **Clouds** | `beaver cloud status` |
+| Enrol a machine | Shows the command | `beaver connect` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Networks, storage and services" icon="database" href="/interfaces/desktop/networks-storage-services">The resource sections.</Card>
+  <Card title="Connect a machine" icon="plug" href="/infrastructure/connect-a-machine">Enrol your first machine.</Card>
+</CardGroup>

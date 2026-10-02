@@ -1,0 +1,980 @@
+{
+ "GET /api/me/profile": {
+  "user": {
+   "user_id": "usr_ada",
+   "user_name": "ada",
+   "full_name": "Ada Lovelace",
+   "email": "ada@beaver.local",
+   "is_email_verified": true,
+   "mfa_enabled": true,
+   "profile_image": "",
+   "created_at": "2026-03-04T10:00:00Z",
+   "UserID": "usr_ada",
+   "FollowersCount": 12
+  },
+  "status_code": 200
+ },
+ "GET /api/workspaces": {
+  "workspaces": [
+   {
+    "workspace_id": "ws_paperclip",
+    "name": "Paperclip",
+    "kind": "team",
+    "role": "owner",
+    "status": "active",
+    "plan": {
+     "slug": "team",
+     "label": "Team"
+    },
+    "member_count": 4
+   },
+   {
+    "workspace_id": "ws_ada",
+    "name": "Ada Lovelace",
+    "kind": "personal",
+    "role": "owner",
+    "status": "active",
+    "plan": {
+     "slug": "hobby",
+     "label": "Hobby"
+    },
+    "member_count": 1
+   }
+  ]
+ },
+ "GET /api/workspace/me": {
+  "workspace_id": "ws_paperclip",
+  "name": "Paperclip",
+  "kind": "team",
+  "role": "owner",
+  "permissions": [
+   "alie.configure",
+   "alie.use",
+   "approval.decide",
+   "audit.read",
+   "billing.manage",
+   "cloud.manage",
+   "container.exec",
+   "container.operate",
+   "deploy.production",
+   "domain.manage",
+   "firewall.manage",
+   "machine.enroll",
+   "machine.manage",
+   "member.invite",
+   "member.manage",
+   "ownership.transfer",
+   "project.create",
+   "project.delete",
+   "project.deploy",
+   "project.redeploy",
+   "project.rollback",
+   "role.change",
+   "secret.read",
+   "secret.write",
+   "service.create",
+   "service.manage",
+   "workspace.delete",
+   "workspace.manage",
+   "workspace.read"
+  ],
+  "requires": {},
+  "settings": {
+   "developer_production": false,
+   "developer_machines": true,
+   "developer_secrets": false,
+   "allow_link_invites": true,
+   "protected_environments": [
+    "production"
+   ],
+   "require_approval_for": []
+  },
+  "plan": {
+   "slug": "team",
+   "label": "Team"
+  }
+ },
+ "GET /api/workspace/subscription": {
+  "plan_id": "team",
+  "has_subscription": true,
+  "status": "active",
+  "billing_cycle": "monthly",
+  "current_period_end": "2026-10-28T00:00:00Z",
+  "cancel_at_period_end": false,
+  "seats": {
+   "used": 4,
+   "active": 3,
+   "pending": 1,
+   "suspended": 0,
+   "included": 5,
+   "pack": 5,
+   "limit": 5
+  },
+  "seat_packs": [],
+  "next_charge": null,
+  "notice": null,
+  "billing_owner": {
+   "name": "Ada Lovelace",
+   "email": "ada@beaver.local"
+  }
+ },
+ "GET /api/integrations/status": {
+  "github": {
+   "provider": "github",
+   "connected": true,
+   "state": "connected",
+   "accounts": 1,
+   "attention": 0,
+   "checked_at": "2026-10-01T09:00:00Z"
+  }
+ },
+ "GET /api/containers": {
+  "containers": [
+   {
+    "container_id": "ctr_api",
+    "name": "paperclip-api",
+    "status": "running",
+    "framework": "Go",
+    "image": "paperclip/api:v185",
+    "git_branch": "main",
+    "domain": "api.paperclip.example",
+    "kind": "standalone",
+    "project_id": "prj_paperclip",
+    "created_at": "2026-09-19T09:00:00Z"
+   },
+   {
+    "container_id": "ctr_web",
+    "name": "paperclip-web",
+    "status": "running",
+    "framework": "Next.js",
+    "image": "paperclip/web:v42",
+    "git_branch": "main",
+    "domain": "paperclip.example",
+    "kind": "standalone",
+    "project_id": "prj_paperclip",
+    "created_at": "2026-09-11T09:00:00Z"
+   },
+   {
+    "container_id": "ctr_worker",
+    "name": "paperclip-worker",
+    "status": "running",
+    "framework": "Node.js",
+    "image": "paperclip/worker:v12",
+    "git_branch": "main",
+    "kind": "standalone",
+    "project_id": "prj_paperclip",
+    "created_at": "2026-09-22T09:00:00Z"
+   },
+   {
+    "container_id": "ctr_docs",
+    "name": "paperclip-docs",
+    "status": "exited",
+    "framework": "Astro",
+    "image": "paperclip/docs:v7",
+    "git_branch": "docs",
+    "kind": "standalone",
+    "project_id": "prj_docs",
+    "created_at": "2026-08-22T09:00:00Z"
+   }
+  ]
+ },
+ "GET /api/deployments": {
+  "data": [
+   {
+    "deployment_id": "dep_3",
+    "project_id": "prj_paperclip",
+    "container_id": "ctr_api",
+    "status": "success",
+    "image": "paperclip/api:v185",
+    "git_branch": "main",
+    "commit_hash": "1a2b3c4",
+    "commit_msg": "Add refund endpoint",
+    "current": true,
+    "created_at": "2026-10-01T08:18:00Z",
+    "duration_ms": 98000
+   },
+   {
+    "deployment_id": "dep_2",
+    "project_id": "prj_paperclip",
+    "container_id": "ctr_web",
+    "status": "success",
+    "image": "paperclip/web:v42",
+    "git_branch": "main",
+    "commit_hash": "9f8e7d6",
+    "commit_msg": "Update pricing page",
+    "current": true,
+    "created_at": "2026-10-01T04:00:00Z",
+    "duration_ms": 141000
+   },
+   {
+    "deployment_id": "dep_1",
+    "project_id": "prj_paperclip",
+    "container_id": "ctr_worker",
+    "status": "failed",
+    "image": "paperclip/worker:v13",
+    "git_branch": "main",
+    "commit_hash": "5c4d3e2",
+    "commit_msg": "Retry queue changes",
+    "current": false,
+    "created_at": "2026-09-30T07:00:00Z",
+    "duration_ms": 63000
+   }
+  ]
+ },
+ "GET /api/dashboard/summary": {
+  "generated_at": "2026-10-01T09:00:00Z",
+  "workspace": {
+   "id": "ws_paperclip",
+   "name": "Paperclip",
+   "kind": "team",
+   "plan": {
+    "slug": "team",
+    "label": "Team"
+   }
+  },
+  "projects_count": 2,
+  "requests_today": 18420,
+  "fleet": {
+   "healthy": 2,
+   "degraded": 1,
+   "offline": 0,
+   "unknown": 0,
+   "firing_alerts": 1
+  },
+  "incidents": [
+   {
+    "id": "inc_1",
+    "title": "Disk pressure on build-01",
+    "status": "open",
+    "severity": "warning",
+    "started_at": "2026-10-01T07:45:00Z",
+    "resolved_at": null
+   }
+  ],
+  "edge_apps": [
+   {
+    "id": "edge_1",
+    "domain_name": "app.paperclip.example",
+    "status": "active",
+    "ssl_status": "active"
+   }
+  ],
+  "services": {
+   "items": [
+    {
+     "id": "svc_db",
+     "name": "paperclip-db",
+     "type": "postgres",
+     "status": "healthy"
+    },
+    {
+     "id": "svc_cache",
+     "name": "paperclip-cache",
+     "type": "redis",
+     "status": "healthy"
+    }
+   ],
+   "summary": {
+    "Total": 2,
+    "Unhealthy": 0,
+    "ByType": {
+     "postgres": 1,
+     "redis": 1
+    }
+   }
+  },
+  "approvals": [
+   {
+    "id": "apr_1",
+    "source": "cli",
+    "kind": "deploy",
+    "status": "pending",
+    "requested_by_name": "Grace Hopper",
+    "summary": "Deploy paperclip-api to production",
+    "environment": "production",
+    "action": "deploy",
+    "params": {},
+    "expires_at": "2026-10-02T09:00:00Z"
+   }
+  ],
+  "notifications": {
+   "unread": 3,
+   "requires_action": 1
+  },
+  "activity": [
+   {
+    "id": "act_1",
+    "source": "audit",
+    "at": "2026-10-01T08:18:00Z",
+    "action": "deployment.created",
+    "label": "Ada Lovelace deployed paperclip-api",
+    "actor_name": "Ada Lovelace",
+    "actor_role": "owner",
+    "target_name": "paperclip-api",
+    "outcome": "success"
+   },
+   {
+    "id": "act_2",
+    "source": "audit",
+    "at": "2026-10-01T06:00:00Z",
+    "action": "member.invited",
+    "label": "Ada Lovelace invited grace@beaver.local",
+    "actor_name": "Ada Lovelace",
+    "actor_role": "owner",
+    "target_name": "grace@beaver.local",
+    "outcome": "success"
+   },
+   {
+    "id": "act_3",
+    "source": "audit",
+    "at": "2026-10-01T04:00:00Z",
+    "action": "deployment.created",
+    "label": "Grace Hopper deployed paperclip-web",
+    "actor_name": "Grace Hopper",
+    "actor_role": "developer",
+    "target_name": "paperclip-web",
+    "outcome": "success"
+   }
+  ],
+  "usage": {
+   "machines": {
+    "used": 3,
+    "limit": -1,
+    "over_limit": false
+   },
+   "repositories": {
+    "used": 4,
+    "limit": -1,
+    "over_limit": false
+   },
+   "managed_services": {
+    "used": 2,
+    "limit": 25,
+    "over_limit": false
+   },
+   "members": {
+    "used": 4,
+    "limit": 5,
+    "over_limit": false
+   }
+  },
+  "billing_plan": {
+   "slug": "team",
+   "label": "Team",
+   "subscription_status": "active",
+   "current_period_end": "2026-10-28T00:00:00Z",
+   "source": "subscription"
+  }
+ },
+ "GET /api/machines": {
+  "data": [
+   {
+    "machine_id": "m_prod01",
+    "name": "prod-01",
+    "hostname": "prod-01.paperclip.example",
+    "role": "host",
+    "availability": "healthy",
+    "health_score": 90,
+    "health_band": "healthy"
+   },
+   {
+    "machine_id": "m_prod02",
+    "name": "prod-02",
+    "hostname": "prod-02.paperclip.example",
+    "role": "host",
+    "availability": "healthy",
+    "health_score": 94,
+    "health_band": "healthy"
+   },
+   {
+    "machine_id": "m_build01",
+    "name": "build-01",
+    "hostname": "build-01.paperclip.example",
+    "role": "builder",
+    "availability": "degraded",
+    "health_score": 62,
+    "health_band": "degraded"
+   }
+  ]
+ },
+ "GET /api/machines/fleet/overview": {
+  "data": {
+   "counts": {
+    "healthy": 2,
+    "degraded": 1,
+    "offline": 0,
+    "unknown": 0
+   },
+   "machines": [
+    {
+     "machine_id": "m_prod01",
+     "group_id": "g_prod"
+    },
+    {
+     "machine_id": "m_prod02",
+     "group_id": "g_prod"
+    },
+    {
+     "machine_id": "m_build01",
+     "group_id": "g_build"
+    }
+   ]
+  }
+ },
+ "GET /api/machines/groups": {
+  "data": [
+   {
+    "id": "g_prod",
+    "name": "Production"
+   },
+   {
+    "id": "g_build",
+    "name": "Builders"
+   }
+  ]
+ },
+ "GET /api/notifications": {
+  "data": [
+   {
+    "NotificationID": "ntf_1",
+    "WorkspaceID": "ws_paperclip",
+    "Type": "deploy.build_failed",
+    "Category": "deploy",
+    "Title": "Build failed for paperclip-worker",
+    "Message": "The build for commit 5c4d3e2 failed on build-01. Open the build log for the error.",
+    "Severity": "critical",
+    "RequiresAction": true,
+    "RequiresAcknowledgement": true,
+    "Meta": null,
+    "IsRead": false,
+    "AcknowledgedAt": null,
+    "ResolvedAt": null,
+    "ExpiresAt": null,
+    "CreatedAt": "2026-09-30T07:00:00Z",
+    "read_at": null,
+    "unacknowledged": true
+   },
+   {
+    "NotificationID": "ntf_2",
+    "WorkspaceID": "ws_paperclip",
+    "Type": "approval.requested",
+    "Category": "approval",
+    "Title": "Approval requested",
+    "Message": "Grace Hopper asked to deploy paperclip-api to production.",
+    "Severity": "warning",
+    "RequiresAction": true,
+    "RequiresAcknowledgement": true,
+    "Meta": null,
+    "IsRead": false,
+    "AcknowledgedAt": null,
+    "ResolvedAt": null,
+    "ExpiresAt": null,
+    "CreatedAt": "2026-10-01T08:40:00Z",
+    "read_at": null,
+    "unacknowledged": true
+   },
+   {
+    "NotificationID": "ntf_3",
+    "WorkspaceID": "ws_paperclip",
+    "Type": "deploy.succeeded",
+    "Category": "deploy",
+    "Title": "paperclip-api is live",
+    "Message": "Release v185 passed its health check and is serving traffic.",
+    "Severity": "success",
+    "RequiresAction": false,
+    "RequiresAcknowledgement": false,
+    "Meta": null,
+    "IsRead": false,
+    "AcknowledgedAt": null,
+    "ResolvedAt": null,
+    "ExpiresAt": null,
+    "CreatedAt": "2026-10-01T08:18:00Z",
+    "read_at": null,
+    "unacknowledged": false
+   },
+   {
+    "NotificationID": "ntf_4",
+    "WorkspaceID": "ws_paperclip",
+    "Type": "domain.verified",
+    "Category": "domain",
+    "Title": "app.paperclip.example is live over HTTPS",
+    "Message": "DNS was verified and the certificate was issued.",
+    "Severity": "success",
+    "RequiresAction": false,
+    "RequiresAcknowledgement": false,
+    "Meta": null,
+    "IsRead": true,
+    "AcknowledgedAt": null,
+    "ResolvedAt": null,
+    "ExpiresAt": null,
+    "CreatedAt": "2026-09-30T03:00:00Z",
+    "read_at": "2026-09-30T03:01:00Z",
+    "unacknowledged": false
+   },
+   {
+    "NotificationID": "ntf_5",
+    "WorkspaceID": "ws_paperclip",
+    "Type": "team.member_joined",
+    "Category": "team",
+    "Title": "Grace Hopper joined Paperclip",
+    "Message": "Grace joined as a Developer.",
+    "Severity": "info",
+    "RequiresAction": false,
+    "RequiresAcknowledgement": false,
+    "Meta": null,
+    "IsRead": true,
+    "AcknowledgedAt": null,
+    "ResolvedAt": null,
+    "ExpiresAt": null,
+    "CreatedAt": "2026-09-29T07:00:00Z",
+    "read_at": "2026-09-29T07:01:00Z",
+    "unacknowledged": false
+   }
+  ],
+  "limit": 25,
+  "total": 5
+ },
+ "GET /api/notifications/unread-count": {
+  "unread_count": 3
+ },
+ "GET /api/billing/status": {
+  "machines": {
+   "used": 3,
+   "limit": -1,
+   "over_limit": false
+  },
+  "repositories": {
+   "used": 4,
+   "limit": -1,
+   "over_limit": false
+  },
+  "managed_services": {
+   "used": 2,
+   "limit": 25,
+   "over_limit": false
+  },
+  "members": {
+   "used": 4,
+   "limit": 5,
+   "over_limit": false
+  },
+  "plan": {
+   "slug": "team",
+   "label": "Team",
+   "billing_cycle": "monthly",
+   "subscription_status": "active",
+   "current_period_end": "2026-10-28T00:00:00Z",
+   "included_seats": 5,
+   "seats": {
+    "included": 5,
+    "extra": 0,
+    "limit": 5,
+    "used": 4,
+    "active": 3,
+    "pending": 1,
+    "suspended": 0
+   }
+  }
+ },
+ "GET /platform/plans": {
+  "plans": [
+   {
+    "plan_id": "plan_hobby",
+    "name": "Free",
+    "slug": "hobby",
+    "type": "subscription",
+    "description": "For trying Beaver",
+    "cta": "Choose plan",
+    "is_popular": false,
+    "sort_order": 1,
+    "monthly_price": 0,
+    "yearly_price": 0,
+    "price_label": null,
+    "extra_seat_monthly_price": null,
+    "extra_seat_yearly_price": null,
+    "limits": [
+     {
+      "label": "Machines",
+      "included": true
+     },
+     {
+      "label": "Managed services",
+      "included": true
+     }
+    ]
+   },
+   {
+    "plan_id": "plan_developer",
+    "name": "Developer",
+    "slug": "developer",
+    "type": "subscription",
+    "description": "For one builder",
+    "cta": "Choose plan",
+    "is_popular": false,
+    "sort_order": 2,
+    "monthly_price": 15,
+    "yearly_price": 150,
+    "price_label": null,
+    "extra_seat_monthly_price": null,
+    "extra_seat_yearly_price": null,
+    "limits": [
+     {
+      "label": "Machines",
+      "included": true
+     },
+     {
+      "label": "Managed services",
+      "included": true
+     }
+    ]
+   },
+   {
+    "plan_id": "plan_team",
+    "name": "Team",
+    "slug": "team",
+    "type": "subscription",
+    "description": "For a team",
+    "cta": "Choose plan",
+    "is_popular": true,
+    "sort_order": 3,
+    "monthly_price": 59,
+    "yearly_price": 590,
+    "price_label": null,
+    "extra_seat_monthly_price": 10,
+    "extra_seat_yearly_price": 8,
+    "limits": [
+     {
+      "label": "Machines",
+      "included": true
+     },
+     {
+      "label": "Managed services",
+      "included": true
+     }
+    ]
+   }
+  ]
+ },
+ "GET /api/workspace/payments": {
+  "payments": [
+   {
+    "payment_id": "pay_3",
+    "reference": "PCL-2026-0914",
+    "amount": 59,
+    "gateway": "paypal",
+    "status": "success",
+    "created_at": "2026-09-28T09:00:00Z"
+   },
+   {
+    "payment_id": "pay_2",
+    "reference": "PCL-2026-0828",
+    "amount": 59,
+    "gateway": "paypal",
+    "status": "success",
+    "created_at": "2026-08-28T09:00:00Z"
+   },
+   {
+    "payment_id": "pay_1",
+    "reference": "PCL-2026-0728",
+    "amount": 59,
+    "gateway": "paypal",
+    "status": "success",
+    "created_at": "2026-07-28T09:00:00Z"
+   }
+  ]
+ },
+ "GET /api/workspace/members": {
+  "members": [
+   {
+    "member_id": "mem_1",
+    "user_id": "usr_ada",
+    "name": "Ada Lovelace",
+    "email": "ada@beaver.local",
+    "role": "owner",
+    "status": "active",
+    "joined_at": "2026-03-04T10:00:00Z",
+    "is_self": true
+   },
+   {
+    "member_id": "mem_2",
+    "user_id": "usr_grace",
+    "name": "Grace Hopper",
+    "email": "grace@beaver.local",
+    "role": "developer",
+    "status": "active",
+    "joined_at": "2026-04-12T10:00:00Z",
+    "is_self": false
+   },
+   {
+    "member_id": "mem_3",
+    "user_id": "usr_alan",
+    "name": "Alan Turing",
+    "email": "alan@beaver.local",
+    "role": "admin",
+    "status": "active",
+    "joined_at": "2026-05-20T10:00:00Z",
+    "is_self": false
+   }
+  ]
+ },
+ "GET /api/workspace/seats": {
+  "used": 4,
+  "active": 3,
+  "pending": 1,
+  "suspended": 0,
+  "included": 5,
+  "pack": 5,
+  "limit": 5
+ },
+ "GET /api/workspace/invites": {
+  "invites": [
+   {
+    "invite_id": "inv_1",
+    "email": "katherine@beaver.local",
+    "role": "developer",
+    "status": "pending",
+    "expires_at": "2026-10-08T09:00:00Z",
+    "invited_by_name": "Ada Lovelace",
+    "link_mode": false
+   }
+  ]
+ },
+ "GET /api/workspace/approvals": {
+  "approvals": [
+   {
+    "id": "apr_1",
+    "source": "cli",
+    "kind": "deploy",
+    "status": "pending",
+    "requested_by_name": "Grace Hopper",
+    "summary": "Deploy paperclip-api to production",
+    "environment": "production",
+    "action": "deploy",
+    "params": {},
+    "expires_at": "2026-10-02T09:00:00Z"
+   }
+  ]
+ },
+ "GET /api/workspace/transfer": {
+  "transfer": null
+ },
+ "GET /api/workspace/feed": {
+  "items": [
+   {
+    "id": "act_1",
+    "source": "audit",
+    "at": "2026-10-01T08:18:00Z",
+    "action": "deployment.created",
+    "label": "Ada Lovelace deployed paperclip-api",
+    "actor_name": "Ada Lovelace",
+    "actor_role": "owner",
+    "target_name": "paperclip-api",
+    "outcome": "success"
+   },
+   {
+    "id": "act_2",
+    "source": "audit",
+    "at": "2026-10-01T06:00:00Z",
+    "action": "member.invited",
+    "label": "Ada Lovelace invited grace@beaver.local",
+    "actor_name": "Ada Lovelace",
+    "actor_role": "owner",
+    "target_name": "grace@beaver.local",
+    "outcome": "success"
+   },
+   {
+    "id": "act_3",
+    "source": "audit",
+    "at": "2026-10-01T04:00:00Z",
+    "action": "deployment.created",
+    "label": "Grace Hopper deployed paperclip-web",
+    "actor_name": "Grace Hopper",
+    "actor_role": "developer",
+    "target_name": "paperclip-web",
+    "outcome": "success"
+   }
+  ],
+  "next_cursor": ""
+ },
+ "GET /api/account/identities": {
+  "identities": [
+   {
+    "provider": "github",
+    "provider_username": "ada",
+    "connected": true,
+    "created_at": "2026-03-04T10:00:00Z",
+    "last_used_at": "2026-10-01T08:00:00Z"
+   },
+   {
+    "provider": "google",
+    "connected": false
+   }
+  ],
+  "account_email": "ada@beaver.local"
+ },
+ "GET /api/account/devices": {
+  "devices": [
+   {
+    "id": "dev_1",
+    "device_name": "ada-laptop",
+    "client_kind": "desktop",
+    "created_at": "2026-09-20T10:00:00Z",
+    "last_seen_at": "2026-10-01T08:55:00Z",
+    "expires_at": "2026-12-20T10:00:00Z",
+    "revoked_at": null,
+    "current": true,
+    "approved_mfa_kind": "totp"
+   },
+   {
+    "id": "dev_2",
+    "device_name": "build-01",
+    "client_kind": "cli",
+    "created_at": "2026-09-02T10:00:00Z",
+    "last_seen_at": "2026-10-01T06:00:00Z",
+    "expires_at": "2026-12-02T10:00:00Z",
+    "revoked_at": null,
+    "current": false,
+    "approved_mfa_kind": "totp"
+   },
+   {
+    "id": "dev_3",
+    "device_name": "old-laptop",
+    "client_kind": "cli",
+    "created_at": "2026-06-02T10:00:00Z",
+    "last_seen_at": "2026-09-01T09:00:00Z",
+    "expires_at": "2026-09-02T10:00:00Z",
+    "revoked_at": "2026-09-05T10:00:00Z",
+    "current": false,
+    "revoked_reason": "user"
+   }
+  ]
+ },
+ "GET /api/account/me": {
+  "mfa": {
+   "enabled": true,
+   "methods": [
+    "totp"
+   ],
+   "recovery_codes_remaining": 8,
+   "recovery_login": false,
+   "recovery_pending": false,
+   "last_verified_at": "2026-10-01T08:30:00Z",
+   "session_mfa_kind": "totp",
+   "passkeys": 0,
+   "passkeys_available": false,
+   "enforced_by": []
+  }
+ },
+ "GET /api/account/security-activity": {
+  "items": [
+   {
+    "id": "sa_1",
+    "kind": "login",
+    "at": "2026-10-01T08:30:00Z",
+    "detail": "Signed in with GitHub"
+   }
+  ]
+ },
+ "GET /api/mfa/authenticators": {
+  "authenticators": []
+ },
+ "GET /api/projects": {
+  "projects": [
+   {
+    "ProjectID": "prj_paperclip",
+    "Name": "paperclip",
+    "Description": "The Paperclip storefront: API, web app and background worker.",
+    "CreatedAt": "2026-03-10T10:00:00Z"
+   },
+   {
+    "ProjectID": "prj_docs",
+    "Name": "paperclip-docs",
+    "Description": "Public documentation site.",
+    "CreatedAt": "2026-05-02T10:00:00Z"
+   }
+  ]
+ },
+ "GET /api/edge/connected-apps": {
+  "connected_apps": [
+   {
+    "id": "edge_1",
+    "domain_name": "app.paperclip.example",
+    "origin_url": "https://origin.paperclip.example",
+    "status": "active",
+    "ssl_status": "issued",
+    "record_type": "CNAME",
+    "record_name": "app.paperclip.example",
+    "record_value": "edge.beaver.example",
+    "region": "",
+    "created_at": "2026-08-01T10:00:00Z"
+   },
+   {
+    "id": "edge_2",
+    "domain_name": "status.paperclip.example",
+    "origin_url": "https://status-origin.paperclip.example",
+    "status": "verifying_dns",
+    "ssl_status": "pending",
+    "record_type": "CNAME",
+    "record_name": "status.paperclip.example",
+    "record_value": "edge.beaver.example",
+    "region": "",
+    "created_at": "2026-09-30T10:00:00Z"
+   }
+  ]
+ },
+ "GET /api/services": {
+  "data": [
+   {
+    "id": "svc_db",
+    "name": "paperclip-db",
+    "type": "postgres",
+    "status": "healthy"
+   },
+   {
+    "id": "svc_cache",
+    "name": "paperclip-cache",
+    "type": "redis",
+    "status": "healthy"
+   },
+   {
+    "id": "svc_search",
+    "name": "paperclip-search",
+    "type": "meilisearch",
+    "status": "provisioning"
+   }
+  ],
+  "summary": {
+   "Total": 3,
+   "Unhealthy": 0,
+   "ByType": {
+    "postgres": 1,
+    "redis": 1,
+    "meilisearch": 1
+   }
+  }
+ },
+ "GET /api/incidents?status=open": {
+  "data": [
+   {
+    "id": "inc_1",
+    "title": "Disk pressure on build-01",
+    "status": "open",
+    "severity": "warning",
+    "started_at": "2026-10-01T07:45:00Z",
+    "resolved_at": null
+   }
+  ]
+ },
+ "GET /api/incidents?status=monitoring": {
+  "data": [
+   {
+    "id": "inc_0",
+    "title": "Elevated 5xx on paperclip-api",
+    "status": "monitoring",
+    "severity": "warning",
+    "started_at": "2026-10-01T03:00:00Z",
+    "resolved_at": null
+   }
+  ]
+ }
+}

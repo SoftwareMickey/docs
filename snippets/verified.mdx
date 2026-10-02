@@ -1,0 +1,9 @@
+export const Verified = ({ kind = "source-reviewed", date }) => {
+  const verified = kind === "verified";
+  return (
+    <div style={{ fontSize: "0.85rem", opacity: 0.8, margin: "0 0 1rem 0" }}>
+      {verified ? "Verified" : "Reviewed against the product source"}
+      {date ? ` · ${date}` : ""}
+    </div>
+  );
+};

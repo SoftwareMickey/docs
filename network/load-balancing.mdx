@@ -1,0 +1,72 @@
+---
+title: "Load balancing and staged rollouts"
+sidebarTitle: "Load balancing"
+description: "How traffic is spread across replicas, and how to shift it gradually to a new version with blue/green or canary rollouts."
+keywords: ["load balancing and staged rollouts", "load balancing", "beaver scaling replicas", "beaver scaling policy"]
+icon: "split"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+verified: source-reviewed
+lastVerified: 2026-10-01
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-01" />
+
+When a container runs more than one **replica**, traffic is distributed across them. This page covers how to see that, and how to move traffic to a new version in steps instead of all at
+once. How many replicas run is covered in [Scale](/deploy/scale); where they land is in [Capacity and placement](/infrastructure/capacity-and-placement).
+
+<Note>
+Load balancing applies to **agent-hosted** deployments — ones running on a machine you enrolled. The Dashboard's **Load balancing** tab says so and shows replica records, scaling activity and rollouts.
+</Note>
+
+## See replicas and scaling activity
+
+<Tabs>
+  <Tab title="Dashboard">Open the deployment's **Load balancing** tab: desired replicas, per-replica placement, scaling activity and rollout history, with an **Autoscaling** section.</Tab>
+  <Tab title="Desktop"><Note>Not available in Desktop. Replica placement appears in a cloud's **Nodes** and a machine's **Containers** views.</Note></Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver scaling replicas <container>        # running replica slots
+    beaver scaling policy <container>          # fixed or automatic, and its bounds
+    beaver scaling events <container>          # scale up/down, rollout and self-heal events
+    ```
+  </Tab>
+</Tabs>
+
+## Roll out a new version in steps
+
+Two staged strategies shift **traffic weight** between the current replica set and a candidate:
+
+<Tabs>
+  <Tab title="Blue/green">
+    ```bash
+    beaver scaling deploy-set <container> --image myrepo/app:v2     # standby set at 0% traffic
+    beaver scaling cutover <container> <rollout-id> --weight 100    # shift traffic (0–100)
+    beaver scaling discard <container> <rollout-id>                 # tear down whichever side has 0% — irreversible
+    ```
+    `deploy-set` sends no traffic by itself — `cutover` is what shifts weight.
+  </Tab>
+  <Tab title="Canary">
+    ```bash
+    beaver scaling canary <container> --steps 5,25,75,100 --step-interval 10m --error-band 2
+    beaver scaling canary-status <rollout-id>
+    ```
+    A scheduled ramp through ascending weights. `--error-band` halts the ramp automatically if the error rate rises more than that many percentage points above baseline.
+  </Tab>
+</Tabs>
+
+`beaver scaling rollouts <container>` lists rollout history. If a replacement generation does not become ready, the previous healthy generation is preserved.
+
+## Spread within a cloud
+
+Which machines replicas land on is a placement policy — `beaver cloud workload set <cloud> <container> --policy spread|pack|pinned`, and `--lb dns|proxy` chooses internal load-balancing mode.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Scale" icon="gauge" href="/deploy/scale">Fixed or automatic replica counts.</Card>
+  <Card title="Scaling command reference" icon="terminal" href="/cli/scaling">Every flag.</Card>
+</CardGroup>
