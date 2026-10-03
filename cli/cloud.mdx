@@ -24,8 +24,8 @@ pool — `beaver deploy --cloud <name>` then targets the pool instead of one mac
 | --- | --- |
 | `list` | List every cloud in your workspace. |
 | `create <name>` | Create a cloud from a set of machines. |
-| `status [cloud]` | Capacity, applications, and health at a glance. |
-| `inspect [cloud]` | Per-node breakdown. |
+| `status [cloud]` | Health, what needs attention, machines, capacity, network, and recent events. |
+| `inspect [cloud]` | Every machine with its IDs, hostname, address, and capacity (`machines --wide`). |
 | `rename <cloud> <new-name>` | Rename a cloud. |
 | `rm [cloud]` | Delete a cloud (must have no machines). |
 | `events [cloud]` | Event history: membership, network, capacity, placement, recovery. |
@@ -37,7 +37,12 @@ pool — `beaver deploy --cloud <name>` then targets the pool instead of one mac
   On `rm`: skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
 </ParamField>
 <ParamField query="--limit" type="integer" default="30">
-  On `events`: maximum events to show.
+  On `events`: maximum events to show. On `placements`: how many recent decisions to show
+  (default `10`, `0` for all).
+</ParamField>
+<ParamField query="--wide" type="boolean" default="false">
+  On `status`, `machines`, `capacity`, `network`, `gateway` and `workspace ls`: also show machine
+  IDs and hostnames. Tables otherwise name machines only.
 </ParamField>
 <ParamField query="--category" type="string" default="">
   On `events`: filter by category — `membership`, `network`, `capacity`, `placement`, or
@@ -49,16 +54,47 @@ cloud's own `status` field — a cloud can be up while one node's network connec
 degraded, or vice versa. Check both when diagnosing an issue rather than assuming they always
 move together.
 
+### Reading the output
+
+Every read command lays its report out the same way:
+
+```text
+MICKEY_NET · Capacity
+● Healthy · 2 of 2 machines ready
+
+ATTENTION                       (only when something needs you)
+  ✗ hosting-01 is offline. Its 4 cores and 7.6 GB are not available for new workloads.
+    → beaver machine overview hosting-01
+
+AVAILABLE FOR NEW WORKLOADS     (the direct answer)
+MACHINES                        (the detail behind it)
+NEXT                            (useful follow-up commands)
+
+Updated 12:19 PM · 873ms
+```
+
+- **Machines are named, not numbered.** A machine shows as its name, else its hostname, else its
+  full machine ID. Wherever a command takes a `<machine>` (or `--machine`, `--node`, `--pin`),
+  you can give the name, the hostname, the machine ID, or a unique start of the ID.
+- **Machine states** are the same words everywhere: `Ready`, `Draining`, `Joining`,
+  `Awaiting approval`, `Offline`, `No hardware facts`, `Not schedulable`, `Failed to join`.
+- **The first line under the title is the verdict.** It never reads `Healthy` while the
+  ATTENTION block lists a problem — it says `Needs attention` instead.
+- Tables fit the terminal: on a narrow one the least important columns give way first, and a
+  table that still cannot fit becomes one short card per row. Piped output is plain text at 100
+  columns (or `$COLUMNS`); `NO_COLOR` turns colour off and every status keeps its word and marker.
+- `--json` / `--output yaml` print the server's document unchanged; `--quiet` drops the footer.
+
 ## Machines & membership
 
 | Subcommand | Purpose |
 | --- | --- |
-| `machines [cloud]` | List a cloud's member machines. |
+| `machines [cloud]` | A cloud's machines: state, role, private address, and free capacity. |
 | `machines add [machine...]` | Add machines to a cloud. |
 | `machines rm [machine]` | Remove a machine from a cloud. |
 | `machines pending [cloud]` | List machines awaiting operator approval to join a cloud. |
-| `machines approve <machine-id>` | Approve a pending machine. |
-| `machines reject <machine-id>` | Reject a pending machine. |
+| `machines approve <machine>` | Approve a pending machine. |
+| `machines reject <machine>` | Reject a pending machine. |
 | `preflight <machine>...` | Check machines for cloud-membership readiness before adding them. |
 
 <ParamField query="--cloud" type="string" default="">
@@ -176,12 +212,12 @@ impersonate a workspace you don't belong to.
 
 | Subcommand | Purpose |
 | --- | --- |
-| `network [cloud]` | Show a cloud's private network. |
+| `network [cloud]` | The private network: whether every machine is connected, latency, and container subnets. |
 | `network enable <cloud>` | Turn on the private network for a cloud. |
 | `network allows [cloud]` | List cross-project network allow rules. |
 | `network allows add [cloud]` | Allow two projects to reach each other over the private network. |
 | `network allows rm [cloud] <allow-id>` | Remove an allow rule. |
-| `gateway [cloud]` | Show which members are public entry points, and designate new ones. |
+| `gateway [cloud]` | Which machines take public traffic, and whether each is serving. |
 | `gateway add [cloud] [machine...]` | Designate a machine as a gateway. |
 | `gateway rm [cloud] <machine>` | Remove a machine's gateway role. |
 
@@ -189,8 +225,8 @@ impersonate a workspace you don't belong to.
   On `network`: include the full node-to-node connectivity matrix.
 </ParamField>
 <ParamField query="--debug" type="boolean" default="false">
-  On `network`: include low-level private-networking detail (keys, endpoints, handshakes).
-  Advanced/troubleshooting use — not needed for routine checks.
+  On `network`: add each machine's tunnel endpoint and the MTU detail of the container
+  network. Advanced/troubleshooting use — not needed for routine checks.
 </ParamField>
 <ParamField query="--cidr" type="string" default="">
   On `network enable`: overlay address range to use. Proposed automatically if omitted.
@@ -217,16 +253,24 @@ of the cloud — `gateway`/`gateway add`/`gateway rm` manage which machines have
 
 | Subcommand | Purpose |
 | --- | --- |
-| `capacity [cloud]` | Cloud-wide capacity: schedulable vs. in-use vs. reserved. |
-| `capacity node [cloud]` | Per-node capacity breakdown. |
-| `capacity trend [cloud]` | Capacity usage trend over time. |
-| `reserve [cloud]` | Show current capacity reservations. |
-| `reserve set [cloud]` | Reserve capacity (cloud-wide or per-node). |
-| `reserve clear [cloud]` | Clear a reservation. |
+| `capacity [cloud]` | How much CPU and memory is available for new workloads, the largest workload that fits, and each machine's share. |
+| `capacity node [cloud]` | One machine's capacity, line by line. |
+| `capacity trend [cloud]` | Available capacity over the last 30 days, and when it would run out. |
+| `reserve [cloud]` | The system reserve each machine keeps. |
+| `reserve set [cloud]` | Change the system reserve (cloud-wide, or `--node` for one machine). |
+| `reserve clear [cloud]` | Go back to the default reserve. |
 
+<ParamField query="--explain" type="boolean" default="false">
+  On `capacity`: show how hardware becomes available capacity, line by line, for CPU, memory
+  and disk.
+</ParamField>
+<ParamField query="--machine" type="string" default="">
+  On `capacity node`: the machine to show (name, hostname or ID). A picker opens if omitted and
+  the cloud has more than one machine; without a terminal, `--machine` is required.
+</ParamField>
 <ParamField query="--node" type="string" default="">
-  On `reserve set`/`reserve clear`: apply to (or clear) a single machine's reservation instead
-  of the cloud-wide one.
+  On `reserve set`/`reserve clear`: apply to (or clear) one machine's reserve — by name,
+  hostname or ID — instead of the cloud-wide one.
 </ParamField>
 <ParamField query="--cpu" type="number" default="0">
   On `reserve set`: CPU cores to reserve.
@@ -241,16 +285,29 @@ of the cloud — `gateway`/`gateway add`/`gateway rm` manage which machines have
   On `reserve set`/`reserve clear`: skip the confirmation prompt.
 </ParamField>
 
-Reserved capacity is held back from scheduling — it lowers what's available for new
-deployments without affecting what's already running.
+**What the capacity numbers mean.** `--explain` prints exactly this, per resource:
+
+| Line | Meaning |
+| --- | --- |
+| Hardware | Every machine's CPU, memory and disk. |
+| − System overhead | The system reserve: what each machine keeps for the OS, the Beaver agent, the proxy and exporters. |
+| − Workload reservations | What workloads already placed on the cloud asked for. |
+| − Placements in progress | Held for replicas being placed right now. |
+| − Unavailable machines | The whole hardware of machines that cannot take work: offline, draining, joining, awaiting approval, or not yet reporting their hardware. |
+| = Available | What a new workload can use. |
+| Live usage | Measured usage. It is shown for context and never subtracted — a quiet workload still holds its reservation. |
+
+The bar beside each headline number is filled for what is in use (reserved or unavailable)
+and empty for what is free. The system reserve lowers what's available for new deployments
+without affecting what's already running.
 
 ## Workload placement
 
 | Subcommand | Purpose |
 | --- | --- |
-| `workload [cloud]` | How each application is spread across the cloud's nodes. |
+| `workload [cloud]` | Where each application runs: spread, packed, or pinned, and where its data lives. |
 | `workload set [cloud] <container>` | Set an application's placement policy. |
-| `placements [cloud]` | The cloud's placement decision log — which node each replica landed on, and when. |
+| `placements [cloud]` | Why each replica landed where it did: every machine considered, the one chosen, and why others were left out. |
 
 <ParamField query="--policy" type="string" default="">
   On `workload set`: placement policy — `spread` (default: one replica per node where
@@ -258,7 +315,8 @@ deployments without affecting what's already running.
   named node).
 </ParamField>
 <ParamField query="--pin" type="string" default="">
-  On `workload set`: machine ID to pin to. Required when `--policy pinned`.
+  On `workload set`: the machine to pin to (name, hostname or ID). With `--policy pinned` and no
+  `--pin`, a picker opens.
 </ParamField>
 <ParamField query="--lb" type="string" default="">
   On `workload set`: internal load balancing mode — `dns` (multi-record round-robin) or
@@ -277,10 +335,10 @@ only decides where those replicas land, not how many there are.
 
 | Subcommand | Purpose |
 | --- | --- |
-| `impact <machine>` | Show what breaks if this node is lost — before it happens. |
-| `drain <machine>` | Take a node out of service: stop sending it **new** work. |
-| `undrain <machine>` | Restore a drained node's eligibility for new work. |
-| `evacuate <machine>` | Compute a **reviewable plan** to move every container off a node. Moves nothing by itself. |
+| `impact <machine>` | What breaks if this machine is lost — a verdict (`Safe to lose`, `Risky to lose`, `Losing it causes an outage`), then each workload's outcome. |
+| `drain <machine>` | Stop placing **new** work on a machine; what runs there keeps running. |
+| `undrain <machine>` | Let a drained machine take new work again. |
+| `evacuate <machine>` | Compute a **reviewable plan** to move every workload off a machine. Moves nothing by itself. |
 | `evacuate execute <plan-id>` | Run a previously generated evacuation plan. |
 | `evacuate rollback` | Undo an executed evacuation plan, moving containers back. |
 
@@ -299,8 +357,8 @@ offline (there is no automatic failover), so these are the explicit recovery act
 
 | Subcommand | Purpose |
 | --- | --- |
-| `services [cloud]` | Service discovery: every app in the cloud and the addresses it resolves to. |
-| `containers [cloud]` | Every container deployed to the cloud, with the node and subnet each replica runs in. |
+| `services [cloud]` | Service discovery: every app in the cloud, how many replicas are healthy, and the addresses its name resolves to. |
+| `containers [cloud]` | Every container deployed to the cloud, and the machine, address and subnet each replica runs in. |
 
 Service discovery is a property of the cloud, not of any one host: each app resolves
 cloud-wide by its short name (`api`) and by a full name (`api.<slug>.beaver.internal`) to
@@ -333,7 +391,7 @@ connectivity while they take effect.
 <CodeGroup>
 
 ```bash Create a cloud
-beaver cloud create paperclip-prod --machines srv_web01,srv_web02,srv_db01
+beaver cloud create paperclip-prod --machines web01,web02,db01
 ```
 
 ```bash Check capacity before deploying
@@ -346,7 +404,17 @@ beaver deploy --cloud paperclip-prod
 
 ```bash Spread an app, then pin the database
 beaver cloud workload set paperclip-prod paperclip-web --policy spread
-beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin srv_db01
+beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin db01
+```
+
+```bash See how capacity adds up
+beaver cloud capacity paperclip-prod --explain
+beaver cloud capacity node paperclip-prod --machine web01
+```
+
+```bash Before taking a machine down
+beaver cloud impact web02 --cloud paperclip-prod
+beaver cloud drain web02 --cloud paperclip-prod
 ```
 
 </CodeGroup>
@@ -363,7 +431,10 @@ beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin srv_
 | `machines add` — "Agent cannot run system tasks unattended" | The failed requirement, naming the machine and `beaver agent privileges grant` | On that machine run `beaver agent privileges grant`, or `machines add --fix` there; then retry. |
 | `machines rm` would take workloads down | The workloads and gateways affected, a safe alternative, and the `--force` command | Scale the app out first, or accept the impact with `--force`. |
 | `machines rm` with no terminal and no `--yes` | A failure saying it needs confirmation (exit `1`) | Re-run with `--yes`. |
-| `workload set --policy pinned` with no `--pin` | `--pin` required error | Pass a target machine ID. |
+| `workload set --policy pinned` with no `--pin` | A machine picker (no terminal: an error) | Pass `--pin <machine>`. |
+| A `<machine>` that matches nothing | `no machine named "x" in <cloud>`, listing the cloud's machines | Use one of the listed names. |
+| A `<machine>` that matches several | The matching machine IDs | Pass the full machine ID. |
+| `capacity node` with no terminal and no `--machine` | An error asking for `--machine` | Pass `--machine <machine>`. |
 
 ## Used in
 
