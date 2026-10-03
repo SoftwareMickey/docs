@@ -79,6 +79,20 @@ The agent cannot tell whether a tunnel conflicts with Beaver. Run `beaver update
 
 Tailscale uses `100.64.0.0/10`. If the cloud's range overlaps it, Beaver reports a range conflict (`cloud.cidr_conflict`); otherwise the two coexist. Tailscale is not listed as a WireGuard tunnel when it runs in userspace.
 
+### A machine at home shows "network-partitioned" or has no private IP
+
+`beaver cloud network <cloud>` lists a laptop or office machine as offline, and the timeline
+says it is "network-partitioned (agent connected, overlay unreachable)". Older versions of Beaver
+treated the router's public address as the machine's own. When the internet provider changed that
+address, the cloud's other members kept expecting the old one.
+
+Run `beaver update` on that machine and on the cloud's other members. Within a few minutes Beaver
+picks up the machine's current address, notices it is behind a router, and reconnects it. Nothing
+on the router needs to change.
+
+If `beaver cloud machines` shows `—` in the overlay IP column for a machine that left and
+re-joined, wait a minute: Beaver restores the machine's private address on its own.
+
 ### The join is undone with a verification message
 
 When a join cannot be confirmed — for example `verification failed at handshake` or `verification failed at route` — Beaver puts the machine back exactly as it was and says which step failed. The other tunnels are never part of that undo.

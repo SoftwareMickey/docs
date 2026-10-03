@@ -256,7 +256,9 @@
               "operate/observability",
               "operate/state-and-drift",
               "operate/recovery-model",
-              "operate/activity-and-following"
+              "operate/activity-and-following",
+              "operate/emails-beaver-sends",
+              "operate/is-this-email-from-beaver"
             ]
           },
           {

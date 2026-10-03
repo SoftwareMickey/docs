@@ -227,7 +227,7 @@ def main():
         if r["destination"] in srcs: E(f"redirect: '{r['source']}' chains through '{r['destination']}'")
     for f in glob.glob(f"{ROOT}/snippets/*.mdx"):
         t = open(f).read()
-        if os.path.basename(f) in ("plan-ladder.mdx", "team-permission-matrix.mdx", "two-step-tables.mdx") and "GENERATED" not in t[:300]:
+        if os.path.basename(f) in ("plan-ladder.mdx", "team-permission-matrix.mdx", "two-step-tables.mdx", "email-catalogue.mdx") and "GENERATED" not in t[:300]:
             E(f"snippets/{os.path.basename(f)}: lost its GENERATED header")
     for e in errors: print("ERROR  ", e)
     for w in warns: print("WARN   ", w)

@@ -1,0 +1,60 @@
+---
+title: "Is this email really from Beaver?"
+sidebarTitle: "Is this email from Beaver?"
+description: "How to tell a real Beaver email from a fake one: the sender, what Beaver never asks for, how to check a link, and where to report phishing."
+keywords: ["phishing", "fake email", "suspicious email", "is this email real", "verify beaver email", "report phishing"]
+icon: "shield-check"
+type: howto
+audience: [developer, team-lead, operator]
+---
+
+Fake emails that imitate a service are common. A real Beaver email will never need you to hand over a secret, so you can check any message against four rules.
+
+## What Beaver never asks for by email
+
+Beaver will **never** ask you to send, reply with or type into a form linked from an email:
+
+- your password,
+- a 2-step verification code or a recovery code,
+- an API key or access token,
+- a card number.
+
+A verification code email is the one place a code appears, and it is a code *you* just asked for — you type it into the Beaver screen you already have open, never into a page you reached from the email.
+
+If a message asks for any of these, do not reply and do not click. [Report it](#report-a-suspicious-email).
+
+## Check the sender
+
+Real Beaver email arrives from the display name **Beaver**, from an address that begins `notify@notify.` and ends in Beaver's own domain. Two checks help:
+
+- The part after the `@` must be Beaver's own domain, spelled exactly. Look-alikes (an extra word, a swapped letter, a different ending) are not Beaver.
+- A display name alone proves nothing. Open the full sender address in your mail client.
+
+## Check a link before you click
+
+Every link in a Beaver email goes to one of two places: the Beaver dashboard you already sign in to, or the Beaver documentation site. To check one:
+
+1. Hover over the button or link (or press and hold on a phone) and read the address your mail app shows.
+2. Confirm the host is the same one you use to sign in to Beaver.
+3. If in doubt, do not use the link. Open the dashboard yourself and look at **Notifications**: anything that needs your attention is there too.
+
+Each email also prints the full address under its main button, so you can compare it without hovering.
+
+## Why you received it
+
+The footer of every Beaver email states why you got it — for example "You received this email because deployment notifications are enabled for Acme" — and whether you can turn that kind off. An email that gives no reason, or a reason that does not match anything you did or set up, is a warning sign. The full list of what Beaver sends is in [Emails Beaver sends](/operate/emails-beaver-sends).
+
+## Report a suspicious email
+
+Forward the message, with its full headers if your mail client allows, to **support@vectorihub.com**. If you already clicked a link or entered a password:
+
+1. Change your Beaver password and, if you use one, your sign-in provider's password.
+2. Revoke any API key you do not recognise and check your workspace's [audit history](/teams/audit-history) for activity you did not do.
+3. Make sure 2-step verification is on.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Emails Beaver sends" icon="mail" href="/operate/emails-beaver-sends">The full list, and which are required.</Card>
+  <Card title="Security checklist" icon="shield" href="/network/security-checklist">Hardening your account and workspace.</Card>
+</CardGroup>

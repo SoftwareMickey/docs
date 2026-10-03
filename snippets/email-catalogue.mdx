@@ -1,0 +1,313 @@
+{/* GENERATED FILE — do not edit. Regenerate with `go run ./cmd/maildocs` in vhb-server; source: the notification catalog (mail/mailtemplate/census). */}
+
+### Account
+
+Sign-in, password and profile notices, plus integration messages.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Deletion scheduled | `identity.account_deletion_scheduled` | The person it concerns | No — required | Yes |
+| Suspension scheduled | `identity.account_suspension_scheduled` | The person it concerns | No — required | Yes |
+| API key created | `identity.api_key_created` | The person it concerns | No — required | Yes |
+| API key revoked | `identity.api_key_revoked` | The person it concerns | Yes | Yes |
+| Unusual API key use | `identity.api_key_unusual_use` | The person it concerns | No — required | Yes |
+| GitHub access revoked | `identity.github_authorization_revoked` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| GitHub connected | `identity.github_connected` | The person it concerns | Yes | Yes |
+| GitHub disconnected | `identity.github_disconnected` | The person it concerns | Yes | Yes |
+| GitHub app expired | `identity.github_installation_expired` | The person it concerns | Yes | Yes |
+| GitHub app suspended | `identity.github_installation_suspended` | The person it concerns | Yes | Yes |
+| Link confirmed | `identity.link_confirmed` | The person it concerns | No — required | Yes |
+| Credentials reset | `identity.link_credentials_reset` | The person it concerns | No — required | Yes |
+| Link requested | `identity.link_requested` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| New sign-in | `identity.login_new_device` | The person it concerns | No — required | Yes |
+| Suspicious sign-in | `identity.login_suspicious` | The person it concerns | No — required | Yes |
+| Reset by an administrator | `identity.mfa_admin_reset` | The person it concerns | No — required | Yes |
+| 2-step verification off | `identity.mfa_disabled` | The person it concerns | No — required | Yes |
+| 2-step verification on | `identity.mfa_enabled` | The person it concerns | No — required | Yes |
+| Method removed | `identity.mfa_factor_removed` | The person it concerns | No — required | Yes |
+| Account locked | `identity.mfa_locked` | The person it concerns | No — required | Yes |
+| Passkey added | `identity.mfa_passkey_added` | The person it concerns | No — required | Yes |
+| 2-step verification recovered | `identity.mfa_recovered` | The person it concerns | No — required | Yes |
+| Recovery cancelled | `identity.mfa_recovery_cancelled` | The person it concerns | No — required | Yes |
+| Recovery codes | `identity.mfa_recovery_codes_regenerated` | The person it concerns | No — required | Yes |
+| 2-step verification removed | `identity.mfa_recovery_executed` | The person it concerns | No — required | Yes |
+| Recovery requested | `identity.mfa_recovery_requested` | The person it concerns | No — required | Yes |
+| 2-step verification replaced | `identity.mfa_replaced` | The person it concerns | No — required | Yes |
+| Password added | `identity.password_added` | The person it concerns | No — required | Yes |
+| Password changed | `identity.password_changed` | The person it concerns | No — required | Yes |
+| Sign-in method added | `identity.provider_linked` | The person it concerns | No — required | Yes |
+| Sign-in method removed | `identity.provider_unlinked` | The person it concerns | No — required | Yes |
+| Session signed out | `identity.session_revoked` | The person it concerns | No — required | Yes |
+| Verification | `identity.verification_new` | The person it concerns | Yes | Yes |
+
+### Security
+
+Suspicious activity, access changes and security alerts.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Firewall policy changed | `security.firewall_policy_changed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Login protection | `security.login_protection_triggered` | Workspace owners and admins | No — required | No — inbox only; you can turn email on |
+| Dependency blocked | `security.network_policy_blocked_dependency` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Service exposed | `security.service_unexpectedly_exposed` | Workspace owners and admins | No — required | Yes |
+| Attack detected | `security.waf_attack_detected` | Workspace owners and admins | No — required | Yes |
+
+### Escalations
+
+Unacknowledged critical alerts being escalated to you.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Escalated | `escalation.tier_reached` | The next person in the escalation policy | No — required | Yes |
+
+### Deployments
+
+Builds, releases, rollbacks and production health.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Accepted | `deploy.accepted` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Push deploy | `deploy.auto_push_triggered` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Recovered | `deploy.auto_recovery_succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Build failed | `deploy.build_failed` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Build running long | `deploy.build_slow` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Build started | `deploy.build_started` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Cancelled | `deploy.cancelled` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Certificate expiring | `deploy.certificate_expiring` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Certificate renewal failed | `deploy.certificate_renewal_failed` | Workspace owners and admins | Yes | Yes |
+| Config drift | `deploy.config_drift_detected` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Crash loop | `deploy.container_crash_loop` | The person it concerns, and workspace owners and admins | Yes | Yes |
+| Routing failed | `deploy.domain_routing_failed` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Promoted | `deploy.environment_promoted` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Health check failed | `deploy.health_check_failed` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Hosting started | `deploy.hosting_started` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Policy refused | `deploy.policy_refused` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Production deploy | `deploy.production_deployed_by_member` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Production failed | `deploy.production_failed` | The person it concerns, workspace owners and admins, and whoever is on call | Yes | Yes |
+| Replica unhealthy | `deploy.replica_unhealthy` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Retry succeeded | `deploy.retry_completed` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Retry requested | `deploy.retry_requested` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Rollback completed | `deploy.rollback_completed` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Rollback failed | `deploy.rollback_failed` | The person it concerns, workspace owners and admins, and whoever is on call | Yes | No — inbox only; you can turn email on |
+| Rollback started | `deploy.rollback_started` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Stall resolved | `deploy.stall_resolved` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Stalled | `deploy.stalled` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Succeeded | `deploy.succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
+
+### Machines
+
+Connected machine status, capacity and agent health.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Agent disconnected | `machine.agent_disconnected` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Agent update available | `machine.agent_outdated` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| High CPU | `machine.cpu_pressure` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Identity changed | `machine.fingerprint_changed` | People who can operate that cloud | No — required | No — inbox only; you can turn email on |
+| Joined | `machine.joined` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Left | `machine.left` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| High memory | `machine.memory_pressure` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Offline | `machine.offline` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Back online | `machine.recovered` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Disk predicted full | `machine.storage_predicted_full` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Disk nearly full | `machine.storage_pressure` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+
+### Services & databases
+
+Managed services, databases and their backups.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Backup failed | `service.backup_failed` | Workspace owners and admins | Yes | Yes |
+| Backup started | `service.backup_started` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Backup completed | `service.backup_succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Quorum lost | `service.cluster_quorum_lost` | Workspace owners and admins | Yes | Yes |
+| Quorum restored | `service.cluster_quorum_restored` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Connections near limit | `service.connection_limit_approaching` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Credential rotated | `service.credential_rotated` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Integrity check failed | `service.data_integrity_check_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Failover completed | `service.failover_completed` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Failover started | `service.failover_initiated` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Off-machine backup unavailable | `service.offnode_backup_unavailable` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Provisioning failed | `service.provisioning_failed` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Ready | `service.provisioning_succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Recovered | `service.recovered` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Replica lag | `service.replica_lag` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Restore failed | `service.restore_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Restore started | `service.restore_started` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Restore completed | `service.restore_succeeded` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Storage threshold | `service.storage_threshold` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Unhealthy | `service.unhealthy` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Upgrade available | `service.upgrade_available` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Rehearsal failed | `service.upgrade_rehearsal_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Rehearsal passed | `service.upgrade_rehearsal_passed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+
+### Cloud infrastructure
+
+Cloud accounts, instances and provisioning.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Capacity exhausted | `cloud.capacity_exhausted` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Drain completed | `cloud.drain_completed` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Drain failed | `cloud.drain_failed` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Drain requested | `cloud.drain_requested` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Drain started | `cloud.drain_started` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Gateway unavailable | `cloud.gateway_unavailable` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Grant quota | `cloud.grant_quota_threshold` | The workspace owner | Yes | No — inbox only; you can turn email on |
+| Placement refused | `cloud.placement_refused` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Private network degraded | `cloud.private_network_degraded` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
+| Recovery plan created | `cloud.recovery_plan_created` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Recovery plan executed | `cloud.recovery_plan_executed` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Reservation at risk | `cloud.reservation_at_risk` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+
+### Domains
+
+Domain verification, certificates and renewals.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Certificate issued | `domain.certificate_issued` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Verification failed | `domain.dns_verification_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Verification pending | `domain.dns_verification_pending` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Origin unreachable | `domain.origin_unreachable` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Route failed | `domain.route_publication_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Tunnel created | `domain.tunnel_created` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Tunnel expired | `domain.tunnel_expired` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+
+### Performance
+
+Performance regressions detected on your apps.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Performance alert | `speed.threshold_alert` | The person it concerns | Yes | Yes |
+
+### Workspace & members
+
+Membership, roles, invitations and ownership.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Approval decided | `workspace.approval_decided` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Approval expired | `workspace.approval_expired` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Approval needed | `workspace.approval_requested` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Billing | `workspace.billing` | The workspace owner | Yes | No — inbox only; you can turn email on |
+| Cloud grant accepted | `workspace.cloud_grant_accepted` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Cloud grant | `workspace.cloud_grant_invited` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Cloud grant revoked | `workspace.cloud_grant_revoked` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Cloud grant suspended | `workspace.cloud_grant_suspended` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Deleted | `workspace.deletion_scheduled` | Workspace owners and admins | No — required | Yes |
+| Deployment failed | `workspace.deploy_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Deployment result | `workspace.deploy_result` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Invitation accepted | `workspace.invitation_accepted` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Invitation declined | `workspace.invitation_declined` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Invitation expired | `workspace.invitation_expired` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Invitation pending | `workspace.invitation_reminder` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Invitation revoked | `workspace.invitation_revoked` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Machine offline | `workspace.machine_offline` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Member joined | `workspace.member_joined` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Member left | `workspace.member_left` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Member suspended | `workspace.member_suspended` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Access blocked | `workspace.mfa_enforcement_blocked` | The person it concerns | No — required | Yes |
+| 2-step verification required | `workspace.mfa_enforcement_enabled` | The person it concerns | No — required | Yes |
+| 2-step verification reminder | `workspace.mfa_enforcement_reminder` | The person it concerns | No — required | Yes |
+| 2-step verification readiness | `workspace.mfa_readiness_digest` | The workspace owner | Yes | No — inbox only; you can turn email on |
+| Member recovery | `workspace.mfa_recovery_started` | The workspace owner | No — required | Yes |
+| Ownership transferred | `workspace.ownership_transfer_completed` | Workspace owners and admins | No — required | No — inbox only; you can turn email on |
+| Ownership offered | `workspace.ownership_transfer_requested` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Permanently deleted | `workspace.permanently_deleted` | Workspace owners and admins | No — required | Yes |
+| Plan limit reached | `workspace.plan_limit_reached` | The workspace owner | Yes | No — inbox only; you can turn email on |
+| Production protection changed | `workspace.production_protection_changed` | Workspace owners and admins | No — required | No — inbox only; you can turn email on |
+| Restored | `workspace.restored` | Workspace owners and admins | No — required | No — inbox only; you can turn email on |
+| Seat limit reached | `workspace.seat_limit_reached` | The workspace owner | Yes | No — inbox only; you can turn email on |
+| Secret changed | `workspace.secret_changed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Invitation | `workspace.security_invited` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Ownership | `workspace.security_ownership` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Security policy changed | `workspace.security_policy_changed` | Workspace owners and admins | No — required | No — inbox only; you can turn email on |
+| Removed | `workspace.security_removed` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Role changed | `workspace.security_role_changed` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Suspended | `workspace.security_suspended` | The person it concerns | No — required | No — inbox only; you can turn email on |
+| Settings changed | `workspace.settings_changed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+
+### Maintenance
+
+Scheduled maintenance runs and their outcomes.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Apps verified | `maintenance.applications_verified` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Approval needed | `maintenance.approval_requested` | Workspace owners and admins | Yes | Yes |
+| Failed | `maintenance.failed` | Workspace owners and admins | Yes | Yes |
+| Impact calculated | `maintenance.impact_calculated` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Progress | `maintenance.progress` | The person it concerns | Yes | No — inbox only; you can turn email on |
+| Proposed | `maintenance.proposed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Starting soon | `maintenance.reminder` | Workspace owners and admins | Yes | Yes |
+| Report | `maintenance.report` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Started | `maintenance.started` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Completed | `maintenance.succeeded` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Scheduled | `maintenance.window_scheduled` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+
+### Billing & usage
+
+Invoices, payments, quotas and plan changes.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Budget threshold | `billing.budget_threshold_reached` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Unusual spend | `billing.cost_anomaly` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Spend back to normal | `billing.cost_normalized` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Coupon expiring | `billing.coupon_expiring` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Granted limit expiring | `billing.entitlement_expiring` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Forecast higher | `billing.forecast_significantly_higher` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Invoice issued | `billing.invoice_issued` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Payment failed | `billing.payment_failed` | The workspace owner and billing contact | Yes | Yes |
+| Payment received | `billing.payment_succeeded` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Plan changed | `billing.plan_changed` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Quota exceeded | `billing.quota_exceeded` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Restored | `billing.restoration` | The workspace owner and billing contact | No — required | No — inbox only; you can turn email on |
+| Downgrade scheduled | `billing.scheduled_downgrade` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Seat limit exceeded | `billing.seat_limit_exceeded` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Subscription cancelled | `billing.subscription_cancelled` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Subscription renewed | `billing.subscription_renewed` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Suspended | `billing.suspension` | The workspace owner and billing contact | No — required | Yes |
+| Suspension warning | `billing.suspension_warning` | The workspace owner and billing contact | No — required | Yes |
+| Trial ending | `billing.trial_ending` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Trial started | `billing.trial_started` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+| Usage threshold | `billing.usage_threshold` | The workspace owner and billing contact | Yes | No — inbox only; you can turn email on |
+
+### Platform incidents
+
+Beaver outages, degradations and status updates.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Breaking change | `platform.breaking_change` | Workspace owners and admins | Yes | Yes |
+| Degraded service | `platform.degradation` | Workspace owners and admins | Yes | Yes |
+| Resolved | `platform.incident_resolved` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Incident update | `platform.incident_update` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Release notes | `platform.release_note` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+| Action required | `platform.required_migration` | Workspace owners and admins | No — required | Yes |
+| Scheduled maintenance | `platform.scheduled_maintenance` | Workspace owners and admins | Yes | Yes |
+| Security advisory | `platform.security_advisory` | Workspace owners and admins | No — required | Yes |
+| Email probe failed | `platform.synthetic_probe_failed` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
+| Provider incident | `platform.third_party_incident` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
+
+### Product updates
+
+Onboarding, tips and what's new.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| What's new | `lifecycle.feature_announcement` | The person it concerns | Yes | Yes |
+| Get started | `lifecycle.machine_no_deployment` | The person it concerns | Yes | Yes |
+| Monthly summary | `lifecycle.monthly_summary` | The person it concerns | Yes | Yes |
+| Get started | `lifecycle.workspace_no_machine` | The person it concerns | Yes | Yes |
+
+### Other
+
+General notices that are not part of a preference category.
+
+| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
+| --- | --- | --- | --- | --- |
+| Notification | `legacy.notification` | The person it concerns | Yes | No — inbox only; you can turn email on |

@@ -1,0 +1,56 @@
+---
+title: "Emails Beaver sends"
+sidebarTitle: "Emails Beaver sends"
+description: "Every email Beaver can send you, who receives it, which ones are required, and how to change what you get."
+keywords: ["email", "emails from beaver", "notification email", "mandatory notifications", "turn off emails", "unsubscribe"]
+icon: "mail"
+type: reference
+audience: [developer, team-lead, operator]
+---
+
+Beaver sends email for two reasons: something happened that you should know about, or something needs your confirmation (a verification code, an invitation). Every message names why you received it in its footer, and says whether you can turn it off.
+
+If you are unsure whether a message is really from Beaver, read [Is this email really from Beaver?](/operate/is-this-email-from-beaver).
+
+## What is required and what you can change
+
+- **Required emails** cannot be turned off: security alerts, sign-in and 2-step verification messages, ownership changes and payment failures. They exist so that you are never locked out of, or surprised by, something that affects your account or your money.
+- **Everything else** follows your notification settings. A kind that is "inbox only" by default shows up in your Beaver notification inbox and is emailed only if you turn email on for its category.
+- **Digests** bundle non-urgent notifications into one message on your schedule. Critical and security notifications are never held for a digest.
+
+<Tabs>
+  <Tab title="Dashboard">Open **Settings → Notifications**. Each category below is a row there, with the same description and the same wording about what is required.</Tab>
+  <Tab title="Desktop">Open **Settings → Notifications** in the app.</Tab>
+  <Tab title="CLI">Category preferences are set in the Dashboard or Desktop. From the terminal you can read your inbox with `beaver notifications` and set a workspace digest with `beaver workspace digest`; see [Notifications](/operate/notifications).</Tab>
+</Tabs>
+
+Optional emails also carry a **Mute these emails** link: it opens a confirmation page, and nothing changes until you confirm.
+
+Every action an email offers can also be done in the terminal, and emails that suggest a command show it.
+
+## Every email, by category
+
+The lists below are generated from Beaver's notification catalog, so they always match what the product can send. In a team workspace, owners and admins can narrow what the workspace emails; a category your workspace has restricted shows that on your settings page.
+
+import EmailCatalogue from "/snippets/email-catalogue.mdx";
+
+<EmailCatalogue />
+
+## Messages that are not notifications
+
+A few emails are sent directly rather than through your notification settings, because you asked for them in that moment or because they cannot wait:
+
+- **Verification codes** when you sign up or confirm an address.
+- **Invitations** to a workspace, and ownership-transfer offers and confirmations.
+- **2-step verification recovery** messages when a recovery is started or about to complete.
+- **Sign-in method confirmations**, when you link a Google or GitHub sign-in to an existing account.
+- **Platform notices** about changes that affect an address your apps use.
+
+These always arrive, and none of them can be muted.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Is this email really from Beaver?" icon="shield-check" href="/operate/is-this-email-from-beaver">How to tell a real Beaver email from a fake one.</Card>
+  <Card title="Notifications" icon="bell" href="/operate/notifications">Severity, digests, on-call and escalation.</Card>
+</CardGroup>
