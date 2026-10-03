@@ -83,6 +83,13 @@ move together.
   tooling, IP forwarding, time sync), then add it. Asks first; only repairs the server marks
   automatic and safe are run, and only on the machine being added. Anything else is printed as an
   instruction, never run.
+
+  If the machine's agent can't run system tasks unattended (its `sudo` asks for a password) and
+  you're on that machine, `--fix` explains the change, asks, lets `sudo` ask for your password
+  once, then retries the join. This is the same step as
+  [`beaver agent privileges grant`](/cli/agent#unattended-privileges). From another machine it
+  prints the command to run on the target instead, because only someone on that machine can type
+  its password.
 </ParamField>
 <ParamField query="--explain" type="boolean" default="false">
   On `machines add`: list every requirement that was evaluated, including the ones that were met.
@@ -353,6 +360,7 @@ beaver cloud workload set paperclip-prod paperclip-db --policy pinned --pin srv_
 | `machines add` cannot join | Every requirement with ✓/✕/!, what is wrong, the repair for each, the command to retry, and "No changes were made." | Run the repair shown (`--fix` does the automatic ones), or pass `--override` with reviewed finding IDs. |
 | `machines add --check` | The same requirements, nothing changed. Exit `0` if it can join, `1` if not | Fix what is listed, then add the machine. |
 | `machines add --fix` with no terminal and no `--yes` | A failure saying it needs confirmation | Re-run with `--fix --yes`. |
+| `machines add` — "Agent cannot run system tasks unattended" | The failed requirement, naming the machine and `beaver agent privileges grant` | On that machine run `beaver agent privileges grant`, or `machines add --fix` there; then retry. |
 | `machines rm` would take workloads down | The workloads and gateways affected, a safe alternative, and the `--force` command | Scale the app out first, or accept the impact with `--force`. |
 | `machines rm` with no terminal and no `--yes` | A failure saying it needs confirmation (exit `1`) | Re-run with `--yes`. |
 | `workload set --policy pinned` with no `--pin` | `--pin` required error | Pass a target machine ID. |
