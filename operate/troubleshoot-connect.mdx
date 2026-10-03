@@ -42,6 +42,24 @@ The machine needs outbound access to reach Beaver.
 
 Remove it from that account first, or use a different machine.
 
+### The agent can't run system tasks unattended
+
+`beaver connect` warns that the Beaver Agent can't run system tasks unattended, a cloud refuses
+the machine with "Agent cannot run system tasks unattended", or the cloud timeline says it has no
+private-network key yet. These all mean the same thing: `sudo` on that machine asks for a password,
+and the background agent can't type one.
+
+On that machine, run:
+
+```bash
+beaver agent privileges grant
+```
+
+It asks you to confirm, then `sudo` asks for your password once. Beaver finishes adding the machine
+to the private network on its own afterwards. To join a cloud from that same machine, use
+`beaver cloud machines add <machine> --cloud <cloud> --fix`, which runs the same step. See
+[Unattended privileges](/cli/agent#unattended-privileges) for exactly what changes and how to undo it.
+
 ## Still stuck
 
 Run `beaver doctor` on the affected machine and collect its output, then contact support at support@vectorihub.com.

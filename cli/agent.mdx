@@ -32,6 +32,31 @@ beaver agent <subcommand>
 | `status` | Show the service's current status. |
 | `logs` | Follow the service's logs. |
 | `tunnels` | Show or change how this machine coexists with other VPN tunnels. |
+| `privileges` | Show whether the agent can run system tasks unattended; `grant` lets it, `revoke` undoes that. |
+
+## Unattended privileges
+
+The agent runs in the background as the user who connected the machine, and uses `sudo` for
+root-only work: WireGuard keys and interfaces for a private network, firewall rules, routes and
+services. A background service can't type a password, so on a machine whose `sudo` asks for one,
+those steps fail.
+
+```bash
+beaver agent privileges            # show the current state (-o json for scripts)
+beaver agent privileges grant      # asks to confirm, then for your sudo password once
+beaver agent privileges revoke     # remove the rule again
+```
+
+`grant` adds one file, `/etc/sudoers.d/beaver-agent`, checked with `visudo` before it takes
+effect, that lets the agent's user run `sudo` without a password. This is the setup most cloud
+images already ship with, and it applies to anything else running as that user too. Your
+password is typed into `sudo` on that machine's terminal. It is never sent to Beaver.
+
+Run it on the machine itself. `beaver connect` offers the same step after it starts the agent,
+and `beaver cloud machines add --fix` runs it when the machine you're adding is the one you're
+on. If the agent's user isn't allowed to use `sudo`, an administrator can run
+`sudo beaver agent privileges grant --yes`; it targets the user the agent service runs as.
+`revoke` removes only the file Beaver added.
 
 ## Tunnel coexistence
 
@@ -73,6 +98,11 @@ beaver agent restart
 beaver agent logs
 ```
 
+```bash Let the agent run system tasks unattended
+beaver agent privileges
+beaver agent privileges grant
+```
+
 </CodeGroup>
 
 ## Results & failures
@@ -82,6 +112,9 @@ beaver agent logs
 | `status` — running | Service status and uptime | Nothing — informational. |
 | `status` — not running | Service reported as stopped | Run `beaver agent start`, or `beaver doctor` if it won't start. |
 | Machine unreachable from `beaver machine`/`deploy` | Connection error naming the machine | Check `beaver agent status` on that machine; run `beaver doctor`. |
+| `privileges` — sudo asks for a password | `✕ … cannot run system tasks unattended` | Run `beaver agent privileges grant` on that machine. |
+| `privileges grant` — wrong password or user not allowed to use sudo | `installing /etc/sudoers.d/beaver-agent: …` and "nothing was changed" | Retry with the right password, or have an administrator run `sudo beaver agent privileges grant --yes`. |
+| `privileges grant` — no terminal | A refusal asking for `--yes` | Run it in a terminal, or pass `--yes` where `sudo` needs no password (for example as root). |
 
 ## Used in
 
