@@ -68,6 +68,18 @@ inspect` always tells you exactly where something landed.
   promotion, and recovery](/operate/recovery-model).
 </Warning>
 
+## Machines at home or behind a router
+
+A laptop or office machine can join a cloud even though it has no public address of its own.
+Beaver notices when a machine's public address belongs to the router in front of it, and has
+that machine connect out to the cloud's reachable members instead of being dialed. When the
+router's address changes, as home and office connections do, the machine keeps its place in the
+private network without you doing anything. A VPN on the machine doesn't confuse this.
+
+A cloud still needs at least one member that others can reach, such as a VPS with a public IP.
+A cloud made only of machines behind routers is refused with "No node can accept inbound
+WireGuard connections".
+
 Gateway and cross-machine network diagnostics are available but are advanced territory —
 you're unlikely to need them unless you're actively debugging connectivity between members.
 
