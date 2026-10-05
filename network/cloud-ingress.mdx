@@ -1,0 +1,83 @@
+---
+title: "Public IP and private name of a cloud"
+sidebarTitle: "Cloud public IP"
+description: "Every Beaver Cloud can have one stable public address and one private name. Point your domains at it, and adding or replacing gateways never changes your DNS."
+icon: "globe"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+keywords: ["public ip", "stable ip", "cloud address", "ingress", "dns", "gateway", "private name"]
+---
+
+A Beaver Cloud with public ingress has **one public IP address and one hostname that belong to the cloud**, not to any machine in it. Point your domains at that address and they keep working when you add a gateway, replace one, or lose one: your DNS never mentions an individual machine.
+
+<Info>
+  Looking for the records to create for a domain? See [Add a custom domain](/network/domains). For command syntax, see [`beaver cloud ingress`](/cli/cloud).
+</Info>
+
+## Get your cloud's public address
+
+<Tabs>
+  <Tab title="Dashboard">
+    Open the cloud's page. The **Public address** card shows the IP, the hostname and the domains using them. Choose **Enable public ingress** if the cloud has none yet. A **dedicated** address, one that belongs to your cloud alone, is an option and may be billed separately.
+  </Tab>
+  <Tab title="Desktop">
+    Open **Infrastructure → Clouds**, select the cloud, and look at **Public ingress** on the Overview tab. The Topology tab draws your public address in front of the gateways. Changing it is done from the CLI.
+  </Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud ingress enable production
+    beaver cloud ingress production
+    ```
+
+    `beaver cloud ingress` prints the public IP, hostname, mode, private name, how many gateways are serving, and the domains using the address. `--json` prints the same as a document for scripts.
+  </Tab>
+</Tabs>
+
+## What you get
+
+| | |
+| --- | --- |
+| **Public IP** | The address to point a bare domain at. It does not change when gateways do. |
+| **Hostname** | A Beaver-owned name that always resolves to the cloud. Point a subdomain at it with a CNAME. |
+| **Mode** | *Shared* (an address several clouds share; Beaver tells them apart by domain name) or *dedicated* (yours alone). |
+| **Private name** | `ingress.<cloud>.beaver.internal`, the name workloads inside the cloud use to reach the cloud's public entry points. It never leaves the cloud's private network. |
+
+## Keep gateways and DNS separate
+
+A **gateway** is a member machine that accepts public traffic. With public ingress the internet reaches your gateways *through* the cloud's address, so:
+
+- Adding a gateway needs **no DNS change**. `beaver cloud gateway add` says so when it finishes.
+- Replacing or losing a gateway needs no DNS change either; traffic simply stops going to the one that is gone.
+- You never publish a machine's own address for your domain.
+
+To make sure nothing reaches a gateway around the cloud's address, you can restrict gateways to accept only that traffic:
+
+```bash
+beaver cloud ingress guard observe production
+beaver cloud ingress guard enforce production
+```
+
+Start with `observe`. It counts what it would block and blocks nothing. `enforce` is refused until it has observed, and rolls itself back if the cloud's address stops reaching a gateway.
+
+## Release the address
+
+```bash
+beaver cloud ingress disable production
+```
+
+Disabling is refused while domains are attached to the cloud, and the refusal names them: they would stop resolving. Detach or move them first.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Add a custom domain" icon="globe" href="/network/domains">
+    The records to create, and using Cloudflare.
+  </Card>
+  <Card title="My domain does not verify" icon="triangle-alert" href="/operate/troubleshoot-domain-verification">
+    Ownership, routing and TLS, one at a time.
+  </Card>
+  <Card title="Beaver Cloud" icon="cloud" href="/infrastructure/beaver-cloud">
+    Pools of machines operated as one.
+  </Card>
+</CardGroup>

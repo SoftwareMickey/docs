@@ -215,6 +215,7 @@
             "pages": [
               "network/index",
               "network/domains",
+              "network/cloud-ingress",
               "network/domains-and-routing",
               "network/tls",
               "network/beaver-edge",
@@ -281,7 +282,8 @@
             "pages": [
               "operate/troubleshoot-502-503",
               "operate/troubleshoot-domain",
-              "operate/troubleshoot-tls"
+              "operate/troubleshoot-tls",
+              "operate/troubleshoot-domain-verification"
             ]
           },
           {

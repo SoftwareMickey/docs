@@ -1,0 +1,56 @@
+---
+title: "My domain does not verify"
+sidebarTitle: "Domain verification"
+description: "A domain is checked in three separate steps: ownership, routing and TLS. Find out which one is waiting and what to do."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+keywords: ["domain not verifying", "dns", "cloudflare", "ownership record", "txt record", "proxied", "repoint"]
+---
+
+## What you see
+
+A domain stays on *waiting for DNS*, shows a warning, or `beaver domain list` marks it **repoint DNS**.
+
+## Check first
+
+```bash
+beaver domain show <domain-id>
+```
+
+`show` prints the three checks separately and the exact records to create. Beaver keeps checking on its own; `beaver domain verify <domain-id>` checks again now.
+
+## Find the step that is waiting
+
+| Check | It is waiting because | What to do |
+| --- | --- | --- |
+| **Ownership** | The ownership record (a TXT record) is not visible yet, or its value differs. | Create the TXT record exactly as `beaver domain show` prints it. A subdomain can prove ownership with its one CNAME instead. |
+| **Routing** | Requests for the domain are not reaching your cloud. | Set the route record (an A record, or a CNAME for a subdomain) to exactly the value shown. |
+| **TLS** | The certificate is being issued. | Nothing. It starts as soon as routing works and usually takes a minute or two. |
+
+DNS changes can take a few minutes to a few hours to be visible. Waiting is normal and is not a failure.
+
+## Using Cloudflare
+
+Domains behind Cloudflare's proxy (the orange cloud) are supported. Keep the proxy on for the route record. The ownership **TXT** record must stay **DNS only**. Beaver checks the connection by making a request to your domain, not by reading the addresses DNS shows, so a proxy does not stop verification.
+
+If a proxied domain still does not connect, check that Cloudflare's SSL/TLS mode is **Full** and that "Always use HTTPS" is not redirecting Beaver's check to a different host.
+
+## Domain says "repoint DNS" or "still uses the old records"
+
+Older domains were pointed at the individual machines of a cloud. They keep working. Beaver offers one stable address instead:
+
+```bash
+beaver domain repoint <domain-id>
+```
+
+This prints the new records. Create them at your DNS provider and Beaver moves the domain over by itself once it sees them; there is no interruption, because the old records keep serving until then. After the new records resolve you can delete the old ones.
+
+## Ownership "lost"
+
+If the ownership record disappears, the domain keeps serving for seven days while Beaver keeps looking. Restore the record shown by `beaver domain show` and the warning clears on its own.
+
+## If this did not fix it
+
+Contact support with the request ID shown with the failure, for example `req_8f3a21c0`.

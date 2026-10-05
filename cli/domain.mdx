@@ -28,6 +28,7 @@ beaver domain <subcommand> [flags]
 | `verify <domain-id>` | Re-check DNS verification for a domain. |
 | `repoint <domain-id>` | Get the current DNS record for a CNAME domain that still points at an old Beaver address. |
 | `certificate <domain-id>` | Show a domain's TLS certificate status. |
+| `show <domain-id>` | A domain's ownership, routing and TLS checks and the DNS records to create. `--records` prints only the records, one per line. |
 | `remove <domain-id>` | Detach a domain. |
 
 ## Flags
@@ -52,7 +53,7 @@ domain from the container; it does not delete or affect your DNS records themsel
 still control those at your registrar.
 
 `repoint` keeps the domain, its certificate and its history; only the record you must create
-changes. Domains attached with an A record, and domains attached to a cloud, are not affected. See
+changes. For a domain still on a cloud's old per-gateway records, `repoint` prints the cloud's stable records instead; the domain keeps working on the old ones until Beaver sees the new, then moves over by itself. See
 [Domains](/network/domains) for background.
 
 ## Examples

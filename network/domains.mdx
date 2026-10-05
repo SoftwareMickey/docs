@@ -55,24 +55,42 @@ Attach a domain you own to an app:
 beaver domain add --container <name> --domain app.example.com
 ```
 
-`beaver domain add` prints the DNS record to create at your DNS provider. Which record depends on the
-kind of name:
+`beaver domain add` prints the DNS records to create at your DNS provider, and `beaver domain show <domain-id>` prints them again at any time (`--records` prints only the records, ready to copy). Which records depend on the kind of name:
 
-| You attach | Record you create |
+| You attach | Records you create |
 | --- | --- |
-| A subdomain such as `app.example.com` | A **CNAME** pointing at the target Beaver gives you |
-| A bare domain such as `example.com` | **A** record(s) pointing at the address(es) Beaver gives you |
+| A subdomain such as `app.example.com` | One **CNAME** pointing at the target Beaver gives you. It also proves you own the name. |
+| A bare domain such as `example.com` | An **A** record at the root with the address Beaver gives you, plus one **TXT** record that proves you own the domain. |
 
-Then check it:
+For a domain on a Beaver Cloud, that address is the cloud's **stable public address** (see [Public IP and private name of a cloud](/network/cloud-ingress)). It does not change when you add, replace or lose a gateway, so you create the records once.
+
+Beaver checks three things, separately, and shows each one:
+
+1. **Ownership**: the TXT record (or, for a subdomain, the CNAME) is visible.
+2. **Routing**: a request for your domain actually reaches your cloud.
+3. **TLS**: the certificate is issued, which starts once routing works.
 
 ```bash
+beaver domain show <domain-id>
 beaver domain verify <domain-id>
 beaver domain list --container <name>
 ```
 
-Once DNS resolves, verification passes and the certificate is issued automatically. DNS changes can
-take up to a few hours to be visible. If you use Cloudflare, set the records to **DNS only** (grey
-cloud) so verification and certificate issuance can see them.
+Once DNS resolves, verification passes and the certificate is issued automatically. DNS changes can take up to a few hours to be visible, and waiting for them is normal, not a failure. If something looks stuck, see [My domain does not verify](/operate/troubleshoot-domain-verification).
+
+### Using Cloudflare
+
+Domains behind Cloudflare's proxy (the orange cloud) are supported. Keep the proxy **on** for the route record; the ownership TXT record must stay **DNS only**. Beaver checks the connection by making a request to your domain, so a proxy does not hide the domain from verification.
+
+### A domain that still uses the old records
+
+Domains attached to a cloud before it had a public address were pointed at the cloud's individual gateways. They keep working. `beaver domain list` marks them **repoint DNS** once the cloud offers a stable address:
+
+```bash
+beaver domain repoint <domain-id>
+```
+
+This prints the new records. Create them at your DNS provider; Beaver moves the domain over by itself once it sees them, with no interruption, because the old records keep serving until then. Afterwards you can delete the old records. The new records never need to change again.
 
 Your own domain is independent of the default address: your app stays reachable at its default
 address as well, and removing a custom domain never affects your DNS records or your app.
