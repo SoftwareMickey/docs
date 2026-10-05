@@ -1903,6 +1903,30 @@
       },
       "verified": "source-reviewed",
       "checked": "2026-10-01"
+    },
+    {
+      "id": "cloud-public-ip",
+      "group": "Infrastructure",
+      "task": "Give a cloud a stable public IP and see which domains use it",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Cloud page → Public address card",
+          "page": "/network/cloud-ingress"
+        },
+        "desktop": {
+          "status": "partial",
+          "how": "Infrastructure → Clouds → Public ingress (read-only; change it with the CLI)",
+          "page": "/network/cloud-ingress"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud ingress`",
+          "page": "/network/cloud-ingress"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-05"
     }
   ]
 }

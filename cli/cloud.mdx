@@ -221,6 +221,31 @@ impersonate a workspace you don't belong to.
 | `gateway add [cloud] [machine...]` | Designate a machine as a gateway. |
 | `gateway rm [cloud] <machine>` | Remove a machine's gateway role. |
 
+## Public ingress
+
+A cloud's stable public IP and hostname; see [Public IP and private name of a cloud](/network/cloud-ingress).
+
+| Subcommand | Purpose |
+| --- | --- |
+| `ingress [cloud]` | The public IP, hostname, mode, private name, gateways serving, and the domains using the address. Same as `ingress show`. |
+| `ingress status [cloud]` | One line; exits non-zero unless the ingress is active, so scripts can gate on it. |
+| `ingress enable [cloud]` | Give the cloud a public address. Running it again changes nothing. |
+| `ingress disable [cloud]` | Release the address. Refused while domains are attached, and the refusal names them. |
+| `ingress probe [cloud]` | Re-check the ingress now instead of waiting for the next automatic check. |
+| `ingress guard <mode> [cloud]` | `off`, `observe` or `enforce`: restrict gateways to accept public traffic only through the cloud's address. |
+
+<ParamField query="--dedicated" type="boolean" default="false">
+  On `ingress enable`: ask for an address that belongs to this cloud alone (may be billed separately).
+</ParamField>
+<ParamField query="--explain" type="boolean" default="false">
+  On `ingress`, `ingress show` and `ingress probe`: also explain how the address and status work.
+</ParamField>
+<ParamField query="--force" type="boolean" default="false">
+  On `ingress guard`: allow `enforce` without a prior observe period. It never skips the check that the cloud's address currently reaches every gateway.
+</ParamField>
+
+Adding or removing a gateway needs no DNS change when a cloud has public ingress, and `gateway add` says so.
+
 <ParamField query="--matrix" type="boolean" default="false">
   On `network`: include the full node-to-node connectivity matrix.
 </ParamField>
