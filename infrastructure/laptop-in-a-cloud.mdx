@@ -1,0 +1,87 @@
+---
+title: "Keep a laptop on your cloud without running apps on it"
+sidebarTitle: "Laptop in a cloud"
+description: "Join a laptop to a Beaver Cloud as a network member only, change what it may do later, and take it back out of scheduling before you travel."
+keywords: ["laptop in a cloud", "network member only", "beaver cloud machines add", "beaver cloud machine policy", "cordon", "laptop"]
+icon: "laptop"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+verified: source-reviewed
+lastVerified: 2026-10-06
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-06" />
+
+A laptop on your cloud's private network can reach your services by name and be managed like any machine, **without** receiving deployments, replicas, managed databases or builds. See
+[Member vs compute](/infrastructure/member-vs-compute) for what each setting means.
+
+## Join it as a network member only
+
+<Tabs>
+  <Tab title="Dashboard">
+    Open the cloud, choose **Add machine**, pick the machine, and choose **Network member only**. The dialog shows the exact command for your choice.
+  </Tab>
+  <Tab title="Desktop">
+    Open the cloud, then **Nodes → Add machine**. Choose **Network member only** — it is pre-selected — and copy the command.
+  </Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud machines add my-laptop --cloud production --mode member
+    ```
+    In a terminal with no flags, Beaver asks how the machine may participate and pre-selects **Network member only** when it looks like a laptop (a battery or a portable chassis). In a
+    script it never asks: the machine keeps what its enrollment role already allowed, and the command prints exactly that along with how to change it.
+  </Tab>
+</Tabs>
+
+<Note>
+Looking like a laptop only changes the suggestion. Nothing is ever decided for you, and a laptop you choose to make a host stays a host.
+</Note>
+
+## Check what it may do
+
+<Tabs>
+  <Tab title="Dashboard">Open the cloud's machines: each row shows **May do**. Select it for the switches and the reason a capability is off.</Tab>
+  <Tab title="Desktop">The cloud's **Nodes** tab has a mode column; select a node, or open the machine's **Scheduling** tab.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver cloud machine policy my-laptop --cloud production
+    beaver cloud machines production --wide
+    ```
+  </Tab>
+</Tabs>
+
+## Opt a machine out from the machine itself
+
+On the laptop:
+
+```bash
+beaver cloud machine policy --self --cloud production --mode member
+```
+
+You can always turn your own machine's work **off**, even in a cloud someone else owns. Turning it back on needs the cloud's machine-operation permission.
+
+## Before you travel with work on it
+
+If the laptop already runs something, turning work off cordons it and leaves what runs there alone. To move the work first:
+
+```bash
+beaver cloud machines drain my-laptop --cloud production --plan   # preview
+beaver cloud machines drain my-laptop --cloud production --yes    # do it
+```
+
+See [Drain and evacuate](/infrastructure/drain-and-evacuate).
+
+## If something goes wrong
+
+- A deployment says it has nowhere to go: [Why was my machine skipped?](/operate/troubleshoot-cloud-policy).
+- Turning work off was refused because it is the cloud's only host: add another host first, or confirm with `--yes` if the cloud should stop placing work.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Member vs compute" icon="network" href="/infrastructure/member-vs-compute">The model behind the choice.</Card>
+  <Card title="Laptop as Builder" icon="laptop" href="/infrastructure/laptop-builder">Use a laptop to build images instead.</Card>
+</CardGroup>

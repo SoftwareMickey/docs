@@ -8,15 +8,21 @@ type: howto
 audience: [operator]
 interfaces: [cli]
 verified: source-reviewed
-lastVerified: 2026-10-01
+lastVerified: 2026-10-06
 ---
 
 import { Verified } from "/snippets/verified.mdx";
 
-<Verified kind="source-reviewed" date="2026-10-01" />
+<Verified kind="source-reviewed" date="2026-10-06" />
 
-A Beaver Cloud places **new** work; it does **not** move existing work when a machine goes offline. Taking a machine out of service is therefore something you do on purpose, in
-four steps. All of them are CLI commands.
+A Beaver Cloud places **new** work; it does **not** move existing work when a machine goes offline. Taking a machine out of service is therefore something you do on purpose.
+All of the steps are CLI commands.
+
+<Note>
+Two words are easy to mix up. **Cordon** (`beaver cloud machines cordon`) stops *new* work landing on a machine and leaves everything running; **drain** (`beaver cloud machines drain`)
+cordons it **and** moves what runs there to other machines, keeping each old copy until its replacement is healthy. The older `beaver cloud drain` marks a machine as *leaving* the
+cloud (a membership state) — to just stop new work, use `cordon`. See [Member vs compute](/infrastructure/member-vs-compute).
+</Note>
 
 <Warning>
 There is no automatic failover. If a machine is lost, what ran on it stays down until you redeploy or evacuate it. Plan with `impact` **before** it happens.
@@ -33,19 +39,21 @@ There is no automatic failover. If a machine is lost, what ran on it stays down 
   </Step>
   <Step title="Stop sending it new work">
     ```bash
-    beaver cloud drain srv_web02 --cloud paperclip-prod
+    beaver cloud machines cordon srv_web02 --cloud paperclip-prod
     ```
-    The node is excluded from new placement. Its **existing containers keep running**.
+    The node takes nothing new. Its **existing containers keep running**. Cordoning the cloud's only host while work runs asks for `--yes`.
   </Step>
   <Step title="Move what runs there">
+    Preview, then drain:
     ```bash
-    beaver cloud evacuate srv_web02 --cloud paperclip-prod
+    beaver cloud machines drain srv_web02 --cloud paperclip-prod --plan
+    beaver cloud machines drain srv_web02 --cloud paperclip-prod --yes
     ```
-    Generates a **reviewable plan** and moves nothing. Read it, then run it:
-    ```bash
-    beaver cloud evacuate execute <plan-id>
-    ```
-    Changed your mind? `beaver cloud evacuate rollback` moves containers back.
+    The preview changes nothing and lists every **blocker**. Databases and anything with volumes are never moved automatically — they are reported and nothing moves. The machine stays
+    cordoned afterwards, whatever the outcome.
+
+    Prefer to review the plan step by step? `beaver cloud evacuate srv_web02 --cloud paperclip-prod` writes a **reviewable plan** and moves nothing; run it with
+    `beaver cloud evacuate execute <plan-id>`, and undo it with `beaver cloud evacuate rollback`.
   </Step>
   <Step title="Do the maintenance">
     Reboot with `beaver machine reboot <machine>` — first check `beaver machine reboot-impact <machine>` to see what it would interrupt. Or retire it with
@@ -55,7 +63,8 @@ There is no automatic failover. If a machine is lost, what ran on it stays down 
 
 ## Bring it back
 
-`beaver cloud undrain srv_web02 --cloud paperclip-prod` makes the node eligible for new work again.
+`beaver cloud machines uncordon srv_web02 --cloud paperclip-prod` lets it take new work again — if its hosting setting is on. A machine that was turned to *member only* stays that way
+until `beaver cloud machine policy srv_web02 --cloud paperclip-prod --host=on`. (`beaver cloud undrain` undoes the older leaving state.)
 
 ## What this does not protect
 
@@ -69,6 +78,7 @@ Read the evacuation plan carefully before you execute it, especially for anythin
 ## Next steps
 
 <CardGroup cols={2}>
+  <Card title="Member vs compute" icon="network" href="/infrastructure/member-vs-compute">Cordon, drain and what a machine may do.</Card>
   <Card title="Recovery model" icon="history" href="/operate/recovery-model">What each recovery action restores.</Card>
   <Card title="Capacity and placement" icon="gauge" href="/infrastructure/capacity-and-placement">Check there is room to receive work.</Card>
 </CardGroup>

@@ -133,7 +133,9 @@
               "infrastructure/capacity-and-placement",
               "infrastructure/drain-and-evacuate",
               "infrastructure/storage-and-networks",
-              "infrastructure/beaver-cloud-and-other-vpns"
+              "infrastructure/beaver-cloud-and-other-vpns",
+              "infrastructure/member-vs-compute",
+              "infrastructure/laptop-in-a-cloud"
             ]
           },
           {
@@ -292,7 +294,8 @@
               "operate/troubleshoot-machine-offline",
               "operate/troubleshoot-connect",
               "operate/troubleshoot-service-connection",
-              "operate/troubleshoot-cloud-vpns"
+              "operate/troubleshoot-cloud-vpns",
+              "operate/troubleshoot-cloud-policy"
             ]
           },
           {

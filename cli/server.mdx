@@ -19,4 +19,7 @@ beaver server rename <machine-id> <name>
 beaver server remove [machine-id] [--yes]
 ```
 
+`--role` sets the most the machine may ever do (Builder, Host, or both). If the machine is in a Beaver Cloud, that cloud's own setting still applies on top — a machine enrolled as a Host can be a
+network member only there. See and change it with [`beaver cloud machine policy`](/cli/cloud#what-a-machine-may-do-member-vs-compute).
+
 `--labels` replaces the complete label set. Removing a server disconnects it from Beaver; it does not delete the physical machine.
