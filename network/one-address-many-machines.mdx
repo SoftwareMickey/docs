@@ -1,0 +1,227 @@
+---
+title: "How one address serves many machines"
+sidebarTitle: "One address, many machines"
+description: "A cloud's public address can be served by one machine or by several. Five attachment modes, what each needs, and what a customer sees in every case — the same CNAME, always."
+icon: "network-wired"
+type: concept
+audience: [operator]
+interfaces: [cli]
+keywords: ["floating ip", "attachment mode", "failover", "high availability ingress", "dns round robin", "load balancer", "edge node", "one address many machines"]
+verified: source-reviewed
+lastVerified: 2026-10-06
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-06" />
+
+A cloud's public address belongs to the cloud, never to a machine — that is what
+[Cloud public IP](/network/cloud-ingress) promises your customers. This page is the other half of
+that promise: **how the platform keeps one address answering when the machine behind it goes
+away**, and what it costs to do so.
+
+<Note>
+This is an operator page. Nothing on it changes what a customer publishes, and nothing on it is
+visible to one. A tenant sees the cloud's address, its hostname, and whether that address is
+ready — never a machine, a mode or a holder.
+</Note>
+
+## The one thing a customer sees
+
+In every mode below, a customer publishes **one CNAME to the cloud's hostname**, and it never
+changes. Not when a machine dies, not when you add a second machine, not when you move the cloud
+to another address, not when you change modes. That indirection is the whole point: a record that
+names a machine is a record somebody has to edit during an incident.
+
+An **apex** domain is the single exception, because DNS cannot indirect an apex: its `A` record
+names the address directly. If you move a cloud to a different address, Beaver flags those domains
+as needing a repoint and shows the new value. Every other shape is untouched.
+
+## Pick a mode
+
+<CardGroup cols={2}>
+  <Card title="One machine, downtime acceptable" icon="server">
+    **`node`** — the address *is* that machine's IP. Nothing to configure, nothing to buy, and no
+    failover: losing the machine is an outage until it is back. This is a supported topology, not a
+    starting point nobody tested.
+  </Card>
+  <Card title="Two machines, simplest redundancy" icon="arrows-rotate">
+    **`floating`** — your provider's floating IP, moved automatically to a healthy machine. One
+    provider object, one driver, and the fastest failover of the five.
+  </Card>
+  <Card title="More traffic than one machine" icon="scale-balanced">
+    **`balancer`** — your provider's load balancer owns the address and every healthy machine serves
+    at once. Beaver keeps the member list correct and names anything in it that it did not add.
+  </Card>
+  <Card title="No provider API at all" icon="globe">
+    **`dns`** — one `A` record per serving machine. Needs nothing but a zone, and it is the only mode
+    that can span machines at *different* providers.
+  </Card>
+</CardGroup>
+
+**`external`** is the fifth: you already run keepalived, VRRP or anycast, and Beaver observes and
+reports without ever calling a provider. A driver's absence degrades automation, never correctness
+— you keep every read, every finding and every budget.
+
+## The comparison
+
+The table below is generated from the platform's own source. `ingressctl modes` and
+`ingressctl address mode` print it byte-for-byte, and a test asserts this page and that output are
+identical — so a mode whose behaviour changes cannot leave a stale table here.
+
+```text ingressctl modes
+Attachment modes — how one address reaches 1, 2 or N VMs.
+
+node (min 1 VM)
+  on failure  none — losing the VM is an outage until it is back
+  needs       nothing
+  extra cost  none
+  pick it if  you are starting out, or this address serves something you accept downtime on.
+
+floating (min 2 VMs)
+  on failure  automatic, budget < 60 s p95 (~6 s detect + 20 s hold-down + provider move + confirm)
+  needs       a provider floating IP, a driver (aws | hetzner | digitalocean), and a provider ref per VM
+  extra cost  one floating IP
+  pick it if  you want the simplest real redundancy and your provider has floating IPs.
+
+balancer (min 1 VM)
+  on failure  the provider's LB removes the VM; Beaver deregisters a drained one in < 20 s
+  needs       a provider load balancer, a driver, and a provider ref per VM
+  extra cost  one load balancer
+  pick it if  you need more throughput than one VM can serve, or you are already at N≥3.
+
+dns (min 1 VM)
+  on failure  the dead VM's A record is withdrawn; visible in < TTL + 30 s (90 s at TTL 60)
+  needs       a DNS zone. NO provider API at all.
+  extra cost  none beyond the VMs
+  pick it if  your provider has no floating IP or LB, your VMs are at DIFFERENT providers, or you want N>1 today without buying anything.
+
+external (min 1 VM)
+  on failure  whatever your keepalived / VRRP / anycast does; Beaver observes and reports only
+  needs       nothing from Beaver
+  extra cost  none
+  pick it if  you already run your own failover and want Beaver to stay out of it.
+
+Every customer sees the same thing in all five: one CNAME, which never changes.
+
+Timings: the single-VM host ceiling (5,000 hosts, ~9 s reload, ~300 MiB) is MEASURED
+(features/cloud-ip, 2026-10-05). Failover budgets are composed from measured parts and
+are verified per provider in features/floating-IP Era 7 V44; the N-VM ceiling is MODELLED
+from the single-VM measurement until Era 12 V74 measures it.
+```
+
+<Warning>
+Every number above carries its source and whether it is **measured** or **modelled**. The failover
+budget is composed from measured parts and is a *budget*, not a measurement, until a drill has run
+on your own provider: `ingressctl drill failover <address> <reason>` produces the number, and
+`ingressctl drill history` proves when it last did. A drill from last quarter is not evidence about
+today.
+</Warning>
+
+## The decision, in order
+
+```text ingressctl modes
+Choosing a mode:
+  1. One VM, and downtime is acceptable?            → node
+  2. VMs at different providers?                    → dns (nothing else can span them)
+  3. No floating IP and no load balancer available? → dns
+  4. More traffic than one VM can serve?            → balancer
+  5. Otherwise, want redundancy with least setup?   → floating
+  6. Already run your own failover?                 → external
+```
+
+## What `dns` mode cannot do
+
+`dns` mode is the cheapest way to get more than one machine behind an address, and it is the only
+one that spans providers. It also has three limits that are properties of DNS rather than of the
+implementation, and they are printed beside the mode wherever it is chosen so nobody meets them
+during an incident:
+
+- **Withdrawal is not immediate.** A client that cached the dead machine's address keeps trying it
+  until the TTL expires. The budget — under TTL + 30 s — is when the record is *gone*, not when
+  every client has stopped using it.
+- **Some resolvers and clients ignore TTL** or pin one address. A minority of users may see a longer
+  outage than the budget.
+- **An apex cannot be a CNAME**, so a dedicated-address customer whose domain is an apex gets one
+  address and none of this mode's distribution. `dns` mode is not recommended for dedicated
+  addresses.
+
+## Changing mode on a live address
+
+A mode change is an operation with a plan, not an environment edit:
+
+```bash
+# What would change: the record set, the driver calls, which machine changes role.
+ingressctl address mode 203.0.113.20 floating "growing to two VMs" --dry-run
+
+# Then, with the provider-side work done:
+ingressctl address mode 203.0.113.20 floating "growing to two VMs"
+ingressctl dns apply
+ingressctl address verify 203.0.113.20
+```
+
+A transition is refused when its preconditions are not met, and the refusal names the one that
+failed — collapsing a two-machine fleet into `node` mode, for instance, is refused because `node`
+mode means the address *is* one machine's IP, so the others' traffic would be dropped. Beaver never
+creates the floating IP or the load balancer itself; the plan says what you must do at the provider
+and in what order.
+
+## Adding a machine
+
+There is no `ingressctl fleet scale` command and there never will be: Beaver does not provision
+machines. The operation is three steps, and the middle one is the check:
+
+```bash
+# 1. provision the VM yourself, then register it
+ingressctl edge add edge-2 203.0.113.20 --egress 203.0.113.21 --provider-ref i-0abc123
+
+# 2. confirm the fleet meets the target mode's preconditions
+ingressctl fleet scale-check 203.0.113.20 --mode floating --deep
+
+# 3. change the mode; the mode's own sync does the rest
+ingressctl address mode 203.0.113.20 floating "second VM is live"
+```
+
+Adding capacity never moves traffic. The machine that holds the address keeps holding it, because
+churning to a "better" candidate would move live traffic to buy nothing.
+
+## Seeing the fleet
+
+<Tabs>
+  <Tab title="CLI">
+    ```bash
+    ingressctl topology                      # every address, one block each
+    ingressctl topology --address 203.0.113.20
+    ingressctl address show 203.0.113.20     # + record set, history, driver limits, preflight
+    ingressctl topology --json               # the same bytes the dashboard reads
+    ```
+
+    Findings print last and are never truncated, each with its fix line underneath it.
+  </Tab>
+  <Tab title="Dashboard">
+    **Cloud ingress → Fleet** lists one row per address with its mode, DNS status, holder, member
+    count and highest finding; blocking findings sort to the top. Opening a row shows the record set,
+    who moved what and why, the machine table, and the mode's limitations.
+
+    Three actions are available there — acknowledge single node, verify DNS now, and force the holder
+    (which shows its plan first). Mode changes, machine registration and drills are deliberately not:
+    each has a preflight whose failure needs a conversation, and the page names the command for each.
+  </Tab>
+</Tabs>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Cloud public IP" icon="globe" href="/network/cloud-ingress">
+    What a customer points a domain at, and why it never changes.
+  </Card>
+  <Card title="Beaver Edge" icon="server" href="/network/beaver-edge">
+    The forwarder in front of the gateways, and what runs on it.
+  </Card>
+  <Card title="Load balancing" icon="split" href="/network/load-balancing">
+    Spreading traffic across an application's replicas — a different thing with a similar name.
+  </Card>
+  <Card title="Domains and routing" icon="route" href="/network/domains-and-routing">
+    How a request reaches your container once it arrives.
+  </Card>
+</CardGroup>

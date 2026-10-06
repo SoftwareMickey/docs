@@ -42,6 +42,17 @@ A Beaver Cloud with public ingress has **one public IP address and one hostname 
 | **Hostname** | A Beaver-owned name that always resolves to the cloud. Point a subdomain at it with a CNAME. |
 | **Mode** | *Shared* (an address several clouds share; Beaver tells them apart by domain name) or *dedicated* (yours alone). |
 | **Private name** | `ingress.<cloud>.beaver.internal`, the name workloads inside the cloud use to reach the cloud's public entry points. It never leaves the cloud's private network. |
+| **Address ready** | Whether Beaver has confirmed the address actually resolves. `publishing` means it is not finished, not that it is broken: your domains are unaffected and it clears by itself. |
+
+<Note>
+`beaver cloud ingress status` exits non-zero while the address is still publishing, so a deploy
+script can wait for it. There is nothing to run to hurry it along, which is why no command is
+offered for one.
+</Note>
+
+**One address can be served by more than one machine.** Which machines answer for it, and what
+happens when one of them dies, is an operator choice — see
+[One address, many machines](/network/one-address-many-machines). It changes nothing you publish.
 
 ## Keep gateways and DNS separate
 

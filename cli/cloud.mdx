@@ -268,8 +268,8 @@ A cloud's stable public IP and hostname; see [Public IP and private name of a cl
 
 | Subcommand | Purpose |
 | --- | --- |
-| `ingress [cloud]` | The public IP, hostname, mode, private name, gateways serving, and the domains using the address. Same as `ingress show`. |
-| `ingress status [cloud]` | One line; exits non-zero unless the ingress is active, so scripts can gate on it. |
+| `ingress [cloud]` | The public IP, hostname, **address ready**, mode, private name, gateways serving, and the domains using the address. Same as `ingress show`. |
+| `ingress status [cloud]` | One line; exits non-zero unless the ingress is active **and its address is published**, so a deploy script can gate on it. |
 | `ingress enable [cloud]` | Give the cloud a public address. Running it again changes nothing. |
 | `ingress disable [cloud]` | Release the address. Refused while domains are attached, and the refusal names them. |
 | `ingress probe [cloud]` | Re-check the ingress now instead of waiting for the next automatic check. |
@@ -286,6 +286,13 @@ A cloud's stable public IP and hostname; see [Public IP and private name of a cl
 </ParamField>
 
 Adding or removing a gateway needs no DNS change when a cloud has public ingress, and `gateway add` says so.
+
+**Address ready** is the one thing this command says about the machines behind the address, and it
+says it without naming any: `yes` once Beaver has confirmed the address resolves, `publishing` while
+it has not. Nothing else about the fleet is a tenant's to see — which machines answer for an
+address, which one holds it and what mode it is in are operator facts, read with `ingressctl`
+(see [One address, many machines](/network/one-address-many-machines)). `--explain` adds one
+sentence in each case, and never a command, because there is nothing a tenant could run.
 
 <ParamField query="--matrix" type="boolean" default="false">
   On `network`: include the full node-to-node connectivity matrix.
