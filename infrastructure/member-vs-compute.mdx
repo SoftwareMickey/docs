@@ -1,0 +1,64 @@
+---
+title: "Member vs compute"
+sidebarTitle: "Member vs compute"
+description: "A machine can be on a cloud's private network without running your applications or building your images — what each setting means and why it exists."
+keywords: ["member vs compute", "network member only", "cloud mode", "host", "builder", "cordon", "laptop in a cloud"]
+icon: "network"
+type: concept
+audience: [developer, operator]
+---
+
+A machine in a Beaver Cloud is always on the cloud's **private network**. What else it does there is a separate choice. Two independent settings decide whether the cloud may send it
+**application work**, and one more state decides whether it takes anything **new** right now.
+
+## Why it exists
+
+Joining a pool of machines used to mean being a candidate for everything: production replicas, managed databases and image builds all went to whichever member had the most room.
+That is the right default for a rack of servers and the wrong one for a laptop that sleeps, leaves the office and holds your personal files. Keeping the **network** (private
+addresses, service names, management) separate from **compute** (running and building) lets a machine join without volunteering its CPU.
+
+## How it behaves
+
+| Run applications | Build images | What the machine is |
+| --- | --- | --- |
+| Yes | Yes | **Host + builder** — general compute. |
+| Yes | No | **Host** — receives deployments, replicas and managed services. |
+| No | Yes | **Builder** — builds your images, runs none of them. |
+| No | No | **Member only** — on the private network and nothing else. |
+
+- **One sentence everywhere.** A machine that does neither is described the same way in the CLI, the Desktop app, the Dashboard and Alie:
+  "Network member only — will not receive deployments, replicas, managed services, or builds".
+- **A restriction, never a grant.** A cloud setting can only narrow what the machine was enrolled to do. A machine enrolled as a Host cannot be made a Builder here; to widen what it may
+  ever do, change its enrollment role on the machine.
+- **Every path obeys it.** Deployments, scaling, managed services, builds, recovery and moving workloads all skip a machine the cloud says may not take that kind of work — and asking for
+  one by name does not bypass it. The refusal says which setting stopped it and names the command that would allow it.
+- **Turning work off never stops what is running.** The machine becomes **cordoned**: what already runs keeps running, and nothing new lands. Moving the existing work away is a separate,
+  deliberate action (a drain), and it never takes down an old copy before its replacement is healthy.
+- **A cordoned machine is not a broken one.** Cloud health does not count a member that takes no applications on purpose as a fault, and its CPU and memory are shown as part of the
+  cloud's physical pool but not as room for your applications.
+- **Public traffic is independent.** A member can be a gateway and run nothing, or run applications and never face the internet.
+- **Who can change it.** The workspace that contributed a machine can always turn its work **off**, including on a cloud someone else owns. Turning work **on**, or lifting a cordon,
+  needs the cloud's machine-operation permission.
+- **Every change is recorded** with what it was, what it became, who changed it and from which workspace, and appears in the cloud's events.
+
+## When it matters
+
+- A **laptop or workstation** you also use for other things: join it as a member only.
+- A **dedicated build machine**: builder only, so it never receives a production replica.
+- **Maintenance**: cordon, drain, do the work, bring it back — without a surprise placement in between.
+- **A shared cloud**: each contributing workspace decides what its own machine does.
+
+## Limits
+
+- Managed databases and anything with volumes are **stateful**: a drain reports them as blockers and moves nothing rather than risk the data. Back up and move them on purpose.
+- If a cloud has no machine that may run applications, new deployments are refused with that reason instead of waiting for room that cannot appear.
+- Policy applies to machines **in a cloud**. A machine outside any cloud keeps behaving exactly as its enrollment role says.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Keep a laptop on your cloud" icon="laptop" href="/infrastructure/laptop-in-a-cloud">Join it as a network member only.</Card>
+  <Card title="Drain and evacuate" icon="log-out" href="/infrastructure/drain-and-evacuate">Take a machine out of service safely.</Card>
+  <Card title="Why was my machine skipped?" icon="triangle-alert" href="/operate/troubleshoot-cloud-policy">Reasons and fixes, by code.</Card>
+  <Card title="beaver cloud" icon="book" href="/cli/cloud">Every command and flag.</Card>
+</CardGroup>

@@ -1927,6 +1927,30 @@
       },
       "verified": "source-reviewed",
       "checked": "2026-10-05"
+    },
+    {
+      "id": "cloud-member-policy",
+      "group": "Infrastructure",
+      "task": "Choose what a cloud machine may do (host, build, member only)",
+      "interfaces": {
+        "dashboard": {
+          "status": "full",
+          "how": "Cloud > Machines > select the machine's mode: switches and the equivalent command",
+          "page": "/infrastructure/laptop-in-a-cloud"
+        },
+        "desktop": {
+          "status": "full",
+          "how": "Cloud > Nodes > Add machine, and a node's Scheduling panel",
+          "page": "/infrastructure/laptop-in-a-cloud"
+        },
+        "cli": {
+          "status": "full",
+          "how": "`beaver cloud machine policy` and `beaver cloud machines add --mode`",
+          "page": "/cli/cloud"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-06"
     }
   ]
 }

@@ -89,11 +89,15 @@ Updated 12:19 PM · 873ms
 
 | Subcommand | Purpose |
 | --- | --- |
-| `machines [cloud]` | A cloud's machines: state, role, private address, and free capacity. |
-| `machines add [machine...]` | Add machines to a cloud. |
+| `machines [cloud]` | A cloud's machines: state, what each may do (HOST, BUILD, GATEWAY: `allowed` or `blocked`), private address, and free capacity. `--wide` adds scheduling state and the reason. |
+| `machines add [machine...]` | Add machines to a cloud, saying what each may do there (`--mode`). |
+| `machine policy [machine]` | Show or change what a machine may do in a cloud: run applications, build images. |
+| `machines cordon <machine>` | Stop new work landing on a machine; what runs there keeps running. |
+| `machines uncordon <machine>` | Let a cordoned machine take new work again. |
+| `machines drain <machine>` | Cordon a machine and move its workloads to other machines, without downtime. |
 | `machines rm [machine]` | Remove a machine from a cloud. |
 | `machines pending [cloud]` | List machines awaiting operator approval to join a cloud. |
-| `machines approve <machine>` | Approve a pending machine. |
+| `machines approve <machine>` | Approve a pending machine, optionally narrowing what it may do. |
 | `machines reject <machine>` | Reject a pending machine. |
 | `preflight <machine>...` | Check machines for cloud-membership readiness before adding them. |
 
@@ -158,6 +162,43 @@ Updated 12:19 PM · 873ms
 <ParamField query="--yes" type="boolean" default="false">
   On `preflight`: skip the `--fix` confirmation prompt.
 </ParamField>
+
+### What a machine may do: member vs compute
+
+A cloud member is always on the private network. Whether the cloud may also send it **applications** or **builds** is its scheduling policy — see
+[Member vs compute](/infrastructure/member-vs-compute).
+
+<ParamField query="--mode" type="string" default="">
+  On `machines add`, `machines approve` and `machine policy`: a preset — `member` (network member only), `host`, `builder` or `general` (both). In a terminal, `machines add` asks when you give
+  none and pre-selects `member` for a machine that looks like a laptop; in a script it never asks and the machine keeps what its enrollment role allowed, and the command prints exactly that.
+  Cannot be combined with `--host` / `--build`.
+</ParamField>
+<ParamField query="--host" type="string" default="">
+  `on` or `off`: whether the machine may run applications (deployments, replicas, managed services). Turning it `off` never stops anything running — the machine is cordoned.
+</ParamField>
+<ParamField query="--build" type="string" default="">
+  `on` or `off`: whether the machine may build images. Builds already running finish; queued ones are cancelled.
+</ParamField>
+<ParamField query="--self" type="boolean" default="false">
+  On `machine policy`: act on the machine the command runs on, so a laptop can opt out without a dashboard.
+</ParamField>
+<ParamField query="--plan" type="boolean" default="false">
+  On `machines drain`: show what a drain would do and every blocker; change nothing.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `machine policy`, `machines cordon` and `machines drain`: confirm. Turning work off on a cloud's **only** host while work runs, and every drain, need it.
+</ParamField>
+
+```bash
+beaver cloud machine policy laptop --cloud production                    # what may it do, and why not
+beaver cloud machine policy laptop --cloud production --mode member      # network member only
+beaver cloud machine policy build-01 --cloud production --build=on
+beaver cloud machines drain laptop --cloud production --plan             # preview; nothing changes
+```
+
+Turning a switch **off** is open to the workspace that contributed the machine (and to anyone with operate-machines on the cloud); turning one **on**, uncordoning, or approving wider
+than requested needs operate-machines. A cloud setting only ever narrows the machine's enrollment role. Databases and anything with volumes are never moved by a drain: they are listed
+as blockers and nothing moves.
 
 Once a cloud's join policy is `approval_required` (this happens automatically once a second
 workspace holds a grant on it, or its private network is active — see [Sharing with another
@@ -361,8 +402,8 @@ only decides where those replicas land, not how many there are.
 | Subcommand | Purpose |
 | --- | --- |
 | `impact <machine>` | What breaks if this machine is lost — a verdict (`Safe to lose`, `Risky to lose`, `Losing it causes an outage`), then each workload's outcome. |
-| `drain <machine>` | Stop placing **new** work on a machine; what runs there keeps running. |
-| `undrain <machine>` | Let a drained machine take new work again. |
+| `drain <machine>` | Mark a machine as **leaving** the cloud (a membership state, older than `machines cordon`); it takes no new work, and what runs there keeps running. To only stop new work, use `machines cordon`; to move work away, `machines drain`. |
+| `undrain <machine>` | Undo `drain`. |
 | `evacuate <machine>` | Compute a **reviewable plan** to move every workload off a machine. Moves nothing by itself. |
 | `evacuate execute <plan-id>` | Run a previously generated evacuation plan. |
 | `evacuate rollback` | Undo an executed evacuation plan, moving containers back. |

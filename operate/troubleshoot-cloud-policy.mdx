@@ -1,0 +1,107 @@
+---
+title: "Why was my machine skipped?"
+sidebarTitle: "Machine skipped by policy"
+description: "A deployment, replica, managed service or build did not land on a machine you expected — the reason codes Beaver reports and how to fix each."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [dashboard, desktop, cli]
+keywords: ["policy_hosting_disabled", "policy_builds_disabled", "cordoned", "no eligible host", "no eligible builder", "network member only", "machine skipped"]
+verified: source-reviewed
+lastVerified: 2026-10-06
+---
+
+## What you see
+
+A deployment, scale-up, managed service or build avoids a machine you expected, or is refused with one of:
+
+```
+machine <name> cannot host applications in cloud "<cloud>" (policy_hosting_disabled): run `beaver cloud machine policy <name> --cloud <cloud> --host=on`
+build cannot use <name> because builds are disabled for this machine in cloud "<cloud>" (policy_builds_disabled)
+machine <name> is cordoned in cloud "<cloud>": it keeps its current workloads but takes no new ones (cordoned)
+cloud "<cloud>" has no eligible host: every member is excluded by cloud policy
+cloud "<cloud>" has no eligible builder: every member is excluded from builds
+```
+
+## Check first
+
+1. See what each machine may do and why not:
+
+   ```bash
+   beaver cloud machines <cloud> --wide
+   beaver cloud machine policy <machine> --cloud <cloud>
+   ```
+
+   In the Dashboard open the cloud's machines; in the Desktop app open the cloud's **Nodes** tab. The **WHY NOT** column uses the codes below.
+2. Ask Alie: "why isn't `<machine>` getting deployments?" — it answers with the same codes and the command that fixes them.
+
+## Causes and fixes
+
+### `policy_hosting_disabled` — the machine does not run applications
+
+The machine is a network member only (or a builder). If you want it to run applications:
+
+```bash
+beaver cloud machine policy <machine> --cloud <cloud> --host=on
+```
+
+Turning work **on** needs the cloud's machine-operation permission. The machine's enrollment role must also allow it (`global_role_forbids` below).
+
+### `policy_builds_disabled` — the machine does not build
+
+```bash
+beaver cloud machine policy <machine> --cloud <cloud> --build=on
+```
+
+Builds already running when this was switched off finish; ones still queued were cancelled and re-chosen on the next attempt.
+
+### `cordoned` — the machine takes nothing new
+
+Someone cordoned it (or turned its work off while something was running). Lift it:
+
+```bash
+beaver cloud machines uncordon <machine> --cloud <cloud>
+```
+
+If hosting is also off, uncordoning is not enough — see `policy_hosting_disabled`.
+
+### `draining` — a drain is moving work off the machine
+
+Wait for it to finish; it ends cordoned. Check progress with `beaver cloud events <cloud>`.
+
+### `global_role_forbids` — the enrollment role does not allow it
+
+A cloud setting can only narrow the role the machine was enrolled with. A Host cannot be made a builder here. Change the enrollment role on the machine, then retry:
+
+```bash
+beaver server update --role builder-host
+```
+
+### `not_joined` — the machine has not finished joining
+
+Pending approval, still joining, or failed to join. See `beaver cloud machines pending --cloud <cloud>` and [Machine shows offline](/operate/troubleshoot-machine-offline).
+
+### `policy_missing` — no policy recorded
+
+Beaver fails closed: it will not guess a machine may take work. Set it explicitly with `beaver cloud machine policy <machine> --cloud <cloud> --mode <member|host|builder|general>`.
+
+### "no eligible host" / "no eligible builder"
+
+Every machine in the cloud is excluded for the reasons above. Allow one: `beaver cloud machine policy <machine> --cloud <cloud> --host=on` (or `--build=on`). A cloud made only of
+Host-role machines cannot build on its own; allow a builder, or use `beaver deploy` against a cloud that has one.
+
+### Turning work off was refused: "the only machine that may host applications"
+
+It would leave running work with nowhere to be replaced or scaled. Allow hosting on another machine first, or confirm that this cloud should stop placing work:
+
+```bash
+beaver cloud machine policy <machine> --cloud <cloud> --host=off --yes
+```
+
+## Still stuck
+
+Run `beaver cloud events <cloud>` for the policy changes (who changed what, and when) and `beaver doctor`, then contact support with the request id shown in the error.
+
+## Related
+
+<Card title="Member vs compute" icon="network" href="/infrastructure/member-vs-compute">What each setting means.</Card>
