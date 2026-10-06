@@ -64,9 +64,30 @@ Two staged strategies shift **traffic weight** between the current replica set a
 
 Which machines replicas land on is a placement policy — `beaver cloud workload set <cloud> <container> --policy spread|pack|pinned`, and `--lb dns|proxy` chooses internal load-balancing mode.
 
+## Not the same thing: spreading the cloud's public address
+
+**Load balancing spreads one application's traffic across its replicas; an attachment mode decides
+which machines answer for the cloud's public address in the first place.** Two different layers with
+similar names, and confusing them is how somebody adds replicas expecting redundancy they did not
+buy.
+
+The platform-level choice is an operator one and is invisible to an application. Two of the five
+modes belong in this page because they are the ones that *spread* inbound traffic rather than moving
+it between machines:
+
+| Mode | What answers for the address | Needs |
+| --- | --- | --- |
+| `balancer` | your provider's load balancer, with every healthy machine as a member | a provider load balancer and a driver |
+| `dns` | one `A` record per serving machine | nothing but a DNS zone |
+
+Neither changes anything a customer publishes, and neither is configured per application. See
+[One address, many machines](/network/one-address-many-machines) for the full set, the decision
+order, and the three things `dns` mode cannot do.
+
 ## Next steps
 
 <CardGroup cols={2}>
   <Card title="Scale" icon="gauge" href="/deploy/scale">Fixed or automatic replica counts.</Card>
   <Card title="Scaling command reference" icon="terminal" href="/cli/scaling">Every flag.</Card>
+  <Card title="One address, many machines" icon="network-wired" href="/network/one-address-many-machines">The platform-level choice, and why it is a different thing.</Card>
 </CardGroup>
