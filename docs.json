@@ -295,6 +295,7 @@
               "operate/troubleshoot-machine-offline",
               "operate/troubleshoot-connect",
               "operate/troubleshoot-service-connection",
+              "operate/service-container-missing",
               "operate/troubleshoot-cloud-vpns",
               "operate/troubleshoot-cloud-policy"
             ]
@@ -581,7 +582,10 @@
               {
                 "group": "Conflict",
                 "pages": [
-                  "reference/errors/conflict"
+                  "reference/errors/attachments-active",
+                  "reference/errors/conflict",
+                  "reference/errors/password-changed-elsewhere",
+                  "reference/errors/signup-failed"
                 ]
               },
               {
@@ -598,11 +602,12 @@
                 ]
               },
               {
-                "group": "Invalid input",
+                "group": "Invalid input · C–L",
                 "pages": [
                   "reference/errors/cancelled",
                   "reference/errors/client-too-old",
                   "reference/errors/context-unresolved",
+                  "reference/errors/email-invalid",
                   "reference/errors/flag-conflict",
                   "reference/errors/flag-ignored",
                   "reference/errors/flag-invalid-value",
@@ -612,10 +617,32 @@
                 ]
               },
               {
+                "group": "Invalid input · N–P",
+                "pages": [
+                  "reference/errors/name-required",
+                  "reference/errors/password-common",
+                  "reference/errors/password-compromised",
+                  "reference/errors/password-contains-account-info",
+                  "reference/errors/password-missing-lowercase",
+                  "reference/errors/password-missing-number",
+                  "reference/errors/password-missing-special",
+                  "reference/errors/password-missing-uppercase",
+                  "reference/errors/password-same-as-current",
+                  "reference/errors/password-too-long"
+                ]
+              },
+              {
+                "group": "Invalid input · P",
+                "pages": [
+                  "reference/errors/password-too-short"
+                ]
+              },
+              {
                 "group": "Not found",
                 "pages": [
                   "reference/errors/ambiguous",
-                  "reference/errors/not-found"
+                  "reference/errors/not-found",
+                  "reference/errors/password-reset-link-invalid"
                 ]
               },
               {
@@ -637,7 +664,8 @@
                 "group": "Sign-in",
                 "pages": [
                   "reference/errors/auth-expired",
-                  "reference/errors/auth-required"
+                  "reference/errors/auth-required",
+                  "reference/errors/password-current-incorrect"
                 ]
               },
               {
@@ -649,6 +677,11 @@
               {
                 "group": "Resource State",
                 "pages": [
+                  "reference/errors/password-not-set",
+                  "reference/errors/recover-refused",
+                  "reference/errors/service-container-absent",
+                  "reference/errors/service-machine-removed",
+                  "reference/errors/service-volume-missing",
                   "reference/errors/state-invalid"
                 ]
               },
@@ -662,6 +695,7 @@
                   "reference/errors/network-tls",
                   "reference/errors/network-unreachable",
                   "reference/errors/rate-limited",
+                  "reference/errors/service-machine-unreachable",
                   "reference/errors/temporary"
                 ]
               }

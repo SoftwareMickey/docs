@@ -7,6 +7,13 @@
     "doc": "The reference matched several resources; the response lists the candidates."
   },
   {
+    "name": "ATTACHMENTS_ACTIVE",
+    "http": 409,
+    "class": "conflict",
+    "message": "Applications are still attached to this service",
+    "doc": "The service cannot be deleted while applications are attached. The response lists each application and the commands that detach them, or delete with detach_apps to detach them all."
+  },
+  {
     "name": "AUTH_EXPIRED",
     "http": 401,
     "class": "authentication",
@@ -54,6 +61,13 @@
     "class": "invalid_input",
     "message": "Beaver could not work out which workspace or project you mean",
     "doc": "No workspace, project or environment could be resolved from the flag, environment, config or default. The response shows each source consulted."
+  },
+  {
+    "name": "EMAIL_INVALID",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Enter a valid email address.",
+    "doc": "The email address is missing or malformed."
   },
   {
     "name": "FLAG_CONFLICT",
@@ -133,6 +147,13 @@
     "doc": "The workspace enforces 2-step verification and the account has none."
   },
   {
+    "name": "NAME_REQUIRED",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Enter your full name.",
+    "doc": "Creating an account needs a name."
+  },
+  {
     "name": "NETWORK_DNS",
     "http": 503,
     "class": "temporary",
@@ -182,6 +203,104 @@
     "doc": "An operation failed after it started; the response names the failed stage and what changed."
   },
   {
+    "name": "PASSWORD_CHANGED_ELSEWHERE",
+    "http": 409,
+    "class": "conflict",
+    "message": "Your password was changed somewhere else just now.",
+    "doc": "Another request changed the password between this one reading and writing it. Sign in again with the newest password."
+  },
+  {
+    "name": "PASSWORD_COMMON",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "This password is too common.",
+    "doc": "The new password meets the character rules but follows a predictable pattern, such as a well-known word with a number and symbol added, a keyboard run or a repeat."
+  },
+  {
+    "name": "PASSWORD_COMPROMISED",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "This password has appeared in a data breach.",
+    "doc": "The new password is in the Have I Been Pwned breach corpus. Only the first five characters of its SHA-1 hash were sent to check."
+  },
+  {
+    "name": "PASSWORD_CONTAINS_ACCOUNT_INFO",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Don't include your email address in your password.",
+    "doc": "The new password contains the account's email address or its mailbox name."
+  },
+  {
+    "name": "PASSWORD_CURRENT_INCORRECT",
+    "http": 401,
+    "class": "authentication",
+    "message": "Your current password is incorrect.",
+    "doc": "Changing a password needs the current one, and the one given does not match."
+  },
+  {
+    "name": "PASSWORD_MISSING_LOWERCASE",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Add a lowercase letter.",
+    "doc": "The new password has no lowercase letter."
+  },
+  {
+    "name": "PASSWORD_MISSING_NUMBER",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Add a number.",
+    "doc": "The new password has no digit."
+  },
+  {
+    "name": "PASSWORD_MISSING_SPECIAL",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Add a special character, such as ! or #.",
+    "doc": "The new password has no character that is neither a letter nor a digit. A space counts."
+  },
+  {
+    "name": "PASSWORD_MISSING_UPPERCASE",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Add an uppercase letter.",
+    "doc": "The new password has no uppercase letter."
+  },
+  {
+    "name": "PASSWORD_NOT_SET",
+    "http": 409,
+    "class": "resource_state",
+    "message": "This account has no password yet.",
+    "doc": "The account signs in with GitHub or Google only. Add a password from Settings, Security instead of changing one."
+  },
+  {
+    "name": "PASSWORD_RESET_LINK_INVALID",
+    "http": 404,
+    "class": "not_found",
+    "message": "This reset link has expired or has already been used.",
+    "doc": "Reset links work once, for 30 minutes, and only the newest one sent works. Request a new link."
+  },
+  {
+    "name": "PASSWORD_SAME_AS_CURRENT",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Choose a password different from your current one.",
+    "doc": "The new password is the password being replaced."
+  },
+  {
+    "name": "PASSWORD_TOO_LONG",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Use at most 64 characters.",
+    "doc": "The new password has more than 64 characters."
+  },
+  {
+    "name": "PASSWORD_TOO_SHORT",
+    "http": 400,
+    "class": "invalid_input",
+    "message": "Use at least 8 characters.",
+    "doc": "The new password has fewer than 8 characters."
+  },
+  {
     "name": "PRECONDITION_FAILED",
     "http": 409,
     "class": "eligibility",
@@ -201,6 +320,48 @@
     "class": "temporary",
     "message": "Too many requests",
     "doc": "The caller is being rate limited; retry after the stated delay."
+  },
+  {
+    "name": "RECOVER_REFUSED",
+    "http": 409,
+    "class": "resource_state",
+    "message": "The service cannot be recovered right now",
+    "doc": "A precondition for recreating the container is not met. The response carries a refusal_code and the next action."
+  },
+  {
+    "name": "SERVICE_CONTAINER_ABSENT",
+    "http": 409,
+    "class": "resource_state",
+    "message": "The service's container is missing",
+    "doc": "The operation needs the service's container, which is no longer on its machine. The data volume is untouched; recover the service from the volume, restore a backup, or delete it."
+  },
+  {
+    "name": "SERVICE_MACHINE_REMOVED",
+    "http": 409,
+    "class": "resource_state",
+    "message": "The service's machine is no longer enrolled",
+    "doc": "The machine the service ran on has been removed from the workspace, so Beaver can never reach its container or volume again. The service can be abandoned, which records that its data can no longer be managed."
+  },
+  {
+    "name": "SERVICE_MACHINE_UNREACHABLE",
+    "http": 503,
+    "class": "temporary",
+    "message": "The service's machine is not connected",
+    "doc": "Beaver cannot reach the machine the service runs on, so it cannot tell what state the container is in. Retry when the machine is online; a detach may be recorded now with revoke_later and finished when it reconnects."
+  },
+  {
+    "name": "SERVICE_VOLUME_MISSING",
+    "http": 409,
+    "class": "resource_state",
+    "message": "The service's data volume is missing",
+    "doc": "The container cannot be recovered because the data volume it used no longer exists on the machine. Restore the latest backup instead; recover never creates an empty volume."
+  },
+  {
+    "name": "SIGNUP_FAILED",
+    "http": 409,
+    "class": "conflict",
+    "message": "An account with this email may already exist.",
+    "doc": "The account could not be created, most often because the email address is already registered. Sign in, or reset the password."
   },
   {
     "name": "STATE_INVALID",

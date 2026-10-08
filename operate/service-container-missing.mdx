@@ -1,0 +1,127 @@
+---
+title: "A service's container went missing"
+sidebarTitle: "Service container missing"
+description: "A managed service's container was removed from its machine. What Beaver knows, the four ways forward, and what happens to application credentials in the meantime."
+icon: "triangle-alert"
+type: troubleshooting
+audience: [developer, operator]
+interfaces: [cli]
+keywords: ["service container missing", "container removed", "docker rm", "recover service", "detach failed no such container", "cannot delete service attachments", "revoke pending"]
+verified: source-reviewed
+lastVerified: 2026-10-07
+---
+
+import { Verified } from "/snippets/verified.mdx";
+
+<Verified kind="source-reviewed" date="2026-10-07" />
+
+## What you see
+
+A managed service shows as unhealthy and stays that way, and one of these happens:
+
+- `beaver service detach` or `beaver service delete` used to fail with a Docker "No such container" message. They now succeed or explain themselves.
+- `beaver service delete` says applications are still attached, and detaching them is the step that failed.
+- `beaver service show <name>` prints `Container: missing since …`.
+
+The usual cause is that the container was removed outside Beaver — `docker rm`, a machine rebuild, a pruned host.
+
+## Check first
+
+```bash
+beaver service check <name>
+```
+
+It asks the service's machine what is there right now and changes nothing. It reports:
+
+| Line | Meaning |
+| --- | --- |
+| **Container** | `running`, `stopped`, `missing` or unknown. *Missing* is only said when the machine itself reported the container absent; silence is *unknown*. |
+| **Volume** | Whether the service's data volume is still on the machine. |
+| **Credentials still owed** | Application credentials whose revoke could not run yet (see below). |
+| **Last backup** | The newest successful backup. |
+| **Next** | The one command to run. |
+
+## The four ways forward
+
+| You want | Run |
+| --- | --- |
+| The service back, with its data | `beaver service recover <name>` |
+| The service gone, its apps released | `beaver service delete <name> --detach-apps` |
+| The data back from a backup | `beaver service restore <name> --backup <id>` |
+| To give up a service on a machine that no longer exists | `beaver service delete <name> --abandon` |
+
+### Recover
+
+`recover` recreates the container from the data volume that is still on the machine — same version, same allocation, same data. It shows its plan first and asks before it acts; `--dry-run` stops after the plan.
+
+Application credentials whose revoke was deferred are dropped **before** the service is reported healthy, so a detached application is never left with a working login. Applications that stayed attached keep working with the credentials they had.
+
+<Warning>
+  `recover` never creates an empty volume. If the data volume is gone, it refuses and points at your backups, because a fresh, empty database would look like your service and be wrong.
+</Warning>
+
+### Detach and delete
+
+Detaching an application from a service whose container is confirmed missing succeeds: the attachment ends in Beaver at once and the credential's revoke is recorded as **pending**. `beaver service delete <name> --detach-apps` does that for every attached application and then deletes the service, in one command you can run again if it stops part-way. The data volume is kept either way.
+
+### Restore
+
+If the volume is gone, restore a backup: `beaver service backup list <name>`, then `beaver service restore <name> --backup <id>`.
+
+### Abandon
+
+A service whose machine was removed from the workspace can never be reached again. `--abandon` removes it from Beaver, after you type its name. Nothing is owed on an abandoned service: its credentials can no longer be used or revoked.
+
+## What happens to application credentials
+
+A detach ends the application's *relationship* with the service. Revoking its *credential* needs the database engine to be running. When the container is missing, the two are separated, and Beaver says so:
+
+```text
+✓ postgres detached from apis
+! credential revoke pending — the postgres container is missing
+    it will be revoked when the service is recovered or its volume is destroyed
+```
+
+- **The container is confirmed missing.** The credential **cannot be used** — nothing is running that could accept it. The revoke is paid when you recover the service, and is moot if its volume is destroyed.
+- **The machine is not connected.** Beaver cannot tell whether the engine is still running, so it does not end an application's access it cannot revoke. `--revoke-later` records the detach anyway, and the credential **may still work** until the machine is back. Beaver asks you to confirm that before it proceeds.
+
+A detach never defers a revoke that failed against a *running* container: that is a failure, and nothing changes.
+
+`beaver service drain <name>` pays owed revokes immediately when the container is reachable. In scripts, a detach that left a revoke owed exits `0` and sets `revoke_deferred` and `pending_principals` in `--output json`.
+
+## Causes and fixes
+
+### Applications are still attached
+
+`beaver service delete` refuses while applications are attached, and names each one. Detach them one at a time (`beaver service detach <name> --container <app>`), or use `--detach-apps` to do all of it at once.
+
+### The container is missing
+
+Operations that need the container — `start`, `stop`, `restart`, `resize`, creating a database, backing up — refuse with `SERVICE_CONTAINER_ABSENT` instead of failing on Docker, and change nothing. Run `beaver service recover <name>`.
+
+### The machine is not connected
+
+`SERVICE_MACHINE_UNREACHABLE`. Wait for the machine to come back and run the command again. Only `detach` and `delete --detach-apps` accept `--revoke-later`, for when you cannot wait.
+
+### The machine was removed
+
+`SERVICE_MACHINE_REMOVED`. The service's machine is no longer enrolled. Use `beaver service delete <name> --abandon`.
+
+### The data volume is missing
+
+`SERVICE_VOLUME_MISSING`. The container cannot be recovered because the data is not on the machine. Restore the latest backup.
+
+### Recover was refused
+
+`RECOVER_REFUSED`. The response names why (for example an upgrade is running, the service is a cluster member, or its container turned out to exist) and the next command. A cluster member is replaced with `beaver service cluster replace-member`, not recovered.
+
+## Let Beaver recover it for you
+
+`beaver service auto-recover <name> on` lets Beaver recreate a missing container by itself after it has stayed missing for a grace period, within a daily budget. It is off by default, your workspace must allow it, and it never recreates onto a missing volume.
+
+## Related
+
+- [`beaver service`](/cli/service) — every flag
+- [Error codes](/reference/errors) — `ATTACHMENTS_ACTIVE`, `SERVICE_CONTAINER_ABSENT`, `SERVICE_MACHINE_UNREACHABLE`, `SERVICE_MACHINE_REMOVED`, `SERVICE_VOLUME_MISSING`, `RECOVER_REFUSED`
+- [Backups and restore](/data/backups-and-restore)
+- [Exit codes and output formats](/reference/exit-codes-and-output)

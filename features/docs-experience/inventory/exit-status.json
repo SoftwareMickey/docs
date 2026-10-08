@@ -36,6 +36,18 @@
     "meaning": "Server error while saving or loading configuration."
   },
   {
+    "status": 10,
+    "scope": "beaver service …",
+    "meaning": "Refused for data safety: the server stopped before changing anything because proceeding would risk data or leave a credential live (applications still attached, container missing, data volume missing, machine removed, recover refused). A deferred credential revoke after a successful command is not a refusal: it exits 0 and sets revoke_deferred in --output json.",
+    "codes": [
+      "ATTACHMENTS_ACTIVE",
+      "SERVICE_CONTAINER_ABSENT",
+      "SERVICE_MACHINE_REMOVED",
+      "SERVICE_VOLUME_MISSING",
+      "RECOVER_REFUSED"
+    ]
+  },
+  {
     "status": 3,
     "scope": "beaver github install",
     "meaning": "You cancelled."

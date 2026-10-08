@@ -62,7 +62,7 @@ provisioning.
 | --- | --- |
 | `start` / `stop` / `restart [name]` | Control the running container. |
 | `resize <name>` | Change allocated CPU/memory. |
-| `delete <name>` (alias `rm`) | Remove the container. **The data volume is kept.** |
+| `delete <name>` (alias `rm`) | Remove the container. **The data volume is kept.** Refuses while applications are attached unless `--detach-apps`. |
 | `delete-volume <name>` | Permanently destroy a deleted service's data volume. |
 
 <ParamField query="--cpu" type="number" default="0">
@@ -75,6 +75,22 @@ provisioning.
   On `delete`/`delete-volume`: skip the confirmation prompt. See [shared
   flags](/cli/shared-flags#yes).
 </ParamField>
+<ParamField query="--detach-apps" type="boolean" default="false">
+  On `delete`: detach every attached application first, then delete. Works when the
+  service's container is already gone — each application's credential revoke is then
+  deferred. The confirmation lists the applications and says whether each credential is
+  revoked now or deferred.
+</ParamField>
+<ParamField query="--revoke-later" type="boolean" default="false">
+  On `delete --detach-apps` and on `detach`: proceed although the service's machine is not
+  connected. The revoke is deferred and the application's credential **may still work**
+  until the machine is back. Not available with `--abandon` or `detach --secure`.
+</ParamField>
+<ParamField query="--abandon" type="boolean" default="false">
+  On `delete`: remove a service whose machine was removed from the workspace. Beaver can no
+  longer manage its data, so it asks you to type the service's name. Refused while the
+  machine is still enrolled.
+</ParamField>
 
 ### Consequences
 
@@ -82,10 +98,47 @@ provisioning.
 keeps the data volume** — `delete-volume` is a separate, more heavily confirmed step for
 actually destroying data.
 
+`delete` refuses while applications are attached (`ATTACHMENTS_ACTIVE`), naming each one and the
+commands that detach it. It never leaves a service half-deleted: if it stops part-way, running
+it again carries on.
+
 <Warning>
   `delete-volume` is only reachable once a service is already deleted, requires two separate
   confirmations, and permanently destroys the data — there is no undo once it succeeds.
 </Warning>
+
+## When a container goes missing
+
+| Subcommand | Purpose |
+| --- | --- |
+| `check [name]` | Ask the machine what is there and explain it: container, volume, owed credentials, last backup, the next command. Changes nothing. |
+| `recover <name>` | Recreate a missing container from its retained data volume. Shows the plan, asks, then runs. |
+| `drain <name>` | Pay owed application credential revokes now (the container must be reachable). |
+| `auto-recover <name> on\|off` | Let Beaver recover the service by itself after a grace period. Off by default. |
+
+<ParamField query="--dry-run" type="boolean" default="false">
+  On `recover`: print the plan and stop.
+</ParamField>
+<ParamField query="--yes" type="boolean" default="false">
+  On `recover`: skip the confirmation. A refusal (missing volume, machine gone) is never skipped.
+</ParamField>
+
+`recover` never creates an empty volume: if the data volume is gone it refuses
+(`SERVICE_VOLUME_MISSING`) and points at your backups. `service show` prints a `Container:` line
+when the container is missing. The whole situation, with each path, is on
+[A service's container went missing](/operate/service-container-missing).
+
+### Output and exit status
+
+`check`, `recover`, `drain`, `detach` and `delete` accept `--output json`. These fields are stable:
+`container_state`, `volume`, `revoke_deferred`, `pending_principals`, `apps`, `next_actions`
+(plus `run` on `recover` and `check`).
+
+| Exit | Meaning |
+| --- | --- |
+| `0` | Succeeded. A detach or delete that left a credential revoke owed is a success: it sets `revoke_deferred` rather than failing. |
+| `10` | Refused for data safety — nothing was changed (`ATTACHMENTS_ACTIVE`, `SERVICE_CONTAINER_ABSENT`, `SERVICE_VOLUME_MISSING`, `SERVICE_MACHINE_REMOVED`, `RECOVER_REFUSED`). |
+| `1` | Failed, including a machine that is only offline (`SERVICE_MACHINE_UNREACHABLE`). |
 
 ## Credentials & config
 
@@ -131,7 +184,7 @@ area, a MinIO bucket, a Meilisearch index, a NATS subject prefix, or a Kafka top
 | Subcommand | Purpose |
 | --- | --- |
 | `attach <name>` | Connect an app to a service, injecting its connection details as env vars. |
-| `detach <name>` | Remove that connection. |
+| `detach <name>` | Remove that connection. Succeeds when the service's container is missing; the credential's revoke is then pending. |
 | `attached <container>` | Services attached to one app. |
 | `connect [service]` | Open a local tunnel to a managed service's database. |
 
@@ -386,6 +439,11 @@ beaver service connect paperclip-db --local-port 5433
 | --- | --- | --- |
 | `create` success | New service, provisioning status | Check `service show <name>` until healthy. |
 | `delete` success | `<name> deleted — its data volume was retained` | Run `delete-volume` separately if you actually want the data gone. |
+| `delete` while an application is attached | `ATTACHMENTS_ACTIVE` naming each app, exit `10` | `detach` each one, or `delete --detach-apps`. |
+| `detach` while the container is missing | `detached`, then `credential revoke pending — the … container is missing` (exit `0`) | `recover` pays it; `delete` makes it moot. |
+| `detach` while the machine is offline | `SERVICE_MACHINE_UNREACHABLE` | Retry when it is online, or `--revoke-later` (the credential may still work). |
+| Any container operation while the container is missing | `SERVICE_CONTAINER_ABSENT`, nothing dispatched | `beaver service check <name>`, then `recover`. |
+| `recover` with the data volume gone | `SERVICE_VOLUME_MISSING`, exit `10` | `beaver service backup list <name>`, then `restore`. |
 | `database delete` while attached | Refusal naming every attached app | `detach` each one first, then retry. |
 | `attach` to a resource another app already holds, without `--shared` | Refusal naming the other app(s) | Pass `--shared` (and `--read-only` if appropriate) to confirm the two apps should share data. |
 | `cluster upgrade` member fails mid-rollout | Upgrade aborts; cluster stays on old version for remaining members | Investigate the failed member before retrying. |
@@ -393,6 +451,7 @@ beaver service connect paperclip-db --local-port 5433
 
 ## Used in
 
+- [A service's container went missing](/operate/service-container-missing) — the symptoms, the four ways forward and the credential window.
 - [`cloud`](/cli/cloud) — services run on machines that may be grouped into a cloud.
 - [Environment variables](/deploy/environment-variables) — `attach` injects connection
   details the same way.

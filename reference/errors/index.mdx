@@ -16,7 +16,10 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 
 | Code | Meaning | HTTP |
 | --- | --- | --- |
+| [`ATTACHMENTS_ACTIVE`](/reference/errors/attachments-active) | Applications are still attached to this service | `409` |
 | [`CONFLICT`](/reference/errors/conflict) | The request conflicts with an existing resource | `409` |
+| [`PASSWORD_CHANGED_ELSEWHERE`](/reference/errors/password-changed-elsewhere) | Your password was changed somewhere else just now. | `409` |
+| [`SIGNUP_FAILED`](/reference/errors/signup-failed) | An account with this email may already exist. | `409` |
 
 ## Eligibility
 
@@ -38,12 +41,24 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | [`CANCELLED`](/reference/errors/cancelled) | Cancelled | `400` |
 | [`CLIENT_TOO_OLD`](/reference/errors/client-too-old) | This version of the Beaver CLI is too old | `426` |
 | [`CONTEXT_UNRESOLVED`](/reference/errors/context-unresolved) | Beaver could not work out which workspace or project you mean | `400` |
+| [`EMAIL_INVALID`](/reference/errors/email-invalid) | Enter a valid email address. | `400` |
 | [`FLAG_CONFLICT`](/reference/errors/flag-conflict) | Flags cannot be used together | `400` |
 | [`FLAG_IGNORED`](/reference/errors/flag-ignored) | A flag has no effect on this command | `400` |
 | [`FLAG_INVALID_VALUE`](/reference/errors/flag-invalid-value) | A flag or argument has an invalid value | `400` |
 | [`FLAG_REQUIRES`](/reference/errors/flag-requires) | A flag needs another flag | `400` |
 | [`INVALID_REQUEST`](/reference/errors/invalid-request) | The request was not valid | `400` |
 | [`LOCAL_PREREQUISITE`](/reference/errors/local-prerequisite) | Something this machine needs is missing | `400` |
+| [`NAME_REQUIRED`](/reference/errors/name-required) | Enter your full name. | `400` |
+| [`PASSWORD_COMMON`](/reference/errors/password-common) | This password is too common. | `400` |
+| [`PASSWORD_COMPROMISED`](/reference/errors/password-compromised) | This password has appeared in a data breach. | `400` |
+| [`PASSWORD_CONTAINS_ACCOUNT_INFO`](/reference/errors/password-contains-account-info) | Don't include your email address in your password. | `400` |
+| [`PASSWORD_MISSING_LOWERCASE`](/reference/errors/password-missing-lowercase) | Add a lowercase letter. | `400` |
+| [`PASSWORD_MISSING_NUMBER`](/reference/errors/password-missing-number) | Add a number. | `400` |
+| [`PASSWORD_MISSING_SPECIAL`](/reference/errors/password-missing-special) | Add a special character, such as ! or #. | `400` |
+| [`PASSWORD_MISSING_UPPERCASE`](/reference/errors/password-missing-uppercase) | Add an uppercase letter. | `400` |
+| [`PASSWORD_SAME_AS_CURRENT`](/reference/errors/password-same-as-current) | Choose a password different from your current one. | `400` |
+| [`PASSWORD_TOO_LONG`](/reference/errors/password-too-long) | Use at most 64 characters. | `400` |
+| [`PASSWORD_TOO_SHORT`](/reference/errors/password-too-short) | Use at least 8 characters. | `400` |
 
 ## Not found
 
@@ -51,6 +66,7 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | --- | --- | --- |
 | [`AMBIGUOUS`](/reference/errors/ambiguous) | More than one resource matches | `409` |
 | [`NOT_FOUND`](/reference/errors/not-found) | Resource not found | `404` |
+| [`PASSWORD_RESET_LINK_INVALID`](/reference/errors/password-reset-link-invalid) | This reset link has expired or has already been used. | `404` |
 
 ## Permission
 
@@ -73,6 +89,7 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | --- | --- | --- |
 | [`AUTH_EXPIRED`](/reference/errors/auth-expired) | Your session has expired | `401` |
 | [`AUTH_REQUIRED`](/reference/errors/auth-required) | You are not signed in | `401` |
+| [`PASSWORD_CURRENT_INCORRECT`](/reference/errors/password-current-incorrect) | Your current password is incorrect. | `401` |
 
 ## Async Operation
 
@@ -84,6 +101,11 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 
 | Code | Meaning | HTTP |
 | --- | --- | --- |
+| [`PASSWORD_NOT_SET`](/reference/errors/password-not-set) | This account has no password yet. | `409` |
+| [`RECOVER_REFUSED`](/reference/errors/recover-refused) | The service cannot be recovered right now | `409` |
+| [`SERVICE_CONTAINER_ABSENT`](/reference/errors/service-container-absent) | The service's container is missing | `409` |
+| [`SERVICE_MACHINE_REMOVED`](/reference/errors/service-machine-removed) | The service's machine is no longer enrolled | `409` |
+| [`SERVICE_VOLUME_MISSING`](/reference/errors/service-volume-missing) | The service's data volume is missing | `409` |
 | [`STATE_INVALID`](/reference/errors/state-invalid) | The resource is not in a state that allows this | `409` |
 
 ## Temporary
@@ -97,4 +119,5 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | [`NETWORK_TLS`](/reference/errors/network-tls) | The server's certificate could not be verified | `503` |
 | [`NETWORK_UNREACHABLE`](/reference/errors/network-unreachable) | The Beaver server could not be reached | `503` |
 | [`RATE_LIMITED`](/reference/errors/rate-limited) | Too many requests | `429` |
+| [`SERVICE_MACHINE_UNREACHABLE`](/reference/errors/service-machine-unreachable) | The service's machine is not connected | `503` |
 | [`TEMPORARY`](/reference/errors/temporary) | A temporary condition blocked the request | `503` |

@@ -1,0 +1,47 @@
+---
+title: "SERVICE_CONTAINER_ABSENT"
+sidebarTitle: "SERVICE_CONTAINER_ABSENT"
+description: "What the SERVICE_CONTAINER_ABSENT failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["SERVICE_CONTAINER_ABSENT", "The service's container is missing", "error", "failure", "beaver help SERVICE_CONTAINER_ABSENT"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The service's container is missing**
+
+The operation needs the service's container, which is no longer on its machine. The data volume is untouched; recover the service from the volume, restore a backup, or delete it.
+
+| | |
+| --- | --- |
+| Code | `SERVICE_CONTAINER_ABSENT` |
+| Kind | Resource State |
+| HTTP status | `409` |
+| CLI exit status | `10` |
+
+## What to do
+
+Run `beaver service check NAME`, then `beaver service recover NAME` to recreate the container from its data volume. Nothing was dispatched or changed. See [A service's container went missing](/operate/service-container-missing#the-container-is-missing).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "SERVICE_CONTAINER_ABSENT",
+    "message": "The service's container is missing",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The service's container is missing"
+  }
+}
+```
+
+Look it up offline with `beaver help SERVICE_CONTAINER_ABSENT`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

@@ -1,0 +1,47 @@
+---
+title: "ATTACHMENTS_ACTIVE"
+sidebarTitle: "ATTACHMENTS_ACTIVE"
+description: "What the ATTACHMENTS_ACTIVE failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["ATTACHMENTS_ACTIVE", "Applications are still attached to this service", "error", "failure", "beaver help ATTACHMENTS_ACTIVE"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Applications are still attached to this service**
+
+The service cannot be deleted while applications are attached. The response lists each application and the commands that detach them, or delete with detach_apps to detach them all.
+
+| | |
+| --- | --- |
+| Code | `ATTACHMENTS_ACTIVE` |
+| Kind | Conflict |
+| HTTP status | `409` |
+| CLI exit status | `10` |
+
+## What to do
+
+The response lists every attached application and the commands that follow. Detach them one by one, or run `beaver service delete NAME --detach-apps` to detach them all and delete in one step. See [A service's container went missing](/operate/service-container-missing#applications-are-still-attached).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "ATTACHMENTS_ACTIVE",
+    "message": "Applications are still attached to this service",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Applications are still attached to this service"
+  }
+}
+```
+
+Look it up offline with `beaver help ATTACHMENTS_ACTIVE`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

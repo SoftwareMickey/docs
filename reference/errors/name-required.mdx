@@ -1,0 +1,47 @@
+---
+title: "NAME_REQUIRED"
+sidebarTitle: "NAME_REQUIRED"
+description: "What the NAME_REQUIRED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["NAME_REQUIRED", "Enter your full name.", "error", "failure", "beaver help NAME_REQUIRED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Enter your full name.**
+
+Creating an account needs a name.
+
+| | |
+| --- | --- |
+| Code | `NAME_REQUIRED` |
+| Kind | Invalid input |
+| HTTP status | `400` |
+| CLI exit status | `1` |
+
+## What to do
+
+The response names the flag or argument and shows an accepted value. Run `beaver help <command>` for the command's flags.
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "NAME_REQUIRED",
+    "message": "Enter your full name.",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Enter your full name."
+  }
+}
+```
+
+Look it up offline with `beaver help NAME_REQUIRED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.
