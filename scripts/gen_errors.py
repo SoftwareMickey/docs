@@ -39,6 +39,18 @@ CLASS_NEXT = {
 }
 
 
+# Guidance specific to one code, where the class-wide sentence would be too vague to act on. Codes of
+# features/services-durability point at the page that explains the whole situation (its anchors are checked).
+CODE_NEXT = {
+    "ATTACHMENTS_ACTIVE": "The response lists every attached application and the commands that follow. Detach them one by one, or run `beaver service delete NAME --detach-apps` to detach them all and delete in one step. See [A service's container went missing](/operate/service-container-missing#applications-are-still-attached).",
+    "SERVICE_CONTAINER_ABSENT": "Run `beaver service check NAME`, then `beaver service recover NAME` to recreate the container from its data volume. Nothing was dispatched or changed. See [A service's container went missing](/operate/service-container-missing#the-container-is-missing).",
+    "SERVICE_MACHINE_UNREACHABLE": "Wait until the machine is online and run the command again. For a detach you cannot wait for, `--revoke-later` records it now — the application's credential may still work until the machine is back. See [A service's container went missing](/operate/service-container-missing#the-machine-is-not-connected).",
+    "SERVICE_MACHINE_REMOVED": "The machine is no longer enrolled, so its data can no longer be reached. `beaver service delete NAME --abandon` removes the service from Beaver and asks you to type its name. See [A service's container went missing](/operate/service-container-missing#the-machine-was-removed).",
+    "SERVICE_VOLUME_MISSING": "Recover never creates an empty volume. List backups with `beaver service backup list NAME` and restore one with `beaver service restore NAME --backup ID`. See [A service's container went missing](/operate/service-container-missing#the-data-volume-is-missing).",
+    "RECOVER_REFUSED": "The response carries a `refusal_code` and the next command. See [A service's container went missing](/operate/service-container-missing#recover-was-refused).",
+}
+
+
 def slug(code):
     return code.lower().replace("_", "-")
 
@@ -74,7 +86,7 @@ def code_page(entry, examples, rows):
     out += [HEAD.rstrip("\n") % "problem-codes.json", "",
             f"**{entry['message']}**", "", entry["doc"], "",
             "| | |", "| --- | --- |", f"| Code | `{c}` |", f"| Kind | {cls} |", f"| HTTP status | `{entry['http']}` |", f"| CLI exit status | `{exit_for(c, rows)}` |", "",
-            "## What to do", "", CLASS_NEXT.get(entry["class"], "Read the conditions in the response: each says what was checked and how to fix it."), "",
+            "## What to do", "", CODE_NEXT.get(c) or CLASS_NEXT.get(entry["class"], "Read the conditions in the response: each says what was checked and how to fix it."), "",
             "## What the response contains", "",
             "Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), "
             "`conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. "
@@ -127,8 +139,19 @@ def nav_tree(codes):
     by = {}
     for e in codes:
         by.setdefault(e["class"], []).append(e["name"])
-    groups = [{"group": CLASS_TITLE.get(c, c.replace("_", " ").title()), "pages": [f"reference/errors/{slug(n)}" for n in sorted(by[c])]}
-              for c in sorted(by, key=lambda c: CLASS_TITLE.get(c, c))]
+    groups = []
+    for c in sorted(by, key=lambda c: CLASS_TITLE.get(c, c)):
+        title = CLASS_TITLE.get(c, c.replace("_", " ").title())
+        names = sorted(by[c])
+        if len(names) <= 12:
+            groups.append({"group": title, "pages": [f"reference/errors/{slug(n)}" for n in names]})
+            continue
+        # A class over the lint cap is split into sibling groups (the lint also caps nesting at 2):
+        # "Invalid input · A–F", "Invalid input · G–P" ...
+        for i in range(0, len(names), 10):
+            ch = names[i:i + 10]
+            span = f"{ch[0][0]}–{ch[-1][0]}" if ch[0][0] != ch[-1][0] else ch[0][0]
+            groups.append({"group": f"{title} · {span}", "pages": [f"reference/errors/{slug(n)}" for n in ch]})
     return ["reference/errors/index"] + groups
 
 

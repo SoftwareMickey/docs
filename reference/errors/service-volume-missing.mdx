@@ -1,0 +1,47 @@
+---
+title: "SERVICE_VOLUME_MISSING"
+sidebarTitle: "SERVICE_VOLUME_MISSING"
+description: "What the SERVICE_VOLUME_MISSING failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["SERVICE_VOLUME_MISSING", "The service's data volume is missing", "error", "failure", "beaver help SERVICE_VOLUME_MISSING"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**The service's data volume is missing**
+
+The container cannot be recovered because the data volume it used no longer exists on the machine. Restore the latest backup instead; recover never creates an empty volume.
+
+| | |
+| --- | --- |
+| Code | `SERVICE_VOLUME_MISSING` |
+| Kind | Resource State |
+| HTTP status | `409` |
+| CLI exit status | `10` |
+
+## What to do
+
+Recover never creates an empty volume. List backups with `beaver service backup list NAME` and restore one with `beaver service restore NAME --backup ID`. See [A service's container went missing](/operate/service-container-missing#the-data-volume-is-missing).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "SERVICE_VOLUME_MISSING",
+    "message": "The service's data volume is missing",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "The service's data volume is missing"
+  }
+}
+```
+
+Look it up offline with `beaver help SERVICE_VOLUME_MISSING`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.
