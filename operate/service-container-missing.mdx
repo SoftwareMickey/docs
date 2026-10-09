@@ -101,7 +101,11 @@ Operations that need the container — `start`, `stop`, `restart`, `resize`, cre
 
 ### The machine is not connected
 
-`SERVICE_MACHINE_UNREACHABLE`. Wait for the machine to come back and run the command again. Only `detach` and `delete --detach-apps` accept `--revoke-later`, for when you cannot wait.
+`SERVICE_MACHINE_UNREACHABLE`. Nothing changed: Beaver asks the machine before it dispatches anything.
+
+`delete` and `delete-volume` go further — they reach the machine **before** asking you to confirm, wait up to `--wait-for-machine` (60s by default) for it to connect, and only then ask. If the service lives on the machine you are typing on, they notice that beaverd is not running locally and offer to start it. So this refusal on a delete means you were never asked to confirm and nothing was destroyed; if the machine drops after you confirmed, Beaver waits and finishes the delete instead of asking again.
+
+For anything else, wait for the machine to come back and run the command again. Only `detach` and `delete --detach-apps` accept `--revoke-later`, for when you cannot wait.
 
 ### The machine was removed
 
