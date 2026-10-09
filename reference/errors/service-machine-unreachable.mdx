@@ -23,7 +23,7 @@ Beaver cannot reach the machine the service runs on, so it cannot tell what stat
 
 ## What to do
 
-Wait until the machine is online and run the command again. For a detach you cannot wait for, `--revoke-later` records it now — the application's credential may still work until the machine is back. See [A service's container went missing](/operate/service-container-missing#the-machine-is-not-connected).
+Nothing was changed — the machine is asked before anything is dispatched. `delete` and `delete-volume` wait for the machine (`--wait-for-machine`, 60s by default) and only ask you to confirm once it is connected, so a refusal here means you were never asked and nothing was destroyed. Otherwise wait until the machine is online and run the command again; for a detach you cannot wait for, `--revoke-later` records it now — the application's credential may still work until the machine is back. See [A service's container went missing](/operate/service-container-missing#the-machine-is-not-connected).
 
 ## What the response contains
 

@@ -104,6 +104,11 @@ provisioning.
   longer manage its data, so it asks you to type the service's name. Refused while the
   machine is still enrolled.
 </ParamField>
+<ParamField query="--wait-for-machine" type="duration" default="60s">
+  On `delete`/`delete-volume`: how long to wait for the service's machine to connect
+  **before** you are asked to confirm anything. `0` does not wait. `--abandon` ignores it —
+  that delete is for a machine that is gone for good.
+</ParamField>
 
 ### Consequences
 
@@ -114,6 +119,19 @@ actually destroying data. `delete --full` does both in one command.
 `delete` refuses while applications are attached (`ATTACHMENTS_ACTIVE`), naming each one and the
 commands that detach it. It never leaves a service half-deleted: if it stops part-way, running
 it again carries on.
+
+Every delete except `--abandon` needs the service's machine to answer — Beaver will not remove a
+container it cannot see. So `delete` and `delete-volume` reach the machine **first**: if it is not
+connected they say so, wait up to `--wait-for-machine` for it to connect, and only then ask you to
+confirm. A machine that never connects is refused with `SERVICE_MACHINE_UNREACHABLE` before any
+question is asked — nothing was deleted, nothing was typed, and nothing changed. If the machine
+drops *after* you confirm, Beaver waits for it again and finishes the delete rather than asking
+you to confirm a second time.
+
+<Tip>
+  When the service lives on the machine you are typing on, Beaver notices that beaverd is not
+  running locally and offers to start it — the common reason a machine "is not connected".
+</Tip>
 
 <Warning>
   `delete-volume` is only reachable once a service is already deleted, requires two separate
