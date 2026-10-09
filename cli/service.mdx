@@ -84,7 +84,20 @@ provisioning.
 <ParamField query="--revoke-later" type="boolean" default="false">
   On `delete --detach-apps` and on `detach`: proceed although the service's machine is not
   connected. The revoke is deferred and the application's credential **may still work**
-  until the machine is back. Not available with `--abandon` or `detach --secure`.
+  until the machine is back. Not available with `--abandon`, `--full` or `detach --secure`.
+</ParamField>
+<ParamField query="--full" type="boolean" default="false">
+  On `delete`: also **permanently destroy the data volume** in the same operation — the
+  container is removed, then the volume. It never detaches applications on its own: add
+  `--detach-apps`, otherwise it is refused with `ATTACHMENTS_ACTIVE`. It asks you to type
+  the service's name, and with `--yes` it also needs `--confirm-data-loss`. Not available
+  with `--revoke-later` or `--abandon`. Backups stored elsewhere are not deleted. If the
+  volume cannot be removed the container stays removed and the service stays `deleting`;
+  run the same command again. There is no undo.
+</ParamField>
+<ParamField query="--confirm-data-loss" type="boolean" default="false">
+  With `delete --full --yes`: confirm that the data volume is destroyed. `--yes` alone is
+  not enough for `--full`.
 </ParamField>
 <ParamField query="--abandon" type="boolean" default="false">
   On `delete`: remove a service whose machine was removed from the workspace. Beaver can no
@@ -96,7 +109,7 @@ provisioning.
 
 `delete` removes the running container and marks the service deleted, **but deliberately
 keeps the data volume** — `delete-volume` is a separate, more heavily confirmed step for
-actually destroying data.
+actually destroying data. `delete --full` does both in one command.
 
 `delete` refuses while applications are attached (`ATTACHMENTS_ACTIVE`), naming each one and the
 commands that detach it. It never leaves a service half-deleted: if it stops part-way, running
