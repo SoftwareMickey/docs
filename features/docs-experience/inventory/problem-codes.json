@@ -1,5 +1,12 @@
 [
   {
+    "name": "AGENT_UNINSTALL_INCOMPLETE",
+    "http": 500,
+    "class": "internal",
+    "message": "Beaver was partly removed from this machine",
+    "doc": "`beaver agent uninstall` runs each teardown step independently so one failure never skips the rest. At least one step did not finish: the summary lists every step, and the repairs give the exact command to finish each one by hand."
+  },
+  {
     "name": "AMBIGUOUS",
     "http": 409,
     "class": "not_found",
@@ -327,6 +334,13 @@
     "class": "resource_state",
     "message": "The service cannot be recovered right now",
     "doc": "A precondition for recreating the container is not met. The response carries a refusal_code and the next action."
+  },
+  {
+    "name": "SERVICE_ABANDON_REFUSED",
+    "http": 409,
+    "class": "resource_state",
+    "message": "This service cannot be abandoned yet",
+    "doc": "Abandon forgets a service without touching its data, so it is only for a machine Beaver cannot reach any more: one that is no longer enrolled, or one that has been unreachable for longer than the grace period. A connected machine is deleted normally; a briefly offline one is waited for. The response gives how long the machine has been unreachable and how much longer the wait is."
   },
   {
     "name": "SERVICE_CONTAINER_ABSENT",

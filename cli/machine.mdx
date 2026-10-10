@@ -79,6 +79,24 @@ remove` (an alias for `beaver server remove`) disconnects one.
   Beaver only forgets about it, and its local credentials stop working immediately.
 </Warning>
 
+`remove` refuses while the machine is still a member of a cloud or carrying live replicas —
+remove it from its cloud first, or pass `--force` to accept the orphaned rows.
+
+**Managed services are different.** If managed services are pinned to the machine, `remove`
+lists them, then runs: their containers and data volumes stay on the machine, untouched, and
+Beaver stops managing them. This is deliberate — the way out for a machine that was deleted at
+its cloud provider is to remove the machine and *then* take its services off the books, so a
+removal that refused here would leave you with no way to do either. After the removal, each
+service is forgotten with the `beaver service delete <slug> --abandon` line the command prints
+for it.
+
+<Tip>
+  Removing the enrollment is only half of leaving. To take Beaver off the machine itself — the
+  agent, the sudo rule, the credentials and the binaries — run
+  [`beaver agent uninstall`](/cli/agent) on that machine; it offers to do this de-enrolment as
+  its first step.
+</Tip>
+
 `reboot` takes down **every container running on the machine**, not just one application, for
 the duration of the reboot; run `reboot-impact` first to see exactly what will be interrupted.
 `package-update` and `restart-service` can briefly disrupt whatever runs on that machine —
@@ -285,6 +303,8 @@ beaver machine fleet-drift
 | Situation | What you'll see | What to do |
 | --- | --- | --- |
 | `remove` success | Confirmation, then the machine disappears from `list` | No undo; reconnect with `beaver connect` if needed later. |
+| `remove` with managed services on the machine | The services listed before the prompt, and an `--abandon` command for each afterwards | Run each `beaver service delete <slug> --abandon` to take them off Beaver's books. Their data is untouched. |
+| `remove` refused — still in a cloud or carrying replicas | A conflict naming what depends on it | Remove it from its cloud first, or re-run with `--force`. |
 | `reboot` declined | Command exits without rebooting | Re-run with `--yes` once you're sure. |
 | `cleanup apply` on a stale plan | An error naming the failure | Regenerate with `cleanup-plan` and retry. |
 | `policy set` missing `--mode` | `--mode` required error | Pass `observe`, `assisted`, or `autopilot`. |

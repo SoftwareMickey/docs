@@ -22,29 +22,30 @@
   },
   {
     "status": 2,
-    "scope": "beaver config …",
+    "scope": "beaver config \u2026",
     "meaning": "Usage error: a flag or argument the command does not accept."
   },
   {
     "status": 3,
-    "scope": "beaver config …",
+    "scope": "beaver config \u2026",
     "meaning": "Local I/O error: a file could not be read or written."
   },
   {
     "status": 4,
-    "scope": "beaver config …",
+    "scope": "beaver config \u2026",
     "meaning": "Server error while saving or loading configuration."
   },
   {
     "status": 10,
-    "scope": "beaver service …",
-    "meaning": "Refused for data safety: the server stopped before changing anything because proceeding would risk data or leave a credential live (applications still attached, container missing, data volume missing, machine removed, recover refused). A deferred credential revoke after a successful command is not a refusal: it exits 0 and sets revoke_deferred in --output json.",
+    "scope": "beaver service \u2026",
+    "meaning": "Refused for data safety: the server stopped before changing anything because proceeding would risk data or leave a credential live (applications still attached, container missing, data volume missing, machine removed, recover refused, abandon refused). A deferred credential revoke after a successful command is not a refusal: it exits 0 and sets revoke_deferred in --output json.",
     "codes": [
       "ATTACHMENTS_ACTIVE",
       "SERVICE_CONTAINER_ABSENT",
       "SERVICE_MACHINE_REMOVED",
       "SERVICE_VOLUME_MISSING",
-      "RECOVER_REFUSED"
+      "RECOVER_REFUSED",
+      "SERVICE_ABANDON_REFUSED"
     ]
   },
   {

@@ -32,6 +32,7 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 
 | Code | Meaning | HTTP |
 | --- | --- | --- |
+| [`AGENT_UNINSTALL_INCOMPLETE`](/reference/errors/agent-uninstall-incomplete) | Beaver was partly removed from this machine | `500` |
 | [`INTERNAL`](/reference/errors/internal) | Beaver could not complete the operation | `500` |
 
 ## Invalid input
@@ -103,6 +104,7 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | --- | --- | --- |
 | [`PASSWORD_NOT_SET`](/reference/errors/password-not-set) | This account has no password yet. | `409` |
 | [`RECOVER_REFUSED`](/reference/errors/recover-refused) | The service cannot be recovered right now | `409` |
+| [`SERVICE_ABANDON_REFUSED`](/reference/errors/service-abandon-refused) | This service cannot be abandoned yet | `409` |
 | [`SERVICE_CONTAINER_ABSENT`](/reference/errors/service-container-absent) | The service's container is missing | `409` |
 | [`SERVICE_MACHINE_REMOVED`](/reference/errors/service-machine-removed) | The service's machine is no longer enrolled | `409` |
 | [`SERVICE_VOLUME_MISSING`](/reference/errors/service-volume-missing) | The service's data volume is missing | `409` |
