@@ -26,6 +26,7 @@ beaver agent <subcommand>
 | Subcommand | Purpose |
 | --- | --- |
 | `install` | Install and start `beaverd` as a background service. |
+| `uninstall` | Remove the agent — and Beaver itself — from this machine. |
 | `start` | Start the service. |
 | `stop` | Stop the service. |
 | `restart` | Restart the service. |
@@ -57,6 +58,68 @@ and `beaver cloud machines add --fix` runs it when the machine you're adding is 
 on. If the agent's user isn't allowed to use `sudo`, an administrator can run
 `sudo beaver agent privileges grant --yes`; it targets the user the agent service runs as.
 `revoke` removes only the file Beaver added.
+
+## Uninstalling
+
+`beaver agent uninstall` is `install`'s opposite, and it is the whole exit: it removes the
+`beaverd` service, the sudo rule Beaver added for it, this machine's local credentials, and the
+`beaver`/`beaverd` binaries. Before any of that, it offers to remove this machine's enrollment
+from your workspace.
+
+**What it never touches**: containers, images, volumes, Docker itself, or anything Beaver deployed
+on the machine. Removing Beaver is not the same as destroying what Beaver built, and this command
+will not quietly be both.
+
+### The order, and why it matters
+
+<Steps>
+  <Step title="Workspace enrollment">
+    Removing the machine from your workspace needs a working login and a reachable control plane,
+    so it happens **first** — sweeping credentials before it would make it impossible. If it fails
+    or you decline, the local teardown still runs and the summary prints the
+    `beaver machine remove <machine-id>` to run from another machine.
+  </Step>
+  <Step title="The beaverd service">
+    Stopped, disabled and its unit/init script deleted, through whichever service manager the
+    machine actually uses (systemd, OpenRC, SysV, runit). A machine with no service installed is
+    reported, not an error.
+  </Step>
+  <Step title="The agent's sudo rule">
+    The same removal `beaver agent privileges revoke` performs. A rule Beaver did not write is left
+    alone, and the summary says so.
+  </Step>
+  <Step title="Local credentials">
+    `~/.beaver_server.json` (this machine's credential) first, then `~/.beaver_config.json` (your
+    saved login) and `~/.beaver_onboarding.json`.
+  </Step>
+  <Step title="The binaries">
+    Last, because every earlier step may need the running binary's own code.
+  </Step>
+</Steps>
+
+Every step runs independently: one failure never skips the rest, and the summary lists every step
+with the exact command to finish by hand anything that did not happen.
+
+| Flag | Effect |
+| --- | --- |
+| `--keep-enrollment` | Leave the machine enrolled in the workspace. Use this when you intend to re-install the agent — a re-install on a still-enrolled machine keeps its name, labels and role. |
+| `--keep-login` | Remove this machine's credential but keep your saved login, for someone who manages other machines from this terminal. |
+| `--keep-credentials` | Leave all local credentials in place. |
+| `--keep-binary` | Leave the `beaver` and `beaverd` binaries. |
+| `--yes` | Uninstall without asking. |
+
+<Warning>
+  Managed services pinned to this machine keep their containers and data volumes on it. Beaver
+  simply stops managing them. The confirmation names them before you agree, and after the machine
+  is de-enrolled each one is taken off Beaver's books with
+  `beaver service delete <slug> --abandon` — see
+  [When a service's container is missing](/operate/service-container-missing).
+</Warning>
+
+<Note>
+  On Windows a running executable is locked, so the binaries are reported as a manual step with
+  their exact paths instead of failing the command.
+</Note>
 
 ## Tunnel coexistence
 
@@ -103,6 +166,14 @@ beaver agent privileges
 beaver agent privileges grant
 ```
 
+```bash Take Beaver off this machine
+beaver agent uninstall
+```
+
+```bash Remove the agent but keep the machine enrolled
+beaver agent uninstall --keep-enrollment
+```
+
 </CodeGroup>
 
 ## Results & failures
@@ -115,8 +186,12 @@ beaver agent privileges grant
 | `privileges` — sudo asks for a password | `✕ … cannot run system tasks unattended` | Run `beaver agent privileges grant` on that machine. |
 | `privileges grant` — wrong password or user not allowed to use sudo | `installing /etc/sudoers.d/beaver-agent: …` and "nothing was changed" | Retry with the right password, or have an administrator run `sudo beaver agent privileges grant --yes`. |
 | `privileges grant` — no terminal | A refusal asking for `--yes` | Run it in a terminal, or pass `--yes` where `sudo` needs no password (for example as root). |
+| `uninstall` — everything removed | A summary with every step ticked | Nothing. `beaver connect` enrols the machine again later. |
+| `uninstall` — a step failed | `AGENT_UNINSTALL_INCOMPLETE`, with the step and the command that finishes it | Run the command the summary names; the other steps already ran. |
+| `uninstall` — the de-enrolment failed | The step reported failed, with `beaver machine remove <machine-id>` | Run that from another machine; the local teardown already completed. |
 
 ## Used in
 
 - [`connect`](/cli/connect) — installs and starts the agent as part of the connect wizard.
 - [`doctor`](/cli/doctor) — verifies the agent connection as one of its checks.
+- [`machine remove`](/cli/machine) — the enrollment half of leaving, on its own.

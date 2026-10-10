@@ -100,9 +100,12 @@ provisioning.
   not enough for `--full`.
 </ParamField>
 <ParamField query="--abandon" type="boolean" default="false">
-  On `delete`: remove a service whose machine was removed from the workspace. Beaver can no
-  longer manage its data, so it asks you to type the service's name. Refused while the
-  machine is still enrolled.
+  On `delete`: forget a service whose machine Beaver cannot reach any more — either no longer
+  enrolled, or still enrolled but unreachable for longer than the grace period (7 days by
+  default). It never touches the data, so it asks you to type the service's name, and for a
+  still-enrolled machine it says plainly that the container and volume stay there. Refused with
+  `SERVICE_ABANDON_REFUSED` while the machine is connected (delete it normally) or has only just
+  gone quiet. Ignores `--wait-for-machine`.
 </ParamField>
 <ParamField query="--wait-for-machine" type="duration" default="60s">
   On `delete`/`delete-volume`: how long to wait for the service's machine to connect

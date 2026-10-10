@@ -107,9 +107,35 @@ Operations that need the container — `start`, `stop`, `restart`, `resize`, cre
 
 For anything else, wait for the machine to come back and run the command again. Only `detach` and `delete --detach-apps` accept `--revoke-later`, for when you cannot wait.
 
-### The machine was removed
+### The machine is gone for good
 
-`SERVICE_MACHINE_REMOVED`. The service's machine is no longer enrolled. Use `beaver service delete <name> --abandon`.
+`SERVICE_MACHINE_REMOVED`, or a machine that simply never came back. Either way the service has to be removable, or it sits in Beaver's books forever.
+
+`beaver service delete <name> --abandon` forgets the service. It **cannot** touch the data — that is the point: Beaver can no longer reach it. Abandon is accepted when
+
+- the machine is **no longer enrolled** (`SERVICE_MACHINE_REMOVED`), or
+- the machine is still enrolled but has been **unreachable for longer than the grace period** — 7 days by default, set platform-wide with `SERVICE_ABANDON_UNREACHABLE_AFTER_HOURS`. This is the case for a machine deleted at its cloud provider, which stops answering but stays enrolled here.
+
+It is refused with `SERVICE_ABANDON_REFUSED` when the machine is connected (delete it normally — the container is removed properly) or when it has only just gone quiet (the ordinary delete waits for it). The refusal says how long the machine has been unreachable and how much longer the wait is.
+
+#### You don't have to wait out the grace period
+
+The grace period exists because Beaver cannot know that a machine was deleted at its cloud provider — from here, "deleted" and "rebooting" look the same for the first few minutes. **If you know it is gone, say so**, and abandon becomes available at once:
+
+```bash
+beaver machine remove <machine-id>          # the machine is no longer enrolled
+beaver service delete <name> --abandon      # now accepted immediately
+```
+
+The refusal names this command for you, with the real machine ID. `beaver machine remove` lists the managed services it is about to leave unmanaged before it asks, and prints the `--abandon` line for each one afterwards.
+
+<Note>
+  Removing the machine is a hard delete of its enrollment, with its own confirmation — which is why it is a reasonable substitute for a week of waiting, and why no typo can reach it by accident. The physical machine, and anything still on it, is untouched. To take Beaver off the machine itself as well, run [`beaver agent uninstall`](/cli/agent) there.
+</Note>
+
+<Warning>
+  Abandoning a service whose machine is still enrolled leaves its container and data volume on that machine. If it ever reconnects they are still there, and Beaver no longer manages them — clean them up by hand, or re-enrol the machine and delete the service properly before abandoning it.
+</Warning>
 
 ### The data volume is missing
 

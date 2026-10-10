@@ -251,7 +251,8 @@
               "operate/notifications",
               "operate/incidents",
               "operate/drift-and-reconcile",
-              "operate/day-two-checklist"
+              "operate/day-two-checklist",
+              "operate/leaving-beaver"
             ]
           },
           {
@@ -598,6 +599,7 @@
               {
                 "group": "Internal",
                 "pages": [
+                  "reference/errors/agent-uninstall-incomplete",
                   "reference/errors/internal"
                 ]
               },
@@ -679,6 +681,7 @@
                 "pages": [
                   "reference/errors/password-not-set",
                   "reference/errors/recover-refused",
+                  "reference/errors/service-abandon-refused",
                   "reference/errors/service-container-absent",
                   "reference/errors/service-machine-removed",
                   "reference/errors/service-volume-missing",

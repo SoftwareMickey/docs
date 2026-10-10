@@ -1,0 +1,122 @@
+---
+title: "Leaving: removing a machine, or Beaver itself"
+sidebarTitle: "Leaving Beaver"
+description: "How to take one machine out of your workspace, how to remove Beaver from a machine entirely, and what each of those leaves behind."
+icon: "door-open"
+type: howto
+audience: [operator]
+interfaces: [cli]
+keywords: ["uninstall beaver", "remove beaver", "de-enroll machine", "deenroll", "unenroll machine", "remove machine from workspace", "decommission machine", "beaver agent uninstall", "machine deleted at provider", "orphaned service"]
+verified: source-reviewed
+lastVerified: 2026-10-09
+---
+
+Leaving has two halves, and they are separate on purpose:
+
+| You want to | Run | Where |
+| --- | --- | --- |
+| Take a machine out of your workspace | [`beaver machine remove <machine-id>`](/cli/machine) | anywhere you are logged in |
+| Take Beaver off a machine | [`beaver agent uninstall`](/cli/agent) | on that machine |
+
+`agent uninstall` offers to do the first as its own first step, so a normal exit is one command.
+They stay separate because each is useful alone: you de-enrol a machine you can no longer reach,
+and you uninstall the agent from a machine you are keeping.
+
+## Removing a machine from the workspace
+
+```bash
+beaver machine remove <machine-id>
+```
+
+A hard delete of the enrollment, with no undo. The machine ID and hardware fingerprint are freed,
+so the same physical machine can be enrolled again later with `beaver connect`.
+
+**The physical machine is never touched.** Beaver forgets about it; its local credentials
+(`~/.beaver_server.json`) stop working immediately, and it disappears from deployments and the
+dashboard.
+
+It refuses while the machine is still a member of a cloud or carrying live replicas — remove it
+from its cloud first, or pass `--force` to accept the orphaned rows.
+
+### What happens to managed services on it
+
+They are **listed before the prompt**, and the removal still runs. Their containers and data
+volumes stay on the machine, untouched; Beaver stops managing them. Afterwards the command prints
+the line that takes each off Beaver's books:
+
+```bash
+beaver service delete <slug> --abandon
+```
+
+<Note>
+  Managed services deliberately do **not** block the removal. The way out for a machine that was
+  deleted at its cloud provider is to remove the machine and *then* abandon its services — a
+  removal that refused here would leave you with no way to do either.
+  See [A service's container went missing](/operate/service-container-missing#the-machine-is-gone-for-good).
+</Note>
+
+## Removing Beaver from a machine
+
+```bash
+beaver agent uninstall
+```
+
+Run it on the machine itself. It removes the `beaverd` service, the sudo rule Beaver added for the
+agent, this machine's local credentials, and the `beaver`/`beaverd` binaries — and before any of
+that, it offers to remove the machine's enrollment from your workspace.
+
+**What it never touches**: containers, images, volumes, Docker itself, or anything Beaver deployed
+here. Removing Beaver is not the same as destroying what Beaver built.
+
+The de-enrolment goes first because it is the only step that needs a working login and a reachable
+control plane. If it fails or you decline, the local teardown still runs, and the summary prints
+the `beaver machine remove <machine-id>` to run from somewhere else.
+
+Every step runs independently: one failure never skips the rest, and the summary gives the exact
+command to finish by hand anything that did not happen. See
+[`beaver agent`](/cli/agent#uninstalling) for every flag and the full order.
+
+### Keeping part of it
+
+| Situation | Use |
+| --- | --- |
+| Re-installing the agent on this machine later | `--keep-enrollment` — a re-install on a still-enrolled machine keeps its name, labels and role |
+| You manage other machines from this terminal | `--keep-login` — sweeps this machine's credential, keeps your session |
+| Scripted teardown | `--yes`, and `-o json` for the summary |
+
+## A machine that is already gone
+
+If the machine was deleted at its cloud provider, it stops answering but stays enrolled here —
+Beaver has no way to tell that apart from a reboot. You cannot run `agent uninstall` on a machine
+that no longer exists, so do the enrollment half from anywhere:
+
+```bash
+beaver machine remove <machine-id>      # it is no longer enrolled
+beaver service delete <slug> --abandon  # accepted at once, no grace period
+```
+
+Without the first command, abandoning a service on that machine waits out the unreachable grace
+period — 7 days by default. Removing the machine is you asserting it is gone, which is why it
+needs its own confirmation and why it is a reasonable substitute for the wait.
+
+## Leaving Beaver entirely
+
+Removing the CLI from your machines does not close your account or delete your workspace's data.
+Deleting a workspace is a separate, owner-only action — see
+[Workspaces](/cli/workspace).
+
+## If `beaver` is already gone
+
+When the binary has been deleted but the service is still installed, there is no command left to
+run. On Linux:
+
+```bash
+sudo systemctl disable --now beaverd
+sudo rm /etc/systemd/system/beaverd.service
+sudo systemctl daemon-reload
+sudo rm -f /usr/local/bin/beaver /usr/local/bin/beaverd /etc/sudoers.d/beaver-agent
+rm -f ~/.beaver_config.json ~/.beaver_server.json ~/.beaver_onboarding.json
+```
+
+Then remove the machine record from any machine that still has a working login, with
+`beaver machine remove <machine-id>`, or from the dashboard.

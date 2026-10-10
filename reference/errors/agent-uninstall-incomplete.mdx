@@ -1,0 +1,47 @@
+---
+title: "AGENT_UNINSTALL_INCOMPLETE"
+sidebarTitle: "AGENT_UNINSTALL_INCOMPLETE"
+description: "What the AGENT_UNINSTALL_INCOMPLETE failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["AGENT_UNINSTALL_INCOMPLETE", "Beaver was partly removed from this machine", "error", "failure", "beaver help AGENT_UNINSTALL_INCOMPLETE"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Beaver was partly removed from this machine**
+
+`beaver agent uninstall` runs each teardown step independently so one failure never skips the rest. At least one step did not finish: the summary lists every step, and the repairs give the exact command to finish each one by hand.
+
+| | |
+| --- | --- |
+| Code | `AGENT_UNINSTALL_INCOMPLETE` |
+| Kind | Internal |
+| HTTP status | `500` |
+| CLI exit status | `1` |
+
+## What to do
+
+Every step of `beaver agent uninstall` runs independently, so one failure never skips the rest. The summary lists each step and gives the exact command to finish by hand whatever did not happen — most often the workspace de-enrolment, which needs a reachable control plane and can be run from another machine with `beaver machine remove MACHINE_ID`. See [`beaver agent`](/cli/agent#uninstalling).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "AGENT_UNINSTALL_INCOMPLETE",
+    "message": "Beaver was partly removed from this machine",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "Beaver was partly removed from this machine"
+  }
+}
+```
+
+Look it up offline with `beaver help AGENT_UNINSTALL_INCOMPLETE`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

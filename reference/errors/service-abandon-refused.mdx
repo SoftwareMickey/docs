@@ -1,0 +1,47 @@
+---
+title: "SERVICE_ABANDON_REFUSED"
+sidebarTitle: "SERVICE_ABANDON_REFUSED"
+description: "What the SERVICE_ABANDON_REFUSED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["SERVICE_ABANDON_REFUSED", "This service cannot be abandoned yet", "error", "failure", "beaver help SERVICE_ABANDON_REFUSED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**This service cannot be abandoned yet**
+
+Abandon forgets a service without touching its data, so it is only for a machine Beaver cannot reach any more: one that is no longer enrolled, or one that has been unreachable for longer than the grace period. A connected machine is deleted normally; a briefly offline one is waited for. The response gives how long the machine has been unreachable and how much longer the wait is.
+
+| | |
+| --- | --- |
+| Code | `SERVICE_ABANDON_REFUSED` |
+| Kind | Resource State |
+| HTTP status | `409` |
+| CLI exit status | `10` |
+
+## What to do
+
+Abandon only forgets a service — it cannot remove a container, so it is reserved for a machine Beaver cannot reach any more. If the machine is connected, `beaver service delete NAME` removes the container properly. If it is merely offline, the ordinary delete waits for it; abandon becomes available once the machine has been unreachable for the grace period (7 days by default, `SERVICE_ABANDON_UNREACHABLE_AFTER_HOURS`), and the response says how much longer that is. See [A service’s container went missing](/operate/service-container-missing#the-machine-is-gone-for-good).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "SERVICE_ABANDON_REFUSED",
+    "message": "This service cannot be abandoned yet",
+    "changed": false,
+    "conditions": [],
+    "repairs": [],
+    "request_id": "req_…",
+    "error": "This service cannot be abandoned yet"
+  }
+}
+```
+
+Look it up offline with `beaver help SERVICE_ABANDON_REFUSED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.

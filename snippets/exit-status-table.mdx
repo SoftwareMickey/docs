@@ -8,7 +8,7 @@
 | `2` | beaver config … | Usage error: a flag or argument the command does not accept. |
 | `3` | beaver config … | Local I/O error: a file could not be read or written. |
 | `4` | beaver config … | Server error while saving or loading configuration. |
-| `10` | beaver service … | Refused for data safety: the server stopped before changing anything because proceeding would risk data or leave a credential live (applications still attached, container missing, data volume missing, machine removed, recover refused). A deferred credential revoke after a successful command is not a refusal: it exits 0 and sets revoke_deferred in --output json. |
+| `10` | beaver service … | Refused for data safety: the server stopped before changing anything because proceeding would risk data or leave a credential live (applications still attached, container missing, data volume missing, machine removed, recover refused, abandon refused). A deferred credential revoke after a successful command is not a refusal: it exits 0 and sets revoke_deferred in --output json. |
 | `3` | beaver github install | You cancelled. |
 | `4` | beaver github install | GitHub denied the request. |
 | `5` | beaver github install | The install failed. |
