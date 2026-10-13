@@ -232,6 +232,7 @@
               "network/rate-limiting",
               "network/access-controls",
               "network/secrets",
+              "network/sealed-secrets",
               "network/security-checklist",
               "network/shared-responsibility"
             ]
