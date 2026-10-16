@@ -16,7 +16,6 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 
 | Code | Meaning | HTTP |
 | --- | --- | --- |
-| [`ATTACHMENTS_ACTIVE`](/reference/errors/attachments-active) | Applications are still attached to this service | `409` |
 | [`CONFLICT`](/reference/errors/conflict) | The request conflicts with an existing resource | `409` |
 | [`PASSWORD_CHANGED_ELSEWHERE`](/reference/errors/password-changed-elsewhere) | Your password was changed somewhere else just now. | `409` |
 | [`SIGNUP_FAILED`](/reference/errors/signup-failed) | An account with this email may already exist. | `409` |
@@ -103,11 +102,6 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | Code | Meaning | HTTP |
 | --- | --- | --- |
 | [`PASSWORD_NOT_SET`](/reference/errors/password-not-set) | This account has no password yet. | `409` |
-| [`RECOVER_REFUSED`](/reference/errors/recover-refused) | The service cannot be recovered right now | `409` |
-| [`SERVICE_ABANDON_REFUSED`](/reference/errors/service-abandon-refused) | This service cannot be abandoned yet | `409` |
-| [`SERVICE_CONTAINER_ABSENT`](/reference/errors/service-container-absent) | The service's container is missing | `409` |
-| [`SERVICE_MACHINE_REMOVED`](/reference/errors/service-machine-removed) | The service's machine is no longer enrolled | `409` |
-| [`SERVICE_VOLUME_MISSING`](/reference/errors/service-volume-missing) | The service's data volume is missing | `409` |
 | [`STATE_INVALID`](/reference/errors/state-invalid) | The resource is not in a state that allows this | `409` |
 
 ## Temporary
@@ -121,5 +115,4 @@ Every refusal from the CLI, the API and the Dashboard carries a stable **code**.
 | [`NETWORK_TLS`](/reference/errors/network-tls) | The server's certificate could not be verified | `503` |
 | [`NETWORK_UNREACHABLE`](/reference/errors/network-unreachable) | The Beaver server could not be reached | `503` |
 | [`RATE_LIMITED`](/reference/errors/rate-limited) | Too many requests | `429` |
-| [`SERVICE_MACHINE_UNREACHABLE`](/reference/errors/service-machine-unreachable) | The service's machine is not connected | `503` |
 | [`TEMPORARY`](/reference/errors/temporary) | A temporary condition blocked the request | `503` |

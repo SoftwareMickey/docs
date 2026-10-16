@@ -109,11 +109,8 @@ with the exact command to finish by hand anything that did not happen.
 | `--yes` | Uninstall without asking. |
 
 <Warning>
-  Managed services pinned to this machine keep their containers and data volumes on it. Beaver
-  simply stops managing them. The confirmation names them before you agree, and after the machine
-  is de-enrolled each one is taken off Beaver's books with
-  `beaver service delete <slug> --abandon` — see
-  [When a service's container is missing](/operate/service-container-missing).
+  Containers and volumes on this machine are left exactly as they are: uninstalling the agent does not stop or delete
+  your applications' data. Take a backup first if you plan to wipe the machine.
 </Warning>
 
 <Note>

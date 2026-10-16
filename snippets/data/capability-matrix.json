@@ -845,156 +845,6 @@
       "checked": "2026-10-01"
     },
     {
-      "id": "service-create",
-      "group": "Data",
-      "task": "Create a managed service",
-      "interfaces": {
-        "dashboard": {
-          "status": "none",
-          "how": "The Managed services page lists services; creating one is a CLI action",
-          "page": "/data/create-a-service"
-        },
-        "desktop": {
-          "status": "partial",
-          "how": "Add Service opens a sheet that builds the exact `beaver service create` command; Desktop shows the exact command in an action sheet; run it in a terminal",
-          "page": "/data/create-a-service"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service create`",
-          "page": "/cli/service"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01",
-      "related": [
-        {
-          "title": "Walkthrough: first service",
-          "page": "/start/first-service"
-        }
-      ]
-    },
-    {
-      "id": "service-view",
-      "group": "Data",
-      "task": "See a service's status, connection and storage",
-      "interfaces": {
-        "dashboard": {
-          "status": "partial",
-          "how": "Managed services lists every service with its type and status",
-          "page": "/interfaces/dashboard/nodes-clouds-edge"
-        },
-        "desktop": {
-          "status": "full",
-          "how": "Services → select a service (Status, Connections, Storage, Backups, Metrics, Logs, Credentials, Attached Applications)",
-          "page": "/interfaces/desktop/networks-storage-services"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service show`, `beaver service list`",
-          "page": "/cli/service"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01"
-    },
-    {
-      "id": "service-credentials",
-      "group": "Data",
-      "task": "Reveal credentials and connect locally",
-      "interfaces": {
-        "dashboard": {
-          "status": "none",
-          "how": "Use Desktop or the CLI",
-          "page": "/data/credentials-and-connection-strings"
-        },
-        "desktop": {
-          "status": "partial",
-          "how": "Services → Credentials → Reveal; Connect locally shows the tunnel command",
-          "page": "/interfaces/desktop/networks-storage-services"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service reveal`, `beaver service connect`",
-          "page": "/data/connect-locally"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01"
-    },
-    {
-      "id": "service-backup",
-      "group": "Data",
-      "task": "Back up and restore a service",
-      "interfaces": {
-        "dashboard": {
-          "status": "none",
-          "how": "Use the CLI",
-          "page": "/data/backups-and-restore"
-        },
-        "desktop": {
-          "status": "partial",
-          "how": "Services → Backups shows backup status; taking and restoring a backup is a CLI action",
-          "page": "/interfaces/desktop/networks-storage-services"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service backup`, `beaver service restore`",
-          "page": "/data/backups-and-restore"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01"
-    },
-    {
-      "id": "service-attach",
-      "group": "Data",
-      "task": "Attach a service to an application",
-      "interfaces": {
-        "dashboard": {
-          "status": "none",
-          "how": "Use the CLI",
-          "page": "/data/create-a-service"
-        },
-        "desktop": {
-          "status": "partial",
-          "how": "Services → Attached Applications → Connect an app shows the command",
-          "page": "/data/create-a-service"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service attach`",
-          "page": "/cli/service"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01"
-    },
-    {
-      "id": "service-resize",
-      "group": "Data",
-      "task": "Resize a service",
-      "interfaces": {
-        "dashboard": {
-          "status": "none",
-          "how": "Use the CLI",
-          "page": "/data/resize-and-upgrade"
-        },
-        "desktop": {
-          "status": "none",
-          "how": "Use the CLI",
-          "page": "/data/resize-and-upgrade"
-        },
-        "cli": {
-          "status": "full",
-          "how": "`beaver service resize`",
-          "page": "/data/resize-and-upgrade"
-        }
-      },
-      "verified": "source-reviewed",
-      "checked": "2026-10-01"
-    },
-    {
       "id": "domain",
       "group": "Networking",
       "task": "Add a custom domain",
@@ -1185,7 +1035,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Dashboard home (applications, machines, services, edge) and Deployments",
+          "how": "Dashboard home (applications, machines, edge) and Deployments",
           "page": "/interfaces/dashboard/tour"
         },
         "desktop": {
@@ -1808,7 +1658,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Networks and Storage (assembled from your machines and services)",
+          "how": "Networks and Storage (assembled from your machines)",
           "page": "/interfaces/desktop/networks-storage-services"
         },
         "cli": {
@@ -1853,6 +1703,44 @@
         {
           "title": "Builds",
           "page": "/deploy/builds"
+        }
+      ]
+    },
+    {
+      "id": "connect-database",
+      "group": "Deploy",
+      "task": "Connect an app to a database",
+      "interfaces": {
+        "dashboard": {
+          "status": "partial",
+          "how": "Set the connection string as a variable on the deployment's Environment tab; Beaver does not create or run the database",
+          "page": "/start/first-database"
+        },
+        "desktop": {
+          "status": "none",
+          "how": "Use the Dashboard or CLI",
+          "page": "/start/first-database"
+        },
+        "cli": {
+          "status": "full",
+          "how": "Pass the connection string with `beaver deploy --env-file`; run the database as a container with `beaver compose deploy`",
+          "page": "/start/first-database"
+        }
+      },
+      "verified": "source-reviewed",
+      "checked": "2026-10-16",
+      "related": [
+        {
+          "title": "Bring your own database",
+          "page": "/data/bring-your-own-database"
+        },
+        {
+          "title": "Run a database container",
+          "page": "/data/run-a-database-container"
+        },
+        {
+          "title": "Connection strings and secrets",
+          "page": "/data/connection-strings-and-secrets"
         }
       ]
     },

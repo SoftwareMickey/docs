@@ -1,7 +1,7 @@
 ---
 title: "Why was my machine skipped?"
 sidebarTitle: "Machine skipped by policy"
-description: "A deployment, replica, managed service or build did not land on a machine you expected — the reason codes Beaver reports and how to fix each."
+description: "A deployment, replica or build did not land on a machine you expected — the reason codes Beaver reports and how to fix each."
 icon: "triangle-alert"
 type: troubleshooting
 audience: [developer, operator]
@@ -13,7 +13,7 @@ lastVerified: 2026-10-06
 
 ## What you see
 
-A deployment, scale-up, managed service or build avoids a machine you expected, or is refused with one of:
+A deployment, scale-up or build avoids a machine you expected, or is refused with one of:
 
 ```
 machine <name> cannot host applications in cloud "<cloud>" (policy_hosting_disabled): run `beaver cloud machine policy <name> --cloud <cloud> --host=on`

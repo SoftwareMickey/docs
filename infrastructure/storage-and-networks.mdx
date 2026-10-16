@@ -19,7 +19,7 @@ Two questions come up constantly: **will my data survive** and **what can reach 
 [Persistent volumes](/data/persistent-volumes) and [Beaver Cloud](/infrastructure/beaver-cloud).
 
 <Note>
-Beaver has no `beaver network` or `beaver storage` command group. Networks and volumes come from other things — a cloud's private network, a Compose stack, a managed service, or a
+Beaver has no `beaver network` or `beaver storage` command group. Networks and volumes come from other things — a cloud's private network, a Compose stack, or a
 machine's own Docker — and are viewed and authored through those.
 </Note>
 
@@ -27,7 +27,6 @@ machine's own Docker — and are viewed and authored through those.
 
 | Kind | What it is | Where you see it |
 | --- | --- | --- |
-| **Service volume** | The data volume of a managed service | `beaver service show`; Desktop **Storage** and the service's Storage tab |
 | **Compose stack volume** | Named volumes declared by a stack | `beaver compose stack volumes <stack-id>`; Dashboard **Composers → volumes** |
 | **Host volume / bind mount** | A named volume, or a host path mapped into a container, on one machine | Desktop machine **Volumes** tab; `beaver config volume` and `beaver config bind` author them |
 
@@ -37,14 +36,12 @@ permanently. A bind mount ties data to one machine: if the workload moves, the d
 </Warning>
 
 <Tabs>
-  <Tab title="Dashboard">Compose volumes are on a stack's **volumes** page; a service's storage is on its page under **Managed services**.</Tab>
-  <Tab title="Desktop">**Storage** lists volumes assembled from your managed services and machines; open one to see whether it belongs to a service or a host and to jump to its machine or service. Desktop never deletes a volume.</Tab>
+  <Tab title="Dashboard">Compose volumes are on a stack's **volumes** page.</Tab>
+  <Tab title="Desktop">**Storage** lists volumes assembled from your machines; open one to see what mounts it and to jump to its machine. Desktop never deletes a volume.</Tab>
   <Tab title="CLI">
     ```bash
-    beaver service show paperclip-db                # includes its storage
     beaver compose stack volumes <stack-id>
     beaver config volume --help                     # author a required volume in .beaver/config.yml
-    beaver service delete-volume paperclip-db       # permanently destroys a *deleted* service's data
     ```
   </Tab>
 </Tabs>

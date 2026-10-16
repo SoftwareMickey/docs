@@ -1,0 +1,63 @@
+---
+title: "Your first app with a database"
+sidebarTitle: "5. First database"
+description: "Give your deployed app a database: create one at a hosted provider, store its connection string as a sealed variable, and redeploy."
+keywords: ["first database", "database url", "connect a database", "postgres", "connection string", "getting started"]
+icon: "database"
+type: tutorial
+audience: [developer]
+interfaces: [dashboard, cli]
+time: "10 min"
+---
+
+## What you'll do
+
+Give the application you [deployed](/start/first-deploy) a database. Beaver deploys and secures your app; **your data lives where you choose**, so you create the database at a
+provider, hand its connection string to the app as a sealed variable, and redeploy. Prefer to run the database yourself on your own machine? See
+[Run a database container](/data/run-a-database-container).
+
+## Before you start
+
+A running [deployment](/start/first-deploy) whose app reads its database address from an environment variable such as `DATABASE_URL`, and a free account with a hosted
+Postgres provider (Neon, Supabase and others — see [Bring your own database](/data/bring-your-own-database)).
+
+## Steps
+
+<Steps>
+  <Step title="Create the database">
+    At the provider, create a database and a dedicated login for the app, then copy the connection string. Make sure it ends in `?sslmode=require`.
+  </Step>
+  <Step title="Store it as a variable">
+    <Tabs>
+      <Tab title="Dashboard">Open the deployment's **Environment** tab and add `DATABASE_URL` with the string as its value.</Tab>
+      <Tab title="CLI">
+        ```bash
+        echo 'DATABASE_URL=postgresql://app:<password>@<host>/app?sslmode=require' > .env.production
+        beaver deploy --cloud paperclip-prod --env-file .env.production
+        ```
+        Keep `.env.production` out of git. The value is sealed for the machine that runs the app and cannot be read back from Beaver.
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Run your migrations">
+    Run them from your pipeline or a one-off job against the same `DATABASE_URL`, then reload your app.
+  </Step>
+</Steps>
+
+## Verify it worked
+
+The app can read and write its data. `beaver environment vars list <container>` shows `DATABASE_URL` by name, never its value.
+
+## If it fails
+
+- **Connection refused or timed out:** the provider may allow only listed addresses. Allow your machine's public IP at the provider, and check any outbound
+  [firewall](/network/firewall) rule.
+- **SSL required:** add `?sslmode=require` to the string.
+- **Changed a value and nothing happened:** variables apply on the next release — `beaver container <name> redeploy`.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connection strings and secrets" icon="key" href="/data/connection-strings-and-secrets">Rotate it and know what can read it.</Card>
+  <Card title="Back up your own data" icon="archive-restore" href="/data/backups-yourself">Backups are yours, wherever the data lives.</Card>
+</CardGroup>

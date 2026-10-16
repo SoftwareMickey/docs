@@ -1,6 +1,6 @@
 ---
 title: "Projects"
-description: "A project groups one application's environments, deployments, and services — the unit almost everything else nests inside."
+description: "A project groups one application's environments and deployments — the unit almost everything else nests inside."
 sidebarTitle: "Projects"
 icon: "folder"
 type: concept
@@ -8,15 +8,14 @@ audience: [developer]
 interfaces: [dashboard, desktop, cli]
 ---
 
-A **project** groups everything for one application: its environments, deployments, and any
-services attached to it. It's the unit most other concepts nest inside — see [How Beaver
+A **project** groups everything for one application: its environments and deployments. It's the unit most other concepts nest inside — see [How Beaver
 fits together](/start/how-beaver-fits-together) for the full tree.
 
 In the CLI: `beaver project list`; `beaver project show <project-id>`.
 
 ## Why this matters
 
-Once you have more than one application, keeping their environments and services from
+Once you have more than one application, keeping their environments from
 bleeding into each other matters — a `staging` environment in one project has nothing to do
 with a `staging` environment in another. The project boundary is what keeps that clean, and
 it's usually the first thing you create.

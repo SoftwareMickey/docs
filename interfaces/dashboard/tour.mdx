@@ -49,8 +49,7 @@ Some screens are reached from a link on another page, not from the sidebar:
 | Screen | Reached from |
 | --- | --- |
 | **Incidents** | The home summary's "Open incidents", and deployment pages |
-| **Clouds** (Beaver Clouds) | Deployment details and the managed services page |
-| **Managed services** | The home summary and the **Create managed service** shortcut |
+| **Clouds** (Beaver Clouds) | Deployment details |
 | **Deployment history** | **Recent deployments → View all deployments** on the home screen |
 
 Other pages open from emails, links or a prompt, and have no menu entry:
@@ -69,7 +68,7 @@ Other pages open from emails, links or a prompt, and have no menu entry:
 When you open a deployment, the sidebar collapses to icons and the deployment gets its own tab bar: **Overview**, **Deployments**, **Domains**, **Logs**, **Traffic**, **Load Balancing**, **Performance**, **Firewall**, **Environments**, **Github Branch** and **Settings**. They are described in
 [Projects, deployments and containers](/interfaces/dashboard/projects-and-deployments).
 
-<Shot name="dashboard/home" alt="The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, services, requests and incidents, then panels for applications, infrastructure, managed services and edge above recent deployments." />
+<Shot name="dashboard/home" alt="The Dashboard Overview: alert banners, a row of summary tiles for projects, workloads, machines, requests and incidents, then panels for applications, infrastructure and edge above recent deployments." />
 
 ## The home screen
 
@@ -79,16 +78,15 @@ The **Dashboard** page summarises the workspace. A banner at the top says **Ever
 | --- | --- |
 | **Applications & workloads** | Running, Deploying, Failed and Total |
 | **Infrastructure** | Machine health: Healthy, Degraded, Offline; Firing alerts |
-| **Managed services** | Healthy and Unhealthy services |
 | **Edge** | Connected apps, Healthy origins, Unverified |
 | **Recent activity** | The latest workspace activity, with **View all activity** |
 | **Recent deployments** | The latest deployments, with **View all deployments** |
 | **Usage** | Plan usage, with **View billing** |
 
-The header offers **Deploy application**, **Create project**, **Connect machine** and **Create managed service**. In an empty workspace the screen guides you through *Connect GitHub*, *Connect a machine* and *Deploy your first application*.
+The header offers **Deploy application**, **Create project** and **Connect machine**. In an empty workspace the screen guides you through *Connect GitHub*, *Connect a machine* and *Deploy your first application*.
 
 <Warning>
-**Connect machine** does not enrol a machine from the browser: enrolment is done with [`beaver connect`](/infrastructure/connect-a-machine) on the machine, and **Create managed service** opens the Managed services list — creating a service is a [CLI action](/data/create-a-service).
+**Connect machine** does not enrol a machine from the browser: enrolment is done with [`beaver connect`](/infrastructure/connect-a-machine) on the machine.
 </Warning>
 
 When the live connection to Beaver drops, a **Reconnecting — live updates are paused** notice appears; the numbers refresh once it is back.

@@ -10,7 +10,7 @@ audience: [evaluator, developer, team-lead, operator, security]
 A **concept** page explains *why*; it never tells you which button to press or command to run. Each one lives in the section where you need it — under **Deploy**, **Infrastructure**,
 **Data**, **Networking & security**, **Operate**, **Teams** or **Alie** — and every how-to links to its concept. Read these first if you are new:
 
-1. [How Beaver fits together](/start/how-beaver-fits-together) — workspaces, projects, environments, machines, clouds, deployments and services in one picture.
+1. [How Beaver fits together](/start/how-beaver-fits-together) — workspaces, projects, environments, machines, clouds and deployments in one picture.
 2. [What is Beaver?](/start/what-is-vectorihub) — what it handles for you, and what it does not.
 
 ## Start here
@@ -26,7 +26,7 @@ A **concept** page explains *why*; it never tells you which button to press or c
   <Card title="Integrations" icon="rocket" href="/deploy/integrations">Connect GitHub so Beaver can see your repositories, deploy from them, and keep pulling new commits.</Card>
   <Card title="Configuration" icon="rocket" href="/deploy/configuration">Your deployment settings live in one local file, and Beaver keeps a saved copy per container — the two can drift, and Beaver shows you exactly how.</Card>
   <Card title="Deployments" icon="rocket" href="/deploy/deployment-lifecycle">A deployment is one service running in one environment — deploying is shipping a new build to it, with your choice of how the switch happens.</Card>
-  <Card title="Projects" icon="rocket" href="/deploy/projects">A project groups one application's environments, deployments, and services — the unit almost everything else nests inside.</Card>
+  <Card title="Projects" icon="rocket" href="/deploy/projects">A project groups one application's environments and deployments — the unit almost everything else nests inside.</Card>
   <Card title="Building applications" icon="rocket" href="/deploy/builds-and-images">Beaver builds and deploys from a Dockerfile you provide — every language and framework works the same way.</Card>
   <Card title="Containers and replicas" icon="rocket" href="/deploy/containers-and-replicas">A deployment is the definition; a container is one running copy of it. Replica count is how many copies exist.</Card>
   <Card title="Scaling and resources" icon="rocket" href="/deploy/scaling-and-resources">Two separate levers control capacity: how many copies run, and how much each one gets. Fixed mode holds a count; automatic mode holds a range.</Card>
@@ -39,11 +39,11 @@ A **concept** page explains *why*; it never tells you which button to press or c
   <Card title="Beaver Cloud" icon="server" href="/infrastructure/beaver-cloud">Group your connected machines into one pool, share capacity and a private network across them, and deploy without naming a specific machine.</Card>
 </CardGroup>
 
-## Services and data
+## Data
 
 <CardGroup cols={2}>
   <Card title="Persistent storage" icon="database" href="/data/persistent-volumes">By default, anything a container writes is lost when it's replaced. Volumes and bind mounts are the two ways to make specific paths survive that.</Card>
-  <Card title="Services" icon="database" href="/data/services-and-persistence">Attach a managed database, cache, or similar backing component to your application instead of running and maintaining it yourself.</Card>
+  <Card title="Your data" icon="database" href="/data">Beaver deploys and secures your app; your database is hosted elsewhere or runs as a container you operate.</Card>
 </CardGroup>
 
 ## Networking and security

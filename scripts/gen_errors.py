@@ -39,18 +39,17 @@ CLASS_NEXT = {
 }
 
 
-# Guidance specific to one code, where the class-wide sentence would be too vague to act on. Codes of
-# features/services-durability point at the page that explains the whole situation (its anchors are checked).
+# Guidance specific to one code, where the class-wide sentence would be too vague to act on.
 CODE_NEXT = {
-    "ATTACHMENTS_ACTIVE": "The response lists every attached application and the commands that follow. Detach them one by one, or run `beaver service delete NAME --detach-apps` to detach them all and delete in one step. See [A service's container went missing](/operate/service-container-missing#applications-are-still-attached).",
-    "SERVICE_CONTAINER_ABSENT": "Run `beaver service check NAME`, then `beaver service recover NAME` to recreate the container from its data volume. Nothing was dispatched or changed. See [A service's container went missing](/operate/service-container-missing#the-container-is-missing).",
-    "SERVICE_MACHINE_UNREACHABLE": "Nothing was changed — the machine is asked before anything is dispatched. `delete` and `delete-volume` wait for the machine (`--wait-for-machine`, 60s by default) and only ask you to confirm once it is connected, so a refusal here means you were never asked and nothing was destroyed. Otherwise wait until the machine is online and run the command again; for a detach you cannot wait for, `--revoke-later` records it now — the application's credential may still work until the machine is back. See [A service's container went missing](/operate/service-container-missing#the-machine-is-not-connected).",
-    "SERVICE_MACHINE_REMOVED": "The machine is no longer enrolled, so its data can no longer be reached. `beaver service delete NAME --abandon` removes the service from Beaver and asks you to type its name. See [A service's container went missing](/operate/service-container-missing#the-machine-is-gone-for-good).",
-    "SERVICE_VOLUME_MISSING": "Recover never creates an empty volume. List backups with `beaver service backup list NAME` and restore one with `beaver service restore NAME --backup ID`. See [A service's container went missing](/operate/service-container-missing#the-data-volume-is-missing).",
     "AGENT_UNINSTALL_INCOMPLETE": "Every step of `beaver agent uninstall` runs independently, so one failure never skips the rest. The summary lists each step and gives the exact command to finish by hand whatever did not happen \u2014 most often the workspace de-enrolment, which needs a reachable control plane and can be run from another machine with `beaver machine remove MACHINE_ID`. See [`beaver agent`](/cli/agent#uninstalling).",
-    "SERVICE_ABANDON_REFUSED": "Abandon only forgets a service \u2014 it cannot remove a container, so it is reserved for a machine Beaver cannot reach any more. If the machine is connected, `beaver service delete NAME` removes the container properly. If it is merely offline, the ordinary delete waits for it; abandon becomes available once the machine has been unreachable for the grace period (7 days by default, `SERVICE_ABANDON_UNREACHABLE_AFTER_HOURS`), and the response says how much longer that is. See [A service\u2019s container went missing](/operate/service-container-missing#the-machine-is-gone-for-good).",
-    "RECOVER_REFUSED": "The response carries a `refusal_code` and the next command. See [A service's container went missing](/operate/service-container-missing#recover-was-refused).",
 }
+
+
+# services-removal V18: managed services were removed. The server's registry still lists these codes until it drops them (V32/V44), but
+# their pages are gone: every old URL redirects to NOTICE, and the codes are neither generated, indexed nor in the navigation.
+REMOVED = {"ATTACHMENTS_ACTIVE", "RECOVER_REFUSED", "SERVICE_ABANDON_REFUSED", "SERVICE_CONTAINER_ABSENT", "SERVICE_MACHINE_REMOVED",
+           "SERVICE_MACHINE_UNREACHABLE", "SERVICE_VOLUME_MISSING"}
+NOTICE = "reference/errors/services-removed.mdx"  # hand-written, not generated; the one page every removed surface points at
 
 
 def slug(code):
@@ -123,7 +122,7 @@ def exit_table(rows):
 
 
 def build():
-    codes = load("problem-codes.json")
+    codes = [e for e in load("problem-codes.json") if e["name"] not in REMOVED]
     examples = {k: v for k, v in load("problem-examples.json").items() if not k.startswith("_")}
     rows = load("exit-status.json")
     files = {"reference/errors/index.mdx": index_page(codes), "snippets/exit-status-table.mdx": exit_table(rows)}
@@ -133,7 +132,7 @@ def build():
 
 
 def nav_pages(codes):
-    return ["reference/errors/index"] + [f"reference/errors/{slug(e['name'])}" for e in sorted(codes, key=lambda e: e["name"])]
+    return ["reference/errors/index", "reference/errors/services-removed"] + [f"reference/errors/{slug(e['name'])}" for e in sorted(codes, key=lambda e: e["name"])]
 
 
 def nav_tree(codes):
@@ -154,7 +153,7 @@ def nav_tree(codes):
             ch = names[i:i + 10]
             span = f"{ch[0][0]}–{ch[-1][0]}" if ch[0][0] != ch[-1][0] else ch[0][0]
             groups.append({"group": f"{title} · {span}", "pages": [f"reference/errors/{slug(n)}" for n in ch]})
-    return ["reference/errors/index"] + groups
+    return ["reference/errors/index", "reference/errors/services-removed"] + groups
 
 
 def main():
@@ -166,7 +165,7 @@ def main():
     files, codes, examples = build()
     bad = 0
     check = "--check" in sys.argv
-    names = {e["name"] for e in codes}
+    names = {e["name"] for e in codes} | REMOVED
     for k in examples:
         if k not in names:
             print(f"ERROR  errors: problem-examples.json has an example for {k}, which is not a registered code"); bad += 1
@@ -181,7 +180,7 @@ def main():
     # stale pages for codes that no longer exist
     d = f"{ROOT}/reference/errors"
     if os.path.isdir(d):
-        want = {os.path.basename(k) for k in files if k.startswith("reference/errors/")}
+        want = {os.path.basename(k) for k in files if k.startswith("reference/errors/")} | {os.path.basename(NOTICE)}
         for f in sorted(os.listdir(d)):
             if f.endswith(".mdx") and f not in want:
                 if check:

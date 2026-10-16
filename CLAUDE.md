@@ -35,7 +35,7 @@ than hand-editing JSON. `docs.json` also controls theme, logo, navbar, footer, `
 
 **Tabs, in order** (each tab's first page is a `type: hub` page, `<tab>/index.mdx`): **Get started** (`start/`, `install/`,
 home `index.mdx`) · **Deploy** (`deploy/`: sources (incl. `bring-your-own-app`), configure, ship, understand) · **Infrastructure** (`infrastructure/`: machines, Beaver Cloud, providers) ·
-**Data** (`data/`: services catalog under `data/services/*`, operating services) · **Networking & security** (`network/`) ·
+**Data** (`data/`: bring-your-own-database, run-a-database-container, connection strings, backing up your own data — Beaver does not run databases) · **Networking & security** (`network/`) ·
 **Operate** (`operate/`: observe, recover, the troubleshooting pages) · **Teams** (`teams/`: workspaces, access, identity,
 plans) · **Alie** (`alie/`) · **Reference** (`cli.mdx` + `cli/*` — the command reference, one page per command group,
 produced by `features/docs`). Concepts are not a tab: each concept page lives in the tab where it is used, in an
@@ -60,9 +60,8 @@ fires). `scripts/check-commands.py` checks every `beaver` command and flag writt
 **Old structure retired**: the `Guides`/`CLI` two-tab layout, the flat 38-page `Concepts` group, `guides/`, `concepts/`,
 `deploying/`, `infrastructure-setup/`, root-level `connect.mdx`/`machine-roles.mdx`/… all moved (see the migration map).
 Do not add framework pages: the contract is a Dockerfile and a port. `recipes/` holds the sample apps CI builds (`python3 scripts/recipes/run.py`).
-Adding a provider: `infrastructure/<provider>.mdx` + a card on `infrastructure/providers.mdx`. Adding a service type:
-`data/services/<type>.mdx` + a card on `data/services.mdx` — confirm supported versions against `beaver service catalog`'s
-live output, never guess.
+Adding a provider: `infrastructure/<provider>.mdx` + a card on `infrastructure/providers.mdx`.
+Managed services were removed (`features/rollback/services-removal` in beaver-desktop); do not document `beaver service`, a service catalog or any "managed database" — the one page every old surface points at is `reference/errors/services-removed`, and `scripts/check-services-freeze.py` fails on a link to a removed page.
 
 Note: there used to be a separate "Infrastructure Providers" nav group (`providers/…`) describing VectorIHub-provisioned
 dashboard deployments. It was removed and replaced by the bring-your-own-machine / `beaver connect` model — do not recreate it.

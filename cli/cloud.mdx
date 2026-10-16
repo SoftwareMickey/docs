@@ -174,7 +174,7 @@ A cloud member is always on the private network. Whether the cloud may also send
   Cannot be combined with `--host` / `--build`.
 </ParamField>
 <ParamField query="--host" type="string" default="">
-  `on` or `off`: whether the machine may run applications (deployments, replicas, managed services). Turning it `off` never stops anything running — the machine is cordoned.
+  `on` or `off`: whether the machine may run applications (deployments and replicas). Turning it `off` never stops anything running — the machine is cordoned.
 </ParamField>
 <ParamField query="--build" type="string" default="">
   `on` or `off`: whether the machine may build images. Builds already running finish; queued ones are cancelled.
@@ -439,8 +439,7 @@ every healthy replica's address on the cloud's private network — this is what 
 services should use to reach it, rather than a specific machine's address. `containers`
 gives you the reverse view: where each replica actually landed.
 
-Distinct from [`beaver service`](/cli/service) (provisioning and operating managed stateful
-dependencies like databases) and [`beaver containers`](/cli/containers) (every deployed
+Distinct from [`beaver containers`](/cli/containers) (every deployed
 container across your whole workspace, not scoped to one cloud).
 
 ## Consequences

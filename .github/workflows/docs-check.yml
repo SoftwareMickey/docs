@@ -21,6 +21,11 @@ jobs:
       - run: python3 scripts/test_check_docs.py
       - name: Generated pages are current
         run: python3 scripts/gen_capability_matrix.py --check
+      - name: Managed services stay removed (no link to a removed page; every old URL redirects in one hop)
+        run: |
+          python3 scripts/check-services-freeze.py
+          git fetch --depth=1 --quiet origin tag services-final-2026-10
+          python3 scripts/check-removed-redirects.py
       - name: Disclosure sweep (and its leak fixture)
         run: |
           python3 scripts/check-disclosure.py

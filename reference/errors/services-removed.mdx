@@ -1,0 +1,45 @@
+---
+title: "Managed services were removed"
+sidebarTitle: "Managed services removed"
+description: "Beaver no longer runs managed databases, caches or brokers. What changed, what is not affected, and what to use instead."
+keywords: ["managed services removed", "beaver service", "managed database", "removed", "SERVICES_REMOVED"]
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+---
+
+Beaver no longer offers **managed services** — the databases, caches and brokers it used to create, attach, back up and restore for you. `beaver service` (and `beaver services`) no
+longer does anything except show this page. Beaver is a platform that deploys and secures applications on machines you own; it is not a database operator, and operating other
+people's data well is a different job from the one we want to be good at.
+
+## What to do now
+
+<CardGroup cols={2}>
+  <Card title="Bring your own database" icon="cloud" href="/data/bring-your-own-database">Use Neon, Supabase, RDS or any hosted database; keep the connection string as a sealed variable.</Card>
+  <Card title="Run a database container" icon="container" href="/data/run-a-database-container">Deploy the official image with a volume, next to your app. You own backups and upgrades.</Card>
+</CardGroup>
+
+## What is not affected
+
+- **Your containers and volumes keep running.** Removing the feature does not stop, move or delete anything on your machines. A database that was a managed service is an ordinary
+  container with an ordinary volume; Beaver simply no longer manages it.
+- **Your data stays where it is.** Nothing is deleted on your behalf. Back it up yourself ([Back up your own data](/data/backups-yourself)) before you change anything.
+- Applications, deployments, Compose stacks, volumes, networks, domains and everything else on your machines work as before.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I still deploy a database?">
+    Yes, as a container through [Compose](/data/run-a-database-container) or any deploy that runs the official image with a persistent volume. What changed is who operates it: you do.
+  </Accordion>
+  <Accordion title="What about my existing service?">
+    It keeps running as a container. Take a backup you control, note its connection details, and decide whether to keep it as an ordinary container or move to a hosted database.
+    Beaver can no longer create backups, restore, resize or rotate it for you.
+  </Accordion>
+  <Accordion title="Will this come back?">
+    It is not on any roadmap.
+  </Accordion>
+  <Accordion title="I got here from a command">
+    `beaver service` (and `beaver services`) prints a short notice with a link to this page and changes nothing.
+  </Accordion>
+</AccordionGroup>

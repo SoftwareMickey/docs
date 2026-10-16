@@ -55,16 +55,6 @@
     },
     {
       "surface": "desktop",
-      "name": "services-list",
-      "steps": [
-        {
-          "click": "Services"
-        }
-      ],
-      "alt": "The Services section listing managed services with type, status and machine."
-    },
-    {
-      "surface": "desktop",
       "name": "networks-list",
       "steps": [
         {
@@ -136,32 +126,12 @@
           "maxY": 850
         },
         {
-          "click": "Open \u2192",
+          "click": "Open →",
           "maxY": 850
         }
       ],
       "expectText": "Capacity",
       "alt": "A Beaver Cloud's detail view on the Overview tab: nodes, applications, health, network and free CPU, memory and storage, with seven tabs along the top."
-    },
-    {
-      "surface": "desktop",
-      "name": "service-connections",
-      "steps": [
-        {
-          "click": "Services",
-          "maxY": 850
-        },
-        {
-          "click": "payments-db",
-          "maxY": 850
-        },
-        {
-          "click": "Connections",
-          "maxY": 850
-        }
-      ],
-      "expectText": "Connect locally",
-      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel."
     },
     {
       "surface": "desktop",
@@ -230,14 +200,6 @@
       "settleMs": 7000,
       "expectText": "Connected apps",
       "alt": "The Beaver Edge page listing connected apps and the health of their origins."
-    },
-    {
-      "surface": "dashboard",
-      "name": "managed-services",
-      "url": "/managed-services",
-      "settleMs": 7000,
-      "expectText": "paperclip-db",
-      "alt": "The Managed services page listing each database and cache with its type and status."
     },
     {
       "surface": "dashboard",

@@ -21,13 +21,13 @@ import { Shot } from "/snippets/shot.mdx";
 
 | Area | Shows | Actions | How-to |
 | --- | --- | --- | --- |
-| **Environments** | Each environment, its branch, and its services | **Create environment** (name, branch mapping, description) | [Environments](/deploy/environments) |
+| **Environments** | Each environment, its branch, and its deployments | **Create environment** (name, branch mapping, description) | [Environments](/deploy/environments) |
 | **Environment variables** | Keys and values for the environment, with a visibility toggle | Filter, add, edit, delete, upload a `.env` file | [Environment variables](/deploy/environment-variables) |
 | **Settings** | The project name and general details | **Delete Project** under the *Danger Zone* — you must type the project name | [Projects](/deploy/projects) |
 
 A project's name is required and appears in listings; keep related deployments, environments and resources together.
 
-<Shot name="dashboard/projects" alt="The Projects page listing the workspace's projects with their containers and services." />
+<Shot name="dashboard/projects" alt="The Projects page listing the workspace's projects with their containers." />
 
 ## Deploying
 
@@ -83,7 +83,7 @@ The Dashboard also contains a **Migrate** window on a deployment (to AWS or to y
 
 | Task | CLI | Desktop |
 | --- | --- | --- |
-| List containers | `beaver containers` | **Machines → machine → Containers**; **Services** for managed services |
+| List containers | `beaver containers` | **Machines → machine → Containers** |
 | Inspect a deployment | `beaver inspect` | A container's **Overview** |
 | Roll back | `beaver container <name> rollback` | Not available — use the Dashboard or CLI |
 

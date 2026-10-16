@@ -38,22 +38,11 @@ dashboard.
 It refuses while the machine is still a member of a cloud or carrying live replicas — remove it
 from its cloud first, or pass `--force` to accept the orphaned rows.
 
-### What happens to managed services on it
+### What happens to its containers and data
 
-They are **listed before the prompt**, and the removal still runs. Their containers and data
-volumes stay on the machine, untouched; Beaver stops managing them. Afterwards the command prints
-the line that takes each off Beaver's books:
-
-```bash
-beaver service delete <slug> --abandon
-```
-
-<Note>
-  Managed services deliberately do **not** block the removal. The way out for a machine that was
-  deleted at its cloud provider is to remove the machine and *then* abandon its services — a
-  removal that refused here would leave you with no way to do either.
-  See [A service's container went missing](/operate/service-container-missing#the-machine-is-gone-for-good).
-</Note>
+Nothing. Containers and volumes on the machine stay exactly as they are; removing the enrollment only stops Beaver managing the machine. If a database ran there as a
+plain container ([Run a database container](/data/run-a-database-container)), it keeps running and its volume is untouched — back it up yourself before you wipe the machine
+([Back up your own data](/data/backups-yourself)).
 
 ## Removing Beaver from a machine
 
@@ -92,12 +81,9 @@ that no longer exists, so do the enrollment half from anywhere:
 
 ```bash
 beaver machine remove <machine-id>      # it is no longer enrolled
-beaver service delete <slug> --abandon  # accepted at once, no grace period
 ```
 
-Without the first command, abandoning a service on that machine waits out the unreachable grace
-period — 7 days by default. Removing the machine is you asserting it is gone, which is why it
-needs its own confirmation and why it is a reasonable substitute for the wait.
+Removing the machine is you asserting it is gone, which is why it needs its own confirmation.
 
 ## Leaving Beaver entirely
 
