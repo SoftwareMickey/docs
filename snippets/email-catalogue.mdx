@@ -112,36 +112,6 @@ Connected machine status, capacity and agent health.
 | Disk predicted full | `machine.storage_predicted_full` | People who can operate that cloud | Yes | No — inbox only; you can turn email on |
 | Disk nearly full | `machine.storage_pressure` | People who can operate that cloud, and owners and admins of workspaces it affects | Yes | No — inbox only; you can turn email on |
 
-### Services & databases
-
-Managed services, databases and their backups.
-
-| Email | Id | Who receives it | Can you turn it off? | Emailed by default |
-| --- | --- | --- | --- | --- |
-| Backup failed | `service.backup_failed` | Workspace owners and admins | Yes | Yes |
-| Backup started | `service.backup_started` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Backup completed | `service.backup_succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Quorum lost | `service.cluster_quorum_lost` | Workspace owners and admins | Yes | Yes |
-| Quorum restored | `service.cluster_quorum_restored` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Connections near limit | `service.connection_limit_approaching` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Credential rotated | `service.credential_rotated` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Integrity check failed | `service.data_integrity_check_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Failover completed | `service.failover_completed` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Failover started | `service.failover_initiated` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Off-machine backup unavailable | `service.offnode_backup_unavailable` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Provisioning failed | `service.provisioning_failed` | The person it concerns, and workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Ready | `service.provisioning_succeeded` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Recovered | `service.recovered` | The person it concerns | Yes | No — inbox only; you can turn email on |
-| Replica lag | `service.replica_lag` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Restore failed | `service.restore_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Restore started | `service.restore_started` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Restore completed | `service.restore_succeeded` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Storage threshold | `service.storage_threshold` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Unhealthy | `service.unhealthy` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Upgrade available | `service.upgrade_available` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Rehearsal failed | `service.upgrade_rehearsal_failed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-| Rehearsal passed | `service.upgrade_rehearsal_passed` | Workspace owners and admins | Yes | No — inbox only; you can turn email on |
-
 ### Cloud infrastructure
 
 Cloud accounts, instances and provisioning.
