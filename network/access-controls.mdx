@@ -40,8 +40,7 @@ beaver firewall visibility set dep_abc123 --public
 `--private` makes the service unreachable from outside your private network **immediately**. Confirm nothing external depends on it first.
 </Warning>
 
-Managed [services](/data) are never published on a public port; you reach them from your own machine through an authenticated tunnel
-([Connect locally](/data/connect-locally)). To see what is publicly reachable on a machine and whether it is protected: `beaver machine exposure <machine-id>`.
+Never publish a database port: keep a [database container](/data/run-a-database-container) on an internal network. To see what is publicly reachable on a machine and whether it is protected: `beaver machine exposure <machine-id>`.
 
 ## Reach: allow and block specific traffic
 

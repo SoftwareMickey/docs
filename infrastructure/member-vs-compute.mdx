@@ -22,15 +22,15 @@ addresses, service names, management) separate from **compute** (running and bui
 | Run applications | Build images | What the machine is |
 | --- | --- | --- |
 | Yes | Yes | **Host + builder** — general compute. |
-| Yes | No | **Host** — receives deployments, replicas and managed services. |
+| Yes | No | **Host** — receives deployments and replicas. |
 | No | Yes | **Builder** — builds your images, runs none of them. |
 | No | No | **Member only** — on the private network and nothing else. |
 
 - **One sentence everywhere.** A machine that does neither is described the same way in the CLI, the Desktop app, the Dashboard and Alie:
-  "Network member only — will not receive deployments, replicas, managed services, or builds".
+  "Network member only — will not receive deployments, replicas, or builds".
 - **A restriction, never a grant.** A cloud setting can only narrow what the machine was enrolled to do. A machine enrolled as a Host cannot be made a Builder here; to widen what it may
   ever do, change its enrollment role on the machine.
-- **Every path obeys it.** Deployments, scaling, managed services, builds, recovery and moving workloads all skip a machine the cloud says may not take that kind of work — and asking for
+- **Every path obeys it.** Deployments, scaling, builds, recovery and moving workloads all skip a machine the cloud says may not take that kind of work — and asking for
   one by name does not bypass it. The refusal says which setting stopped it and names the command that would allow it.
 - **Turning work off never stops what is running.** The machine becomes **cordoned**: what already runs keeps running, and nothing new lands. Moving the existing work away is a separate,
   deliberate action (a drain), and it never takes down an old copy before its replacement is healthy.

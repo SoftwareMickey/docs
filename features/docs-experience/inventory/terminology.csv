@@ -1,6 +1,6 @@
 term,ui_string,where_in_product,short_definition,avoid,note
 VectorIHub,VectorIHub,site and company name; Dashboard footer/marketing,The platform and company behind Beaver,"Vectorihub, Vector iHub, VIH","D1: platform/company name only; say ""Beaver"" for the product"
-Beaver,Beaver,every interface and the binary,The product family (CLI + Desktop + Dashboard + Cloud + Edge + Services),"BeaverCLI, the VectorIHub CLI",D1
+Beaver,Beaver,every interface and the binary,The product family (CLI + Desktop + Dashboard + Cloud + Edge),"BeaverCLI, the VectorIHub CLI",D1
 Beaver CLI,Beaver CLI,Desktop Settings > Beaver CLI & Agent; install pages,The `beaver` command-line tool,"the vectorihub CLI, bvr",
 Beaver Desktop,Beaver Desktop,desktop app,The desktop application,"Beaver app, the GUI",
 Dashboard,Dashboard,Dashboard sidebar,The web application at the product domain,"web app, console, control panel (control-panel is a separate repo)",Capital D when naming the product surface
@@ -9,12 +9,11 @@ Beaver Edge,Beaver Edge,Dashboard Edge,Edge routing/performance product,"Edge ne
 Alie,Alie,Dashboard + Desktop,Beaver's infrastructure AI assistant,"ALIE, the AI, the agent (agent = machine agent)",Casing follows the UI (docs 39 / client 36 use Alie; ALIE appears only in one eyebrow)
 machine,Machine,Desktop navigator; docs,A computer enrolled in Beaver that can run workloads,"server (legacy), host, box","Dashboard sidebar still says Nodes; docs say machine and note ""shown as Node in the Dashboard"""
 node,Nodes,Dashboard sidebar,Dashboard's name for a machine,,Use only when quoting the Dashboard label
-workspace,Workspace,Dashboard + Desktop switcher,The scope that owns projects clouds and services; personal or team,"account (an account owns workspaces), org, organisation",
+workspace,Workspace,Dashboard + Desktop switcher,The scope that owns projects and clouds; personal or team,"account (an account owns workspaces), org, organisation",
 team workspace,Team,Dashboard Team,A workspace shared by several members,"organisation, company account",
 project,Project,Dashboard Projects,The thing you deploy: a repo or folder plus its configuration,"app, site",
 deployment,Deployment,Dashboard Deployments,One running (or past) release of a project,"release (a release is a compose stack revision), build",
 environment,Environment,Dashboard Project environments,A named target such as staging or production,"stage, tier",
-service,Service,Dashboard Services; Desktop Services,A managed database or broker Beaver runs for you,"add-on, resource, managed database (use for a specific kind only)",
 Composer,Composers,Dashboard sidebar,Dashboard's name for compose stacks,,"Docs say compose application and note ""shown as Composers in the Dashboard"""
 compose application,Stack,Dashboard Composers detail; CLI compose,An application defined by a Docker Compose file,stack (only when quoting),
 container,Containers,Dashboard + CLI,A running instance of an image,pod,

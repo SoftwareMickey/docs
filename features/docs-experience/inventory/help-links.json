@@ -267,11 +267,6 @@
       "surface": "cli",
       "where": "beaver server --help footer"
     },
-    "cli.service": {
-      "path": "/cli/service",
-      "surface": "cli",
-      "where": "beaver service --help footer"
-    },
     "cli.settings": {
       "path": "/cli/settings",
       "surface": "cli",
@@ -427,11 +422,6 @@
       "surface": "dashboard",
       "where": "Projects page header"
     },
-    "dashboard.services": {
-      "path": "/data/services",
-      "surface": "dashboard",
-      "where": "Managed services page"
-    },
     "dashboard.team.approvals": {
       "path": "/teams/production-approvals",
       "surface": "dashboard",
@@ -491,11 +481,6 @@
       "path": "/operate/observability",
       "surface": "desktop",
       "where": "Observability and Traces sections"
-    },
-    "desktop.services": {
-      "path": "/data/services",
-      "surface": "desktop",
-      "where": "Services section"
     },
     "desktop.settings": {
       "path": "/interfaces/desktop/settings",

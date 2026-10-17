@@ -1,31 +1,28 @@
 ---
-title: "Services and data"
+title: "Your data"
 sidebarTitle: "Overview"
-description: "Managed databases, caches and brokers you attach to an application — connect, back up, restore and scale them."
+description: "Beaver deploys and secures your applications; where your data lives and who operates it is your choice."
 icon: "database"
 type: hub
 audience: [developer, operator]
 ---
 
-A **service** is a managed database, cache or broker that Beaver runs for you on your machines and attaches to your
-application, so you do not install or maintain it yourself.
+Beaver **deploys and secures** your applications on machines you own. It does **not** operate databases for you: there is no
+managed database, cache or broker, and no backups, upgrades or failover run on your behalf. Your data lives where you choose.
 
-<Tip>
-**Start here:** [Services and persistence](/data/services-and-persistence) explains the model; the
-[catalog](/data/services) lists what you can create.
-</Tip>
-
-## Do
+You have two ways to give an application a database, and one thing to decide afterwards: who backs it up.
 
 <CardGroup cols={2}>
-  <Card title="Browse the catalog" icon="library" href="/data/services">Every supported service type.</Card>
-  <Card title="Credentials and connection strings" icon="key" href="/data/credentials-and-connection-strings">Isolated logins per application.</Card>
-  <Card title="Connect from your laptop" icon="plug" href="/data/connect-locally">An authenticated tunnel — no public port.</Card>
-  <Card title="Back up and restore" icon="archive-restore" href="/data/backups-and-restore">Point-in-time copies on your schedule.</Card>
-  <Card title="High availability" icon="layers" href="/data/high-availability">Run a service across several members.</Card>
-  <Card title="Persistent volumes" icon="hard-drive" href="/data/persistent-volumes">Make specific paths survive a replacement.</Card>
+  <Card title="Bring your own database" icon="cloud" href="/data/bring-your-own-database">Use a hosted Postgres, MySQL or Redis from a provider you already trust.</Card>
+  <Card title="Run a database container" icon="container" href="/data/run-a-database-container">Deploy the official image with a volume, next to your app. You operate it.</Card>
+  <Card title="Connection strings and secrets" icon="key" href="/data/connection-strings-and-secrets">Keep the connection string out of your repository and image.</Card>
+  <Card title="Back up your own data" icon="archive-restore" href="/data/backups-yourself">Dumps, volume snapshots and provider-native backups.</Card>
 </CardGroup>
 
-## Look up and fix
+## Understand
 
-[`beaver service`](/cli/service) · [Troubleshooting](/operate/troubleshooting)
+[Persistent storage](/data/persistent-volumes) explains what survives a container being replaced — the basis of the container path.
+
+<Note>
+Looking for `beaver service` or the managed services catalog? They were removed — see [Managed services were removed](/reference/errors/services-removed).
+</Note>

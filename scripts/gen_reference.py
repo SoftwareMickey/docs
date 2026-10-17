@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """features/docs-experience V107/V108 — generated reference.
 
-  gen_reference.py            write snippets/supported-service-versions.mdx and reference/glossary.mdx
-  gen_reference.py --check    fail if either is out of date, or a terminology.csv term is missing from the glossary
+  gen_reference.py            write reference/glossary.mdx
+  gen_reference.py --check    fail if it is out of date, or a terminology.csv term is missing from the glossary
 
-Sources: inventory/service-facts.json (extracted from vhb-server's service Spec registry; versions are confirmed against `beaver service catalog` before a change is
-published) and inventory/terminology.csv (the terminology registry the lint reads). The glossary is generated, so a new registry row cannot be forgotten.
+Source: inventory/terminology.csv (the terminology registry the lint reads). The glossary is generated, so a new registry row cannot be forgotten.
 """
 import csv, json, os, sys
 
@@ -17,7 +16,7 @@ SEE = {
     "Beaver CLI": "/cli", "Beaver Desktop": "/interfaces/desktop/shell-tour", "Dashboard": "/interfaces/dashboard/tour", "Beaver Cloud": "/infrastructure/beaver-cloud",
     "Beaver Edge": "/network/beaver-edge", "Alie": "/alie/what-is-alie", "machine": "/infrastructure/machines-and-roles", "node": "/infrastructure/machines-and-roles",
     "workspace": "/teams/accounts-workspaces-teams", "team workspace": "/teams/create-a-team", "project": "/deploy/projects", "deployment": "/deploy/deployment-lifecycle",
-    "environment": "/deploy/environments", "service": "/data/services", "Composer": "/deploy/compose-applications", "compose application": "/deploy/compose-applications",
+    "environment": "/deploy/environments", "Composer": "/deploy/compose-applications", "compose application": "/deploy/compose-applications",
     "container": "/deploy/containers-and-replicas", "replica": "/deploy/containers-and-replicas", "approval": "/teams/production-approvals", "role": "/teams/roles-and-permissions",
     "activity": "/operate/activity-and-following", "template": "/deploy/publishing-a-template", "2-step verification": "/teams/two-step-verification", "passkey": "/teams/two-step-verification",
     "sign-in method": "/teams/sign-in-methods", "repository access": "/teams/signing-in-and-repository-access", "device authorization": "/cli/login", "Builder": "/infrastructure/machines-and-roles",
@@ -35,15 +34,6 @@ def title_of(path):
             m = re.search(r'^title:\s*"(.+)"', open(c).read(), re.M)
             if m: return m.group(1)
     return p
-
-
-def versions():
-    d = json.load(open(f"{INV}/service-facts.json"))
-    rows = ["| Service | Versions (default marked) | Default port | Env prefix | Beaver backups |", "| --- | --- | --- | --- | --- |"]
-    for key, v in d.items():
-        if key.startswith("_"): continue
-        rows.append(f"| `{v['type']}` | {v['versions']} | {v['port']} | `{v['prefix']}` | {'Yes' if v.get('backup') else 'No'} |")
-    return HEAD % "service-facts.json" + "\n".join(rows) + "\n"
 
 
 def glossary():
@@ -64,17 +54,8 @@ def glossary():
     return "\n".join(out)
 
 
-def sizes():
-    d = json.load(open(f"{INV}/service-facts.json"))
-    rows = ["| Service | CPU | Memory (MB) | Disk (GB) | Persistent storage |", "| --- | --- | --- | --- | --- |"]
-    for key, v in d.items():
-        if key.startswith("_"): continue
-        rows.append(f"| `{v['type']}` | {v['cpu']} | {v['mem']} | {v['disk']} | {v['persist']} |")
-    return HEAD % "service-facts.json" + "\n".join(rows) + "\n"
-
-
 def main():
-    outputs = {"snippets/service-default-sizes.mdx": sizes(), "snippets/supported-service-versions.mdx": versions(), "reference/glossary.mdx": glossary()}
+    outputs = {"reference/glossary.mdx": glossary()}
     bad = 0
     for rel, text in outputs.items():
         p = f"{ROOT}/{rel}"

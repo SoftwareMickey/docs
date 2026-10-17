@@ -26,7 +26,6 @@ dashboard,infrastructure,Nodes list and node detail,vhb-client /nodes /nodes/:ma
 dashboard,infrastructure,Add a node (connect wizard),vhb-client pages/nodes,dashboard;cli,add a node|enroll,interfaces/dashboard/nodes-clouds-edge,public,
 dashboard,infrastructure,Beaver Clouds list and manage,vhb-client /clouds,dashboard;cli,Beaver Cloud,interfaces/dashboard/nodes-clouds-edge,public,
 dashboard,infrastructure,Beaver Edge apps,vhb-client /edge /edge/:appId,dashboard;cli,Beaver Edge,interfaces/dashboard/nodes-clouds-edge,public,
-dashboard,infrastructure,Managed services,vhb-client /managed-services,dashboard;cli,managed service|Services page,interfaces/dashboard/nodes-clouds-edge,public,
 dashboard,infrastructure,Incidents,vhb-client /incidents,dashboard,incidents,interfaces/dashboard/nodes-clouds-edge,public,
 dashboard,infrastructure,Provider flows (aws/* vps/*),vhb-client aws/* vps/*,dashboard,AWS,infrastructure/aws,internal,Legacy /aws/* and /vps/* routes redirect to Integrations
 dashboard,collaboration,Activity feed (Following / Explore / Workspace),vhb-client /activity,dashboard;cli,Explore|Following,interfaces/dashboard/activity-notifications-billing,public,
@@ -72,8 +71,6 @@ desktop,machines,Machine backups tab,desktop MachineDetail backups,desktop,machi
 desktop,clouds,Beaver Cloud list and detail,desktop CloudsList CloudDetail,desktop;cli,Beaver Cloud,interfaces/desktop/infrastructure,public,
 desktop,networks,Networks list and detail,desktop NetworksList NetworkDetail,desktop,Networks|Members,interfaces/desktop/networks-storage-services,public,
 desktop,storage,Storage list and volume detail,desktop StorageList VolumeDetail,desktop,Storage|Volumes,interfaces/desktop/networks-storage-services,public,
-desktop,services,Services list and detail,desktop ServicesList ServiceDetail,desktop;cli,Services|Attached Applications,interfaces/desktop/networks-storage-services,public,
-desktop,services,Create a service (sheet),desktop ServiceCreateSheet,desktop;cli,create a service,interfaces/desktop/networks-storage-services,public,
 desktop,containers,Container detail,desktop ContainerDetail,desktop;cli,Containers|Traffic,interfaces/desktop/networks-storage-services,public,
 desktop,runtime,Traces explorer,desktop traces,desktop,traces,interfaces/desktop/approvals-and-alie,public,
 desktop,runtime,Approvals inbox,desktop team ApprovalsInbox,desktop;dashboard;cli,approvals inbox,interfaces/desktop/approvals-and-alie,public,

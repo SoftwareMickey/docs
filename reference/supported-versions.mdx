@@ -1,14 +1,12 @@
 ---
 title: "Supported versions and platforms"
 sidebarTitle: "Supported versions"
-description: "Operating systems the CLI and connected machines support, the service catalog with its versions, and the runtime versions the recipes are tested with."
+description: "Operating systems the CLI and connected machines support, and the runtime versions the recipes are tested with."
 icon: "layers"
 type: reference
 audience: [developer, operator]
-keywords: ["supported versions", "ubuntu", "debian", "rocky", "arm64", "postgres versions", "redis version", "node version"]
+keywords: ["supported versions", "ubuntu", "debian", "rocky", "arm64", "node version"]
 ---
-
-import ServiceVersions from "/snippets/supported-service-versions.mdx";
 
 ## Operating systems
 
@@ -20,18 +18,6 @@ import ServiceVersions from "/snippets/supported-service-versions.mdx";
 | **Beaver Desktop** | No public installer is published yet; see [Install Beaver Desktop](/install/desktop) |
 
 A machine on another distribution may connect but `beaver connect` warns it is not supported ([Install the CLI](/install/cli#supported-environments)).
-
-## The service catalog
-
-The service types Beaver can run for you, the versions each offers (the default is marked) and the environment prefix its connection variables use. The catalog on your plan can be smaller; `beaver service catalog` marks the types your plan includes.
-
-<ServiceVersions />
-
-Beaver backs up PostgreSQL (and its flavors), MySQL, MariaDB, MongoDB, Redis and RabbitMQ. **Kafka, NATS, Meilisearch and MinIO have no Beaver backups** — plan your own ([Backups and restore](/data/backups-and-restore)).
-
-<Note>
-Versions are taken from the service registry and must be confirmed against `beaver service catalog` before a change to this table is published. The command is the source of truth for what you can create today.
-</Note>
 
 ## Languages and frameworks
 

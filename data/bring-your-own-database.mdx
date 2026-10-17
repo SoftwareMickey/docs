@@ -1,0 +1,66 @@
+---
+title: "Bring your own database"
+sidebarTitle: "Bring your own database"
+description: "Point an application at a database hosted outside Beaver — you run it with a provider, Beaver deploys and secures the app."
+keywords: ["external database", "neon", "supabase", "rds", "managed postgres", "database url", "bring your own database"]
+icon: "cloud"
+type: howto
+audience: [developer]
+interfaces: [dashboard, cli]
+---
+
+Beaver deploys your application; it does not run your database. With this path the database is hosted by a provider (Neon, Supabase, Amazon RDS, a managed Redis,
+and so on — examples, not endorsements) and the application reaches it over the network with a connection string. **Backups, upgrades, failover and cost are the
+provider's and yours, not Beaver's.**
+
+## 1. Create the database at the provider
+
+Create the database and copy its **connection string**, for example
+`postgresql://app:<password>@db.example-provider.com:5432/app?sslmode=require`. Create a dedicated login for the application rather than using the provider's owner login.
+
+## 2. Store the connection string as a variable
+
+The string contains a password, so it goes in as an [environment variable](/deploy/environment-variables), never in your repository or image. Values are
+[sealed](/network/sealed-secrets) for the machine that runs them. Details: [Connection strings and secrets](/data/connection-strings-and-secrets).
+
+<Tabs>
+  <Tab title="Dashboard">Open the deployment, its **Environment** tab, and add `DATABASE_URL`.</Tab>
+  <Tab title="CLI">
+    ```bash
+    echo 'DATABASE_URL=postgresql://app:<password>@db.example-provider.com:5432/app?sslmode=require' > .env.production
+    beaver deploy --cloud paperclip-prod --env-file .env.production
+    ```
+    Keep `.env.production` out of git.
+  </Tab>
+</Tabs>
+
+## 3. Let the machine reach the provider
+
+The machine running your app needs **outbound** access to the provider's host and port. If you restrict egress with a
+[firewall policy](/network/firewall), allow the provider's address and port. Two provider quirks to check before you blame Beaver:
+
+- **IP allowlists.** Some providers accept connections only from listed addresses. Allow the **public IP of the machine** (or of your cloud's ingress) in the provider's settings.
+- **IPv6.** Some providers publish only IPv6 addresses for direct connections. If your machine has no IPv6 route, use the provider's pooled or IPv4 endpoint.
+
+## 4. Require TLS
+
+A database across the internet must be encrypted. The connection string's `sslmode` decides:
+
+| `sslmode` | Result |
+| --- | --- |
+| `disable` | Plain text. Do not use across the internet. |
+| `prefer` (many drivers' default) | Encrypts if the server offers it, silently falls back otherwise. |
+| `require` | Encrypts; fails if the server cannot. The minimum to use here. |
+| `verify-full` | Encrypts **and** checks the server certificate and name. Needs the provider's CA (`sslrootcert=system` uses your system roots). |
+
+## 5. Run migrations, then rotate when needed
+
+Run migrations from your deploy pipeline or a one-off job against the same `DATABASE_URL`. To rotate the password, change it at the provider, update the variable,
+and [redeploy](/deploy/environment-variables#changing-a-value-takes-a-new-release) — a changed variable does not take effect until a new release.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connection strings and secrets" icon="key" href="/data/connection-strings-and-secrets">Where the value lives and what shows it.</Card>
+  <Card title="Back up your own data" icon="archive-restore" href="/data/backups-yourself">Provider backups and your own dumps.</Card>
+</CardGroup>

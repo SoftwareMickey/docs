@@ -71,22 +71,6 @@
       "sha256": "d275522ba99c3fd77776b855e9232f5c21ffab1e2120763e83abd50c99032a4d"
     },
     {
-      "file": "desktop/services-list-light.png",
-      "surface": "desktop",
-      "name": "services-list",
-      "theme": "light",
-      "alt": "The Services section listing managed services with type, status and machine.",
-      "sha256": "ffe425bb0d3dba6bdeb42f2b39b48b3181778faab2586036b7e06ca60d7a0be1"
-    },
-    {
-      "file": "desktop/services-list-dark.png",
-      "surface": "desktop",
-      "name": "services-list",
-      "theme": "dark",
-      "alt": "The Services section listing managed services with type, status and machine.",
-      "sha256": "622071a6b2925316511c45eea78b293f5f0d53b88e4d3cb0f49d3e7d14412fa7"
-    },
-    {
       "file": "desktop/networks-list-light.png",
       "surface": "desktop",
       "name": "networks-list",
@@ -199,22 +183,6 @@
       "sha256": "94b2fb7a001803f8921c734e7838054249201818b825881815ebe9c59b08dec1"
     },
     {
-      "file": "desktop/service-connections-light.png",
-      "surface": "desktop",
-      "name": "service-connections",
-      "theme": "light",
-      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel.",
-      "sha256": "1bce5307757f33ab883b41222552e14b4e7e5e4904276d4d998b19c48aa6a729"
-    },
-    {
-      "file": "desktop/service-connections-dark.png",
-      "surface": "desktop",
-      "name": "service-connections",
-      "theme": "dark",
-      "alt": "A managed service's Connections tab: the internal host and port, a hidden connection URL with Reveal and Copy, and a Connect locally panel.",
-      "sha256": "545b1325d837a18a18f79083c5dda5954eb92df7b6aa4313905db3f81a7b8b62"
-    },
-    {
       "file": "desktop/workspaces-list-light.png",
       "surface": "desktop",
       "name": "workspaces-list",
@@ -325,22 +293,6 @@
       "theme": "dark",
       "alt": "The Beaver Edge page listing connected apps and the health of their origins.",
       "sha256": "7784a6bb327fc7a82f07ca019c78547276a33adb6f3cb0a93032c798e25d60a0"
-    },
-    {
-      "file": "dashboard/managed-services-light.png",
-      "surface": "dashboard",
-      "name": "managed-services",
-      "theme": "light",
-      "alt": "The Managed services page listing each database and cache with its type and status.",
-      "sha256": "71f3ff982d2f82aff7cc4dfe770e2291c7c6fc581bf0093c754c2f38b802f89c"
-    },
-    {
-      "file": "dashboard/managed-services-dark.png",
-      "surface": "dashboard",
-      "name": "managed-services",
-      "theme": "dark",
-      "alt": "The Managed services page listing each database and cache with its type and status.",
-      "sha256": "d9285336e4218e0331fe8b4e4501d89729b87aa4733ccee6220e94e193cf362a"
     },
     {
       "file": "dashboard/incidents-light.png",

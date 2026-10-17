@@ -1,0 +1,126 @@
+---
+title: "Run a database as a container"
+sidebarTitle: "Run a database container"
+description: "Deploy the official Postgres or Redis image with a named volume next to your app. It runs as an ordinary container — you own backups, upgrades and tuning."
+keywords: ["postgres container", "redis container", "docker compose database", "named volume", "self-hosted database"]
+icon: "container"
+type: howto
+audience: [developer, operator]
+interfaces: [dashboard, cli]
+---
+
+A database deployed from its official image through [Compose](/deploy/compose-applications) is an **ordinary container** with a [volume](/data/persistent-volumes).
+Beaver deploys, restarts and secures it like any other workload; it does **not** back it up, upgrade it, resize it or fail it over. **Those are yours.**
+
+## The recipe
+
+This `compose.yml` runs your app, Postgres 17 and Redis 7 on a private network, with a named volume each, health checks and restart policies. It was run end to end with
+Docker Compose (data survived a recreate and a daemon restart; the database ports were not reachable from outside).
+
+```yaml compose.yml
+services:
+  app:
+    image: your-app-image            # your application
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://app:${APP_DB_PASSWORD}@db:5432/app
+      REDIS_URL: redis://:${APP_REDIS_PASSWORD}@cache:6379
+    depends_on:
+      db: { condition: service_healthy }
+      cache: { condition: service_healthy }
+    networks: [backend, default]
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: ${APP_DB_PASSWORD}
+      POSTGRES_DB: app
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  cache:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${APP_REDIS_PASSWORD}", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    networks: [backend]
+    environment:
+      APP_REDIS_PASSWORD: ${APP_REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$APP_REDIS_PASSWORD ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  backend:
+    internal: true
+
+volumes:
+  pgdata:
+  redisdata:
+```
+
+Deploy it:
+
+<Tabs>
+  <Tab title="Dashboard">Deploy the file from **Composers** ([Compose applications](/deploy/compose-applications)); the stack needs `APP_DB_PASSWORD` and `APP_REDIS_PASSWORD`.</Tab>
+  <Tab title="CLI">
+    ```bash
+    beaver compose detect    # lists the services, volumes and variables the file would deploy
+    beaver compose deploy --cloud paperclip-prod --env-file .env.production
+    ```
+    `.env.production` holds `APP_DB_PASSWORD=` and `APP_REDIS_PASSWORD=` (generate each with `openssl rand -hex 16`) and stays out of git.
+  </Tab>
+</Tabs>
+
+## What this gives you
+
+- **Data survives** a redeploy (the containers are recreated, the named volume is not) and a restart of the host's Docker daemon.
+- **Not reachable from outside.** No `ports:` entry is published, and the `backend` network is `internal`, so the database has no route to or from the internet. Your app reaches it by service name (`db`, `cache`).
+
+## Sharp edges
+
+<AccordionGroup>
+  <Accordion title="Never publish the database port">
+    `ports: ["5432:5432"]` puts the database on the machine's public address. Leave `ports` out; the app does not need it. If you must reach the database from your laptop, use
+    `docker exec` on the machine or an SSH tunnel, not a published port.
+  </Accordion>
+  <Accordion title="A password is required">
+    The Postgres image refuses to initialise without `POSTGRES_PASSWORD`. Do not work around it with `POSTGRES_HOST_AUTH_METHOD=trust`.
+  </Accordion>
+  <Accordion title="Postgres 18 and later use a different data path">
+    From Postgres 18 the image keeps data in a version-named directory under `/var/lib/postgresql`. Mounting a volume at `/var/lib/postgresql/data` makes the container exit
+    with an error about "data in `/var/lib/postgresql/data`". For 18+, mount the volume at **`/var/lib/postgresql`** instead.
+  </Accordion>
+  <Accordion title="Changing the major version is a migration, not a redeploy">
+    Pointing `postgres:17` at `postgres:18` does not upgrade the data. Dump with `pg_dump`/`pg_dumpall`, start the new version on a fresh volume, and restore
+    ([Back up your own data](/data/backups-yourself)). Minor versions of the same major are a normal image change.
+  </Accordion>
+  <Accordion title="Every container needs its own restart policy">
+    After a host restart only containers with `restart: unless-stopped` come back. A container you stopped by hand stays stopped on purpose — start it again yourself.
+    Give the **app** a policy too, or it stays down while the database returns.
+  </Accordion>
+  <Accordion title="Volumes belong to one machine">
+    A named volume lives on the machine that runs it. If the container moves to another machine, the data does not follow. Pin the database to one machine and treat moving it as a restore.
+  </Accordion>
+  <Accordion title="Tuning is yours">
+    The images start with conservative defaults. Set memory limits and database settings (`shared_buffers`, `maxmemory`) for your workload; Beaver does not size them for you.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Back up your own data" icon="archive-restore" href="/data/backups-yourself">A dump container and volume snapshots.</Card>
+  <Card title="Compose applications" icon="boxes" href="/deploy/compose-applications">Deploy, roll back and inspect a stack.</Card>
+</CardGroup>

@@ -19,7 +19,7 @@ where you are comfortable and switch whenever it helps.
     The web app. Best for **deploying from a repository, managing a team, and billing** without installing anything.
   </Card>
   <Card title="Desktop" icon="monitor">
-    The desktop app. Best for **seeing your whole infrastructure at once** — machines, clouds, services, volumes, networks.
+    The desktop app. Best for **seeing your whole infrastructure at once** — machines, clouds, volumes, networks.
   </Card>
   <Card title="CLI" icon="terminal">
     The `beaver` command. Best for **scripts, CI, SSH sessions** — and required to connect a machine.
@@ -32,7 +32,7 @@ where you are comfortable and switch whenever it helps.
 | --- | --- | --- |
 | want to try Beaver with the least setup | **CLI**, then the Dashboard | Connecting a machine runs `beaver connect` on that machine; the Dashboard cannot do it for you. |
 | prefer clicking to typing and your code is on GitHub | **Dashboard** | Pick the repository, builder and cloud, set the port and environment, deploy. |
-| run several machines or clouds and want the picture | **Desktop** | One home screen with every machine, cloud, service, volume and network, each drilling into detail. |
+| run several machines or clouds and want the picture | **Desktop** | One home screen with every machine, cloud, volume and network, each drilling into detail. |
 | deploy from CI or a script | **CLI** | Non-interactive flags (`--yes`, `--wait`, `--json`) are made for it — see [Run in CI](/deploy/ci-cd). |
 | manage people, roles, approvals and billing | **Dashboard** | The Team and Billing pages live there; the CLI has `beaver workspace` and `beaver billing` for the same. |
 
@@ -42,13 +42,13 @@ where you are comfortable and switch whenever it helps.
   <Tab title="Dashboard">
     **Can:** deploy from a connected repository; see projects, deployments and containers; read logs, set environment
     variables and domains per deployment; configure load balancing, performance and firewall settings; manage
-    compose stacks ("Composers"), nodes, Beaver Clouds, Beaver Edge, managed services and incidents; use Activity and
+    compose stacks ("Composers"), nodes, Beaver Clouds, Beaver Edge and incidents; use Activity and
     Notifications; manage your team, plan and billing; set up 2-step verification.
 
     **Cannot:** enrol a machine. A node appears in the Dashboard only after you run `beaver connect` on it.
   </Tab>
   <Tab title="Desktop">
-    **Can:** show every machine, Beaver Cloud, service, volume and network in your workspace, with a detail view for each;
+    **Can:** show every machine, Beaver Cloud, volume and network in your workspace, with a detail view for each;
     show the approvals waiting for you and let you approve or reject them; host an Alie panel; keep your settings.
     Where an infrastructure action would change something, Desktop shows you the equivalent `beaver` command.
 

@@ -53,7 +53,7 @@
               "start/first-cloud",
               "start/first-deploy",
               "start/first-domain",
-              "start/first-service",
+              "start/first-database",
               "start/first-production-promotion",
               "start/production-readiness"
             ]
@@ -155,56 +155,19 @@
         "tab": "Data",
         "groups": [
           {
-            "group": "Services catalog",
+            "group": "Your data",
             "pages": [
               "data/index",
-              "data/services",
-              {
-                "group": "Relational databases",
-                "pages": [
-                  "data/services/postgresql",
-                  "data/services/postgres-pgvector",
-                  "data/services/postgres-postgis",
-                  "data/services/postgres-timescaledb",
-                  "data/services/mysql",
-                  "data/services/mariadb"
-                ]
-              },
-              {
-                "group": "Document, key-value and search",
-                "pages": [
-                  "data/services/mongodb",
-                  "data/services/redis",
-                  "data/services/meilisearch"
-                ]
-              },
-              {
-                "group": "Messaging and object storage",
-                "pages": [
-                  "data/services/kafka",
-                  "data/services/rabbitmq",
-                  "data/services/nats",
-                  "data/services/minio"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Operate services",
-            "pages": [
-              "data/create-a-service",
-              "data/credentials-and-connection-strings",
-              "data/connect-locally",
-              "data/backups-and-restore",
-              "data/resize-and-upgrade",
-              "data/high-availability",
-              "data/persistent-volumes"
+              "data/bring-your-own-database",
+              "data/run-a-database-container",
+              "data/connection-strings-and-secrets",
+              "data/backups-yourself"
             ]
           },
           {
             "group": "Understand",
             "pages": [
-              "data/services-and-persistence"
+              "data/persistent-volumes"
             ]
           }
         ]
@@ -292,12 +255,10 @@
             ]
           },
           {
-            "group": "Fix: machines and services",
+            "group": "Fix: machines",
             "pages": [
               "operate/troubleshoot-machine-offline",
               "operate/troubleshoot-connect",
-              "operate/troubleshoot-service-connection",
-              "operate/service-container-missing",
               "operate/troubleshoot-cloud-vpns",
               "operate/troubleshoot-cloud-policy"
             ]
@@ -504,7 +465,6 @@
             "group": "Clouds, services and edge",
             "pages": [
               "cli/cloud",
-              "cli/service",
               "cli/firewall",
               "cli/scaling",
               "cli/autoscale",
@@ -581,10 +541,10 @@
             "group": "Error codes",
             "pages": [
               "reference/errors/index",
+              "reference/errors/services-removed",
               {
                 "group": "Conflict",
                 "pages": [
-                  "reference/errors/attachments-active",
                   "reference/errors/conflict",
                   "reference/errors/password-changed-elsewhere",
                   "reference/errors/signup-failed"
@@ -681,11 +641,6 @@
                 "group": "Resource State",
                 "pages": [
                   "reference/errors/password-not-set",
-                  "reference/errors/recover-refused",
-                  "reference/errors/service-abandon-refused",
-                  "reference/errors/service-container-absent",
-                  "reference/errors/service-machine-removed",
-                  "reference/errors/service-volume-missing",
                   "reference/errors/state-invalid"
                 ]
               },
@@ -699,7 +654,6 @@
                   "reference/errors/network-tls",
                   "reference/errors/network-unreachable",
                   "reference/errors/rate-limited",
-                  "reference/errors/service-machine-unreachable",
                   "reference/errors/temporary"
                 ]
               }
@@ -780,6 +734,10 @@
       "destination": "/start/choose-your-infrastructure"
     },
     {
+      "source": "/cli/service",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
       "source": "/concepts/accounts-and-workspaces",
       "destination": "/teams/accounts-workspaces-teams"
     },
@@ -797,7 +755,7 @@
     },
     {
       "source": "/concepts/backups-and-restoration",
-      "destination": "/data/backups-and-restore"
+      "destination": "/data/backups-yourself"
     },
     {
       "source": "/concepts/beaver-cloud",
@@ -821,7 +779,7 @@
     },
     {
       "source": "/concepts/connecting-to-services-locally",
-      "destination": "/data/connect-locally"
+      "destination": "/reference/errors/services-removed"
     },
     {
       "source": "/concepts/containers-and-replicas",
@@ -893,15 +851,15 @@
     },
     {
       "source": "/concepts/service-clusters",
-      "destination": "/data/high-availability"
+      "destination": "/reference/errors/services-removed"
     },
     {
       "source": "/concepts/service-databases-and-credentials",
-      "destination": "/data/credentials-and-connection-strings"
+      "destination": "/data/connection-strings-and-secrets"
     },
     {
       "source": "/concepts/services",
-      "destination": "/data/services-and-persistence"
+      "destination": "/data/persistent-volumes"
     },
     {
       "source": "/concepts/settings-and-precedence",
@@ -934,6 +892,90 @@
     {
       "source": "/connect",
       "destination": "/infrastructure/connect-a-machine"
+    },
+    {
+      "source": "/data/backups-and-restore",
+      "destination": "/data/backups-yourself"
+    },
+    {
+      "source": "/data/connect-locally",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/data/create-a-service",
+      "destination": "/start/first-database"
+    },
+    {
+      "source": "/data/credentials-and-connection-strings",
+      "destination": "/data/connection-strings-and-secrets"
+    },
+    {
+      "source": "/data/high-availability",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/data/resize-and-upgrade",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/data/services",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services-and-persistence",
+      "destination": "/data/persistent-volumes"
+    },
+    {
+      "source": "/data/services/kafka",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/mariadb",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/meilisearch",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/minio",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/mongodb",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/mysql",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/nats",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/postgres-pgvector",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/postgres-postgis",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/postgres-timescaledb",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/postgresql",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/rabbitmq",
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/data/services/redis",
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/deploy/automation-and-ci",
@@ -1236,8 +1278,44 @@
       "destination": "/infrastructure/machines-and-roles"
     },
     {
+      "source": "/operate/service-container-missing",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/operate/troubleshoot-service-connection",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
       "source": "/quickstart",
       "destination": "/start/quickstart-dashboard"
+    },
+    {
+      "source": "/reference/errors/attachments-active",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/recover-refused",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/service-abandon-refused",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/service-container-absent",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/service-machine-removed",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/service-machine-unreachable",
+      "destination": "/reference/errors/services-removed"
+    },
+    {
+      "source": "/reference/errors/service-volume-missing",
+      "destination": "/reference/errors/services-removed"
     },
     {
       "source": "/runtimes/go",
@@ -1249,59 +1327,63 @@
     },
     {
       "source": "/services",
-      "destination": "/data/services"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/kafka",
-      "destination": "/data/services/kafka"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/mariadb",
-      "destination": "/data/services/mariadb"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/meilisearch",
-      "destination": "/data/services/meilisearch"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/minio",
-      "destination": "/data/services/minio"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/mongodb",
-      "destination": "/data/services/mongodb"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/mysql",
-      "destination": "/data/services/mysql"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/nats",
-      "destination": "/data/services/nats"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/postgres-pgvector",
-      "destination": "/data/services/postgres-pgvector"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/postgres-postgis",
-      "destination": "/data/services/postgres-postgis"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/postgres-timescaledb",
-      "destination": "/data/services/postgres-timescaledb"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/postgresql",
-      "destination": "/data/services/postgresql"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/rabbitmq",
-      "destination": "/data/services/rabbitmq"
+      "destination": "/data/bring-your-own-database"
     },
     {
       "source": "/services/redis",
-      "destination": "/data/services/redis"
+      "destination": "/data/bring-your-own-database"
+    },
+    {
+      "source": "/start/first-service",
+      "destination": "/start/first-database"
     },
     {
       "source": "/start/product-tour",

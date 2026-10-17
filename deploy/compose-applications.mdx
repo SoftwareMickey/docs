@@ -66,12 +66,12 @@ Destroying a stack is permanent: `beaver compose destroy <stack-id>`.
 ## Where Compose has edges
 
 Not every Compose feature has a Beaver equivalent — check the [Compose command reference](/cli/compose) for exactly what is supported before expecting
-parity with `docker compose` locally. A database defined **as a Compose service** runs as an ordinary container: it does not get the backups and credential
-management of a Beaver-managed [service](/data/services-and-persistence). Attach a managed service instead if you want those.
+parity with `docker compose` locally. A database defined **as a Compose service** runs as an ordinary container: backups, upgrades and credentials are yours
+([Run a database container](/data/run-a-database-container)).
 
 ## Next steps
 
 <CardGroup cols={2}>
   <Card title="Compose command reference" icon="terminal" href="/cli/compose">Every subcommand and flag.</Card>
-  <Card title="Managed services" icon="database" href="/data">The managed alternative to a Compose database.</Card>
+  <Card title="Run a database container" icon="database" href="/data/run-a-database-container">A Postgres and Redis recipe for a stack.</Card>
 </CardGroup>
