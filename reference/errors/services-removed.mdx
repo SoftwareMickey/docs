@@ -35,6 +35,7 @@ people's data well is a different job from the one we want to be good at.
   <Accordion title="What about my existing service?">
     It keeps running as a container. Take a backup you control, note its connection details, and decide whether to keep it as an ordinary container or move to a hosted database.
     Beaver can no longer create backups, restore, resize or rotate it for you.
+    If an app reaches it through a cloud's private DNS name (`<name>.internal`), that name stops resolving once the cloud's DNS is next rebuilt — point the app at the machine's address instead.
   </Accordion>
   <Accordion title="Will this come back?">
     It is not on any roadmap.
