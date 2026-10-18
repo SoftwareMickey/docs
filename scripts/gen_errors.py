@@ -52,7 +52,9 @@ REMOVED = {"ATTACHMENTS_ACTIVE", "RECOVER_REFUSED", "SERVICE_ABANDON_REFUSED", "
 NOTICE = "reference/errors/services-removed.mdx"  # hand-written, not generated; the one page every removed surface points at
 # features/services-disabling V4: compose projects and Beaver Edge are parked, not removed. These two codes are still registered and
 # indexed, but their pages are hand-written notices (what changed, what keeps running, what to do instead), not generated code pages.
-NOTICES = {"COMPOSE_FROZEN", "EDGE_FROZEN"}
+# features/cleanup-removal V17: same shape — CLEANUP_REMOVED is the current, live code (not a REMOVED legacy one), still registered,
+# indexed and in the navigation, but with a hand-written notice instead of a generated code page.
+NOTICES = {"COMPOSE_FROZEN", "EDGE_FROZEN", "CLEANUP_REMOVED"}
 
 
 def slug(code):

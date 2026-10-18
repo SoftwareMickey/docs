@@ -34,8 +34,10 @@ people up constantly, so it's worth internalizing early.
 
 Every connected machine reports a health state — healthy, degraded, or offline — visible via
 `beaver machine list`/`inspect`. The agent itself can be started, stopped, restarted, and
-updated independently of the machine's containers. Logs, maintenance windows, and cleanup of
-old build artifacts are all things you trigger explicitly.
+updated independently of the machine's containers. Logs and maintenance windows are things
+you trigger explicitly. Beaver only ever removes a container, volume or network it deployed
+itself — see [Host-wide Docker cleanup was removed](/reference/errors/cleanup-removed) for
+reclaiming disk space by hand.
 
 **Approvals**: some actions can be configured to require your explicit confirmation before
 they run — for example, something proposed by tooling rather than typed directly by you.

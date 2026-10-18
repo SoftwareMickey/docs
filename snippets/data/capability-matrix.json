@@ -57,7 +57,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Settings → Connected devices (Beaver CLI and Desktop sessions)",
+          "how": "Settings \u2192 Connected devices (Beaver CLI and Desktop sessions)",
           "page": "/interfaces/dashboard/team-and-settings"
         },
         "desktop": {
@@ -81,12 +81,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Settings → Security → 2-step verification",
+          "how": "Settings \u2192 Security \u2192 2-step verification",
           "page": "/teams/two-step-verification"
         },
         "desktop": {
           "status": "partial",
-          "how": "Settings → Account shows the status and links to the web to manage it",
+          "how": "Settings \u2192 Account shows the status and links to the web to manage it",
           "page": "/teams/two-step-verification"
         },
         "cli": {
@@ -105,7 +105,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Profile → Edit profile",
+          "how": "Profile \u2192 Edit profile",
           "page": "/interfaces/dashboard/team-and-settings"
         },
         "desktop": {
@@ -129,12 +129,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Integrations → GitHub → Connect GitHub / Manage repository access",
+          "how": "Integrations \u2192 GitHub \u2192 Connect GitHub / Manage repository access",
           "page": "/teams/signing-in-and-repository-access"
         },
         "desktop": {
           "status": "partial",
-          "how": "Settings → Git → Repository access shows the connected accounts; connecting happens in the Dashboard",
+          "how": "Settings \u2192 Git \u2192 Repository access shows the connected accounts; connecting happens in the Dashboard",
           "page": "/teams/signing-in-and-repository-access"
         },
         "cli": {
@@ -153,7 +153,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Settings → Account → Delete account",
+          "how": "Settings \u2192 Account \u2192 Delete account",
           "page": "/interfaces/dashboard/team-and-settings"
         },
         "desktop": {
@@ -177,7 +177,7 @@
       "interfaces": {
         "dashboard": {
           "status": "none",
-          "how": "Nothing to install — it is the web app",
+          "how": "Nothing to install \u2014 it is the web app",
           "page": "/interfaces/overview"
         },
         "desktop": {
@@ -242,7 +242,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Settings → Beaver CLI & Agent shows whether the CLI and agent are detected",
+          "how": "Settings \u2192 Beaver CLI & Agent shows whether the CLI and agent are detected",
           "page": "/interfaces/desktop/settings"
         },
         "cli": {
@@ -261,12 +261,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Nodes → select a machine (monitoring, security posture, containers)",
+          "how": "Nodes \u2192 select a machine (monitoring, security posture, containers)",
           "page": "/interfaces/dashboard/nodes-clouds-edge"
         },
         "desktop": {
           "status": "full",
-          "how": "Machines → select a machine (nine tabs: Overview, Containers, Resources, Networks, Volumes, Logs, Events, Security, Configuration)",
+          "how": "Machines \u2192 select a machine (nine tabs: Overview, Containers, Resources, Networks, Volumes, Logs, Events, Security, Configuration)",
           "page": "/interfaces/desktop/infrastructure"
         },
         "cli": {
@@ -309,7 +309,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Nodes → machine → Maintenance actions (each confirmed first) and Maintenance windows",
+          "how": "Nodes \u2192 machine \u2192 Maintenance actions (each confirmed first) and Maintenance windows",
           "page": "/interfaces/dashboard/nodes-clouds-edge"
         },
         "desktop": {
@@ -319,12 +319,12 @@
         },
         "cli": {
           "status": "full",
-          "how": "`beaver machine cleanup-plan`, `beaver machine cleanup`, `beaver machine maintenance-windows`",
+          "how": "`beaver machine maintenance-windows`, `beaver machine reboot`, `beaver machine package-update`, `beaver machine restart-service`",
           "page": "/cli/machine"
         }
       },
       "verified": "source-reviewed",
-      "checked": "2026-10-01"
+      "checked": "2026-10-18"
     },
     {
       "id": "machine-approvals",
@@ -333,7 +333,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Nodes → Pending approvals (in Assisted mode)",
+          "how": "Nodes \u2192 Pending approvals (in Assisted mode)",
           "page": "/interfaces/dashboard/nodes-clouds-edge"
         },
         "desktop": {
@@ -387,12 +387,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Clouds → select a cloud",
+          "how": "Clouds \u2192 select a cloud",
           "page": "/interfaces/dashboard/nodes-clouds-edge"
         },
         "desktop": {
           "status": "full",
-          "how": "Beaver Cloud → select a cloud (Overview, Nodes, Network, Capacity, Services, Topology, Timeline)",
+          "how": "Beaver Cloud \u2192 select a cloud (Overview, Nodes, Network, Capacity, Services, Topology, Timeline)",
           "page": "/interfaces/desktop/infrastructure"
         },
         "cli": {
@@ -421,7 +421,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Clouds → machine row → Drain, Undrain, Evacuate",
+          "how": "Clouds \u2192 machine row \u2192 Drain, Undrain, Evacuate",
           "page": "/interfaces/dashboard/nodes-clouds-edge"
         },
         "desktop": {
@@ -445,7 +445,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Clouds → Sharing → Invite workspace, Request access, Pending access requests",
+          "how": "Clouds \u2192 Sharing \u2192 Invite workspace, Request access, Pending access requests",
           "page": "/teams/cloud-sharing"
         },
         "desktop": {
@@ -469,7 +469,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Projects → Create project",
+          "how": "Projects \u2192 Create project",
           "page": "/deploy/overview"
         },
         "desktop": {
@@ -493,7 +493,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Dashboard → Deploy application (pick repository, builder, cloud, port, variables)",
+          "how": "Dashboard \u2192 Deploy application (pick repository, builder, cloud, port, variables)",
           "page": "/deploy/from-github"
         },
         "desktop": {
@@ -532,7 +532,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Open the folder, then Deploy this → answer the prompts → Deploy in terminal runs `beaver deploy`",
+          "how": "Open the folder, then Deploy this \u2192 answer the prompts \u2192 Deploy in terminal runs `beaver deploy`",
           "page": "/deploy/from-local-project"
         },
         "cli": {
@@ -551,7 +551,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Composers → deploy a compose file",
+          "how": "Composers \u2192 deploy a compose file",
           "page": "/deploy/compose-applications"
         },
         "desktop": {
@@ -599,7 +599,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Environments → Add variable",
+          "how": "Deployment \u2192 Environments \u2192 Add variable",
           "page": "/deploy/environment-variables"
         },
         "desktop": {
@@ -629,7 +629,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Project → Environments → Create environment (branch mapping)",
+          "how": "Project \u2192 Environments \u2192 Create environment (branch mapping)",
           "page": "/deploy/environments"
         },
         "desktop": {
@@ -653,7 +653,7 @@
       "interfaces": {
         "dashboard": {
           "status": "partial",
-          "how": "Deployment → Settings",
+          "how": "Deployment \u2192 Settings",
           "page": "/interfaces/dashboard/projects-and-deployments"
         },
         "desktop": {
@@ -677,7 +677,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Promote",
+          "how": "Deployment \u2192 Promote",
           "page": "/interfaces/dashboard/projects-and-deployments"
         },
         "desktop": {
@@ -707,7 +707,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployments → release → Roll back",
+          "how": "Deployments \u2192 release \u2192 Roll back",
           "page": "/deploy/rollback-and-recovery"
         },
         "desktop": {
@@ -731,7 +731,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployments → Redeploy",
+          "how": "Deployments \u2192 Redeploy",
           "page": "/deploy/overview"
         },
         "desktop": {
@@ -755,7 +755,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployments → Deployment history",
+          "how": "Deployments \u2192 Deployment history",
           "page": "/deploy/history"
         },
         "desktop": {
@@ -779,7 +779,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Load Balancing / Performance",
+          "how": "Deployment \u2192 Load Balancing / Performance",
           "page": "/interfaces/dashboard/projects-and-deployments"
         },
         "desktop": {
@@ -827,7 +827,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Activity → Publish template",
+          "how": "Activity \u2192 Publish template",
           "page": "/deploy/publishing-a-template"
         },
         "desktop": {
@@ -851,7 +851,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Domains → Add domain (shows the DNS record, then checks DNS and TLS)",
+          "how": "Deployment \u2192 Domains \u2192 Add domain (shows the DNS record, then checks DNS and TLS)",
           "page": "/network/domains"
         },
         "desktop": {
@@ -881,7 +881,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Domains (status: Checking DNS → Live over HTTPS)",
+          "how": "Deployment \u2192 Domains (status: Checking DNS \u2192 Live over HTTPS)",
           "page": "/network/tls"
         },
         "desktop": {
@@ -905,7 +905,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Firewall",
+          "how": "Deployment \u2192 Firewall",
           "page": "/network/firewall"
         },
         "desktop": {
@@ -939,7 +939,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Beaver Edge → Connect app (domain, origin URL, one CNAME)",
+          "how": "Beaver Edge \u2192 Connect app (domain, origin URL, one CNAME)",
           "page": "/network/beaver-edge"
         },
         "desktop": {
@@ -963,7 +963,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Load Balancing",
+          "how": "Deployment \u2192 Load Balancing",
           "page": "/network/load-balancing"
         },
         "desktop": {
@@ -987,12 +987,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Logs",
+          "how": "Deployment \u2192 Logs",
           "page": "/operate/logs"
         },
         "desktop": {
           "status": "partial",
-          "how": "Machines → machine → Logs reads machine log sources; the container view shows its Logs",
+          "how": "Machines \u2192 machine \u2192 Logs reads machine log sources; the container view shows its Logs",
           "page": "/operate/logs"
         },
         "cli": {
@@ -1011,7 +1011,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment → Traffic and Performance",
+          "how": "Deployment \u2192 Traffic and Performance",
           "page": "/operate/metrics-and-traffic"
         },
         "desktop": {
@@ -1064,7 +1064,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Machines → Events and Overview show open incidents",
+          "how": "Machines \u2192 Events and Overview show open incidents",
           "page": "/operate/incidents"
         },
         "cli": {
@@ -1088,7 +1088,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Delivers desktop alerts; Settings → Notifications chooses categories",
+          "how": "Delivers desktop alerts; Settings \u2192 Notifications chooses categories",
           "page": "/operate/notifications"
         },
         "cli": {
@@ -1112,7 +1112,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Settings → Notifications → On call, Escalation, Digest",
+          "how": "Settings \u2192 Notifications \u2192 On call, Escalation, Digest",
           "page": "/operate/notifications"
         },
         "cli": {
@@ -1136,7 +1136,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Machine → Configuration shows drift",
+          "how": "Machine \u2192 Configuration shows drift",
           "page": "/operate/drift-and-reconcile"
         },
         "cli": {
@@ -1184,7 +1184,7 @@
         },
         "desktop": {
           "status": "partial",
-          "how": "Settings → Activity shows your profile and Following feed",
+          "how": "Settings \u2192 Activity shows your profile and Following feed",
           "page": "/interfaces/desktop/settings"
         },
         "cli": {
@@ -1203,7 +1203,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Billing → plans → Team, then Team",
+          "how": "Billing \u2192 plans \u2192 Team, then Team",
           "page": "/teams/create-a-team"
         },
         "desktop": {
@@ -1238,7 +1238,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "The workspace switcher; Settings → Account → Switch workspace",
+          "how": "The workspace switcher; Settings \u2192 Account \u2192 Switch workspace",
           "page": "/teams/switch-workspaces"
         },
         "cli": {
@@ -1257,7 +1257,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Members → Invite member (email or one-use link)",
+          "how": "Team \u2192 Members \u2192 Invite member (email or one-use link)",
           "page": "/teams/invite-members"
         },
         "desktop": {
@@ -1311,7 +1311,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Members",
+          "how": "Team \u2192 Members",
           "page": "/teams/roles-and-permissions"
         },
         "desktop": {
@@ -1335,7 +1335,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Approvals",
+          "how": "Team \u2192 Approvals",
           "page": "/teams/production-approvals"
         },
         "desktop": {
@@ -1359,7 +1359,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Access policies",
+          "how": "Team \u2192 Access policies",
           "page": "/teams/production-approvals"
         },
         "desktop": {
@@ -1383,7 +1383,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Activity",
+          "how": "Team \u2192 Activity",
           "page": "/teams/audit-history"
         },
         "desktop": {
@@ -1407,7 +1407,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Team → Settings → Transfer ownership, Leave this workspace",
+          "how": "Team \u2192 Settings \u2192 Transfer ownership, Leave this workspace",
           "page": "/teams/removing-members-and-leaving"
         },
         "desktop": {
@@ -1431,7 +1431,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Billing → Plan & seats → Change plan",
+          "how": "Billing \u2192 Plan & seats \u2192 Change plan",
           "page": "/teams/plans-and-billing"
         },
         "desktop": {
@@ -1461,7 +1461,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Billing → Team seats → Add 5 seats",
+          "how": "Billing \u2192 Team seats \u2192 Add 5 seats",
           "page": "/teams/plans-and-billing"
         },
         "desktop": {
@@ -1485,7 +1485,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Billing → Payments",
+          "how": "Billing \u2192 Payments",
           "page": "/teams/plans-and-billing"
         },
         "desktop": {
@@ -1509,7 +1509,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Billing → Redeem code",
+          "how": "Billing \u2192 Redeem code",
           "page": "/teams/plans-and-billing"
         },
         "desktop": {
@@ -1562,7 +1562,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Settings → AI Harnesses",
+          "how": "Settings \u2192 AI Harnesses",
           "page": "/alie/connect-an-ai-provider"
         },
         "cli": {
@@ -1586,7 +1586,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Settings → Automation Policy",
+          "how": "Settings \u2192 Automation Policy",
           "page": "/alie/automation-policies"
         },
         "cli": {
@@ -1610,7 +1610,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Settings → Skills",
+          "how": "Settings \u2192 Skills",
           "page": "/alie/what-is-alie"
         },
         "cli": {
@@ -1683,7 +1683,7 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Deployment view → build logs and build summary; Deployment history",
+          "how": "Deployment view \u2192 build logs and build summary; Deployment history",
           "page": "/interfaces/dashboard/projects-and-deployments"
         },
         "desktop": {
@@ -1756,7 +1756,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Terminal panel (⌘⇧T for Big Terminal)",
+          "how": "Terminal panel (\u2318\u21e7T for Big Terminal)",
           "page": "/interfaces/desktop/terminal-and-projects"
         },
         "cli": {
@@ -1780,7 +1780,7 @@
         },
         "desktop": {
           "status": "full",
-          "how": "Open folder → project overview (identity, Git, config, builder, host, cloud)",
+          "how": "Open folder \u2192 project overview (identity, Git, config, builder, host, cloud)",
           "page": "/interfaces/desktop/terminal-and-projects"
         },
         "cli": {
@@ -1799,12 +1799,12 @@
       "interfaces": {
         "dashboard": {
           "status": "full",
-          "how": "Cloud page → Public address card",
+          "how": "Cloud page \u2192 Public address card",
           "page": "/network/cloud-ingress"
         },
         "desktop": {
           "status": "partial",
-          "how": "Infrastructure → Clouds → Public ingress (read-only; change it with the CLI)",
+          "how": "Infrastructure \u2192 Clouds \u2192 Public ingress (read-only; change it with the CLI)",
           "page": "/network/cloud-ingress"
         },
         "cli": {

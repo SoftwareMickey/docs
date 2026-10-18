@@ -42,6 +42,13 @@
     "doc": "The person cancelled at a prompt or with Ctrl+C. Cancelling is not a failure; nothing further ran."
   },
   {
+    "name": "CLEANUP_REMOVED",
+    "http": 410,
+    "class": "not_found",
+    "message": "Host-wide Docker cleanup was removed from Beaver",
+    "doc": "Beaver only ever removes a container, volume or network it deployed itself (a redeploy, a delete, a scale-down). It no longer scans a machine's Docker state and removes anything else, however unused it looks. Reclaim disk by hand: docker image prune, docker builder prune."
+  },
+  {
     "name": "CLIENT_TOO_OLD",
     "http": 426,
     "class": "invalid_input",
