@@ -1,0 +1,47 @@
+---
+title: "Compose projects are disabled"
+sidebarTitle: "Compose disabled"
+description: "Beaver has parked Compose projects. Existing stacks keep running and stay readable; nothing can create or change one. What changed and what to do instead."
+keywords: ["compose disabled", "compose frozen", "beaver compose", "docker compose", "COMPOSE_FROZEN"]
+icon: "snowflake"
+type: reference
+audience: [developer, operator]
+---
+
+Beaver has **parked Compose projects** — the `beaver compose` product that turned a `docker-compose.yml` into a stack with one deployment per service. Creating, deploying, rolling back, retrying, cancelling and deleting a stack
+all answer with the code `COMPOSE_FROZEN` (HTTP 403) and send you here, and `beaver compose …` does nothing except show this page.
+
+This is a pause, not a verdict. We narrowed Beaver to a surface one team can run well — single-app deploys, Beaver Cloud, machines, networking and the deployment firewall — before widening it again.
+
+## What is not affected
+
+- **Your containers keep running.** Nothing was stopped, moved or deleted. A stack you already deployed is still serving traffic, with its routes and domains intact.
+- **You can still read your stacks.** They stay visible in the dashboard, and `beaver container` and the Containers screen still show, log and control each container.
+- **Pushes are accepted, not deployed.** A `git push` to a repository linked to a Compose stack no longer starts a release. Beaver records that the push arrived and that Compose is disabled; your containers are not touched.
+- Single-app deploys, Beaver Cloud, machines, domains, the deployment firewall and everything else work as before.
+
+## What to do instead
+
+Deploy **one Beaver project per service**. Give each service its own `Dockerfile`, then deploy each as its own project with `beaver deploy`. A database can run as an ordinary container next to your app (see [Run a database container](/data/run-a-database-container)).
+
+<CardGroup cols={2}>
+  <Card title="Deploy an application" icon="rocket" href="/deploy/overview">One Dockerfile, one project.</Card>
+  <Card title="Run a database container" icon="container" href="/data/run-a-database-container">The official image with a volume, next to your app.</Card>
+</CardGroup>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I delete an old stack?">
+    Not through the product while Compose is disabled. Its containers are ordinary containers: remove them with `beaver container` or from the Containers screen.
+  </Accordion>
+  <Accordion title="I got here from a command">
+    `beaver compose` (and every subcommand) prints a short notice with a link to this page, exits with status 1 and changes nothing. With `--json` it prints one JSON error whose `code` is `COMPOSE_FROZEN`.
+  </Accordion>
+  <Accordion title="Does `docker compose` still work?">
+    Yes. `beaver docker` passes straight through to the Docker on your own machine; Beaver is not involved.
+  </Accordion>
+  <Accordion title="Will Compose come back?">
+    It is parked, not removed, and is reviewed again in April 2027. Nothing is promised here.
+  </Accordion>
+</AccordionGroup>

@@ -50,6 +50,9 @@ CODE_NEXT = {
 REMOVED = {"ATTACHMENTS_ACTIVE", "RECOVER_REFUSED", "SERVICE_ABANDON_REFUSED", "SERVICE_CONTAINER_ABSENT", "SERVICE_MACHINE_REMOVED",
            "SERVICE_MACHINE_UNREACHABLE", "SERVICE_VOLUME_MISSING"}
 NOTICE = "reference/errors/services-removed.mdx"  # hand-written, not generated; the one page every removed surface points at
+# features/services-disabling V4: compose projects and Beaver Edge are parked, not removed. These two codes are still registered and
+# indexed, but their pages are hand-written notices (what changed, what keeps running, what to do instead), not generated code pages.
+NOTICES = {"COMPOSE_FROZEN", "EDGE_FROZEN"}
 
 
 def slug(code):
@@ -127,6 +130,8 @@ def build():
     rows = load("exit-status.json")
     files = {"reference/errors/index.mdx": index_page(codes), "snippets/exit-status-table.mdx": exit_table(rows)}
     for e in codes:
+        if e["name"] in NOTICES:
+            continue
         files[f"reference/errors/{slug(e['name'])}.mdx"] = code_page(e, examples, rows)
     return files, codes, examples
 
@@ -180,7 +185,7 @@ def main():
     # stale pages for codes that no longer exist
     d = f"{ROOT}/reference/errors"
     if os.path.isdir(d):
-        want = {os.path.basename(k) for k in files if k.startswith("reference/errors/")} | {os.path.basename(NOTICE)}
+        want = {os.path.basename(k) for k in files if k.startswith("reference/errors/")} | {os.path.basename(NOTICE)} | {f"{slug(n)}.mdx" for n in NOTICES}
         for f in sorted(os.listdir(d)):
             if f.endswith(".mdx") and f not in want:
                 if check:

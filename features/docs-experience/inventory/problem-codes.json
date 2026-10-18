@@ -56,6 +56,13 @@
     "doc": "One or more requirements for joining a cloud are not met. Each requirement is listed with its status and repair."
   },
   {
+    "name": "COMPOSE_FROZEN",
+    "http": 403,
+    "class": "eligibility",
+    "message": "Compose projects are disabled",
+    "doc": "Compose projects are parked: existing stacks keep running and stay readable, but nothing can create, deploy, roll back, retry, cancel or delete one. Deploy one Beaver project per service instead."
+  },
+  {
     "name": "CONFLICT",
     "http": 409,
     "class": "conflict",
@@ -68,6 +75,13 @@
     "class": "invalid_input",
     "message": "Beaver could not work out which workspace or project you mean",
     "doc": "No workspace, project or environment could be resolved from the flag, environment, config or default. The response shows each source consulted."
+  },
+  {
+    "name": "EDGE_FROZEN",
+    "http": 403,
+    "class": "eligibility",
+    "message": "Beaver Edge is disabled",
+    "doc": "Beaver Edge is parked: existing connected apps keep resolving and proxying and stay readable, but nothing can create or change one."
   },
   {
     "name": "EMAIL_INVALID",

@@ -18,6 +18,21 @@ def exists(url: str) -> bool:
     return p == "" or (ROOT / f"{p}.mdx").exists() or (ROOT / p / "index.mdx").exists()
 
 
+# features/services-disabling V6: the pages every COMPOSE_FROZEN / EDGE_FROZEN refusal links to must exist and be in the nav.
+NOTICE_PAGES = ("reference/errors/compose-frozen", "reference/errors/edge-frozen")
+
+
+def notice_problems() -> list[str]:
+    nav = (ROOT / "docs.json").read_text()
+    bad = []
+    for page in NOTICE_PAGES:
+        if not (ROOT / f"{page}.mdx").exists():
+            bad.append(f"/{page}: notice page missing (refusals link to it)")
+        elif f'"{page}"' not in nav:
+            bad.append(f"/{page}: notice page is not in docs.json navigation")
+    return bad
+
+
 def main() -> int:
     tree = subprocess.check_output(["git", "-C", str(ROOT), "ls-tree", "-r", "--name-only", TAG], text=True).split()
     red = {r["source"]: r["destination"] for r in json.loads((ROOT / "docs.json").read_text())["redirects"]}
@@ -33,6 +48,7 @@ def main() -> int:
             bad.append(f"{url} -> {dest}: redirect chain ({dest} redirects again)")
         elif not exists(dest):
             bad.append(f"{url} -> {dest}: destination does not exist")
+    bad += notice_problems()
     print("\n".join(bad) if bad else f"removed-page redirects: {len(gone)} pages, all single-hop to an existing page")
     return 1 if bad else 0
 
