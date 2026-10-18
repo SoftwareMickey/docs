@@ -14,9 +14,9 @@ type: reference
 
 `beaver machine` is where you check on and maintain the machines already connected via
 [`beaver connect`](/cli/connect) — the densest command group in the CLI. It covers everything
-from a quick `list`/`overview` to fleet-wide policy, maintenance windows, cleanup, and
-predictive advisories. To connect a new machine, use `beaver connect`; `beaver machine
-remove` (an alias for `beaver server remove`) disconnects one.
+from a quick `list`/`overview` to fleet-wide policy, maintenance windows, and predictive
+advisories. To connect a new machine, use `beaver connect`; `beaver machine remove` (an
+alias for `beaver server remove`) disconnects one.
 
 ## Inventory
 
@@ -98,29 +98,12 @@ triggering it by hand each time.
 
 ## Cleanup
 
-| Subcommand | Purpose |
-| --- | --- |
-| `cleanup-plan [machine-id]` | Preview what disk/Docker cleanup would remove. |
-| `cleanup apply <plan-id> [machine-id]` | Apply a cleanup plan. |
-| `cleanup plans [machine-id]` | List cleanup plans. |
-| `cleanup show <plan-id> [machine-id]` | Show one plan's detail. |
-| `cleanup retry <plan-id> [machine-id]` | Retry a failed cleanup plan. |
-| `cleanup cancel <plan-id> [machine-id]` | Cancel a pending cleanup plan. |
-
-<ParamField query="--prune-build-cache" type="boolean" default="false">
-  On `cleanup-plan`: also prune the Docker build cache when the plan is applied.
-</ParamField>
-<ParamField query="--yes" type="boolean" default="false">
-  Skip the confirmation prompt. See [shared flags](/cli/shared-flags#yes).
-</ParamField>
-<ParamField query="--review" type="boolean" default="false">
-  Interactively pick individual items from the review-required tier instead of accepting the
-  whole plan.
-</ParamField>
-
-Always run `cleanup-plan` before `cleanup apply` — the plan is exactly what will be removed,
-nothing more. Some items require the `--review` step because removing them isn't always safe
-to automate blindly (for example, a stopped container that hasn't been confirmed unneeded).
+`cleanup-plan` and `cleanup` were removed — see
+[Host-wide Docker cleanup was removed](/reference/errors/cleanup-removed). Beaver only ever
+removes a container, volume or network it deployed itself; it no longer scans a machine's
+Docker state and removes anything else, however unused it looks. Use `beaver machine docker
+<id>` to see what's using space, then reclaim it by hand on the machine (`docker image prune`,
+`docker builder prune`).
 
 ## Approvals
 
@@ -274,11 +257,6 @@ beaver machine reboot-impact srv_web01
 beaver machine reboot srv_web01
 ```
 
-```bash Clean up disk space
-beaver machine cleanup-plan srv_web01
-beaver machine cleanup apply plan_abc123 srv_web01 --yes
-```
-
 ```bash Set a machine to autopilot
 beaver machine policy set srv_web01 --mode autopilot --auto-security-updates
 ```
@@ -297,7 +275,6 @@ beaver machine fleet-drift
 | `remove` success | Confirmation, then the machine disappears from `list` | No undo; reconnect with `beaver connect` if needed later. |
 | `remove` refused — still in a cloud or carrying replicas | A conflict naming what depends on it | Remove it from its cloud first, or re-run with `--force`. |
 | `reboot` declined | Command exits without rebooting | Re-run with `--yes` once you're sure. |
-| `cleanup apply` on a stale plan | An error naming the failure | Regenerate with `cleanup-plan` and retry. |
 | `policy set` missing `--mode` | `--mode` required error | Pass `observe`, `assisted`, or `autopilot`. |
 
 ## Used in

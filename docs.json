@@ -544,6 +544,7 @@
               "reference/errors/services-removed",
               "reference/errors/compose-frozen",
               "reference/errors/edge-frozen",
+              "reference/errors/cleanup-removed",
               {
                 "group": "Conflict",
                 "pages": [

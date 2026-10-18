@@ -29,7 +29,7 @@ Select a machine to see:
 | **Core services** and **Containers** | What runs on the machine: name, status, memory, restarts |
 | **Alert rules** and **Machine activity** | Alert thresholds, and a timeline you can open event by event |
 | **Security posture** | The latest scan: SSH password authentication, root login, security updates, reboot required, Docker socket exposure, and a **public exposure map** of ports, containers, domains and firewall state |
-| **Maintenance actions** | Safe cleanups such as **Clean up safe items**, **Storage trend**, **Log inventory**, **Maintenance windows** and **Maintenance history** — each action asks you to confirm and lists the workloads that may be interrupted |
+| **Maintenance actions** | **Storage trend**, **Log inventory**, **Maintenance windows** and **Maintenance history** — each action asks you to confirm and lists the workloads that may be interrupted. Beaver only removes a container, volume or network it deployed itself; see [Host-wide Docker cleanup was removed](/reference/errors/cleanup-removed) for reclaiming disk space by hand |
 
 Roles, enrolment and the agent are covered in [Machines and roles](/infrastructure/machines-and-roles). The same data is in Desktop's **Machines** and the CLI's `beaver machine`.
 
