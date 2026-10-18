@@ -1,0 +1,35 @@
+---
+title: "Beaver Edge is disabled"
+sidebarTitle: "Edge disabled"
+description: "Beaver has parked Beaver Edge. Existing connected apps keep resolving and proxying and stay readable; nothing can create or change one."
+keywords: ["beaver edge disabled", "edge frozen", "connected app", "beaver edge", "EDGE_FROZEN"]
+icon: "snowflake"
+type: reference
+audience: [developer, operator]
+---
+
+Beaver has **parked Beaver Edge** — the product that put a Beaver edge node in front of an app Beaver does not deploy, for routing, firewall rules, request logs and alerts. Creating or changing a connected app answers
+with the code `EDGE_FROZEN` (HTTP 403) and sends you here, and `beaver edge …` does nothing except show this page.
+
+This is a pause, not a verdict: we narrowed Beaver to a surface one team can run well before widening it again.
+
+## What is not affected
+
+- **Your connected apps keep working.** DNS, routing and proxying are untouched, and your apps remain readable.
+- **The deployment firewall is unchanged.** `beaver firewall` and the firewall tab on a deployment protect apps Beaver deploys, and keep working.
+- **Beaver Cloud ingress is unchanged.** Apps deployed on a Beaver Cloud keep their stable address.
+
+## What to do instead
+
+Deploy the app on Beaver (`beaver deploy`) to get routing, the deployment firewall, logs and health checks, or keep your own reverse proxy in front of it.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I got here from a command">
+    `beaver edge` (and every subcommand) prints a short notice with a link to this page, exits with status 1 and changes nothing. With `--json` it prints one JSON error whose `code` is `EDGE_FROZEN`.
+  </Accordion>
+  <Accordion title="Will Beaver Edge come back?">
+    It is parked, not removed, and is reviewed again in April 2027. Nothing is promised here.
+  </Accordion>
+</AccordionGroup>
