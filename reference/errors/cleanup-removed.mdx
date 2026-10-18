@@ -1,0 +1,52 @@
+---
+title: "Host-wide Docker cleanup was removed"
+sidebarTitle: "Cleanup removed"
+description: "Beaver no longer scans a machine's Docker state and removes what looks unused. What changed, what is not affected, and what to use instead."
+keywords: ["cleanup removed", "docker cleanup", "cleanup-plan", "machine cleanup", "removed", "CLEANUP_REMOVED"]
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+---
+
+Beaver no longer scans a machine's Docker state and removes containers, volumes, networks or logs that look unused. `beaver machine cleanup` and `beaver machine cleanup-plan` no
+longer do anything except show this page. Beaver only ever removes a container, volume or network it deployed itself — a redeploy, an explicit delete, a scale-down — never one it
+merely found on a machine it also happens to manage.
+
+## Why
+
+The previous cleanup scanned every stopped container on a machine and treated anything Beaver had no record of as safe to remove. On a machine an owner also runs their own
+workloads on — a database, a staging copy, a job meant to restart — that is exactly backwards: a stray container wastes a little disk; a force-removed one does not come back.
+
+## What to do now
+
+<CardGroup cols={2}>
+  <Card title="See what's using space" icon="hard-drive" href="/cli/machine#docker">`beaver machine docker <id>` still reports every container, image and volume and how much space it holds — read-only, nothing removed.</Card>
+  <Card title="Reclaim it yourself" icon="trash" href="/infrastructure/machine-and-agent-operation">Run `docker image prune` / `docker builder prune` on the machine directly for dangling images and build cache.</Card>
+</CardGroup>
+
+## What is not affected
+
+- **Nothing on your machines was stopped, moved or deleted by this change.** It only removes a scanning feature; every container, volume, network and image keeps running or
+  sitting exactly as it was.
+- **Beaver's own cleanup still works.** A redeploy still replaces its own container, a delete still removes what you asked to delete, a scale-down still retires its own replica,
+  and a deleted Compose stack still tears down its own networks and volumes. None of that ever depended on the removed scan.
+- The agent's own daily (or low-disk) prune of dangling images and the Docker build cache is unaffected — that has never touched a container, and still runs.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="How do I free up disk space now?">
+    `beaver machine docker <id>` to see what's using it, then act on the machine directly: `docker image prune`, `docker builder prune`, or `docker volume rm` for a volume you know
+    is unused. Beaver will not do this scan and remove step for you any more.
+  </Accordion>
+  <Accordion title="What about my scheduled cleanup windows?">
+    Any maintenance window that named `DOCKER_CLEANUP` has had that action removed from it; a window left with no other action is disabled, not deleted. Package updates and service
+    restarts in the same window are unaffected and keep running.
+  </Accordion>
+  <Accordion title="Will this come back?">
+    Not in this form. A future version may resurface the same information as a read-only report with nothing to apply.
+  </Accordion>
+  <Accordion title="I got here from a command">
+    `beaver machine cleanup` (and `cleanup-plan`) prints a short notice with a link to this page and changes nothing.
+  </Accordion>
+</AccordionGroup>
