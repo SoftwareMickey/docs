@@ -557,6 +557,7 @@
                 "group": "Eligibility",
                 "pages": [
                   "reference/errors/cloud-machine-ineligible",
+                  "reference/errors/framework-not-supported",
                   "reference/errors/precondition-failed"
                 ]
               },

@@ -8,7 +8,11 @@
       "operation": "cloud.machine.add",
       "changed": false,
       "conditions": [
-        { "id": "machine.online", "label": "Machine agent is online", "status": "passed" },
+        {
+          "id": "machine.online",
+          "label": "Machine agent is online",
+          "status": "passed"
+        },
         {
           "id": "cloud.wireguard_unavailable.srv_1",
           "label": "WireGuard tooling is missing",
@@ -24,7 +28,10 @@
         }
       ],
       "repairs": [],
-      "retry": { "command": "beaver cloud machines add srv_1 --cloud production", "safe": true },
+      "retry": {
+        "command": "beaver cloud machines add srv_1 --cloud production",
+        "safe": true
+      },
       "request_id": "req_8f3a21c0",
       "error": "Machine cannot join this cloud"
     }
@@ -43,12 +50,42 @@
           "detail": "The session this machine holds is no longer accepted.",
           "expected": "an active session",
           "actual": "expired",
-          "repair": { "kind": "command", "description": "Sign in again, then run the command again", "command": "beaver login" }
+          "repair": {
+            "kind": "command",
+            "description": "Sign in again, then run the command again",
+            "command": "beaver login"
+          }
         }
       ],
       "repairs": [],
       "request_id": "req_41c9d7e2",
       "error": "Your session has expired"
+    }
+  },
+  "FRAMEWORK_NOT_SUPPORTED": {
+    "ok": false,
+    "error": {
+      "code": "FRAMEWORK_NOT_SUPPORTED",
+      "message": "Beaver deploys React applications. Vue isn't one of them.",
+      "operation": "deploy",
+      "changed": false,
+      "conditions": [
+        {
+          "id": "runtime.framework_supported",
+          "label": "The application is a React app",
+          "status": "failed",
+          "expected": "react",
+          "actual": "vue on node",
+          "repair": {
+            "kind": "manual",
+            "description": "Deploy a React app from this repository, or host this one elsewhere.",
+            "url": "https://docs.vectorihub.com/reference/errors/framework-not-supported"
+          }
+        }
+      ],
+      "repairs": [],
+      "request_id": "req_01HZ…",
+      "error": "Beaver deploys React applications. Vue isn't one of them."
     }
   }
 }

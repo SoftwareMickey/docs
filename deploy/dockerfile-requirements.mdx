@@ -16,11 +16,11 @@ import { Verified } from "/snippets/verified.mdx";
 <Verified kind="source-reviewed" date="2026-10-01" />
 
 Beaver builds directly from your `Dockerfile` — it is the single source of truth for how your application is built and run. If your project can produce a Docker
-image, Beaver can deploy it, in any language or framework.
+image, Beaver builds it as written. Beaver deploys React applications; see [Bring your own app](/deploy/bring-your-own-app) for what counts as one.
 
 <Warning>
-A `Dockerfile` is **required**, at the repository root or at the path you give (`--dockerfile`, or `path:` in `.beaver/config.yml`). Beaver does not generate one,
-and it does not detect your framework.
+A `Dockerfile` is **required**, at the repository root or at the path you give (`--dockerfile`, or `path:` in `.beaver/config.yml`). Beaver does not generate one.
+It detects your framework only to decide whether the app is one it deploys, never to change how it is built.
 </Warning>
 
 ## What it should define
@@ -85,5 +85,5 @@ beaver preflight --local               # repository checks only, no network
 
 <CardGroup cols={2}>
   <Card title="Builds" icon="hammer" href="/deploy/builds">Where it builds and how to read a failed build.</Card>
-  <Card title="Bring your own app" icon="box" href="/deploy/bring-your-own-app">Any app with a Dockerfile and a port runs; a checklist and starting shapes.</Card>
+  <Card title="Bring your own app" icon="box" href="/deploy/bring-your-own-app">What counts as a React app; a checklist and starting shapes.</Card>
 </CardGroup>

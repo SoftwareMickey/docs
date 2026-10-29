@@ -41,6 +41,7 @@ CLASS_NEXT = {
 
 # Guidance specific to one code, where the class-wide sentence would be too vague to act on.
 CODE_NEXT = {
+    "FRAMEWORK_NOT_SUPPORTED": "Nothing to retry: the same repository is refused again until what it contains changes. The condition's `actual` names what was detected. If it names a framework you did not expect \u2014 Next.js, Remix or Astro on a repository you think of as React, say \u2014 that is the detection working as intended: those are refused under their own names. If it says nothing was detected, the repository has no `package.json` Beaver could read at the path it was given. See [what counts as a React app](/deploy/bring-your-own-app#what-counts-as-a-react-app).",
     "AGENT_UNINSTALL_INCOMPLETE": "Every step of `beaver agent uninstall` runs independently, so one failure never skips the rest. The summary lists each step and gives the exact command to finish by hand whatever did not happen \u2014 most often the workspace de-enrolment, which needs a reachable control plane and can be run from another machine with `beaver machine remove MACHINE_ID`. See [`beaver agent`](/cli/agent#uninstalling).",
 }
 

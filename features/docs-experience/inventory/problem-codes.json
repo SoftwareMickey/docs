@@ -140,6 +140,13 @@
     "doc": "The acting workspace or user lacks a capability the operation needs; the response names it and the role that can grant it."
   },
   {
+    "name": "FRAMEWORK_NOT_SUPPORTED",
+    "http": 422,
+    "class": "eligibility",
+    "message": "Beaver deploys React applications",
+    "doc": "The repository's framework was detected and is not one Beaver deploys. Beaver deploys React applications: a React app built with Vite, with Create React App, or with a setup of your own. A meta-framework that depends on React — Next.js, Remix, Astro — is detected as that framework, not as React, and is refused under its own name. A repository whose framework could not be identified at all is also refused, rather than attempted. The response names what was detected."
+  },
+  {
     "name": "INTERNAL",
     "http": 500,
     "class": "internal",
