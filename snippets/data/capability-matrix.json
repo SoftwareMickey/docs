@@ -515,7 +515,7 @@
           "page": "/start/first-deploy"
         },
         {
-          "title": "Any app with a Dockerfile and a port",
+          "title": "A React app with a Dockerfile and a port",
           "page": "/deploy/bring-your-own-app"
         }
       ]

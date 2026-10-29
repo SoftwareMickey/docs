@@ -1,0 +1,61 @@
+---
+title: "FRAMEWORK_NOT_SUPPORTED"
+sidebarTitle: "FRAMEWORK_NOT_SUPPORTED"
+description: "What the FRAMEWORK_NOT_SUPPORTED failure means, what the response contains, and how to fix it."
+icon: "triangle-alert"
+type: reference
+audience: [developer, operator]
+keywords: ["FRAMEWORK_NOT_SUPPORTED", "Beaver deploys React applications", "error", "failure", "beaver help FRAMEWORK_NOT_SUPPORTED"]
+---
+
+{/* GENERATED FILE — do not edit. Regenerate with `python3 scripts/gen_errors.py`; sources: features/docs-experience/inventory/problem-codes.json. */}
+
+**Beaver deploys React applications**
+
+The repository's framework was detected and is not one Beaver deploys. Beaver deploys React applications: a React app built with Vite, with Create React App, or with a setup of your own. A meta-framework that depends on React — Next.js, Remix, Astro — is detected as that framework, not as React, and is refused under its own name. A repository whose framework could not be identified at all is also refused, rather than attempted. The response names what was detected.
+
+| | |
+| --- | --- |
+| Code | `FRAMEWORK_NOT_SUPPORTED` |
+| Kind | Eligibility |
+| HTTP status | `422` |
+| CLI exit status | `1` |
+
+## What to do
+
+Nothing to retry: the same repository is refused again until what it contains changes. The condition's `actual` names what was detected. If it names a framework you did not expect — Next.js, Remix or Astro on a repository you think of as React, say — that is the detection working as intended: those are refused under their own names. If it says nothing was detected, the repository has no `package.json` Beaver could read at the path it was given. See [what counts as a React app](/deploy/bring-your-own-app#what-counts-as-a-react-app).
+
+## What the response contains
+
+Every failure — in the table output, `--json`, `--yaml` and the API — carries the same fields: `code`, `message`, `changed` (whether anything was altered), `conditions` (each requirement checked, with `status`, `detail` and a `repair`), `repairs`, a `retry` command and a `request_id`. Branch on `error.code`, never on the message text.
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "FRAMEWORK_NOT_SUPPORTED",
+    "message": "Beaver deploys React applications. Vue isn't one of them.",
+    "operation": "deploy",
+    "changed": false,
+    "conditions": [
+      {
+        "id": "runtime.framework_supported",
+        "label": "The application is a React app",
+        "status": "failed",
+        "expected": "react",
+        "actual": "vue on node",
+        "repair": {
+          "kind": "manual",
+          "description": "Deploy a React app from this repository, or host this one elsewhere.",
+          "url": "https://docs.vectorihub.com/reference/errors/framework-not-supported"
+        }
+      }
+    ],
+    "repairs": [],
+    "request_id": "req_01HZ…",
+    "error": "Beaver deploys React applications. Vue isn't one of them."
+  }
+}
+```
+
+Look it up offline with `beaver help FRAMEWORK_NOT_SUPPORTED`. See [Exit codes and output formats](/reference/exit-codes-and-output) for what a script can rely on.
