@@ -15,9 +15,9 @@ type: reference
 Run `beaver validate` before [`beaver plan`](/cli/plan) or [`beaver deploy`](/cli/deploy) to
 catch configuration mistakes early. It parses and checks the current directory's
 `.beaver/config.yml` — the file is not empty or oversized, it parses as YAML, it has no duplicate keys and no YAML anchors or
-aliases (never allowed), `schema_version` is the supported version (`1`), and `project` is set — entirely on your machine. It does **not** check the values of the `deployment:` fields (strategy, replicas, resources, port, and so on) or reject keys it does not
+aliases (never allowed), `schema_version` is in the range this CLI reads (`1`–`2`), and `project` is set — entirely on your machine. A file written by a newer Beaver (`schema_version` above that range) is refused with an instruction to upgrade the CLI. It does **not** check the values of the `deployment:` fields (strategy, replicas, resources, port, and so on) or reject keys it does not
 know; for editor-side checking of those, use the schema from [`beaver config schema`](/cli/config), and see the
-[`.beaver/config.yml` reference](/reference/deployment-specification).
+[`.beaver/config.yml` reference](/reference/deployment-specification). When the file carries an [`app:`](/reference/deployment-specification#app) pin, validate prints the pinned and detected stack as separate facts.
 
 ## Syntax
 

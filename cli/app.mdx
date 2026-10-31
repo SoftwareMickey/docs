@@ -1,0 +1,47 @@
+---
+title: "beaver app"
+sidebarTitle: "app"
+description: "List and manage apps in this project — each directory's app_id, containers, and identity."
+icon: "cubes"
+type: reference
+---
+
+<Info>
+  New here? [Projects and apps](/start/projects-and-apps) explains what an app_id is, before diving into syntax.
+</Info>
+
+## Purpose
+
+`beaver app` looks at the apps in the project this directory is linked to. Use `list` to see them, `show` for this directory, `new` after copying a folder, `rename` for display name only, `rm` to delete an app that has no live containers.
+
+## Syntax
+
+```bash
+beaver app [list|show|new|rename|rm] [flags]
+```
+
+## Subcommands
+
+| Subcommand | Purpose |
+| --- | --- |
+| `list` | Apps in this project. `*` marks this directory's app. |
+| `show` | This directory's app, reservation state (`reserved` / `bound` / `retired`), identity findings. |
+| `new [name]` | Mint a fresh `app_id` into this directory. Refuses if the current app still has live containers unless `--force`. |
+| `rename <name>` | Rename the app. The id, config file, and containers are untouched. |
+| `rm` | Delete the app. Refused while live containers carry its id. |
+
+## Flags
+
+<ParamField query="--force" type="boolean">
+  On `new`: mint a new app even if this directory's current app has live containers. Those containers stay on the old app.
+</ParamField>
+
+<ParamField query="--yes" type="boolean">
+  On `rm`: skip the confirmation prompt.
+</ParamField>
+
+## Used in
+
+- [`init`](/cli/init) — writes `app_id` the first time.
+- [`deploy`](/cli/deploy) — ensures `app_id` and sends it with the deploy.
+- [`status`](/cli/status) — prints reserved vs bound containers for this app.
