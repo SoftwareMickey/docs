@@ -74,6 +74,14 @@ of framework or build steps at deploy time.
 <ParamField query="--no-push" type="boolean" default="false">
   Write `.beaver/config.yml` locally but don't save it to Beaver.
 </ParamField>
+<ParamField query="--reformat" type="boolean" default="false">
+  Rewrite `.beaver/config.yml` in Beaver's canonical layout even when none of its values
+  change. See [File layout](#file-layout).
+</ParamField>
+<ParamField query="--allow-unsupported" type="boolean" default="false">
+  Author the configuration even when this project's framework is one Beaver cannot deploy.
+  See [Framework check](#framework-check).
+</ParamField>
 <ParamField query="--verbose" type="boolean" default="false">
   On `inspect`: include the matched Dockerfile lines that produced each inference.
 </ParamField>
@@ -90,6 +98,100 @@ field names, types, and constraints (for example, `strategy` is `rolling` or `re
 `replicas` is 1–50) — useful for editor autocomplete and validating your file before running
 `validate`. It is a schema for **your local YAML file's shape**, not a description of any
 internal processing behind it.
+
+### Framework check
+
+Before it prompts for anything or writes a file, `beaver config` names the project's runtime
+and framework and checks them against what the platform can deploy:
+
+```
+✓ Runtime: react on node — supported
+```
+
+If the framework is one Beaver does not deploy, it says so there and stops — nothing is
+written:
+
+```
+✕ Beaver deploys React applications. Vue isn't one of them.
+
+REQUIREMENTS
+  ✕ The application is a React app
+
+WHAT'S WRONG
+  The application is a React app
+    expected: react  ·  found: vue on node
+```
+
+That is the same `FRAMEWORK_NOT_SUPPORTED` refusal, with the same code and fields, that a
+deploy of the same repository receives — raised here so you see it in seconds rather than
+after picking a machine and pushing a build. See
+[FRAMEWORK_NOT_SUPPORTED](/reference/errors/framework-not-supported).
+
+Three cases warn instead of stopping, because none of them is a reliable "no":
+
+- **The repository already has a `.beaver/config.yml`.** A project configured before the
+  supported-framework list narrowed can still be re-synced and edited; only a first-time
+  `beaver config` is refused.
+- **Nothing could be identified.** This check reads your local manifests; a deploy judges a
+  full scan of the repository, which recognizes more. An unidentified project is never
+  refused here.
+- **The check could not run** — no session, no network, control plane unreachable.
+  Authoring a configuration works offline, and the framework is checked again at deploy
+  time regardless.
+
+In a monorepo, the root `package.json` usually declares only the toolchain, so the check
+reads the workspace members declared by `pnpm-workspace.yaml` or `workspaces` and reports
+which one the framework came from:
+
+```
+Framework
+  react (apps/desktop)
+```
+
+A repository holding one deployable app beside others is deployable, so a React member is
+reported even when a sibling is something else. Only a declared workspace is followed — an
+`apps/` directory that is not a workspace member is not read.
+
+`--allow-unsupported` turns the refusal into a warning. It does not make the project
+deployable: the binding check is server-side, so the file is written and the deploy is still
+refused. Use it when the detection is wrong about your repository and you need to get on
+with authoring the file.
+
+### File layout
+
+Beaver writes `.beaver/config.yml` with blank lines between top-level sections and around
+each nested block, so a long file stays scannable:
+
+```yaml .beaver/config.yml
+schema_version: 1
+
+project: apis
+
+deployment:
+  - container_name: apis
+    image: apis
+    port: 3000
+    path: .
+    strategy: rolling
+    replicas: 1
+
+    resources:
+      request:
+        cpu: 0.25
+        memory: 250
+
+      limit:
+        cpu: 1
+        memory: 512
+
+cloud: production
+```
+
+Blank lines carry no meaning in YAML, so the layout is purely how the file reads — and it
+is only ever applied when something is actually written. A command that changes nothing
+leaves your file exactly as it is, including its spacing; running `beaver config set` with
+the value already in place still reports no change. To adopt the layout for a file you
+already have, pass `--reformat`.
 
 ### Non-interactive seed values
 
@@ -277,6 +379,8 @@ beaver config validate
 | `pull` with unpushed local edits | Refusal, unless `--force` | Push your edits first, or `--force` to discard them in favor of the saved copy. |
 | `delete` on a live container | Refusal naming the still-running container | Delete the container first, then its saved configuration. |
 | `status` shows drift | The specific field(s) that differ | Decide whether to `push` (save local) or `pull` (adopt saved). |
+| Ctrl+C at any prompt, or answering no to the write | `Cancelled.` and exit status 1 | Nothing is written and nothing is saved to Beaver. Run the command again when you're ready. |
+| First `beaver config` on a project whose framework Beaver can't deploy | `FRAMEWORK_NOT_SUPPORTED`, exit status 1, nothing written | Deploy a React app from this repository, or pass `--allow-unsupported` to author the file anyway. |
 
 ## Used in
 
