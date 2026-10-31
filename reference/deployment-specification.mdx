@@ -31,6 +31,8 @@ deployment:
 ```yaml .beaver/config.yml
 schema_version: 1
 project: paperclip
+project_id: 11111111-1111-1111-1111-111111111111
+app_id: 7c1e9a52-3f0b-4d6e-9a31-0b8f2f5d41aa
 environment: production
 cloud: paperclip-prod
 deployment:
@@ -61,9 +63,11 @@ deployment:
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `schema_version` | integer | Yes | The file format. This build supports `1`; anything else is refused |
+| `schema_version` | integer | Yes | The file format. Readers accept `1` and `2`. A file declares `2` only when it carries an `app:` section; otherwise it stays `1` |
 | `project` | string | Yes | The project's name |
+| `app` | object | No | What the application *is* — see [`app`](#app) |
 | `project_id` | string | No | Written by Beaver when the project is linked. Do not edit |
+| `app_id` | UUID | No | Written by Beaver at `beaver init`. The app's identity. **Never edit.** Copying a folder keeps the old id — run `beaver app new`. See [Projects and apps](/start/projects-and-apps) |
 | `environment` | string | No | The deployment environment this file targets, such as `production` or `staging` ([Environments](/deploy/environments)) |
 | `cloud` | string | No | The [Beaver Cloud](/infrastructure/beaver-cloud) to deploy to. `--cloud` on a command overrides it |
 | `builder` | machine reference | No | The machine that builds this project's images. Set with `beaver config builder` |
@@ -71,6 +75,36 @@ deployment:
 | `deployment` | list | Yes | One entry per container or compose service. At least one |
 
 A **machine reference** has `machine_id` (required, the machine's stable id), `name` (display only) and `docker_user` (the Docker Hub user that machine is signed in as, captured when you verify it).
+
+## `app`
+
+`app:` records what the project is, as distinct from how Beaver deploys it. Values come from the supported-frameworks catalog — the same names `beaver config` and the Scout scan use. There is no `language` field.
+
+```yaml
+schema_version: 2
+
+app:
+  runtime: node
+  framework: react
+```
+
+| Field | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `runtime` | string | Yes, when `app:` is present | The execution environment (`node`, `go`, …) |
+| `framework` | string | No | A named framework in that runtime (`react`, `next`, `gin`). Omitted when none was identified |
+
+**Omit rule** — `runtime` is written when known; `framework` is written only when detection names a real one:
+
+| Detected | Written |
+| --- | --- |
+| runtime `node`, framework `react` | `app: {runtime: node, framework: react}` |
+| runtime `node`, framework `generic` | `app: {runtime: node}` |
+| runtime `go`, framework `go` | `app: {runtime: go}` |
+| runtime `unknown` | no `app:` section |
+
+No `framework: none` and no `framework: generic` in a committed file. An absent key means no framework was identified.
+
+The pin is a record, not a way past the React-only policy. At deploy time it may *select* among frameworks the scan itself found in the repository. It may cause a refusal when it disagrees. It never admits a framework the scan did not find. `beaver config` writes the section the first time it can identify the app, and leaves an existing pin alone.
 
 ## `deployment` entries
 
@@ -149,7 +183,7 @@ A bind names one folder on one machine, so it only makes sense for a deployment 
 - **No YAML anchors or aliases** (`&name`, `*name`). The file is refused if it has any.
 - **No duplicate keys.**
 - **At most 64 KiB.**
-- `beaver validate` checks the file's frame — it parses, `schema_version` is `1`, `project` is set — on your machine. It does **not** check the values inside `deployment:`; use the schema in your editor, and run `beaver config status` to compare the file with what Beaver has saved. Field values are validated again when the file is saved to Beaver and when you deploy.
+- `beaver validate` checks the file's frame — it parses, `schema_version` is in `1`–`2`, `project` is set — on your machine. A version newer than this CLI supports is refused with an upgrade instruction. It does **not** check the values inside `deployment:`; use the schema in your editor, and run `beaver config status` to compare the file with what Beaver has saved. Field values are validated again when the file is saved to Beaver and when you deploy.
 - Configuration commands back up the file to `.beaver/config.yml.bak` before rewriting it.
 
 ## See also

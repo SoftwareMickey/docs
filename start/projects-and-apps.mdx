@@ -1,0 +1,35 @@
+---
+title: "Projects and apps"
+sidebarTitle: "Projects and apps"
+description: "A project can hold several apps. Each app has its own .beaver/config.yml and a server-minted app_id you should never edit."
+icon: "layer-group"
+---
+
+A **project** is the grouping you deploy into. An **app** is one Dockerfile app inside that project. Each app lives in its own directory with its own `.beaver/config.yml`.
+
+Beaver writes a top-level `app_id` into that file when you run `beaver init` (or the first `beaver deploy` if you skipped init). **Never edit `app_id`.** It is the identity the server minted. Changing it by hand does not move the app; it just makes the folder look like a copy.
+
+## Copying a folder
+
+If you copied an app directory into a new folder, that folder still names the original app. Give it its own identity:
+
+```bash
+beaver app new
+```
+
+If you copied it into a *different* project, commands refuse with `APP_PROJECT_MISMATCH` until you run `beaver app new`.
+
+Do not copy a `container_id` line between apps. Saving a file that names another app's container is refused (`CONTAINER_ID_MISMATCH`). Delete the copied `container_id` and save; Beaver allocates a new one.
+
+## Commands
+
+| Command | What it does |
+| --- | --- |
+| `beaver init` | Links this directory and writes `app_id` if it has none |
+| `beaver app list` | Apps in this project; marks the current directory |
+| `beaver app show` | This directory's app, reserved/bound containers, identity findings |
+| `beaver app new [name]` | Mint a fresh `app_id` into this directory |
+| `beaver app rename <name>` | Rename only — the id does not change |
+| `beaver app rm` | Delete the app (refused while its containers are still running) |
+
+See [`beaver app`](/cli/app).

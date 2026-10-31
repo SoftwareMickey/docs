@@ -157,6 +157,12 @@ deployable: the binding check is server-side, so the file is written and the dep
 refused. Use it when the detection is wrong about your repository and you need to get on
 with authoring the file.
 
+When detection can name the app, the wizard writes an [`app:`](/reference/deployment-specification#app)
+section (`runtime`, and `framework` only when a real one was identified) and raises
+`schema_version` to `2`. The first write is announced; a later run that would write the same
+pin stays quiet. An existing pin that disagrees with detection is a warning, not a rewrite.
+`beaver config set app.framework` / `app.runtime` edit the same section.
+
 ### File layout
 
 Beaver writes `.beaver/config.yml` with blank lines between top-level sections and around

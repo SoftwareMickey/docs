@@ -23,6 +23,7 @@
               "start/what-is-vectorihub",
               "start/how-beaver-fits-together",
               "start/concepts",
+              "start/projects-and-apps",
               "start/choose-your-interface",
               "start/choose-your-infrastructure"
             ]
@@ -444,6 +445,7 @@
             "group": "Projects and routing",
             "pages": [
               "cli/project",
+              "cli/app",
               "cli/environment",
               "cli/domain",
               "cli/route"
