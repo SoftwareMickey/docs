@@ -233,6 +233,11 @@ Every config file belongs to one app. The first time `beaver config`, `config sy
 `--dry-run` writes nothing. On a server that predates apps, the file is left as it was. See
 [`beaver app`](/cli/app).
 
+Container ids are assigned the moment `beaver config` writes the file, whatever you answer to the
+"Save this configuration to Beaver now?" prompt: Beaver reserves one id per deployment entry and writes it
+as a `container_id` directly under each `container_name`. That prompt only controls whether the contract
+revision is pushed. A name already taken by another app is refused and the file is left as it was.
+
 ## Deployment tuning
 
 These subcommands edit one specific area of `.beaver/config.yml` without hand-editing the
