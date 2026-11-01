@@ -224,6 +224,15 @@ override a value without the interactive prompt):
   act on it, so setting it doesn't change deploy behavior.
 </ParamField>
 
+### App identity
+
+Every config file belongs to one app. The first time `beaver config`, `config sync` or
+`config push` writes or saves a linked project's `.beaver/config.yml`, it adds a server-minted
+`app_id` directly under `project_id` and leaves the rest of the file untouched. You never need
+`beaver init` to get one. An existing `app_id` is never changed, `--reset` keeps it, and
+`--dry-run` writes nothing. On a server that predates apps, the file is left as it was. See
+[`beaver app`](/cli/app).
+
 ## Deployment tuning
 
 These subcommands edit one specific area of `.beaver/config.yml` without hand-editing the
