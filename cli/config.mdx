@@ -324,6 +324,8 @@ saved copy in agreement.
 | `rollback <container> <revision-id>` | Restore a historical revision as a new, forward revision. |
 | `delete <container>` | Permanently delete a container's saved configuration. |
 | `containers` | List every container across your projects that has a saved configuration. |
+| `list --container <name>` | List the saved `config.yml` versions for the app that runs a container, newest first, with the short id of each. `--contract` lists the container's contract revisions instead. |
+| `view [revision] --container <name>` | Print a saved `config.yml` exactly as it was saved — the current one, or an older version by its id (the full id or the first characters shown by `list`). Read-only. `--contract` prints only the container's normalized contract instead. |
 
 <ParamField query="--dry-run" type="boolean" default="false">
   On `push`: validate and show what would be saved, without persisting anything.
@@ -379,6 +381,12 @@ beaver config resources --cpu 1 --memory 1024
 beaver config status
 beaver config diff
 beaver config push
+```
+
+```bash See a container's saved versions, then read one
+beaver config list --container api
+beaver config view --container api
+beaver config view 3f2a91c0 --container api
 ```
 
 ```bash Recover after a dashboard change
