@@ -40,6 +40,9 @@ Takes no required arguments.
 
 See [shared flags](/cli/shared-flags) for `--json`/`--quiet`/etc., also accepted.
 
+`init` mints the directory's `app_id` before it saves the file, through the same step
+[`beaver config`](/cli/config#app-identity) uses, so the saved copy already carries it.
+
 ## Consequences
 
 Writes `.beaver/config.yml` in the current directory. If a config file already exists, prefer
