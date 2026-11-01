@@ -34,6 +34,7 @@ beaver state <subcommand> [flags]
 | `status` | Compare all three views at once. |
 | `drift` | Show the timeline of differences between the saved configuration and what's running. |
 | `history` | Show the saved-configuration revision history. |
+| `diff` | Show what changed between two versions of the configuration. |
 | `pull` | Write the saved configuration into your local file. |
 | `apply` | Save your local file as the new saved configuration and update the running deployment to match. |
 | `rollback` | Restore an earlier saved revision. |
@@ -57,8 +58,20 @@ beaver state <subcommand> [flags]
   currently running.
 </ParamField>
 <ParamField query="--to" type="string" default="">
-  On `rollback`: a specific revision ID to restore. Defaults to the revision immediately
-  before the current one. See `beaver state history`.
+  On `rollback`: the revision to restore — its full ID, or the first characters shown by
+  `beaver state history` (at least 6). Defaults to the revision immediately before the
+  current one.
+</ParamField>
+<ParamField query="--limit" type="integer" default="50">
+  On `history`: how many revisions to show per page (at most 200).
+</ParamField>
+<ParamField query="--before" type="string" default="">
+  On `history`: show revisions older than this one (its ID or the first characters shown in
+  the table). The footer prints the exact command for the next page.
+</ParamField>
+<ParamField query="--local" type="boolean" default="false">
+  On `diff`: compare the given revision against your local file instead of the saved
+  configuration.
 </ParamField>
 <ParamField query="--plan" type="boolean" default="false">
   On `rollback`: show the target revision and what would change, without applying it.
@@ -75,7 +88,27 @@ non-zero if anything is out of sync — useful as a CI gate.
 row per field that drifted, when it was first detected, and when (if ever) it cleared. It
 doesn't change anything itself.
 
-`history` lists past saved-configuration revisions you can target with `rollback --to`.
+`history` lists past saved-configuration revisions, newest first, each with a short ID you can
+paste into `rollback --to` or `diff`. The one that matches what's saved right now is marked
+`current`, and a revision created by a rollback says which one it restored. Older revisions
+are kept for a limited time (see [Versions and fingerprints](/operate/state-and-drift#versions-and-fingerprints)).
+
+`diff` compares two versions by **what they mean**: comments, spacing, quoting and key order
+are ignored, and values under keys that look like secrets are never printed. With no
+arguments it compares your local file with what's saved; with one revision it compares that
+revision with what's saved (or with your local file, using `--local`); with two it compares
+them with each other. It exits `1` when they differ and `0` when they don't, like
+`git diff --exit-code`.
+
+When Beaver knows which saved revision is deployed, `status` also shows it:
+
+```text
+  recorded revision  3f2a91c0
+  deployed revision  9b01d4e7
+```
+
+If a newer revision is saved than the one that's deployed, or the last deploy failed, `status`
+says so and exits non-zero.
 
 ## Consequences
 
@@ -86,6 +119,16 @@ every push) and tags the resulting revision with the current git commit.
 
 `pull` refuses to overwrite local edits that haven't been saved yet, unless `--force`; it
 writes a `.beaver/config.yml.bak` backup first.
+
+`status` and `apply` judge your file by what it **means**, not how it's typed. Adding a
+comment, reordering keys or changing indentation doesn't make your file "ahead" of what's
+saved, and `apply` of a formatting-only change records nothing new ("already matches").
+
+<Warning>
+  Rolling back restores your **saved configuration only**. Data, volumes and databases are not
+  changed — if the newer revision added a database and your app wrote to it, going back doesn't
+  un-write that data.
+</Warning>
 
 <Warning>
   `rollback` never rewrites history — restoring an earlier revision creates a **new** current
@@ -119,8 +162,14 @@ beaver state apply
 ```
 
 ```bash Roll back, previewing first
+beaver state history
 beaver state rollback --plan
-beaver state rollback --to 3f2a1b9
+beaver state rollback --to 3f2a91c0
+```
+
+```bash See what a revision changed
+beaver state diff 3f2a91c0
+beaver state diff 3f2a91c0 9b01d4e7
 ```
 
 </CodeGroup>
@@ -139,7 +188,12 @@ recorded vs live     drifted — replicas: recorded 3, live 2
 | `status` — everything in sync | Exit code 0, "up to date" for both comparisons | Nothing to do. |
 | `status` — out of sync | The specific mismatch, non-zero exit | `pull` (adopt saved) or `apply`/push local changes, depending on which side should win. |
 | `pull` with unsaved local edits | Refusal, unless `--force` | Save your edits (`beaver config push`) first, or `--force` to discard them. |
-| `rollback` success | The restored revision's summary | Verify with `state status`. |
+| `status` — only comments or formatting differ | "same content as the recorded state — only formatting or comments differ", exit code 0 | Nothing to do. |
+| `status` — saved but not deployed | "a newer revision is saved than the one that is deployed", non-zero exit | `beaver deploy` to roll it out. |
+| `status` — last deploy failed | The failed revision and the one still running, non-zero exit | Fix the cause and deploy again; the earlier revision keeps running meanwhile. |
+| `rollback` success | "restored the saved config from revision … — recorded as revision …", plus a note that data was not changed | Verify with `state status`. |
+| A revision ID matches more than one revision | The candidates, listed | Type a few more characters. |
+| A revision ID matches nothing | "no revision matches …" | `beaver state history` lists them. |
 
 ## Used in
 

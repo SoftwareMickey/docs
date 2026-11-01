@@ -29,12 +29,38 @@ now you're not sure your local file still reflects reality. Rather than guessing
 gives you one row per actual difference, so you know exactly what changed before you deploy
 on top of it.
 
+## Versions and fingerprints
+
+Every time you save a real change to your configuration, Beaver keeps the previous version.
+`beaver state history` lists them; each has a short ID. To decide whether two versions are
+"the same", Beaver compares their **meaning**, not their typing — a **fingerprint** of the
+content that ignores comments, spacing, quoting and key order. So adding a comment never
+shows up as a change, and saving a file that only differs in formatting doesn't create a new
+revision.
+
+Two other things the fingerprint doesn't cover, so you know where each one lives:
+
+- **Saved vs deployed.** Saving a configuration isn't deploying it. `status` tells you when a
+  newer revision is saved than the one running. For an app deployed before this was
+  available, "never deployed" means "not deployed since then".
+- **Configuration vs container contract.** The `.beaver/config.yml` history is per **app**
+  (`beaver state history`). The history of an individual container's contract is per
+  **container** (`beaver config show <container> list`). Both accept the short IDs their
+  tables show.
+
+Old versions aren't kept forever: by default Beaver keeps anything from the last 90 days, the
+newest 200, the one that's deployed, and any version a rollback was made from. Scripts should
+store the **full** ID — a short one is only guaranteed unique today.
+
 ## Rolling back a configuration
 
 `rollback` restores an earlier saved revision as a **new**, forward revision — the
 historical revision itself stays untouched. There's no way to remove a revision from history
 except deleting the container's entire saved configuration (every revision at once);
 rollback only ever adds, it never edits or erases an old one.
+
+Rolling back restores your **saved configuration only**. It does not change data, volumes or
+databases. Use `beaver state rollback --plan` first to see exactly which settings would change.
 
 ## If both sides have changed
 
