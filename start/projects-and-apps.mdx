@@ -13,11 +13,7 @@ Beaver writes a top-level `app_id` into that file when you run `beaver init` (or
 
 ## Copying a folder
 
-If you copied an app directory into a new folder, that folder still names the original app. Give it its own identity:
-
-```bash
-beaver app new
-```
+If you copied an app directory into a new folder, that folder still names the original app. Running `beaver app new` there gives it its own identity (see [`beaver app`](/cli/app)).
 
 If you copied it into a *different* project, commands refuse with `APP_PROJECT_MISMATCH` until you run `beaver app new`.
 
