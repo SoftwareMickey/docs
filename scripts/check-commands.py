@@ -43,6 +43,12 @@ def parse(path):
         opts.add(o)
     return cmds, opts, t
 
+# Hidden tombstones: commands that were removed on purpose and now only print a notice, so they are absent
+# from --help but the removal pages must still name them (features/cleanup-removal/04-tombstone.docs V18/V20).
+# Only pages whose whole point is the removal should write them; anywhere else they are still a bad command.
+TOMBSTONES = {"machine cleanup", "machine cleanup-plan"}
+TOMBSTONE_PAGES = {"reference/errors/cleanup-removed.mdx", "changelog/cleanup-removed.mdx", "cli/machine.mdx"}
+
 PLACEHOLDER = re.compile(r"^[<\[{(▸].*|.*[>\]})]$|^\.\.\.$|^\$|^…$|^▸$")
 GLOBAL_FLAGS = {"--cwd", "--no-color", "--debug", "--workspace", "--help", "--version", "--json", "--output", "--quiet", "--yes", "--wait", "--timeout"}
 
@@ -66,10 +72,11 @@ def commands_in(text):
             if c.startswith("beaver ") or c == "beaver": out.append((i, c))
     return out
 
-def check(cmd):
+def check(cmd, page=""):
     try: toks = shlex.split(cmd)
     except ValueError: return None
     toks = toks[1:]
+    if page in TOMBSTONE_PAGES and " ".join(toks[:2]) in TOMBSTONES: return None
     path = []; i = 0
     while i < len(toks) and not toks[i].startswith("-") and not PLACEHOLDER.match(toks[i]):
         cmds, _, _ = parse(path)
@@ -110,7 +117,7 @@ def main():
     for f in sorted(files):
         for ln, c in commands_in(open(f).read()):
             n += 1
-            err = check(c)
+            err = check(c, os.path.relpath(f, ROOT))
             if err: bad += 1; print(f"{os.path.relpath(f, ROOT)}:{ln}: {err}   [{c[:80]}]")
     print(f"\n{n} commands checked, {bad} problems")
     sys.exit(1 if bad else 0)
